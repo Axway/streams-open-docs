@@ -4,6 +4,8 @@ Axway-Open-Docs is a docs-as-code implementation for Axway documentation. It is 
 
 This repository contains all files for building and deploying a **microsite** in the Axway-Open-Docs ecosystem.
 
+test for action
+
 ## Create your own microsite using this repository
 
 This section details how to create your own microsite in the Axway-Open-Docs ecosystem. For an overall view of the microsite architecture, see [Architecture for docs-as-code at scale](https://techweb.axway.com/confluence/display/RDAPI/Architecture+for+docs+as+code+at+scale).
