@@ -46,19 +46,27 @@ const postDefaults = {
  * Add new collections here.
  */
 const collections = [{
-  ...docsDefaults('', ''), // content directory, image directory
-  name: 'docs',
-  label: 'Documentation',
-  description: 'Top level pages in documentation.',
+  ...docsDefaults('streams', 'streams'),  // content directory, image directory
+  name: 'streams',
+  label: 'AMPLIFY Streams documentation',
+  label_singular: 'page in AMPLIFY Streams section',
+  description: 'All pages relating to AMPLIFY Streams.',
   format: 'frontmatter',
-  create: false,
+  //create: false,
 }, {
-    ...docsDefaults('Overview', ''),
-    name: 'overview',
-    label: 'Overview',
-    label_singular: 'page in Overview section',
-    description: 'All pages relating to Overview',
-    format: 'frontmatter',
+  ...docsDefaults('streams/publishers', 'streams/publishers'),
+  name: 'streams_publishers',
+  label: 'AMPLIFY Streams Publishers documentation',
+  label_singular: 'page in AMPLIFY Streams Publishers section',
+  description: 'All pages relating to AMPLIFY Streams Publishers.',
+  format: 'frontmatter',
+}, {
+  ...docsDefaults('streams/subscribers', 'streams/subscribers'),
+  name: 'streams_subscribers',
+  label: 'AMPLIFY Streams Subscribers documentation',
+  label_singular: 'page in AMPLIFY Streams Subscribers section',
+  description: 'All pages relating to AMPLIFY Streams Subscribers.',
+  format: 'frontmatter',
 }];
 
 const cms_branch = window.location.hostname.includes('develop') ? 'develop' : 'master'; // Additional config for a develop branch and develop site
