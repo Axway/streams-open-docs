@@ -1,5 +1,5 @@
-baseURL = "https://axway-open-docs.netlify.com/"
-title = "Axway-Open-Docs"
+baseURL = "https://amplifystreams-open-docs.netlify.com/"
+title = "AMPLIFY Streams"
 
 enableRobotsTXT = true
 
