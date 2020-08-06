@@ -1,4 +1,4 @@
-Thank you for your contribution to the Axway-Open-Docs repo.
+Thank you for your contribution to the AMPLIFY Streams documentation.
 
 ## Describe the changes
 
@@ -23,7 +23,6 @@ _This section is to be filled out by project maintainers only._
 Before approving this PR, please make sure it:
 
 * [ ] Does not have conflicts with the base branch
-* [ ] Is clear and complete
 * [ ] Is believed to be accurate (technical accuracy to be checked with an SME for PRs originating from outside R&D)
 * [ ] Follows [Axway style](https://techweb.axway.com/confluence/display/RIE/Style+guide)
 * [ ] Follows [Markdown guidelines](https://axway-open-docs.netlify.com/docs/contribution_guidelines/writing_markdown/)
@@ -32,18 +31,3 @@ Before approving this PR, please make sure it:
 * [ ] Does not expose any sensitive information
 * [ ] Passes the Markdown linter rules (automated via CI check)
 * [ ] Does not contain broken links
-* [ ] Is discoverable and navigable
-
-## Checklist for mergers
-
-_This section is to be filled out by project maintainers only._
-
-Before merging this PR, please make sure:
-
-* [ ] You have applied a size label (unless this work is tracked in the ReadMeFirst JIRA project)
-* [ ] You have applied a production label if this needs a manual push to Zoomin
-* [ ] You have added it to the correct GitHub project
-* [ ] You have added it to the correct Sprint milestone
-* [ ] You have appended a `fixes` line to this description if this PR fixes a specific GitHub issue
-* [ ] You have added a new collection to Netlify CMS config (static/admin/config.js) if required (new doc sections)
-* [ ] You have updated the Zoomin classification file if required (new AMPC topics)
