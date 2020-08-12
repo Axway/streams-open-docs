@@ -46,23 +46,36 @@ const postDefaults = {
  * Add new collections here.
  */
 const collections = [{
-  ...docsDefaults('streams', 'streams'),  // content directory, image directory
+  ...docsDefaults('', ''), // content directory, image directory
+  name: 'docs',
+  label: 'Documentation',
+  description: 'Top level pages in documentation.',
+  format: 'frontmatter',
+  create: false,
+}, {
+  ...docsDefaults('streams', 'streams'),
   name: 'streams',
   label: 'AMPLIFY Streams documentation',
   label_singular: 'page in AMPLIFY Streams section',
   description: 'All pages relating to AMPLIFY Streams.',
   format: 'frontmatter',
-  //create: false,
-}, {
-  ...docsDefaults('streams/publishers', 'streams/publishers'),
-  name: 'streams_publishers',
+}, {  
+  ...docsDefaults('streams/management-api', 'streams'),
+  name: 'management-api',
+  label: 'AMPLIFY Streams Management API documentation',
+  label_singular: 'page in AMPLIFY Streams Management API section',
+  description: 'All pages relating to AMPLIFY Streams Management API.',
+  format: 'frontmatter',
+}, {  // 'PATH_TO_DOC_CONTENT', 'PATH_TO_DOC_IMAGES'
+  ...docsDefaults('streams/publishers', 'streams'),
+  name: 'publishers',
   label: 'AMPLIFY Streams Publishers documentation',
   label_singular: 'page in AMPLIFY Streams Publishers section',
   description: 'All pages relating to AMPLIFY Streams Publishers.',
   format: 'frontmatter',
 }, {
-  ...docsDefaults('streams/subscribers', 'streams/subscribers'),
-  name: 'streams_subscribers',
+  ...docsDefaults('streams/subscribers', 'streams'),
+  name: 'subscribers',
   label: 'AMPLIFY Streams Subscribers documentation',
   label_singular: 'page in AMPLIFY Streams Subscribers section',
   description: 'All pages relating to AMPLIFY Streams Subscribers.',
