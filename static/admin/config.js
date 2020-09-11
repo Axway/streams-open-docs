@@ -88,13 +88,13 @@ const config = {
   backend: {
     name: 'github',
     branch: cms_branch,
-    repo: 'Axway/amplifystreams-open-docs', // Path to your GitHub repository.
+    repo: 'Axway/streams-open-docs', // Path to your GitHub repository.
     open_authoring: true,
   },
   publish_mode: 'editorial_workflow',
   media_folder: '/static/Images', // Media files will be stored in the repo under static/Images
   public_folder: '/Images', // The src attribute for uploaded media will begin with /Images
-  site_url: 'https://amplifystreams-open-docs.netlify.com/', // URL to netlify site
+  site_url: 'https://streams-open-docs.netlify.com/', // URL to netlify site
   collections,
 };
 
