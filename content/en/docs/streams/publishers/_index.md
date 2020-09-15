@@ -3,12 +3,12 @@ title: Publishing
 linkTitle: Publishers
 weight: 150
 date: 2019-04-02
-description: Learn how to use the different types of Publishers supported by AMPLIFY Streams.
+description: Learn how to use the different types of Publishers supported by Streams.
 ---
 
 ## Selecting your type of publisher
 
-AMPLIFY Streams supports different publishers and each topic must be associated with one publisher.
+Streams supports different publishers and each topic must be associated with one publisher.
 When creating your topic, you must define a name, the type of publisher and its configuration under the publisher node of topic's configuration:
 
 ```json

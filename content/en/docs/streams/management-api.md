@@ -1,15 +1,15 @@
 ---
-title: Management API
-linkTitle: Management API
+title: Topics API
+linkTitle: Topics API
 weight: 150
 date: 2019-04-02
-description: The Streams Management API provides programmatic access to efficiently manage pub/sub topics.
+description: The Streams Topics API provides programmatic access to efficiently manage pub/sub topics.
 ---
 
 ## DevOps integration
 
-AMPLIFY Streams supports your DevOps processes by providing an API for you to automate your configuration and deployments.
-AMPLIFY Streams Management API enables you to fully manage every aspects of Streams topics.
+Streams supports your DevOps processes by providing an API for you to automate your configuration and deployments.
+Streams Topics API enables you to fully manage every aspects of Streams topics.
 
 ### What is DevOps?
 
@@ -19,11 +19,11 @@ DevOps can be defined as a combination of people, processes, and technology that
 * **Process**: Continuous improvement of the process to deliver a quality service is key.
 * **Technology**: Tools that automate the manual processes and integrate with other tools to make it easier and faster to develop, package, test, release, and deploy the service.
 
-### AMPLIFY Streams DevOps approach
+### Streams DevOps approach
 
-Taking a DevOps approach to Event-Driven API management with AMPLIFY Streams enables you to streamline the delivery of updates or new capabilities in your services to your customers and partners.
+Taking a DevOps approach to Event-Driven API management with Streams enables you to streamline the delivery of updates or new capabilities in your services to your customers and partners.
 
-AMPLIFY Streams is a CI/CD native solution that you can easily snap in to your existing DevOps pipeline. Simplify and customize how you manage Event-Driven APIs across your organization by using the AMPLIFY Streams Management API to manage every aspects of your topics.
+Streams is a CI/CD native solution that you can easily snap in to your existing DevOps pipeline. Simplify and customize how you manage Event-Driven APIs across your organization by using the Streams Management API to manage every aspects of your topics.
 
 ## Streams Management API Overview
 

@@ -1,20 +1,20 @@
 ---
-title: Get started with AMPLIFY Streams (v2 Beta)
+title: Get started with Axway Streams (v2 Beta)
 linkTitle: Get started
 weight: 2
 date: 2019-04-02
-description: Learn how to create your first Event-Driven API with AMPLIFY Streams.
+description: Learn how to create your first Event-Driven API with Streams.
 ---
 
 ## Before you start
 
-* Register to Streams Early Adopter Program to get access to AMPLIFY Streams and installation materials.
-* Install AMPLIFY Streams thanks to the provided docker-compose or helm chart.
-* Read [Understand AMPLIFY Streams concepts](/docs/streams/concepts).
+* Register to Streams Early Adopter Program to get access to Streams and installation materials.
+* Install Streams thanks to the provided helm chart.
+* Read [Understand Streams concepts](/docs/streams/concepts).
 
 ## Objectives
 
-Learn how to create your first Event-Driven API with AMPLIFY Streams.
+Learn how to create your first Event-Driven API with Streams.
 
 * Create a topic
 * Publish payloads to the topic
@@ -22,7 +22,7 @@ Learn how to create your first Event-Driven API with AMPLIFY Streams.
 
 ## Create a topic
 
-Topics are a central concepts in AMPLIFY Streams and represents a feed of messages.
+Topics are a central concepts in Streams and represents a feed of messages.
 Each topic must be associated with one [publisher](../publishers/) in charge of publishing payloads to be consumed by subscribers.
 
 To start, we will create a topic associated with a [HTTP Poller publisher](../publishers/publisher-http-poller) which will be responsible for polling a target URL and automatically publishing the content retrieved at the given polling period.
@@ -61,4 +61,4 @@ If the connection is successfully established, Streams will respond with a `200 
 
 ## Review
 
-You have learned how to create a topic with AMPLIFY Streams and automatically publish content thanks to Streams HTTP Poller publisher. You have also learned, as a consumer, how to subscribe to a topic thanks to Server-Sent Events.
+You have learned how to create a topic with Streams and automatically publish content thanks to Streams HTTP Poller publisher. You have also learned, as a consumer, how to subscribe to a topic thanks to Server-Sent Events.

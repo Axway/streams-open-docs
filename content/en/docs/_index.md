@@ -1,5 +1,5 @@
 ---
-title: "Welcome to AMPLIFY Streams documentation"
+title: "Welcome to Axway Streams documentation"
 linkTitle: "Documentation"
 weight: 20
 no_list: true
@@ -8,7 +8,7 @@ menu:
     weight: 20
 ---
 
-Axway AMPLIFY Streams documentation is available for collaboration using an open source model as part of the Axway Open Documentation Open Beta program.
+Axway Streams documentation is available for collaboration using an open source model as part of the Axway Open Documentation Open Beta program.
 
 ## About the Open Beta program
 
@@ -21,8 +21,8 @@ The role of each documentation website in the Open Beta is as follows:
 
 All contributions are first published on Axway Open Documentation, and shortly after on the Axway Documentation Portal, so that the latest documentation is always available on both websites.
 
-## AMPLIFY Streams documentation
+## Axway Streams documentation
 
-This website contains the documentation set for AMPLIFY Streams.
+This website contains the documentation set for Streams.
 
-Browse all documentation for AMPLIFY Streams under the top-level [AMPLIFY Streams](/docs/streams/) item in the left navigation menu.
+Browse all documentation for Streams under the top-level [Streams](/docs/streams/) item in the left navigation menu.

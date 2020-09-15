@@ -1,4 +1,4 @@
-Thank you for your contribution to the AMPLIFY Streams documentation.
+Thank you for your contribution to the Axway Streams documentation.
 
 ## Describe the changes
 

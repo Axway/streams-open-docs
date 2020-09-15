@@ -3,12 +3,12 @@ title: Subscribing
 linkTitle: Subscribers
 weight: 150
 date: 2019-04-02
-description: Learn how to use the different types of Subscribers supported by AMPLIFY Streams.
+description: Learn how to use the different types of Subscribers supported by Streams.
 ---
 
 ## Subscribers
 
-AMPLIFY Streams supports different subscriber types. In order for a subscriber to receive messages/events published to a topic, it must subscribe either via:
+Streams supports different subscriber types. In order for a subscriber to receive messages/events published to a topic, it must subscribe either via:
 
 * **Server-Sent Events** which enables Streams to push data to subscribers (e.g client applications) through a persistent connection.
 * **Webhook** which enables Streams to notify the subscribers via a HTTP Post request performed against the registered endpoint (webhook receiver).
