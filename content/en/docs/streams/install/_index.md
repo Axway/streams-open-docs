@@ -109,9 +109,9 @@ Note: The default configuration only accepts incoming HTTP requests to `k8s.your
 To upgrade your Streams installation with a new minor version or update your configuration:
 
 * Optional: update the `values.yaml` files with any custom configuration
-*  Upgrade your Streams installation:
+* Upgrade your Streams installation:
 
-```sh 
+```sh
 helm upgrade my-release . [-f values.yaml] [-f values-ha.yaml] [--set key=value[,key=value]] -n my-namespace
 ```
 
