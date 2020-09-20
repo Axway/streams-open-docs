@@ -1,7 +1,7 @@
 ---
-title: Get started with Axway Streams (v2 Beta)
+title: Get started with Axway Streams
 linkTitle: Get started
-weight: 2
+weight: 1
 date: 2019-04-02
 description: Learn how to create your first Event-Driven API with Streams.
 ---
@@ -9,8 +9,8 @@ description: Learn how to create your first Event-Driven API with Streams.
 ## Before you start
 
 * Register to Streams Early Adopter Program to get access to Streams and installation materials.
-* Install Streams thanks to the provided helm chart.
 * Read [Understand Streams concepts](/docs/streams/concepts).
+* [Install Streams](/docs/streams/install) in your kubernetes cluster.
 
 ## Objectives
 

@@ -60,8 +60,8 @@ const collections = [{
   description: 'All pages relating to Streams.',
   format: 'frontmatter',
 }, {  
-  ...docsDefaults('streams/management-api', 'streams'),
-  name: 'management-api',
+  ...docsDefaults('streams/topics-api', 'streams'),
+  name: 'topics-api',
   label: 'Streams Topics API documentation',
   label_singular: 'page in Streams Topics API section',
   description: 'All pages relating to Streams Topics API.',
@@ -79,6 +79,32 @@ const collections = [{
   label: 'Streams Subscribers documentation',
   label_singular: 'page in Streams Subscribers section',
   description: 'All pages relating to Streams Subscribers.',
+  format: 'frontmatter',
+}, {
+  ...docsDefaults('streams/install', 'streams'),
+  name: 'install',
+  label: 'Install Streams',
+  label_singular: 'page in Streams install section',
+  description: 'All pages relating to installing Streams.',
+}, {
+  ...docsDefaults('streams/capacity', 'capacity'),
+  name: 'capacity',
+  label: 'Capacity planning and performance',
+  label_singular: 'page in Streams Capacity Planning section',
+  description: 'All pages relating to capacity planning and performance tests.',
+  format: 'frontmatter',
+}, {
+  ...docsDefaults('streams/security', 'security'),
+  name: 'security',
+  label: 'Security guidance',
+  label_singular: 'page in Streams security section',
+  description: 'All pages relating to security guidance for Streams.',
+}, {
+  ...docsDefaults('streams/architecture', 'architecture'),
+  name: 'architecture',
+  label: 'Streams Reference Architecture documentation',
+  label_singular: 'page in Streams Reference Architecture section',
+  description: 'All pages relating to Reference Architecture.',
   format: 'frontmatter',
 }];
 

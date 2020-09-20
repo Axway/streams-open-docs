@@ -1,7 +1,7 @@
 ---
 title: Subscribing
 linkTitle: Subscribers
-weight: 150
+weight: 4
 date: 2019-04-02
 description: Learn how to use the different types of Subscribers supported by Streams.
 ---

@@ -1,7 +1,7 @@
 ---
 title: Streams concepts
 linkTitle: Concepts
-weight: 150
+weight: 2
 date: 2019-04-02
 description: Streams is a publish/subscribe (pub/sub) messaging service where the senders of messages are decoupled from the receivers of messages.
 ---

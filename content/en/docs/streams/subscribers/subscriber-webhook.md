@@ -78,7 +78,7 @@ In order to get existing subscriptions, simply do the following GET request on y
 
 `GET /subscribers/webhook/topics/{topicId}/subscriptions`
 
-See [pagination](/docs/streams/management-api/#pagination) to get more information about how pagination and sorting works.
+See [pagination](/docs/streams/topics-api/#pagination) to get more information about how pagination and sorting works.
 
 The field names allowed for sorting are :
 

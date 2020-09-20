@@ -1,11 +1,9 @@
 ---
 title: "Welcome to Axway Streams documentation"
 linkTitle: "Documentation"
-weight: 20
 no_list: true
-menu:
-  main:
-    weight: 20
+hide_readingtime: true
+weight: 10
 ---
 
 Axway Streams documentation is available for collaboration using an open source model as part of the Axway Open Documentation Open Beta program.

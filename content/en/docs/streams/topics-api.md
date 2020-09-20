@@ -1,7 +1,7 @@
 ---
 title: Topics API
 linkTitle: Topics API
-weight: 150
+weight: 5
 date: 2019-04-02
 description: The Streams Topics API provides programmatic access to efficiently manage pub/sub topics.
 ---
@@ -25,7 +25,7 @@ Taking a DevOps approach to Event-Driven API management with Streams enables you
 
 Streams is a CI/CD native solution that you can easily snap in to your existing DevOps pipeline. Simplify and customize how you manage Event-Driven APIs across your organization by using the Streams Management API to manage every aspects of your topics.
 
-## Streams Management API Overview
+## Streams Topics API Overview
 
 Our API is organized around REST and has predictable, resource-oriented URLs, and uses HTTP response codes to indicate API errors.
 We use built-in HTTP features, like HTTP verbs, which are understood by off-the-shelf HTTP clients. We support cross-origin resource sharing, allowing you to interact securely with our API from a client-side web application.

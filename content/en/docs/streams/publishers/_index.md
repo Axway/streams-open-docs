@@ -1,7 +1,7 @@
 ---
 title: Publishing
 linkTitle: Publishers
-weight: 150
+weight: 3
 date: 2019-04-02
 description: Learn how to use the different types of Publishers supported by Streams.
 ---
