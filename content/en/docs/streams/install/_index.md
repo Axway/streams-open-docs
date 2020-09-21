@@ -67,6 +67,22 @@ Then you must create a secret storing those files doing:
 kubectl create secret generic postgresql-certificates-secret --from-file=./server.crt --from-file=./server.key -n my-namespace
 ```
 
+### Enable encryption
+
+By default, Streams encrypts sensitive data using a password-based encryption mechanism.
+All passwords must be at least `12` characters long and contain at least:
+
+* One upper case character.
+* One lower case character.
+* One digit.
+* One special character or punctuation without any space.
+
+You must create a secret storing those passwords doing:
+
+```bash
+kubectl create secret generic streams-crypto-password-secret --from-literal=hub=<hub crypto password> --from-literal=subscriberWebhook=<webhook crypto password> --from-literal=subscriberKafka=<kafka crypto password>
+```
+
 ### Helm command
 
 The command below deploys Streams on the Kubernetes cluster in High availability mode. The passwords for postgreSQL database and Hazelcast must be defined in the installation command line. By doing so, they are stored securely inside the k8s cluster and not visible in plaintext in `values.yaml` file. There are optional parameters that can be specified to customize the installation.
