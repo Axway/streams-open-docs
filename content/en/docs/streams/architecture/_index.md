@@ -161,10 +161,10 @@ The network deployment uses only one subnet per availability zone. Each subnet m
 | 4   | Egress to pull Docker images                   | All subnets       | Internet/Intranet | TCP      | 443    |
 | 5   | Egress to connect to topics endpoints          | All subnets       | Internet/Intranet | TCP      | 80,443 |
 
-#### Time synchronization
+### Time synchronization
 
-For security and maintenance reason, it is strongly recommended to time synchronizing your Kubernetes pods thanks to the Network Time Protocol (NTP). Pods use the clock of the node they are running on, so you need to time synchronize the nodes of your Kubernetes cluster.
-On AWS, it is recommended to use the chrony client to synchronize your Linux instances (e.g. [AWS Set time guide](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/set-time.html))
+For security and maintenance reason, it is strongly recommended to time synchronize your Kubernetes pods thanks to the Network Time Protocol (NTP). Pods use the clock of the node they are running on, so you need to time synchronize the nodes of your Kubernetes cluster.
+On AWS, it is recommended to use the chrony client to synchronize your Linux instances (for details refer to [AWS Set time guide](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/set-time.html)).
 
 ### Kubernetes considerations
 
@@ -629,7 +629,7 @@ Apache Kafka is used as stream-processing layer.
 Source Docker image:
 
 * Repository: bitnami/kafka
-* Tag: 2.3.0-debian-9-r88
+* Tag: 2.5.0
 
 Pod name: `streams-kafka`.
 
@@ -646,7 +646,7 @@ Apache ZooKeeper is used by Kafka.
 Source Docker image:
 
 * Repository: bitnami/zookeeper
-* Tag: latest
+* Tag: 3.6.2
 
 Pod name: `streams-zookeeper`
 
@@ -663,7 +663,7 @@ Hazelcast is used as a distributed in-memory database to share data between stre
 Source Docker image:
 
 * Repository: hazelcast/hazelcast
-* Tag: 3.12.5
+* Tag: 3.12.7
 
 Pod name:  `streams-hazelcast`.
 
@@ -680,7 +680,7 @@ PostgreSQL is our persistence layer.
 Source Docker image:
 
 * Repository: bitnami/postgresql
-* Tag: 11.5.0-debian-9-r60
+* Tag: 11.9.0
 
 Pod names:
 

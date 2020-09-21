@@ -8,7 +8,7 @@ description: Install Streams on-premise, or deploy in your private cloud, and le
 
 ## Prerequisites
 
-* Kubernetes 1.13.10+
+* Kubernetes 1.18
 * Helm 3.0.2+
 * PersistentVolumes and LoadBalancer provisioner supported by the underlying infrastructure
 
