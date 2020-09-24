@@ -67,7 +67,7 @@ Then you must create a secret storing those files doing:
 kubectl create secret generic postgresql-certificates-secret --from-file=./server.crt --from-file=./server.key -n my-namespace
 ```
 
-### Enable encryption
+### Database encryption
 
 By default, Streams encrypts sensitive data using a password-based encryption mechanism.
 All passwords must be at least `12` characters long and contain at least:
@@ -82,6 +82,12 @@ You must create a secret storing those passwords doing:
 ```bash
 kubectl create secret generic streams-crypto-password-secret --from-literal=hub=<hub crypto password> --from-literal=subscriberWebhook=<webhook crypto password> --from-literal=subscriberKafka=<kafka crypto password>
 ```
+
+The three literals in the secret are used by their respective microservice to encrypt their data.
+
+* `hub` is used by streams-hub.
+* `subscriberWebhook` is used by streams-subscriber-webhook.
+* `subscriberKafka` is used by streams-subscriber-kafka.
 
 ### Helm command
 
