@@ -80,7 +80,7 @@ All passwords must be at least `12` characters long and contain at least:
 You must create a secret storing those passwords doing:
 
 ```bash
-kubectl create secret generic streams-crypto-password-secret --from-literal=hub=<hub crypto password> --from-literal=subscriberWebhook=<webhook crypto password> --from-literal=subscriberKafka=<kafka crypto password>
+kubectl create secret generic streams-crypto-password-secret --from-literal=hub=<hub crypto password> --from-literal=subscriberWebhook=<webhook crypto password> --from-literal=subscriberKafka=<kafka crypto password> -n my-namespace
 ```
 
 The three literals in the secret are used by their respective microservice to encrypt their data.
