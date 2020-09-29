@@ -96,12 +96,11 @@ The bastion must have high traceability with specific RBAC permissions to allow 
 
 Platform infrastructure must support Kubernetes PersistentVolumes. See [Volumes](#volumes) section for details.
 
-#### Encrypting Secret data at rest
+#### Encrypting secret data at rest
 
-To improve security, you should encrypt k8s secret data at rest.
-See https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data for more details.
-{{< alert title="Note" color="primary" >}} We strongly recommend to use a KMS provider instead of storing the raw encryption key in the EncryptionConfig file.
-Using a locally managed key doesn't protect against a host being compromised since the encryption keys are stored on the host in a file. {{< /alert >}}
+To improve security, you should encrypt k8s secret data at rest. See [Encrypting Secret Data at Rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data) for more details.
+
+{{< alert title="Warning" color="warning" >}} We strongly recommend you to use a KMS provider instead of storing the raw encryption key in the `EncryptionConfig` file. Encrypting secrets with a locally managed key protects against an `etcd` compromise, but it fails to protect against a host compromise. Since the encryption keys are stored on the host in the `EncryptionConfig` YAML file, a skilled attacker can access that file and extract the encryption keys.{{< /alert >}}
 
 ### Performance goals
 
