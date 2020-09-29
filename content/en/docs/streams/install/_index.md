@@ -135,8 +135,11 @@ Note: The default configuration only accepts incoming HTTP requests to `k8s.your
 | subscriberSse.ports.containerPort     | Http port to subscribe to a topic   | no        | 8080          |
 | hub.replicaCount                      | Hub replica count                   | no        | 2             |
 | hub.ports.containerPort               | Http port to reach the Streams Topics API | no  | 8080          |
+| hub.crypto.enabled                    | Database encryption enabled         | yes       | true          |
 | subscriberWebhook.replicaCount        | Subscriber Webhook replica count    | no        | 2             |
 | subscriberWebhook.ports.containerPort | Http port to subscribe to a topic   | no        | 8080          |
+| subscriberWebhook.crypto.enabled      | Database encryption enabled         | yes       | true          |
+| subscriberKafka.crypto.enabled        | Database encryption enabled         | yes       | true          |
 | publisherHttpPoller.replicaCount      | Publisher HTTP Poller replica count | no        | 2             |
 | publisherHttpPost.replicaCount        | Publisher HTTP Post replica count   | no        | 2             |
 | publisherHttpPost.ports.containerPort | Http port to publish to a topic     | no        | 8080          |
