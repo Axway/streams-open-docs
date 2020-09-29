@@ -41,6 +41,49 @@ We recommend deploying Streams components inside a dedicated namespace. To creat
 kubectl create namespace my-namespace
 ```
 
+### Configure passwords to secure connection to third-parties
+
+Passwords are required for Streams microservices to securely connect to Hazelcast and Postgresql.
+You must provide these passwords through Kubernetes [secrets](https://kubernetes.io/docs/concepts/configuration/secret/):
+
+#### Create secret for Hazelcast
+
+```sh
+export HAZELCAST_PASSWORD="YourHazelcastPassword"
+kubectl create secret generic streams-hazelcast-password-secret --from-literal=hazelcast-password=${HAZELCAST_PASSWORD} -n my-namespace
+```
+
+#### Create secret for PostgreSQL
+
+```sh
+export POSTGRES_ADMIN_PASSWORD="YourPostgresAdminPassword"
+export POSTGRES_USER_PASSWORD="YourPostgresUserPassword"
+export POSTGRES_REPLICATION_PASSWORD="YourPostgresReplicationPassword"
+kubectl create secret generic streams-postgresql-password-secret --from-literal=postgresql-password=${POSTGRES_ADMIN_PASSWORD} --from-literal=postgresql-postgres-password=${POSTGRES_ADMIN_PASSWORD} --from-literal=postgresql-streams-password=${POSTGRES_USER_PASSWORD} --from-literal=postgresql-replication-password=${POSTGRES_REPLICATION_PASSWORD} -n my-namespace
+```
+
+### Database encryption
+
+By default, Streams encrypts sensitive data using a password-based encryption mechanism.
+All passwords must be at least `12` characters long and contain at least:
+
+* One upper case character.
+* One lower case character.
+* One digit.
+* One special character or punctuation without any space.
+
+You must create a secret storing those passwords doing:
+
+```bash
+kubectl create secret generic streams-crypto-password-secret --from-literal=hub=<hub crypto password> --from-literal=subscriberWebhook=<webhook crypto password> --from-literal=subscriberKafka=<kafka crypto password> -n my-namespace
+```
+
+The three literals in the secret are used by their respective microservice to encrypt their data.
+
+* `hub` is used by streams-hub.
+* `subscriberWebhook` is used by streams-subscriber-webhook.
+* `subscriberKafka` is used by streams-subscriber-kafka.
+
 ### Ingress TLS settings
 
 SSL/TLS is *enabled by default* on our embedded Ingress controller. You need to provide an SSL/TLS certificate for the domain name you are using:
@@ -67,28 +110,6 @@ Then you must create a secret storing those files doing:
 kubectl create secret generic postgresql-certificates-secret --from-file=./server.crt --from-file=./server.key -n my-namespace
 ```
 
-### Database encryption
-
-By default, Streams encrypts sensitive data using a password-based encryption mechanism.
-All passwords must be at least `12` characters long and contain at least:
-
-* One upper case character.
-* One lower case character.
-* One digit.
-* One special character or punctuation without any space.
-
-You must create a secret storing those passwords doing:
-
-```bash
-kubectl create secret generic streams-crypto-password-secret --from-literal=hub=<hub crypto password> --from-literal=subscriberWebhook=<webhook crypto password> --from-literal=subscriberKafka=<kafka crypto password> -n my-namespace
-```
-
-The three literals in the secret are used by their respective microservice to encrypt their data.
-
-* `hub` is used by streams-hub.
-* `subscriberWebhook` is used by streams-subscriber-webhook.
-* `subscriberKafka` is used by streams-subscriber-kafka.
-
 ### Helm command
 
 The command below deploys Streams on the Kubernetes cluster in High availability mode. The passwords for postgreSQL database and Hazelcast must be defined in the installation command line. By doing so, they are stored securely inside the k8s cluster and not visible in plaintext in `values.yaml` file. There are optional parameters that can be specified to customize the installation.
@@ -96,9 +117,6 @@ The command below deploys Streams on the Kubernetes cluster in High availability
 ```sh
 helm install my-release -f values.yaml -f values-ha.yaml \
   --set imagePullSecrets[0].name=< registry-secret-name >  [--set <parameter>=<value>] \
-  --set postgresql.postgresqlPassword="<postgreSQL admin password>" \
-  --set postgresql.postgresqlStreamsPassword="<postgreSQL streams user password>" \
-  --set hazelcast.hazelcast.yaml.hazelcast.group.password="<hazelcast cluster group password>" \
   -n my-namespace
 ```
 
@@ -108,10 +126,7 @@ Note: The default configuration only accepts incoming HTTP requests to `k8s.your
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| postgresql.postgresqlPassword         | PostgreSQL admin password           | yes       | is not set    |
-| postgresql.postgresqlStreamsPassword  | PostgreSQL streams user password    | yes       | is not set    |
 | postgresql.tls.enabled                | PostgreSQL tls enabled              | no        | yes           |
-| hazelcast.hazelcast.yaml.hazelcast.group.password | Hazelcast cluster group password | yes | is not set |
 | nginx-ingress.enabled                 | Enable/Disable NGINX                | no        | true          |
 | ingress.host | Domain name used for incoming HTTP requests if nginx-ingress.enabled is set to true | no | k8s.yourdomain.tld |
 | ingress.tlsenabled                    | Enable embedded ingress SSL/TLS     | no        | true          |

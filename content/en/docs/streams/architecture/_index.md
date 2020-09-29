@@ -96,6 +96,13 @@ The bastion must have high traceability with specific RBAC permissions to allow 
 
 Platform infrastructure must support Kubernetes PersistentVolumes. See [Volumes](#volumes) section for details.
 
+#### Encrypting Secret data at rest
+
+To improve security, you should encrypt k8s secret data at rest.
+See https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data for more details.
+{{< alert title="Note" color="primary" >}} We strongly recommend to use a KMS provider instead of storing the raw encryption key in the EncryptionConfig file.
+Using a locally managed key doesn't protect against a host being compromised since the encryption keys are stored on the host in a file. {{< /alert >}}
+
 ### Performance goals
 
 An important factor for achieving your goals is to define a set of performance goals. These will be unique for a specific set of APIs, deployment platform and clients’ expectations. Later in the document, we show an example of the performance metrics that have been achieved in testing a reference architecture.
@@ -177,13 +184,13 @@ Some parameters are available only at the creation of the Kubernetes cluster. Th
 ##### Network plugin
 
 Streams does not require any specific network CNI. Nevertheless, it quickly becomes more convenient (e.g. if you want to create ingress/egress network policies) or mandatory when deploying on cloud providers (e.g., deployment on internal network topology).
-The Axway team uses [CALICO](https://kubernetes.io/docs/concepts/cluster-administration/networking/#project-calico) with default configuration. The [AWS VPC CNI](https://kubernetes.io/docs/concepts/cluster-administration/networking/#aws-vpc-cni-for-kubernetes) has also been validated with our platform.
+We recommend the use of [CALICO](https://kubernetes.io/docs/concepts/cluster-administration/networking/#project-calico) with default configuration. The [AWS VPC CNI](https://kubernetes.io/docs/concepts/cluster-administration/networking/#aws-vpc-cni-for-kubernetes) has also been validated with our platform.
 
 ##### RBAC Permission
 
-[RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) permission is a secure mechanism to manage authorization inside Kubernetes. Streams integrates helm charts as dependencies which require RBAC to be enabled:
+Kubernetes Role-based access control ([RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)) is a method of regulating access to your Kubernetes cluster and resources based on the roles of individual users within an enterprise. Streams requires RBAC to be enabled for secrets management and third-party dependencies:
 
-* Hazelcast (discovery for clustering purposes)
+* Hazelcast (cluster discovery service)
 * Nginx (fine tuning of ingress controller permissions)
 
 It is recommended to set people or application permissions to manage resources:
