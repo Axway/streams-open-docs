@@ -21,6 +21,9 @@ The body must contain a JSON webhook subscription configuration as follow:
 ```json
 {
     "webhookUrl": "https://valid.url/of/webhook",
+    "webhookHeaders": {
+      "Authorization"   : "Bearer AbCdEf123456"
+    },
     "subscriptionMode": "snapshot-only|snapshot-patch"
 }
 ```
@@ -28,6 +31,7 @@ The body must contain a JSON webhook subscription configuration as follow:
 | Configuration Entry | Mandatory | Default value | Description |
 |---------------------|-----------|---------------|-------------|
 | webhookUrl | yes | n/a | URL which will be called by Streams in order to inform the subscriber that a new event/message has been published in the topic identified by {topicId}. |
+| webhookHeaders | no | n/a | Map of key/value which will send by Streams to the subscriber |
 | subscriptionMode | no | Default subscription mode defined in the topic's configuration | Refer to [subscription modes](/docs/streams/subscribers/#subscription-modes) section |
 
 Once the webhook subscription is successfully created, Streams will start notifying the subscriber at the specified `webhookUrl`.
