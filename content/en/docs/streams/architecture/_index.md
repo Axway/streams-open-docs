@@ -669,7 +669,7 @@ Hazelcast is used as a distributed in-memory database to share data between stre
 Source Docker image:
 
 * Repository: hazelcast/hazelcast
-* Tag: 3.12.7
+* Tag: 3.12.9
 
 Pod name:  `streams-hazelcast`.
 
@@ -686,7 +686,7 @@ PostgreSQL is our persistence layer.
 Source Docker image:
 
 * Repository: bitnami/postgresql
-* Tag: 11.9.0
+* Tag: 12.4.0
 
 Pod names:
 
