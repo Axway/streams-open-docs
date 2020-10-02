@@ -22,7 +22,8 @@ cd <YOUR_INSTALL_DIR>/helm/streams
 
 ## Helm Chart installation
 
-You can refere to Kubernetes documentation to create [secrets](https://kubernetes.io/docs/concepts/configuration/secret/)
+### Secrets management
+You can refere to Kubernetes documentation to create [secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
 
 ### Docker Registry settings
 
@@ -45,11 +46,12 @@ kubectl create namespace my-namespace
 
 ### Hazelcast settings
 
-Passwords are required for Streams microservices to securely connect to Hazelcast .
+Passwords are required for Streams microservices to securely connect to Hazelcast.
 
 ```sh
+export NAMESPACE="my-namespace"
 export HAZELCAST_PASSWORD="YourHazelcastPassword"
-kubectl create secret generic streams-hazelcast-password-secret --from-literal=hazelcast-password=${HAZELCAST_PASSWORD} -n my-namespace
+kubectl create secret generic streams-hazelcast-password-secret --from-literal=hazelcast-password=${HAZELCAST_PASSWORD} -n ${NAMESPACE}
 ```
 
 ### MariaDB settings
@@ -58,10 +60,11 @@ kubectl create secret generic streams-hazelcast-password-secret --from-literal=h
 Passwords are required for Streams microservices to securely connect to Mariadb.
 
 ```sh
+export NAMESPACE="my-namespace"
 export MARIADB_ROOT_PASSWORD="YourMariadbRootPassword"
 export MARIADB_PASSWORD="YourMariadbUserPassword"
 export MARIADB_REPLICATION_PASSWORD="YourMariadReplicationPassword"
-kubectl create secret genericstreams-database-password-secret --from-literal=mariadb-root-password=${MARIADB_ROOT_PASSWORD} --from-literal=mariadb-password=${MARIADB_PASSWORD}  --from-literal=mariadb-replication-password=${MARIADB_REPLICATION_PASSWORD} -n my-namespace
+kubectl create secret generic streams-database-password-secret --from-literal=mariadb-root-password=${MARIADB_ROOT_PASSWORD} --from-literal=mariadb-password=${MARIADB_PASSWORD}  --from-literal=mariadb-replication-password=${MARIADB_REPLICATION_PASSWORD} -n ${NAMESPACE}
 ```
 
 #### Security 
@@ -70,12 +73,12 @@ kubectl create secret genericstreams-database-password-secret --from-literal=mar
 
 By default, Streams Helm will set up TLS communication between MariaDB and Streams microservices, so you have to provide a CA certificate, a server certificate and a server key. The main requirement is that the server certificate's Common Name must be set up with *streams-database*.
 
-You can follow the officiel documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate. *Don't forget the set the right Common Name.*
+You can follow the official documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate. *Don't forget to set the right Common Name.*
 
 ### Transparent Data Encryption
 
-Mariadb data-at-rest encryption is also enabled by default, so you must provide a keyfile .
-The keyfile must contain a 32-bit integer identifier following by the hex-encoded encryption key separated by semicolon such as : <encryption_key_id>;<hex-encoded_encryption_key>.
+Mariadb data-at-rest encryption is also enabled by default, so you must provide a keyfile.
+The keyfile must contain a 32-bit integer identifier followed by the hex-encoded encryption key separated by semicolon such as: <encryption_key_id>;<hex-encoded_encryption_key>.
 
 To generate the keyfile, simply do:
 
@@ -88,19 +91,22 @@ echo "1;$(openssl rand -hex 32)" > keyfile
 Depending on your security choices, you must create a secret containing both TLS certificates and TDE keyfile or either one of them: 
 
 ```sh
-kubectl create secret generic streams-database-secret --from-literal=CA_PEM="$(cat ca.pem)" --from-literal=SERVER_CERT_PEM="$(cat server-cert.pem)" --from-literal=SERVER_KEY_PEM="$(cat server-key.pem)" --from-literal=KEYFILE="$(cat keyfile)" -n my-namespace
+export NAMESPACE="my-namespace"
+kubectl create secret generic streams-database-secret --from-literal=CA_PEM="$(cat ca.pem)" --from-literal=SERVER_CERT_PEM="$(cat server-cert.pem)" --from-literal=SERVER_KEY_PEM="$(cat server-key.pem)" --from-literal=KEYFILE="$(cat keyfile)" -n ${NAMESPACE}
 ```
 
 or only for TLS
 
 ```sh
-kubectl create secret generic streams-database-secret --from-literal=CA_PEM="$(cat ca.pem)" --from-literal=SERVER_CERT_PEM="$(cat server-cert.pem)" --from-literal=SERVER_KEY_PEM="$(cat server-key.pem)" -n my-namespace
+export NAMESPACE="my-namespace"
+kubectl create secret generic streams-database-secret --from-literal=CA_PEM="$(cat ca.pem)" --from-literal=SERVER_CERT_PEM="$(cat server-cert.pem)" --from-literal=SERVER_KEY_PEM="$(cat server-key.pem)" -n ${NAMESPACE}
 ```
 
 or only for TDE
 
 ```sh
-kubectl create secret generic streams-database-secret --from-literal=KEYFILE="$(cat keyfile)" -n my-namespace
+export NAMESPACE="my-namespace"
+kubectl create secret generic streams-database-secret --from-literal=KEYFILE="$(cat keyfile)" -n ${NAMESPACE}
 ```
 
 ### Ingress TLS settings
@@ -113,7 +119,7 @@ kubectl create secret tls streams-ingress-tls-secret --key=<path/to.key> --cert=
 
 ### Helm command
 
-The command below deploys Streams on the Kubernetes cluster in High availability mode. By doing so, they are stored securely inside the k8s cluster and not visible in plaintext in `values.yaml` file. There are optional parameters that can be specified to customize the installation.
+The command below deploys Streams on the Kubernetes cluster in High availability mode. There are optional parameters that can be specified to customize the installation.
 
 ```sh
 helm install my-release -f values.yaml -f values-ha.yaml \

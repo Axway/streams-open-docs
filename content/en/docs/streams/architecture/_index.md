@@ -690,8 +690,8 @@ Source Docker image:
 
 Pod names:
 
-* `streams-mariadb-master`
-* `streams-mariadb-slave`
+* `streams-database-master`
+* `streams-database-slave`
 
 Pod characteristics for HA deployment mode:
 
