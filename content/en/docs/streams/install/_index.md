@@ -100,13 +100,13 @@ kubectl create secret generic streams-database-password-secret --from-literal=ma
 
 #### Security 
 
-### TLS
+##### TLS
 
 By default, Streams Helm will set up TLS communication between MariaDB and Streams microservices, so you have to provide a CA certificate, a server certificate and a server key. The main requirement is that the server certificate's Common Name must be set up with *streams-database*.
 
 You can follow the official documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate. *Don't forget to set the right Common Name.*
 
-### Transparent Data Encryption
+##### Transparent Data Encryption
 
 Mariadb data-at-rest encryption is also enabled by default, so you must provide a keyfile.
 The keyfile must contain a 32-bit integer identifier followed by the hex-encoded encryption key separated by semicolon such as: <encryption_key_id>;<hex-encoded_encryption_key>.
@@ -117,9 +117,9 @@ To generate the keyfile, simply do:
 echo "1;$(openssl rand -hex 32)" > keyfile
 ```
 
-### Secrets
+##### Secrets
 
-Depending on your security choices, you must create a secret containing both TLS certificates and TDE keyfile or either one of them: 
+Depending on your security choices, you must create a secret containing both TLS certificates and TDE keyfile, one or none of them: 
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -140,7 +140,9 @@ export NAMESPACE="my-namespace"
 kubectl create secret generic streams-database-secret --from-literal=KEYFILE="$(cat keyfile)" -n ${NAMESPACE}
 ```
 
-To disable database encryption (not recommended), see [Helm parameters](#helm-parameters).
+To disable database encryption **and** TLS (not recommended), you should not create the secret above, set the [Helm parameters](#helm-parameters):
+* `mariadb.tls.enabled` and `mariadb.encryption.enabled` to `false`
+* `mariadb.master.extraEnvVarsSecret` and `mariadb.slave.extraEnvVarsSecret` to `null`
 
 ### Ingress TLS settings
 
@@ -215,7 +217,7 @@ kubectl get po -n "${NAMESPACE}"
 NAME                                                           READY   STATUS    RESTARTS   AGE
 streams-hazelcast-0                                            1/1     Running   0          116s
 streams-kafka-0                                                1/1     Running   0          116s
-streams-postgresql-0                                           1/1     Running   0          116s
+streams-mariadb-master-0                                       1/1     Running   0          116s
 streams-zookeeper-0                                            1/1     Running   0          116s
 my-release-hub-675c6f9f6-8gplz                                 1/1     Running   0          116s
 my-release-ingress-nginx-controller-58bfd85658-6plf5           1/1     Running   0          116s
@@ -250,7 +252,8 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | ingress.host | Domain name used for incoming HTTP requests if `ingress-nginx.enabled` is set to true | no | k8s.yourdomain.tld |
 | ingress.tlsenabled                    | Enable embedded ingress SSL/TLS     | no        | true          |
 | ingress.tlsSecretName                 | Embedded ingress SSL/TLS certificate secret name | no | streams-ingress-tls-secret |
-| postgresql.tls.enabled                | PostgreSQL tls enabled              | no        | yes           |
+| mariadb.tls.enabled                   | MariaDB tls enabled                 | no        | yes           |
+| mariadb.encryption.enabled            | MariaDB Transparent Data Encryption enabled | no | yes          |
 | hub.replicaCount                      | Hub replica count                   | no        | 2             |
 | hub.ports.containerPort               | Http port to reach the Streams Topics API | no  | 8080          |
 | subscriberWebhook.replicaCount        | Subscriber Webhook replica count    | no        | 2             |
@@ -264,17 +267,17 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | publisherSfdc.enabled                 | Enable/Disable Publisher SFDC       | no        | false         |
 | publisherSfdc.replicaCount            | Publisher SFDC replica count        | no        | 2             |
 | hazelcast.metrics.enabled             | Activate metrics endpoint for Hazelcast | no    | false         |
-| postgresql.metrics.enabled            | Activate metrics endpoint for PostgreSQL | no   | false         |
+| mariadb.metrics.enabled               | Activate metrics endpoint for MariaDB | no      | false         |
 | kafka.metrics.jmx.enabled             | Activate metrics endpoint for Kafka | no        | false         |
 | kafka.zookeeper.metrics.enabled       | Activate metrics endpoint for Zookeeper | no    | false         |
 | ingress-nginx.controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
 | actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
 
 {{< alert title="Note" >}}
-If you want to configure a parameter from a dependency chart, [PostgreSQL](https://github.com/bitnami/charts/tree/master/bitnami/postgresql), [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka) or [Hazelcast](https://github.com/helm/charts/tree/master/stable/hazelcast), you need to add the chart prefix name to the command line argument. For example:
+If you want to configure a parameter from a dependency chart, [MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb), [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka) or [Hazelcast](https://github.com/helm/charts/tree/master/stable/hazelcast), you need to add the chart prefix name to the command line argument. For example:
 
 ```
---set postgresql.image.tag=latest --set hazelcast.cluster.memberCount=3 --set kafka.replicaCount=2 `
+--set mariadb.image.tag=latest --set hazelcast.cluster.memberCount=3 --set kafka.replicaCount=2 `
 ```
 
 Please refer to the dependency chart's documentation to get the list of parameters.
