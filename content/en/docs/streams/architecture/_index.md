@@ -768,13 +768,13 @@ An unexposed API is available for each Streams microservice to manage logging le
 
 To know current logging level, run this command on a microservice pod:
 
-```bash
+```sh
 curl -s “http://localhost:8080/actuator/loggers/com.axway.streams”
 ```
 
 To change logging level, execute on the chosen pod the following command:
 
-```bash
+```sh
 curl -i -X POST -H 'Content-Type: application/json' -d '{"configuredLevel":"DEBUG"}' http://localhost:8080/actuator/loggers/com.axway.streams
 ```
 

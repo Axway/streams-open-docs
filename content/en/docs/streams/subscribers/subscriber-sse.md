@@ -28,11 +28,14 @@ To enable Server-Sent Events subscribers to subscribe to a topic, you must confi
 
 You can quickly try by opening a terminal and running the following cURL command:
 
-```bash
-curl -v "{baseURL}/subscribers/sse/topics/{topicID}
+```sh
+export BASE_URL="base-url"
+export TOPIC_ID="topic-id"
+
+curl -v "${BASE_URL}/subscribers/sse/topics/${TOPIC_ID}
 ```
 
-where topicID is the unique ID of the topic you want to subscribe to.
+where `topic-id` is the unique ID of the topic you want to subscribe to.
 
 If the connection is successfully established, Streams will respond with a 200 OK and a Content-Type: text/event-stream.
 
@@ -50,8 +53,11 @@ When no change is detected by Streams, the subscribers gets those heartbeats rep
 
 SSE flow can be compressed on demand using gzip or deflate methods. The following is an example of how to use the `Accept-Encoding` header:
 
-```bash
-curl -v "{baseURL}/subscribers/sse/topics/{topicID}" -H "Accept-Encoding: gzip, deflate" --compress
+```sh
+export BASE_URL="base-url"
+export TOPIC_ID="topic-id"
+
+curl -v "${BASE_URL}/subscribers/sse/topics/${TOPIC_ID}" -H "Accept-Encoding: gzip, deflate" --compress
 ```
 
 If this header is not provided, the default behavior is not to compress the data flow.
