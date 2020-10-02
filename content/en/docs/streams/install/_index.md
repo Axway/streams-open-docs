@@ -22,6 +22,8 @@ cd <YOUR_INSTALL_DIR>/helm/streams
 
 ## Helm Chart installation
 
+You can refere to Kubernetes documentation to create [secrets](https://kubernetes.io/docs/concepts/configuration/secret/)
+
 ### Docker Registry settings
 
 In order to store login credentials, we recommend using Kubernetes secrets.  
@@ -41,48 +43,65 @@ We recommend deploying Streams components inside a dedicated namespace. To creat
 kubectl create namespace my-namespace
 ```
 
-### Configure passwords to secure connection to third-parties
+### Hazelcast settings
 
-Passwords are required for Streams microservices to securely connect to Hazelcast and Postgresql.
-You must provide these passwords through Kubernetes [secrets](https://kubernetes.io/docs/concepts/configuration/secret/):
-
-#### Create secret for Hazelcast
+Passwords are required for Streams microservices to securely connect to Hazelcast .
 
 ```sh
 export HAZELCAST_PASSWORD="YourHazelcastPassword"
 kubectl create secret generic streams-hazelcast-password-secret --from-literal=hazelcast-password=${HAZELCAST_PASSWORD} -n my-namespace
 ```
 
-#### Create secret for PostgreSQL
+### MariaDB settings
+
+#### Password
+Passwords are required for Streams microservices to securely connect to Mariadb.
 
 ```sh
-export POSTGRES_ADMIN_PASSWORD="YourPostgresAdminPassword"
-export POSTGRES_USER_PASSWORD="YourPostgresUserPassword"
-export POSTGRES_REPLICATION_PASSWORD="YourPostgresReplicationPassword"
-kubectl create secret generic streams-postgresql-password-secret --from-literal=postgresql-password=${POSTGRES_ADMIN_PASSWORD} --from-literal=postgresql-postgres-password=${POSTGRES_ADMIN_PASSWORD} --from-literal=postgresql-streams-password=${POSTGRES_USER_PASSWORD} --from-literal=postgresql-replication-password=${POSTGRES_REPLICATION_PASSWORD} -n my-namespace
+export MARIADB_ROOT_PASSWORD="YourMariadbRootPassword"
+export MARIADB_PASSWORD="YourMariadbUserPassword"
+export MARIADB_REPLICATION_PASSWORD="YourMariadReplicationPassword"
+kubectl create secret genericstreams-database-password-secret --from-literal=mariadb-root-password=${MARIADB_ROOT_PASSWORD} --from-literal=mariadb-password=${MARIADB_PASSWORD}  --from-literal=mariadb-replication-password=${MARIADB_REPLICATION_PASSWORD} -n my-namespace
 ```
 
-### Database encryption
+#### Security 
 
-By default, Streams encrypts sensitive data using a password-based encryption mechanism.
-All passwords must be at least `12` characters long and contain at least:
+### TLS
 
-* One upper case character.
-* One lower case character.
-* One digit.
-* One special character or punctuation without any space.
+By default, Streams Helm will set up TLS communication between MariaDB and Streams microservices, so you have to provide a CA certificate, a server certificate and a server key. The main requirement is that the server certificate's Common Name must be set up with *streams-database*.
 
-You must create a secret storing those passwords doing:
+You can follow the officiel documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate. *Don't forget the set the right Common Name.*
 
-```bash
-kubectl create secret generic streams-crypto-password-secret --from-literal=hub=<hub crypto password> --from-literal=subscriberWebhook=<webhook crypto password> --from-literal=subscriberKafka=<kafka crypto password> -n my-namespace
+### Transparent Data Encryption
+
+Mariadb data-at-rest encryption is also enabled by default, so you must provide a keyfile .
+The keyfile must contain a 32-bit integer identifier following by the hex-encoded encryption key separated by semicolon such as : <encryption_key_id>;<hex-encoded_encryption_key>.
+
+To generate the keyfile, simply do:
+
+```sh
+echo "1;$(openssl rand -hex 32)" > keyfile
 ```
 
-The three literals in the secret are used by their respective microservice to encrypt their data.
+### Secrets
 
-* `hub` is used by streams-hub.
-* `subscriberWebhook` is used by streams-subscriber-webhook.
-* `subscriberKafka` is used by streams-subscriber-kafka.
+Depending on your security choices, you must create a secret containing both TLS certificates and TDE keyfile or either one of them: 
+
+```sh
+kubectl create secret generic streams-database-secret --from-literal=CA_PEM="$(cat ca.pem)" --from-literal=SERVER_CERT_PEM="$(cat server-cert.pem)" --from-literal=SERVER_KEY_PEM="$(cat server-key.pem)" --from-literal=KEYFILE="$(cat keyfile)" -n my-namespace
+```
+
+or only for TLS
+
+```sh
+kubectl create secret generic streams-database-secret --from-literal=CA_PEM="$(cat ca.pem)" --from-literal=SERVER_CERT_PEM="$(cat server-cert.pem)" --from-literal=SERVER_KEY_PEM="$(cat server-key.pem)" -n my-namespace
+```
+
+or only for TDE
+
+```sh
+kubectl create secret generic streams-database-secret --from-literal=KEYFILE="$(cat keyfile)" -n my-namespace
+```
 
 ### Ingress TLS settings
 
@@ -92,27 +111,9 @@ SSL/TLS is *enabled by default* on our embedded Ingress controller. You need to 
 kubectl create secret tls streams-ingress-tls-secret --key=<path/to.key> --cert=<path/to-full-chain.crt> -n my-namespace
 ```
 
-### PostgreSQL TLS settings
-
-By default, Streams Helm will set up TLS communication between PostgreSQL and Streams microservices, so you must provide a certificate and its key. Below the required steps using a self-signed certificate:
-
-* To create a self-signed certificate, use the following OpenSSL command: (only for testing purposes):
-
-```sh
-openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.crt -text -nodes -subj '/CN=streams-postgresql'
-```
-
-Make sure to set the postgresql service name `streams-postgresql` as `Common Name`; All other should be left. blank using `.` as answer.
-
-Then you must create a secret storing those files doing:
-
-```sh
-kubectl create secret generic postgresql-certificates-secret --from-file=./server.crt --from-file=./server.key -n my-namespace
-```
-
 ### Helm command
 
-The command below deploys Streams on the Kubernetes cluster in High availability mode. The passwords for postgreSQL database and Hazelcast must be defined in the installation command line. By doing so, they are stored securely inside the k8s cluster and not visible in plaintext in `values.yaml` file. There are optional parameters that can be specified to customize the installation.
+The command below deploys Streams on the Kubernetes cluster in High availability mode. By doing so, they are stored securely inside the k8s cluster and not visible in plaintext in `values.yaml` file. There are optional parameters that can be specified to customize the installation.
 
 ```sh
 helm install my-release -f values.yaml -f values-ha.yaml \
@@ -126,7 +127,8 @@ Note: The default configuration only accepts incoming HTTP requests to `k8s.your
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| postgresql.tls.enabled                | PostgreSQL tls enabled              | no        | yes           |
+| mariadb.tls.enabled                   | MariaDB tls enabled                 | no        | yes           |
+| mariadb.encryption.enabled            | MariaDB encryption enabled          | no        | yes           |
 | nginx-ingress.enabled                 | Enable/Disable NGINX                | no        | true          |
 | ingress.host | Domain name used for incoming HTTP requests if nginx-ingress.enabled is set to true | no | k8s.yourdomain.tld |
 | ingress.tlsenabled                    | Enable embedded ingress SSL/TLS     | no        | true          |
@@ -135,11 +137,8 @@ Note: The default configuration only accepts incoming HTTP requests to `k8s.your
 | subscriberSse.ports.containerPort     | Http port to subscribe to a topic   | no        | 8080          |
 | hub.replicaCount                      | Hub replica count                   | no        | 2             |
 | hub.ports.containerPort               | Http port to reach the Streams Topics API | no  | 8080          |
-| hub.crypto.enabled                    | Database encryption enabled         | yes       | true          |
 | subscriberWebhook.replicaCount        | Subscriber Webhook replica count    | no        | 2             |
 | subscriberWebhook.ports.containerPort | Http port to subscribe to a topic   | no        | 8080          |
-| subscriberWebhook.crypto.enabled      | Database encryption enabled         | yes       | true          |
-| subscriberKafka.crypto.enabled        | Database encryption enabled         | yes       | true          |
 | publisherHttpPoller.replicaCount      | Publisher HTTP Poller replica count | no        | 2             |
 | publisherHttpPost.replicaCount        | Publisher HTTP Post replica count   | no        | 2             |
 | publisherHttpPost.ports.containerPort | Http port to publish to a topic     | no        | 8080          |
@@ -176,7 +175,7 @@ helm uninstall my-release –n my-namespace
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
-Note that PersistentVolumeClaims required by Kafka and PostgreSQL are NOT deleted when the release is deleted. If you wish to delete them you can do it with the following command:
+Note that PersistentVolumeClaims required by Kafka and MariaDB are NOT deleted when the release is deleted. If you wish to delete them you can do it with the following command:
 
 ```sh
 kubectl -n my-namespace get persistentvolumeclaims --no-headers=true | awk '/ streams/{print $1}' | xargs kubectl delete -n my-namespace persistentvolumeclaims
@@ -187,7 +186,7 @@ kubectl -n my-namespace get persistentvolumeclaims --no-headers=true | awk '/ st
 It is essential for the smooth operation of Streams to perform regular backups of data and configurations. There are two kinds of data that we encourage to backup:
 
 * Configurations: Helm chart installation files - If you apply any modification to the default Streams helm chart, such as editing the values.yaml file, we recommend tracking the changes and back up the code in a source code repository. We recommend using git to address this point.
-* Data: persistent volumes of Kubernetes services - We do not provide any procedure to backup/restore volume data as it will mainly depend on your iPaaS. Nevertheless, you can have a look at stash project that enables the backup/restore of stateful applications (PostgreSql, Kafka, Zookeeper) into AWS S3 buckets, for instance.
+* Data: persistent volumes of Kubernetes services - We do not provide any procedure to backup/restore volume data as it will mainly depend on your iPaaS. Nevertheless, you can have a look at stash project that enables the backup/restore of stateful applications (MariaDB, Kafka, Zookeeper) into AWS S3 buckets, for instance.
 
 For a disaster recovery procedure, you should have access to cloud resources in another region. Using backed-up configurations/data and Streams helm chart, you should be able to run a new installation in a new Kubernetes cluster in another region.
 
