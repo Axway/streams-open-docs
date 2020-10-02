@@ -1,6 +1,6 @@
 ---
-title: Install guide
-linkTitle: Install guide
+title: Install Streams
+linkTitle: Install Streams
 weight: 7
 date: 2020-09-18
 description: Install Streams on-premise, or deploy in your private cloud, and learn how to upgrade an existing installation.
@@ -12,15 +12,15 @@ description: Install Streams on-premise, or deploy in your private cloud, and le
 * Helm 3.0.2+
 * RBAC enabled
 * PersistentVolumes and LoadBalancer provisioner supported by the underlying infrastructure
-* Resources: for the minimal configuration the cluster must have at least 9 CPUs and 10GB RAM dedicated to the platform.
+* Resources: for the minimal configuration the cluster must have at least `9` CPUs and `10` GB RAM dedicated to the platform.
 
-{{< alert title="Note" color="primary" >}}
-See the [Reference Architecture](../architecture) for more details about these prerequisites.
+{{< alert title="Note" >}}
+Refer to the [Reference Architecture](/docs/streams/architecture) documentation for further details.
 {{< /alert >}}
 
 ## Pre-installation
 
-Download Steams helm chart corresponding to the `release-version` you want to install
+Download Steams helm chart corresponding to the `release-version` you want to install.
 
 ```sh
 export INSTALL_DIR="MyInstallDirectory"
@@ -32,7 +32,7 @@ cd ${INSTALL_DIR}/helm/streams
 
 ### Kubernetes namespace
 
-We recommend deploying Streams components inside a dedicated namespace. To create the namespace, run the following command:
+We recommend to deploy Streams components inside a dedicated namespace. To create a namespace, run the following command:
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -42,10 +42,9 @@ kubectl create namespace "${NAMESPACE}"
 
 ### Docker Registry settings
 
-In order to store login credentials, we recommend using Kubernetes [secrets](https://kubernetes.io/docs/concepts/configuration/secret/).  
-Docker images must be hosted on a docker registry accessible from your cluster.
+Docker images must be hosted on a docker registry accessible from your Kubernetes cluster.
+In order to securely store registry login credentials, we recommend using Kubernetes [secrets](https://kubernetes.io/docs/concepts/configuration/secret/):  
 
-To pull them from the Kubernetes cluster, you might need to create a secret with your container registry credentials:
 ```sh
 export NAMESPACE="my-namespace"
 export REGISTRY_SECRET_NAME="my-registry-secret-name"
@@ -56,26 +55,29 @@ export REGISTRY_PASSWORD="my-registry-password"
 kubectl create secret docker-registry "${REGISTRY_SECRET_NAME}" --docker-server="${REGISTRY_SERVER}"  --docker-username="${REGISTRY_USERNAME}" --docker-password="${REGISTRY_PASSWORD}" -n "${NAMESPACE}"
 ```
 
-{{< alert title="Note" color="primary" >}} If you use [DockerHub](https://hub.docker.com/) as registry:
- - set `REGISTRY_SERVER` to `https://index.docker.io/v1/`
- - set `REGISTRY_USERNAME` with your DockerHub account username
- - set `REGISTRY_PASSWORD` with your DockerHub account password or, for better security, an [access token](https://hub.docker.com/settings/security)
-{{< /alert >}}
+To use Axway [DockerHub](https://hub.docker.com/) as your container registry:
 
+* Set `REGISTRY_SERVER` to `https://index.docker.io/v1/`.
+* Set `REGISTRY_USERNAME` with your DockerHub account username.
+* set `REGISTRY_PASSWORD` with your DockerHub account password or an [access token](https://hub.docker.com/settings/security) for more security.
 
-Finally, to use the secret you just created, you can either edit the file `values.yaml` and set the `imagePullSecrets` entry as following or specify `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` during the Helm Chart installation.
+Finally, to use the secret you just created, you can either:
+
+* Edit the `values.yaml` file and set the `imagePullSecrets` entry as follow:
 
 ```yaml
 imagePullSecrets:
   - name: my-registry-secret-name
 ```
 
+* or specify `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` in the Helm Chart installation command.
+
 ### Configure passwords to secure connection to third-parties
 
 Passwords are required for Streams microservices to securely connect to Hazelcast and Postgresql.
 You must provide these passwords through Kubernetes [secrets](https://kubernetes.io/docs/concepts/configuration/secret/):
 
-#### Create secret for Hazelcast
+* Create secret for Hazelcast:
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -84,7 +86,7 @@ export HAZELCAST_PASSWORD="my-hazelcast-password"
 kubectl create secret generic streams-hazelcast-password-secret --from-literal=hazelcast-password="${HAZELCAST_PASSWORD}" -n "${NAMESPACE}"
 ```
 
-#### Create secret for PostgreSQL
+* Create secret for PostgreSQL:
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -136,23 +138,21 @@ export INGRESS_TLS_CHAIN_PATH="my-chain-path"
 kubectl create secret tls streams-ingress-tls-secret --key==${INGRESS_TLS_KEY_PATH} --cert="${INGRESS_TLS_CHAIN_PATH}" -n "${NAMESPACE}"
 ```
 
-
-
-To disable SSL/TLS (not recommended), see [Helm parameters](#helm-parameters).
+To disable SSL/TLS (not recommended for production use), see [Helm parameters](#helm-parameters).
 
 ### PostgreSQL TLS settings
 
-By default, Streams Helm will set up TLS communication between PostgreSQL and Streams microservices, so you must provide a certificate and its key. Below the required steps using a self-signed certificate:
+By default, Streams Helm chart will set up TLS communication between PostgreSQL and Streams microservices, so you must provide a certificate and its key. Below are the steps required using a self-signed certificate:
 
-* To create a self-signed certificate, use the following OpenSSL command: (only for testing purposes):
+* Create a self-signed certificate using the following OpenSSL command: (only for testing purposes):
 
 ```sh
 openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.crt -text -nodes -subj '/CN=streams-postgresql'
 ```
 
-Make sure to set the postgresql service name `streams-postgresql` as `Common Name`; All other should be left. blank using `.` as answer.
+{{< alert title="Note" >}}Make sure to set the postgresql service name `streams-postgresql` as `Common Name`; All other should be left blank using `.` as answer.{{< /alert >}}
 
-Then you must create a secret storing those files doing:
+* Create a secret to store both certificate and key files:
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -160,13 +160,13 @@ export NAMESPACE="my-namespace"
 kubectl create secret generic postgresql-certificates-secret --from-file=./server.crt --from-file=./server.key -n "${NAMESPACE}"
 ```
 
-To disable database TLS (not recommended), see [Helm parameters](#helm-parameters).
+To disable database TLS (not recommended for production use), see [Helm parameters](#helm-parameters).
 
-### Helm command
+### Helm install command
 
-#### Minimal configuration
+#### Non HA configuration
 
-The command below deploys Streams components in a minimal configuration with 1 replica per microservices, low resource usage...
+The command below deploys Streams components in a non-HA configuration with 1 replica per microservices (not recommended for production use).
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -178,9 +178,10 @@ helm install "${HELM_RELEASE_NAME}" . \
   -n "${NAMESPACE}"
 ```
 
-#### High Availability configuration
+#### HA configuration
 
-The command below deploys Streams on the Kubernetes cluster in High availability mode (recommend for production purpose). There are optional parameters that can be specified to customize the installation.
+The command below deploys Streams on the Kubernetes cluster in High availability (recommend for production).
+Note that optional [Helm parameters](#helm-parameters) can be specified to customize the installation.
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -193,28 +194,26 @@ helm install "${HELM_RELEASE_NAME}" . \
   -n "${NAMESPACE}"
 ```
 
-{{< alert title="Note" color="primary" >}} The default configuration only accepts incoming HTTP/HTTPS requests to `k8s.yourdomain.tld` {{< /alert >}}
+{{< alert title="Note" >}}
+The default configuration only accepts incoming HTTP/HTTPS requests to `k8s.yourdomain.tld`.
+Refer to the [Helm parameters](#helm-parameters) for further details.
+{{< /alert >}}
 
-### Validating the installation
+### Validate the installation
 
-If successful, the expected output will be (for Minimal configuration):
+If Streams is successfully installed, the output of the `helm install` command should be (for non-HA configuration):
+
 ```sh
-export NAMESPACE="my-namespace"
-export HELM_RELEASE_NAME="my-release"
-helm install "${HELM_RELEASE_NAME}" . [--set key=value[,key=value]] -n "${NAMESPACE}"
-
 NAME: my-release
 LAST DEPLOYED: Wed Mar 25 15:18:45 2020
 NAMESPACE: default
 STATUS: deployed
 REVISION: 1
-NOTES:
-1. Create a topic using the Postman collection and Postman environment (https://git-ext.ecd.axway.com/rd-gnb/streams-internal-releases/tree/master/postman_collections)
-
-2. Try to subscribe with SSE to your topic:
-  curl "http://k8s.yourdomain.tld/subscribers/sse/topics/{TOPIC_ID}"
+NOTE: ...
 ```
+
 After a few minutes, all the pods should be running properly:
+
 ```sh
 export NAMESPACE="my-namespace"
 kubectl get po -n "${NAMESPACE}"
@@ -233,7 +232,19 @@ my-release-subscriber-webhook-84469bd68f-lqxgk                 1/1     Running  
 [...]
 ```
 
-{{< alert title="Note" color="primary" >}} By default, the deployment will only accept requests to _**k8s.yourdomain.tld**_ domain. See the [Helm parameters](#helm-parameters) section how to configure it. {{< /alert >}}
+In order to check that Streams is running:
+
+1. Create a topic with default settings using the provided Postman collection and Postman environment.
+2. Try to subscribe with SSE to your topic:
+
+```sh
+curl "http://k8s.yourdomain.tld/subscribers/sse/topics/{TOPIC_ID}"
+```
+
+{{< alert title="Note" >}}
+The default configuration only accepts incoming HTTP/HTTPS requests to `k8s.yourdomain.tld`.
+Refer to the [Helm parameters](#helm-parameters) for further details.
+{{< /alert >}}
 
 #### Helm parameters
 
@@ -274,18 +285,22 @@ my-release-subscriber-webhook-84469bd68f-lqxgk                 1/1     Running  
 | ingress-nginx.controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
 | actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
 
-{{< alert title="Note" color="primary" >}}
-If you want to configure a parameter from a dependency chart [PostgreSQL](https://github.com/bitnami/charts/tree/master/bitnami/postgresql), [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka), [Hazelcast](https://github.com/helm/charts/tree/master/stable/hazelcast), you need to add the chart prefix name to the command line argument. For example:
-`--set postgresql.image.tag=latest --set hazelcast.cluster.memberCount=3 --set kafka.replicaCount=2 `
-Please refer to the dependencies charts documentation to know the parameter names.
-{{< alert title="Note" color="primary" >}}
+{{< alert title="Note" >}}
+If you want to configure a parameter from a dependency chart, [PostgreSQL](https://github.com/bitnami/charts/tree/master/bitnami/postgresql), [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka) or [Hazelcast](https://github.com/helm/charts/tree/master/stable/hazelcast), you need to add the chart prefix name to the command line argument. For example:
+
+```
+--set postgresql.image.tag=latest --set hazelcast.cluster.memberCount=3 --set kafka.replicaCount=2 `
+```
+
+Please refer to the dependency chart's documentation to get the list of parameters.
+{{< /alert >}}
 
 #### Monitoring
 
-Streams ships with monitoring. You can activate metrics with the parameters listed in the table above (under "Activate metrics endpoint"), 
-which will open endpoints designed to be scrapped by Prometheus.
+Streams ships with monitoring. You can activate metrics with the parameters listed in the table above (under "Activate metrics endpoint"),
+which will open endpoints designed to be scrapped by [Prometheus](https://prometheus.io).
 
-{{< alert title="Note" color="primary" >}} You may need to add CPU and memory to the containers. {{< alert title="Note" color="primary" >}}
+{{< alert title="Note" >}}You may need to add CPU and memory to the containers.{{< /alert >}}
 
 ## Upgrade
 
@@ -345,4 +360,4 @@ It is essential for the smooth operation of Streams to perform regular backups o
 
 For a disaster recovery procedure, you should have access to cloud resources in another region. Using backed-up configurations/data and Streams helm chart, you should be able to run a new installation in a new Kubernetes cluster in another region.
 
-{{< alert title="Note" color="primary" >}} Note: The information provided in this section are only guidelines to help you implement your own disaster recovery procedure which needs to take into consideration your own constraints and environments. When disaster strikes, you must be prepared with a runbook of specific actions to take that are proven to work, considering your specific environments. {{< /alert >}}
+{{< alert title="Note" >}}The information provided in this section are only guidelines to help you implement your own disaster recovery procedure which needs to take into consideration your own constraints and environments. When disaster strikes, you must be prepared with a run book of specific actions to take that are proven to work, considering your specific environments.{{< /alert >}}

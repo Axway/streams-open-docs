@@ -100,7 +100,7 @@ Platform infrastructure must support Kubernetes PersistentVolumes. See [Volumes]
 
 To improve security, you should encrypt k8s secret data at rest. See [Encrypting Secret Data at Rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data) for more details.
 
-{{< alert title="Warning" color="warning" >}} We strongly recommend you to use a KMS provider instead of storing the raw encryption key in the `EncryptionConfig` file. Encrypting secrets with a locally managed key protects against an `etcd` compromise, but it fails to protect against a host compromise. Since the encryption keys are stored on the host in the `EncryptionConfig` YAML file, a skilled attacker can access that file and extract the encryption keys.{{< /alert >}}
+{{< alert title="Warning" color="warning" >}}We strongly recommend you to use a KMS provider instead of storing the raw encryption key in the `EncryptionConfig` file. Encrypting secrets with a locally managed key protects against an `etcd` compromise, but it fails to protect against a host compromise. Since the encryption keys are stored on the host in the `EncryptionConfig` YAML file, a skilled attacker can access that file and extract the encryption keys.{{< /alert >}}
 
 ### Performance goals
 
@@ -248,7 +248,7 @@ In addition, each Java service defines heap memory management with the help of J
 | Limit memory and CPU usage to protect the cluster                     | Required |
 | Adjust Java opts (Xmx & Xms) to allocate enough resources to services | Required |
 
-{{< alert title="Note" color="primary" >}} Axway provides the recommended values. Be aware that removing pod and JVM resource limits will result in a non-functional platform. {{< /alert >}}
+{{< alert title="Note" >}}Axway provides the recommended values. Be aware that removing pod and JVM resource limits will result in a non-functional platform.{{< /alert >}}
 
 ##### Components health check
 
@@ -700,7 +700,7 @@ Pod characteristics for HA deployment mode:
 | PostgreSQL master | 1        | 1   | 1024 MB | n/a       | 8 GB        |
 | PostgreSQL slave  | 1        | 1   | 1024 MB | n/a       | 8 GB        |
 
-{{< alert title="Note" color="primary" >}} PostgreSQL is deployed in master/slave mode with asynchronous commit for replication but the failover is not done automatically.{{< /alert >}}
+{{< alert title="Note" >}}PostgreSQL is deployed in master/slave mode with asynchronous commit for replication but the failover is not done automatically.{{< /alert >}}
 
 ### Logging/tracing
 
