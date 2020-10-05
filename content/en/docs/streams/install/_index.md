@@ -31,7 +31,8 @@ cd ${INSTALL_DIR}/helm/streams
 ## Helm Chart installation
 
 ### Secrets management
-You can refere to Kubernetes documentation to create [secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
+
+Refer to Kubernetes documentation to create [secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
 
 ### Kubernetes namespace
 
@@ -98,20 +99,20 @@ export MARIADB_REPLICATION_PASSWORD="my-mariadb-replication-password"
 kubectl create secret generic streams-database-password-secret --from-literal=mariadb-root-password=${MARIADB_ROOT_PASSWORD} --from-literal=mariadb-password=${MARIADB_PASSWORD}  --from-literal=mariadb-replication-password=${MARIADB_REPLICATION_PASSWORD} -n ${NAMESPACE}
 ```
 
-#### Security 
+#### Security
 
 ##### TLS
 
 By default, Streams Helm will set up TLS communication between MariaDB and Streams microservices, so you have to provide a CA certificate, a server certificate and a server key. The main requirement is that the server certificate's Common Name must be set up with *streams-database*.
 
-You can follow the official documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate. *Don't forget to set the right Common Name.*
+You can follow the official documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate. *Remember to set the Common Name correctly.*
 
-##### Transparent Data Encryption
+##### Transparent Data Encryption (TDE)
 
 Mariadb data-at-rest encryption is also enabled by default, so you must provide a keyfile.
-The keyfile must contain a 32-bit integer identifier followed by the hex-encoded encryption key separated by semicolon such as: <encryption_key_id>;<hex-encoded_encryption_key>.
+The keyfile must contain a 32-bit integer identifier followed by the hex-encoded encryption key separated by semicolon such as: `<encryption_key_id>`;`<hex-encoded_encryption_key>`.
 
-To generate the keyfile, simply do:
+To generate the keyfile, run the following command:
 
 ```sh
 echo "1;$(openssl rand -hex 32)" > keyfile
@@ -119,7 +120,7 @@ echo "1;$(openssl rand -hex 32)" > keyfile
 
 ##### Secrets
 
-Depending on your security choices, you must create a secret containing both TLS certificates and TDE keyfile, one or none of them: 
+Depending on your security choices, you must create a secret containing both TLS certificates and TDE keyfile, one or none of them:
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -140,7 +141,8 @@ export NAMESPACE="my-namespace"
 kubectl create secret generic streams-database-secret --from-literal=KEYFILE="$(cat keyfile)" -n ${NAMESPACE}
 ```
 
-To disable database encryption **and** TLS (not recommended), you should not create the secret above, set the [Helm parameters](#helm-parameters):
+To disable database encryption **and** TLS (not recommended for production use), you should not create the secret above, set the [Helm parameters](#helm-parameters):
+
 * `mariadb.tls.enabled` and `mariadb.encryption.enabled` to `false`
 * `mariadb.master.extraEnvVarsSecret` and `mariadb.slave.extraEnvVarsSecret` to `null`
 
