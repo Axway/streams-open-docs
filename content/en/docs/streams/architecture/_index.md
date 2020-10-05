@@ -143,11 +143,11 @@ These are the recommended parameters for the VMs:
 
 #### Storage
 
-We recommend using SSD disks with low latency. The storage is used by the Kafka, Zookeeper and PostgreSQL pods. The following table summarizes the minimum recommended storage for each component, but your configuration will depend on your usage and other parameters.
+We recommend using SSD disks with low latency. The storage is used by the Kafka, Zookeeper and MariaDB pods. The following table summarizes the minimum recommended storage for each component, but your configuration will depend on your usage and other parameters.
 
 | Component  | Size per pod |
 | ---------- | ------------ |
-| PostgreSQL | 8 GB         |
+| MariaDB    | 8 GB         |
 | Kafka      | 200 GB       |
 | Zookeeper  | 8 GB         |
 
@@ -208,7 +208,7 @@ This is a minimal configuration and you can define more specific permissions wit
 
 ##### Volumes
 
-Several third-party components of Streams (Kafka/Zookeeper and PostgreSQL) use Kubernetes [PersistentVolumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) and [PersistentVolumeClaims](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) to enable their persistent storage. The underlying infrastructure must support this feature so that the data is properly stored on disk. This allows Streams to maintain a consistent state and save published data in the event of a component failure.
+Several third-party components of Streams (Kafka/Zookeeper and MariaDB) use Kubernetes [PersistentVolumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) and [PersistentVolumeClaims](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) to enable their persistent storage. The underlying infrastructure must support this feature so that the data is properly stored on disk. This allows Streams to maintain a consistent state and save published data in the event of a component failure.
 
 | Description                                                                 | Type     |
 | --------------------------------------------------------------------------- | -------- |
@@ -300,7 +300,7 @@ nodeSelector:
   application: streams
 ```
 
-For 3rd parties pods (Nginx, Kafka, Hazelcast, Zookeeper and PostgreSQL) you have to define it for each of them:
+For 3rd parties pods (Nginx, Kafka, Hazelcast, Zookeeper and MariaDB) you have to define it for each of them:
 
 ```
 nginx-ingress:
@@ -319,7 +319,7 @@ hazelcast:
   nodeSelector:
     application: streams
 [...]
-postgresql:
+mariadb:
   master:
     nodeSelector:
       application: streams
@@ -404,7 +404,7 @@ Here is the list of secrets related to Streams installation:
 | ------------ | ----------------------------------- |
 | default      | kubernetes.io/service-account-token |
 | hazelcast    | kubernetes.io/service-account-token |
-| postgres     | Opaque                              |
+| mariadb      | Opaque                              |
 | Nginx secret | Opaque                              |
 | Nginx token  | kubernetes.io/service-account-token |
 | helm         | kubernetes.io/service-account-token |
@@ -446,13 +446,13 @@ The Webhook Subscriber allows external clients to be notified via HTTP Post requ
 
 * It exposes an API endpoint to manage webhook subscriptions.
 * It provides an OpenAPI description, available at path `/openapi.yaml`. The API is accessible only through the NGINX Ingress Controller.
-* It uses PostgreSQL to store the subscriptions created via the subscription API.
+* It uses MariaDB to store the subscriptions created via the subscription API.
 * It uses Hazelcast as a L2 cache layer on top of the underlying persistent system, and as a distributed cache.
 * It consumes data from the streaming backbone, which is managed by Apache Kafka.
 
 To start this pod, the following requirements must be met:
 
-* PostgreSQL up and running
+* MariaDB up and running
 * Apache Kafka up and running
 * Hazelcast up and running
 
@@ -472,13 +472,13 @@ Streams Kafka subscriber allows to route events published to a Streams topic to 
 
 * It exposes an API endpoint to manage Kafka subscriptions.
 * It provides an OpenAPI description, available at the path `/openapi.yaml`. The API is accessible only through the NGINX Ingress Controller.
-* It uses PostgreSQL to store the subscriptions created via the subscription API.
+* It uses MariaDB to store the subscriptions created via the subscription API.
 * It uses Hazelcast as a L2 cache layer on top of the underlying persistent system, and as a distributed cache.
 * It consumes data from the streaming backbone, which is managed by Apache Kafka.
 
 To start this pod, the following requirements must be met:
 
-* PostgreSQL up and running
+* MariaDB up and running
 * Apache Kafka up and running
 * Hazelcast up and running
 
@@ -499,12 +499,12 @@ The Hub is the core component of our streaming backbone managed by Apache Kafka.
 * It exposes an Http port (8080 by default) to expose the API endpoint for topic management.
 * It provides an OpenAPI description available at the path `/openapi.yaml`. It is accessed only through the ingress controller.
 * It is in charge of data processing/transformation (e.g incremental updates computation) of the data published by the different publishers.
-* It requires PostgreSQL to store topics. For caching mechanism.
+* It requires MariaDB to store topics. For caching mechanism.
 * It uses Hazelcast as a L2 cache to the underlying persistent layer.
 
 To start this pod, the following requirements must be met:
 
-* Postgres up and running
+* MariaDB up and running
 * Apache Kafka up and running
 * Hazelcast up and running
 
@@ -618,9 +618,9 @@ Pod characteristics of the publisher SFDC for HA deployment mode:
 | Component             | Exposes API | Exposed Port | Resources Limits | Xmx & Xms | Requires | Ingress traffic | Egress traffic |
 | --------------------- | ----------- | ------------ | ---------------- | --------- | -------- | --------------- | -------------- |
 | SSE Subscriber        | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | Kafka, Hazelcast             | Yes | No  |
-| Webhook  Subscriber   | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | PostgreSQL, Kafka, Hazelcast | Yes | Yes |
-| Kafka subscriber      | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | PostgreSQL, Kafka, Hazelcast | Yes | Yes |
-| Hub                   | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | PostgreSQL, Kafka, Hazelcast | Yes | No  |
+| Webhook  Subscriber   | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | MariaDB, Kafka, Hazelcast | Yes | Yes |
+| Kafka subscriber      | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | MariaDB, Kafka, Hazelcast | Yes | Yes |
+| Hub                   | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | MariaDB, Kafka, Hazelcast | Yes | No  |
 | Http-Poller Publisher | No          | none         | 2 CPUs 3 GB      | 2 GB      | Kafka, Zookeeper, Hazelcast  | No  | Yes |
 | Http-Post  Publisher  | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | Kafka, Zookeeper, Hazelcast  | Yes | Yes |
 | Kafka Publisher       | No          | none         | 2 CPUs 3 GB      | 2 GB      | Kafka, Zookeeper, Hazelcast  | No  | Yes |
@@ -679,28 +679,28 @@ Pod characteristics for HA deployment mode:
 | ------------------ | --- | ------ | --------- | ----------- |
 | 3 (one in each AZ) | 1   | 1 GB   | 512 MB    | n/a         |
 
-#### PostgreSQL
+#### MariaDB
 
-PostgreSQL is our persistence layer.
+MariaDB is our persistence layer.
 
 Source Docker image:
 
-* Repository: bitnami/postgresql
-* Tag: 12.4.0
+* Repository: bitnami/mariadb
+* Tag: 10.4.14
 
 Pod names:
 
-* `streams-postgresql-master`
-* `streams-postgresql-slave`
+* `streams-database-master`
+* `streams-database-slave`
 
 Pod characteristics for HA deployment mode:
 
 | Name              | Replicas | CPU | Memory  | Xmx & Xms | Persistence |
 | ----------------- |--------- | --- | ------- | --------- | ----------- |
-| PostgreSQL master | 1        | 1   | 1024 MB | n/a       | 8 GB        |
-| PostgreSQL slave  | 1        | 1   | 1024 MB | n/a       | 8 GB        |
+| MariaDB master    | 1        | 1   | 1024 MB | n/a       | 8 GB        |
+| MariaDB slave     | 1        | 1   | 1024 MB | n/a       | 8 GB        |
 
-{{< alert title="Note" >}}PostgreSQL is deployed in master/slave mode with asynchronous commit for replication but the failover is not done automatically.{{< /alert >}}
+{{< alert title="Note" >}}MariaDB is deployed in master/slave mode with asynchronous commit for replication but the failover is not done automatically.{{< /alert >}}
 
 ### Logging/tracing
 
