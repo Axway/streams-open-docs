@@ -12,7 +12,9 @@ description: Install Streams on-premise, or deploy in your private cloud, and le
 * Helm 3.0.2+
 * RBAC enabled
 * PersistentVolumes and LoadBalancer provisioner supported by the underlying infrastructure
-* Resources: for the minimal configuration the cluster must have at least `9` CPUs and `10` GB RAM dedicated to the platform.
+* Resources: 
+  * Minimal configuration: `9` CPUs and `10` GB RAM dedicated to the platform.
+  * Minimal High availability configuration: `34` CPUs and `51` GB RAM dedicated to the platform.
 
 {{< alert title="Note" >}}
 Refer to the [Reference Architecture](/docs/streams/architecture) documentation for further details.
@@ -81,7 +83,7 @@ Passwords are required for Streams microservices to securely connect to Hazelcas
 
 ```sh
 export NAMESPACE="my-namespace"
-export HAZELCAST_PASSWORD="my-hazelcast-password""
+export HAZELCAST_PASSWORD="my-hazelcast-password"
 kubectl create secret generic streams-hazelcast-password-secret --from-literal=hazelcast-password=${HAZELCAST_PASSWORD} -n ${NAMESPACE}
 ```
 
@@ -148,7 +150,8 @@ To disable database encryption **and** TLS (not recommended for production use),
 
 ### Ingress TLS settings
 
-SSL/TLS is enabled by default on our embedded Ingress controller. You need to provide an SSL/TLS certificate for the domain name you are using (CN field should match the `ingress.host` [Helm parameter](#helm-parameters)):
+SSL/TLS is enabled by default on our embedded Ingress controller. If you don't provide any certificate, SSL will be enabled thanks to a nginx embedded fake SSL certificate.
+You can provide an SSL/TLS certificate for the domain name you are using (either CN or SAN fields should match the `ingress.host` [Helm parameter](#helm-parameters)):
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -164,7 +167,7 @@ To disable SSL/TLS (not recommended for production use), see [Helm parameters](#
 
 #### Non HA configuration
 
-The command below deploys Streams components in a non-HA configuration with 1 replica per microservices (not recommended for production use).
+The command below deploys Streams components in a non-HA configuration with 1 replica per microservices (not recommended for production use). This can take a few minutes.
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -178,7 +181,7 @@ helm install "${HELM_RELEASE_NAME}" . \
 
 #### HA configuration
 
-The command below deploys Streams on the Kubernetes cluster in High availability (recommend for production).
+The command below deploys Streams on the Kubernetes cluster in High availability (recommend for production).  This can take a few minutes.
 Note that optional [Helm parameters](#helm-parameters) can be specified to customize the installation.
 
 ```sh
@@ -194,8 +197,17 @@ helm install "${HELM_RELEASE_NAME}" . \
 
 {{< alert title="Note" >}}
 The default configuration only accepts incoming HTTP/HTTPS requests to `k8s.yourdomain.tld`.
-Refer to the [Helm parameters](#helm-parameters) for further details.
+Refer to [Ingress host configuration](#ingress-host-configuration) and [Helm parameters](#helm-parameters) for further details.
 {{< /alert >}}
+
+#### Ingress host configuration
+
+{{< alert title="Note" >}}
+Do not use for production.
+{{< /alert >}}
+
+The ingress controller automatically deploys a load balancer on the underlying infrastructure. You may want to use its auto-generated DNS if you are not all set for production yet.
+If this is the case, after the installation has been performed, you can edit the `streams` ingress resource and replace the host `k8s.yourdomain.tld` with the auto-generated DNS of your load balancer. 
 
 ### Validate the installation
 
@@ -233,10 +245,11 @@ my-release-subscriber-webhook-84469bd68f-lqxgk                 1/1     Running  
 In order to check that Streams is running:
 
 1. Create a topic with default settings using the provided Postman collection and Postman environment.
+As the provided environment is configured with localhost, you may need to reconfigure it with your own DNS, for instance `baseUrl` will be changed from `http://localhost:9001` to `https://k8s.yourdomain.tld` and so on for other variables.
 2. Try to subscribe with SSE to your topic:
 
 ```sh
-curl "http://k8s.yourdomain.tld/subscribers/sse/topics/{TOPIC_ID}"
+curl "https://k8s.yourdomain.tld/subscribers/sse/topics/{TOPIC_ID}"
 ```
 
 {{< alert title="Note" >}}
