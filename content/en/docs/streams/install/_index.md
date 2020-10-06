@@ -12,9 +12,10 @@ description: Install Streams on-premise, or deploy in your private cloud, and le
 * Helm 3.0.2+
 * RBAC enabled
 * PersistentVolumes and LoadBalancer provisioner supported by the underlying infrastructure
-* Resources: 
-  * Minimal configuration: `9` CPUs and `10` GB RAM dedicated to the platform.
-  * Minimal High availability configuration: `34` CPUs and `51` GB RAM dedicated to the platform.
+* Resources:
+
+    * Minimal non-HA configuration: `9` CPUs and `10` GB RAM dedicated to the platform.
+    * Minimal HA configuration: `34` CPUs and `51` GB RAM dedicated to the platform.
 
 {{< alert title="Note" >}}
 Refer to the [Reference Architecture](/docs/streams/architecture) documentation for further details.
@@ -158,7 +159,7 @@ export NAMESPACE="my-namespace"
 export INGRESS_TLS_KEY_PATH="my-key-path"
 export INGRESS_TLS_CHAIN_PATH="my-chain-path"
 
-kubectl create secret tls streams-ingress-tls-secret --key==${INGRESS_TLS_KEY_PATH} --cert="${INGRESS_TLS_CHAIN_PATH}" -n "${NAMESPACE}"
+kubectl create secret tls streams-ingress-tls-secret --key=${INGRESS_TLS_KEY_PATH} --cert="${INGRESS_TLS_CHAIN_PATH}" -n "${NAMESPACE}"
 ```
 
 To disable SSL/TLS (not recommended for production use), see [Helm parameters](#helm-parameters).
@@ -207,7 +208,7 @@ Do not use for production.
 {{< /alert >}}
 
 The ingress controller automatically deploys a load balancer on the underlying infrastructure. You may want to use its auto-generated DNS if you are not all set for production yet.
-If this is the case, after the installation has been performed, you can edit the `streams` ingress resource and replace the host `k8s.yourdomain.tld` with the auto-generated DNS of your load balancer. 
+If this is the case, after the installation has been performed, you can edit the `streams` ingress resource and replace the host `k8s.yourdomain.tld` with the auto-generated DNS of your load balancer.
 
 ### Validate the installation
 
