@@ -10,12 +10,13 @@
 
 The following diagram shows the product architecture from a security perspective.  The legend explains the security level on connections (SSL by default, always SSL, can be SSL, and so on) and on data storage (signed or encrypted).
 
-![API Gateway architecture and connections](/Images/security/apigw_sec_arch_a5.png)
+![Streams architecture and connection](/Images/security/sec_arch.png)
 
 The diagram includes the following components:
 
-* ES Conf: Entity Store Configuration, which is a file-based store for all policy data.
-* Domain Creds: Salted hash of administrator user credentials.
-* LDAP/IDM: Identity Management products, such as authentication or authorization servers.
-* Domain: An administrative entity comprising at least one Admin Node Manager and at least one API Gateway.  These logical components can be located on the same physical or virtual host or separated across multiple physical or virtual hosts as required.
+* MariaDB: RDBMS use to persist topics and subscriptions
+* Hazelcast: in-memory data cache, act as L2 cache of RDBMS and memory database
+* Kafka: streaming backbone use for transformation on data pipeline
+* Zookeeper: service registry used by Kafka
+
 
