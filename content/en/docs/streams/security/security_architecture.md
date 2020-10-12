@@ -20,5 +20,3 @@ The diagram includes the following components:
 * Hazelcast: in-memory data cache, act as L2 cache of RDBMS and memory database
 * Kafka: streaming backbone use for transformation on data pipeline
 * Zookeeper: service registry used by Kafka
-
-

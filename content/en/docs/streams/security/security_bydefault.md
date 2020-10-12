@@ -10,9 +10,9 @@ Security best practices recommend that products are shipped secure-by-default to
 
 The following measures have been taken to ensure that Streams is secure-by-default:
 
-* TLS communication between Streams and MariaDB is enabled by default 
-* TLS communication for inbound connections is enabled by default 
-* Mariadb encrypted data-at-rest is enabled by default 
+* TLS communication between Streams and MariaDB is enabled by default
+* TLS communication for inbound connections is enabled by default
+* Mariadb encrypted data-at-rest is enabled by default
 * Streams microservices are authenticated to connect to hazelcast and MariaDB
 
-{{< alert title="Caution" color="warning" >}}Turning off secure-by-default configuration effectively makes API Gateway less secure.{{< /alert >}}
+{{< alert title="Caution" color="warning" >}}Turning off secure-by-default configuration effectively makes Streams less secure.{{< /alert >}}
