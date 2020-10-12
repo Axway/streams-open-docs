@@ -10,7 +10,7 @@ Axway implements a Secure Development Lifecycle (SDL) in product development. A 
 
 The SDL consists of a set of standard phases and processes. In this spiral development model, requirements and design are frequently revisited to ensure that risks are assessed and eliminated. The following diagram illustrates the simplified Microsoft SDL model that Axway follows.
 
-![Secure Development Lifecycle model](/Images/streams/securelifecycle.png)
+![Secure Development Lifecycle model](/Images/security/securelifecycle.png)
 
 Axway development teams follow Agile practices and implement SDL processes and controls throughout the development lifecycle. For example, threat-modeling is an important part of the design phase and a final security review is required before product release. These processes and control points ensure that products meet the initial security requirements and pass the technical criteria established by Axway PSG and the larger security community.
 
