@@ -342,7 +342,7 @@ To uninstall Streams, run following command:
 export NAMESPACE="my-namespace"
 export HELM_RELEASE_NAME="my-release"
 
-helm uninstall "${HELM_RELEASE_NAME}" –n "${NAMESPACE}"
+helm uninstall "${HELM_RELEASE_NAME}" -n "${NAMESPACE}"
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -353,6 +353,15 @@ Note that PersistentVolumeClaims required by Kafka and MariaDB are NOT deleted w
 export NAMESPACE="my-namespace"
 
 kubectl -n "${NAMESPACE}" get persistentvolumeclaims --no-headers=true | awk '/streams/{print $1}' | xargs kubectl delete -n "${NAMESPACE}" persistentvolumeclaims
+```
+
+Similarly, all [secrets](#secrets-management) created for the Streams release installation aren't deleted either with the release uninstallation. To delete them, you can run the following command:
+
+```sh
+export NAMESPACE="my-namespace"
+export REGISTRY_SECRET_NAME="my-registry-secret-name"
+
+kubectl -n "${NAMESPACE}" delete secrets "${REGISTRY_SECRET_NAME}" streams-hazelcast-password-secret streams-database-password-secret streams-database-secret streams-ingress-tls-secret
 ```
 
 ## Backup & Disaster recovery
