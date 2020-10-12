@@ -8,7 +8,9 @@
 
 ## Streams architecture
 
-The following diagram shows the product architecture from a security perspective.  The legend explains the security level on connections (SSL by default, always SSL, can be SSL, and so on) and on data storage (signed or encrypted).
+The following diagram shows the product architecture from a security perspective.
+
+The legend explains the security level on connections (TLS by default, always TLS, can be TLS, and so on) and on data storage (signed or encrypted).
 
 ![Streams architecture and connection](/Images/security/sec_arch.png)
 
