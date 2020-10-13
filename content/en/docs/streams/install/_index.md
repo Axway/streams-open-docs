@@ -23,13 +23,74 @@ Refer to the [Reference Architecture](/docs/streams/architecture) documentation 
 
 ## Pre-installation
 
+### Helm chart
+
 Download Steams helm chart corresponding to the `release-version` you want to install.
 
 ```sh
-export INSTALL_DIR="MyInstallDirectory"
+export INSTALL_DIR="my-install-directory"
 
 cd ${INSTALL_DIR}/helm/streams
 ```
+
+### Docker images
+
+If you want to use [DockerHub](https://hub.docker.com/) directly to retrieve the Streams Docker images from your K8s cluster, you can skip this section.
+Otherwise, you must download the Streams Docker images then push it to the desired registry by following these steps:
+
+* Download the Docker images from Webliv or DockerHub
+    * From Docker Hub (you must be [logged in](https://docs.docker.com/engine/reference/commandline/login/)):
+        ```sh
+        export VERSION="streams-version"
+
+        docker pull axway/streams-hub:${VERSION}
+        docker pull axway/streams-subscriber-sse:${VERSION}
+        docker pull axway/streams-subscriber-webhook:${VERSION}
+        docker pull axway/streams-subscriber-kafka:${VERSION}
+        docker pull axway/streams-publisher-http-poller:${VERSION}
+        docker pull axway/streams-publisher-http-post:${VERSION}
+        docker pull axway/streams-publisher-kafka:${VERSION}
+        docker pull axway/streams-publisher-sfdc:${VERSION}
+        ```
+    * From Webliv:
+        * Download all the .tar files manually
+        * Load all the Docker images locally:
+          ```sh
+          for i in streams-*.tar; do docker load < $i; done
+          ```
+        * Check that the docker images are loaded:
+          ```sh
+          docker images | grep streams
+          ```
+* Push these images on the desired registry:
+    ```sh
+    export VERSION="streams-version"
+    export REGISTRY="my-registry"
+
+    docker tag axway/streams-hub:${VERSION} ${REGISTRY}/streams-hub:${VERSION}
+    docker push ${REGISTRY}/streams-hub:${VERSION}
+
+    docker tag axway/streams-subscriber-sse:${VERSION} ${REGISTRY}/streams-subscriber-sse:${VERSION}
+    docker push ${REGISTRY}/streams-subscriber-sse:${VERSION}
+
+    docker tag axway/streams-subscriber-webhook:${VERSION} ${REGISTRY}/streams-subscriber-webhook:${VERSION}
+    docker push ${REGISTRY}/streams-subscriber-webhook:${VERSION}
+
+    docker tag axway/streams-subscriber-kafka:${VERSION} ${REGISTRY}/streams-subscriber-kafka:${VERSION}
+    docker push ${REGISTRY}/streams-subscriber-kafka:${VERSION}
+
+    docker tag axway/streams-publisher-http-poller:${VERSION} ${REGISTRY}/streams-publisher-http-poller:${VERSION}
+    docker push ${REGISTRY}/streams-publisher-http-poller:${VERSION}
+
+    docker tag axway/streams-publisher-http-post:${VERSION} ${REGISTRY}/streams-publisher-http-post:${VERSION}
+    docker push ${REGISTRY}/streams-publisher-http-post:${VERSION}
+
+    docker tag axway/streams-publisher-kafka:${VERSION} ${REGISTRY}/streams-publisher-kafka:${VERSION}
+    docker push ${REGISTRY}/streams-publisher-kafka:${VERSION}
+
+    docker tag axway/streams-publisher-sfdc:${VERSION} ${REGISTRY}/streams-publisher-sfdc:${VERSION}****
+    docker push ${REGISTRY}/streams-publisher-sfdc:${VERSION}
+    ```
 
 ## Helm Chart installation
 
@@ -49,6 +110,16 @@ kubectl create namespace "${NAMESPACE}"
 ### Docker Registry settings
 
 Docker images must be hosted on a docker registry accessible from your Kubernetes cluster.
+
+By default, it use the Axway [DockerHub](https://hub.docker.com/) registry. To use another registry, after following this [section](docker-images), you must either:
+
+* Edit the `values.yaml` file and set the `images.repository` entry as follow:
+  ```yaml
+  images:
+    repository: my-registry
+  ```
+* or specify `--set images.repository="my-registry"` in the Helm Chart installation command.
+
 In order to securely store registry login credentials, we recommend using Kubernetes [secrets](https://kubernetes.io/docs/concepts/configuration/secret/):  
 
 ```sh
@@ -70,12 +141,10 @@ To use Axway [DockerHub](https://hub.docker.com/) as your container registry:
 Finally, to use the secret you just created, you can either:
 
 * Edit the `values.yaml` file and set the `imagePullSecrets` entry as follow:
-
-```yaml
-imagePullSecrets:
-  - name: my-registry-secret-name
-```
-
+  ```yaml
+  imagePullSecrets:
+    - name: my-registry-secret-name
+  ```
 * or specify `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` in the Helm Chart installation command.
 
 ### Hazelcast settings
