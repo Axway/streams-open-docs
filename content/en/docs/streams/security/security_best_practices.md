@@ -14,6 +14,13 @@ Using self-signed certificates may be a security risk for many reasons, includin
 * If self-signed certificates are not securely stored, anyone can change them. CA-signed certificates also must be securely stored, but no one can change them.
 * There is no way to revoke self-signed certificates.
 
+## Remote connections
+
+You should limit the remote connections to the kubernetes cluster:
+
+* If no one needs to access the product remotely, make sure that ports are closed in your firewall.
+* If someone needs to connect remotely only occasionally, set a procedure to open the port only on demand.
+
 ## Internet access limitation
 
 As much as possible, limit the number of Internet access points. Do not open useless Internet connections and limit interconnections with external networks as much as possible. This limits the product’s attack surface, reduces the risk of external attacks, and makes it easier to audit the product.
