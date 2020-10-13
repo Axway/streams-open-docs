@@ -18,7 +18,7 @@ The following secure connections are available:
 ## Encrypted data-at-rest
 
 * Kubernetes secrets data can be encrypted at rest. Raw encryption key can be stored within a KMS provider.
-* Data-at-rest is enabled by default for MariaDB.
+* Encrypted data-at-rest is enabled by default for MariaDB.
 
 ## Password management
 
