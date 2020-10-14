@@ -189,7 +189,6 @@ We recommend the use of [CALICO](https://kubernetes.io/docs/concepts/cluster-adm
 
 Kubernetes Role-based access control ([RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)) is a method of regulating access to your Kubernetes cluster and resources based on the roles of individual users within an enterprise. Streams requires RBAC to be enabled for secrets management and third-party dependencies:
 
-* Hazelcast (cluster discovery service)
 * Nginx (fine tuning of ingress controller permissions)
 
 It is recommended to set people or application permissions to manage resources:
@@ -300,7 +299,7 @@ nodeSelector:
   application: streams
 ```
 
-For 3rd parties pods (Nginx, Kafka, Hazelcast, Zookeeper and MariaDB) you have to define it for each of them:
+For 3rd parties pods (Nginx, Kafka, Zookeeper and MariaDB) you have to define it for each of them:
 
 ```
 nginx-ingress:
@@ -312,10 +311,6 @@ kafka:
   nodeSelector:
     application: streams
 zookeeper:
-  nodeSelector:
-    application: streams
-[...]
-hazelcast:
   nodeSelector:
     application: streams
 [...]
@@ -403,7 +398,6 @@ Here is the list of secrets related to Streams installation:
 | Description  | Type                                |
 | ------------ | ----------------------------------- |
 | default      | kubernetes.io/service-account-token |
-| hazelcast    | kubernetes.io/service-account-token |
 | mariadb      | Opaque                              |
 | Nginx secret | Opaque                              |
 | Nginx token  | kubernetes.io/service-account-token |
@@ -421,14 +415,13 @@ The SSE Subscriber enables Streams to push data to subscribers (e.g., client app
 Server-Sent-Events is a unidirectional http-based protocol which keeps the connection open in order for the server to push data in real time to the client.
 
 * It exposes an API for subscribing to a Streams topic.  
-* It consumes data from the streaming backbone, which is managed by Apache Kafka. It also uses Hazelcast as a distributed cache.
+* It consumes data from the streaming backbone, which is managed by Apache Kafka.
 * It exposes an http port (8080 by default) to expose the subscription endpoint for external consumption.
 * It is accessed only through the NGINX Ingress Controller.
 
 To start this pod, the following requirements must be met:
 
 * Apache Kafka up and running
-* Hazelcast up and running
 
 Pod characteristics of the SSE Subscriber for HA deployment mode:
 
@@ -447,14 +440,14 @@ The Webhook Subscriber allows external clients to be notified via HTTP Post requ
 * It exposes an API endpoint to manage webhook subscriptions.
 * It provides an OpenAPI description, available at path `/openapi.yaml`. The API is accessible only through the NGINX Ingress Controller.
 * It uses MariaDB to store the subscriptions created via the subscription API.
-* It uses Hazelcast as a L2 cache layer on top of the underlying persistent system, and as a distributed cache.
 * It consumes data from the streaming backbone, which is managed by Apache Kafka.
+* It uses Zookeeper as service discovery and for distributed locks.
 
 To start this pod, the following requirements must be met:
 
 * MariaDB up and running
 * Apache Kafka up and running
-* Hazelcast up and running
+* Zookeeper up and running
 
 Pod characteristics of the subscriber webhook for HA deployment mode:  
 
@@ -473,14 +466,14 @@ Streams Kafka subscriber allows to route events published to a Streams topic to 
 * It exposes an API endpoint to manage Kafka subscriptions.
 * It provides an OpenAPI description, available at the path `/openapi.yaml`. The API is accessible only through the NGINX Ingress Controller.
 * It uses MariaDB to store the subscriptions created via the subscription API.
-* It uses Hazelcast as a L2 cache layer on top of the underlying persistent system, and as a distributed cache.
 * It consumes data from the streaming backbone, which is managed by Apache Kafka.
+* It uses Zookeeper as service discovery and for distributed locks.
 
 To start this pod, the following requirements must be met:
 
 * MariaDB up and running
 * Apache Kafka up and running
-* Hazelcast up and running
+* Zookeeper up and running
 
 Pod characteristics of the subscriber Kafka for HA deployment mode:
 
@@ -500,13 +493,11 @@ The Hub is the core component of our streaming backbone managed by Apache Kafka.
 * It provides an OpenAPI description available at the path `/openapi.yaml`. It is accessed only through the ingress controller.
 * It is in charge of data processing/transformation (e.g incremental updates computation) of the data published by the different publishers.
 * It requires MariaDB to store topics. For caching mechanism.
-* It uses Hazelcast as a L2 cache to the underlying persistent layer.
 
 To start this pod, the following requirements must be met:
 
 * MariaDB up and running
 * Apache Kafka up and running
-* Hazelcast up and running
 
 Pod characteristics of the hub for HA deployment mode:
 
@@ -522,15 +513,15 @@ Pod characteristics of the hub for HA deployment mode:
 
 The Http-Poller Publisher has the capability to poll a target URL at a given polling period for a dedicated Streams topic. The data retrieved from each polling are then published into the Streams platform.
 
+* It uses MariaDB to store publisher contexts.
 * It publishes data to the streaming backbone, which is managed by Apache Kafka.
-* It uses Hazelcast as a distributed cache.
-* It uses Zookeeper as a service discovery.
+* It uses Zookeeper as a service discovery and for distributed locks.
 
 To start this pod, the following requirements must be met:
 
+* MariaDB up and running
 * Apache Kafka up and running
 * Zookeeper up and running
-* Hazelcast up and running
 
 Pod characteristics of the HTTP-Poller Publisher for HA deployment mode:  
 
@@ -547,15 +538,15 @@ The HTTP-Post Publisher allows any external component capable of performing an H
 
 * It exposes an API (8080 by default) to publish payloads into the Streams platform.
 * It provides an API description via an OpenAPI spec file at path `/openapi.yaml`. The API is accessible only through the ingress controller.
-* It publishes data to the streaming backbone (Kafka).
-* It uses Hazelcast as a distributed cache.
-* It uses Zookeeper as a service discovery.
+* It uses MariaDB to store publisher contexts.
+* It publishes data to the streaming backbone (Apache Kafka).
+* It uses Zookeeper as a service discovery and for distributed locks.
 
 To start this pod, the following requirements must be met:
 
+* MariaDB up and running
 * Zookeeper up and running
 * Apache Kafka up and running
-* Hazelcast up and running
 
 Pod characteristics of the publisher http post for HA deployment mode:
 
@@ -571,15 +562,15 @@ Pod characteristics of the publisher http post for HA deployment mode:
 
 The Kafka Publisher acts as a consumer of an external Kafka cluster. It consumes a configured Kafka topic from the external Kafka cluster and publishes payloads in the Streams platform.
 
-* It publishes data to the streaming backbone (internal kafka).
-* It uses Hazelcast as a distributed cache.
-* It uses Zookeeper as a service discovery.
+* It uses MariaDB to store publisher contexts.
+* It publishes data to the streaming backbone (Apache Kafka).
+* It uses Zookeeper as a service discovery and for distributed locks.
 
 To start this pod, the following requirements must be met:
 
+* MariaDB up and running
 * Apache Kafka up and running
 * Zookeeper up and running
-* Hazelcast up and running
 
 Pod characteristics of the publisher kafka for HA deployment mode:
 
@@ -594,15 +585,15 @@ Pod characteristics of the publisher kafka for HA deployment mode:
 
 The Salesforce (SFDC) Publisher provides the capability to capture changes Salesforce Streaming API PushTopics or Salesforce Platform Events. PushTopics provide the ability to subscribe to change events related to Salesforce Objects (SObjects). Platform Events allow Salesforce users to define their own publish/subscribe events. Once integrated with Streams, Salesforce events can be then broadcast by any of Streams subscribers.
 
-It publishes data to the streaming backbone.
-It uses Hazelcast as a distributed cache.
-It uses Zookeeper as a service discovery.
+* It uses MariaDB to store publisher contexts.
+* It publishes data to the streaming backbone (Apache Kafka).
+* It uses Zookeeper as a service discovery and for distributed locks.
 
 To start this pod, the following requirements must be met:
 
+* MariaDB up and running
 * Apache Kafka up and running
 * Zookeeper up and running
-* Hazelcast up and running
 
 Pod characteristics of the publisher SFDC for HA deployment mode:
 
@@ -615,16 +606,16 @@ Pod characteristics of the publisher SFDC for HA deployment mode:
 
 #### Summary table
 
-| Component             | Exposes API | Exposed Port | Resources Limits | Xmx & Xms | Requires | Ingress traffic | Egress traffic |
-| --------------------- | ----------- | ------------ | ---------------- | --------- | -------- | --------------- | -------------- |
-| SSE Subscriber        | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | Kafka, Hazelcast             | Yes | No  |
-| Webhook  Subscriber   | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | MariaDB, Kafka, Hazelcast | Yes | Yes |
-| Kafka subscriber      | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | MariaDB, Kafka, Hazelcast | Yes | Yes |
-| Hub                   | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | MariaDB, Kafka, Hazelcast | Yes | No  |
-| Http-Poller Publisher | No          | none         | 2 CPUs 3 GB      | 2 GB      | Kafka, Zookeeper, Hazelcast  | No  | Yes |
-| Http-Post  Publisher  | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | Kafka, Zookeeper, Hazelcast  | Yes | Yes |
-| Kafka Publisher       | No          | none         | 2 CPUs 3 GB      | 2 GB      | Kafka, Zookeeper, Hazelcast  | No  | Yes |
-| Salesforce Publisher  | No          | none         | 2 CPUs 3 GB      | 2 GB      | Kafka, Zookeeper, Hazelcast  | No  | Yes |
+| Component             | Exposes API | Exposed Port | Resources Limits | Xmx & Xms | Requires                  | Ingress traffic | Egress traffic  |
+| --------------------- | ----------- | ------------ | ---------------- | --------- | ------------------------- | --------------- | --------------- |
+| SSE Subscriber        | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | Kafka                     | Yes             | No              |
+| Webhook  Subscriber   | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | MariaDB, Kafka, Zookeeper | Yes             | Yes             |
+| Kafka subscriber      | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | MariaDB, Kafka, Zookeeper | Yes             | Yes             |
+| Hub                   | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | MariaDB, Kafka            | Yes             | No              |
+| Http-Poller Publisher | No          | none         | 2 CPUs 3 GB      | 2 GB      | MariaDB, Kafka, Zookeeper | No              | Yes             |
+| Http-Post Publisher   | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | MariaDB, Kafka, Zookeeper | Yes             | Yes             |
+| Kafka Publisher       | No          | none         | 2 CPUs 3 GB      | 2 GB      | MariaDB, Kafka, Zookeeper | No              | Yes             |
+| Salesforce Publisher  | No          | none         | 2 CPUs 3 GB      | 2 GB      | MariaDB, Kafka, Zookeeper | No              | Yes             |
 
 ### Third parties
 
@@ -661,23 +652,6 @@ Pod characteristics for HA deployment mode:
 | Replicas           | CPU | Memory | Xmx & Xms | Persistence |
 | ------------------ | --- | ------ | --------- | ----------- |
 | 3 (one in each AZ) | 1   | 512 MB | n/a       | 8 GB        |
-
-#### Hazelcast
-
-Hazelcast is used as a distributed in-memory database to share data between streams microservice instances.
-
-Source Docker image:
-
-* Repository: hazelcast/hazelcast
-* Tag: 3.12.9
-
-Pod name:  `streams-hazelcast`.
-
-Pod characteristics for HA deployment mode:
-
-| Replicas           | CPU | Memory | Xmx & Xms | Persistence |
-| ------------------ | --- | ------ | --------- | ----------- |
-| 3 (one in each AZ) | 1   | 1 GB   | 512 MB    | n/a         |
 
 #### MariaDB
 
