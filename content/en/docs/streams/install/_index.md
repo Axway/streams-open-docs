@@ -78,16 +78,6 @@ imagePullSecrets:
 
 * or specify `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` in the Helm Chart installation command.
 
-### Hazelcast settings
-
-Passwords are required for Streams microservices to securely connect to Hazelcast.
-
-```sh
-export NAMESPACE="my-namespace"
-export HAZELCAST_PASSWORD="my-hazelcast-password"
-kubectl create secret generic streams-hazelcast-password-secret --from-literal=hazelcast-password=${HAZELCAST_PASSWORD} -n ${NAMESPACE}
-```
-
 ### MariaDB settings
 
 #### Password
@@ -230,7 +220,6 @@ export NAMESPACE="my-namespace"
 kubectl get po -n "${NAMESPACE}"
 
 NAME                                                           READY   STATUS    RESTARTS   AGE
-streams-hazelcast-0                                            1/1     Running   0          116s
 streams-kafka-0                                                1/1     Running   0          116s
 streams-mariadb-master-0                                       1/1     Running   0          116s
 streams-zookeeper-0                                            1/1     Running   0          116s
@@ -282,7 +271,6 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | publisherKafka.replicaCount           | Publisher Kafka replica count       | no        | 2             |
 | publisherSfdc.enabled                 | Enable/Disable Publisher SFDC       | no        | false         |
 | publisherSfdc.replicaCount            | Publisher SFDC replica count        | no        | 2             |
-| hazelcast.metrics.enabled             | Activate metrics endpoint for Hazelcast | no    | false         |
 | mariadb.metrics.enabled               | Activate metrics endpoint for MariaDB | no      | false         |
 | kafka.metrics.jmx.enabled             | Activate metrics endpoint for Kafka | no        | false         |
 | kafka.zookeeper.metrics.enabled       | Activate metrics endpoint for Zookeeper | no    | false         |
@@ -290,10 +278,10 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
 
 {{< alert title="Note" >}}
-If you want to configure a parameter from a dependency chart, [MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb), [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka) or [Hazelcast](https://github.com/helm/charts/tree/master/stable/hazelcast), you need to add the chart prefix name to the command line argument. For example:
+If you want to configure a parameter from a dependency chart, [MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb), [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka), you need to add the chart prefix name to the command line argument. For example:
 
 ```
---set mariadb.image.tag=latest --set hazelcast.cluster.memberCount=3 --set kafka.replicaCount=2 `
+--set mariadb.image.tag=latest --set kafka.replicaCount=2 `
 ```
 
 Please refer to the dependency chart's documentation to get the list of parameters.
@@ -361,7 +349,7 @@ Similarly, all [secrets](#secrets-management) created for the Streams release in
 export NAMESPACE="my-namespace"
 export REGISTRY_SECRET_NAME="my-registry-secret-name"
 
-kubectl -n "${NAMESPACE}" delete secrets "${REGISTRY_SECRET_NAME}" streams-hazelcast-password-secret streams-database-password-secret streams-database-secret streams-ingress-tls-secret
+kubectl -n "${NAMESPACE}" delete secrets "${REGISTRY_SECRET_NAME}" streams-database-password-secret streams-database-secret streams-ingress-tls-secret
 ```
 
 ## Backup & Disaster recovery
