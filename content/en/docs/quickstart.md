@@ -9,8 +9,8 @@ description: Learn how to create your first Event-Driven API with Streams.
 ## Before you start
 
 * Register to Streams Early Adopter Program to get access to Streams and installation materials.
-* Read [Understand Streams concepts](/docs/streams/concepts).
-* [Install Streams](/docs/streams/install) in your kubernetes cluster.
+* Read [Understand Streams concepts](/docs/concepts).
+* [Install Streams](/docs/install) in your kubernetes cluster.
 
 ## Objectives
 

@@ -18,7 +18,7 @@ description: Install Streams on-premise, or deploy in your private cloud, and le
     * Minimal HA configuration: `34` CPUs and `51` GB RAM dedicated to the platform.
 
 {{< alert title="Note" >}}
-Refer to the [Reference Architecture](/docs/streams/architecture) documentation for further details.
+Refer to the [Reference Architecture](/docs/architecture) documentation for further details.
 {{< /alert >}}
 
 ## Pre-installation

@@ -1,7 +1,7 @@
 ---
 title: Security features
 linkTitle: Security features
-weight: 30
+weight: 2
 date: 2020-09-18
 description: Summary of the main security features of Streams.
 ---

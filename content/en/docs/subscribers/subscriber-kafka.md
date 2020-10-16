@@ -1,7 +1,7 @@
 ---
 title: Kafka Subscriber
 linkTitle: Kafka Subscriber
-weight: 150
+weight: 2
 date: 2020-07-10T00:00:00.000Z
 description: Learn how to configure and use the Streams Kafka Subscriber.
 ---
@@ -30,7 +30,7 @@ The body must contain a JSON kafka subscription configuration as follow:
 
 | Configuration Entry | Mandatory | Default value | Description |
 |---------------------|-----------|---------------|-------------|
-| subscriptionMode | no | Default subscription mode defined in the topic's configuration | Refer to [subscription modes](/docs/streams/subscribers/#subscription-modes) section |
+| subscriptionMode | no | Default subscription mode defined in the topic's configuration | Refer to [subscription modes](/docs/subscribers/#subscription-modes) section |
 | bootstrapServers | yes | n/a | List of Kafka servers used to bootstrap connections to Kafka. |
 | topic | yes | n/a | Kafka topic in which record must be sent. |
 | partition | no | n/a | Kafka partition to use. |
@@ -84,7 +84,7 @@ In order to get existing subscriptions, simply do the following GET request on y
 
 `GET /subscribers/kafka/topics/{topicId}/subscriptions`
 
-See [pagination](/docs/streams/topics-api/#pagination) to get more information about how pagination and sorting work.
+See [pagination](/docs/topics-api/#pagination) to get more information about how pagination and sorting work.
 
 The field names allowed for sorting are :
 
