@@ -8,8 +8,8 @@ description: Presents performance tests achieved for different scenarios in HA m
 
 ## Performance tests settings
 
-* All performance tests are performed on a Kubernetes cluster with [minimal recommended settings](/docs/streams/architecture/#choice-of-runtime-infrastructure-components) for HA.
-* Streams microservices are configured with [minimal recommended resources](/docs/streams/architecture/#summary-table) for HA.
+* All performance tests are performed on a Kubernetes cluster with [minimal recommended settings](/docs/architecture/#choice-of-runtime-infrastructure-components) for HA.
+* Streams microservices are configured with [minimal recommended resources](/docs/architecture/#summary-table) for HA.
 * Each run is configured for `5` minutes including a `30` seconds linear ramp with a percentage of renewed data on each API call set to `20`%.
 * We ran a variety of performance tests on the architecture. These tests are executed with [Gatling](https://gatling.io) which has been customized to support SSE connections.  
 

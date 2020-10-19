@@ -1,7 +1,7 @@
 ---
 title: Kafka Publisher
 linkTitle: Kafka Publisher
-weight: 150
+weight: 3
 date: 2020-04-02T00:00:00.000Z
 description: Learn how to configure a topic associated to a Kafka Publisher.
 ---
