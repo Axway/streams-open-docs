@@ -1,7 +1,7 @@
 ---
 title: HTTP Poller Publisher
 linkTitle: HTTP Poller Publisher
-weight: 150
+weight: 1
 date: 2019-04-02
 description: Learn how to configure a topic associated to a HTTP Poller publisher.
 ---
