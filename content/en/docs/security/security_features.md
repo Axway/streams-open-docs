@@ -13,7 +13,6 @@ The following secure connections are available:
 * All inbound connections to Streams are TLS-secured by default.
 * All outbound connections made by Streams to destination endpoints can be verified to ensure that a trusted certificate is used.
 * Connections between Streams micro services and database can be TLS-secured.
-* Connections between Streams micro services and Kafka can be TLS-secured.
 * Connections to other Axway products (e.g. Axway API Gateway) can be TLS-secured.
 
 ## Secure storage
