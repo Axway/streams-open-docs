@@ -1,7 +1,7 @@
 ---
 title: Salesforce Publisher
 linkTitle: Salesforce Publisher
-weight: 150
+weight: 4
 date: 2020-07-02
 description: Learn how to configure a topic associated to a Salesforce Publisher.
 ---

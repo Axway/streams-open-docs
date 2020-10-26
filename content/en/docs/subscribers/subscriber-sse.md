@@ -1,7 +1,7 @@
 ---
 title: SSE Subscriber
 linkTitle: SSE Subscriber
-weight: 150
+weight: 3
 date: 2019-04-02
 description: Learn how to configure and use the Streams Server-Sent Events Subscriber.
 ---

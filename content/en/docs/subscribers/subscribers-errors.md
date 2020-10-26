@@ -1,7 +1,7 @@
 ---
 title: Subscription Errors
 linkTitle: Subscription Errors
-weight: 150
+weight: 4
 date: 2019-04-02
 description: Describes the different type of errors that can occurs during a subscription to Streams. 
 ---

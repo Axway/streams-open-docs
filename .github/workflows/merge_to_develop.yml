@@ -1,0 +1,24 @@
+name: 'Merge to develop'
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  merge-to-develop:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Merge master into develop
+      uses: robotology/gh-action-nightly-merge@v1.2.0
+      with:
+        stable_branch: 'master'
+        development_branch: 'develop'
+        allow_ff: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.DOCSBUILDER_TOKEN }}
