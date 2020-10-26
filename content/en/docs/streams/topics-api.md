@@ -23,7 +23,7 @@ DevOps can be defined as a combination of people, processes, and technology that
 
 Taking a DevOps approach to Event-Driven API management with Streams enables you to streamline the delivery of updates or new capabilities in your services to your customers and partners.
 
-Streams is a CI/CD native solution that you can easily snap in to your existing DevOps pipeline. Simplify and customize how you manage Event-Driven APIs across your organization by using the Streams Management API to manage every aspects of your topics.
+Streams is a CI/CD native solution that you can easily snap in to your existing DevOps pipeline. Simplify and customize how you manage Event-Driven APIs across your organization by using the Streams Topics API to manage every aspects of your topics.
 
 ## Streams Topics API Overview
 
@@ -35,22 +35,7 @@ JSON is returned by all API responses, including errors. Finally, we rely on gzi
 Streams installation material includes [OpenAPI](https://swagger.io/specification/) specifications and [Postman collections](https://www.postman.com/collection) to help you get started quickly.
 {{< /alert >}}
 
-### Error codes
-
-Streams Management API uses conventional HTTP response codes to indicate the success or failure of an API request.
-In general, codes in the `2xx` range indicate success, codes in the `4xx` range indicate an error that failed given the information provided (e.g., a required parameter was omitted, etc.), and codes in the `5xx` range indicate an error with Streams' servers.
-
-#### HTTP status code summary
-
-| Status Code | Description |
-|-------------|-------------|
-| 200 OK | Everything worked as expected. |
-| 400 Bad Request | The request was unacceptable, often due to missing a required parameter. |
-| 404 Not Found | The requested resource doesn't exist. |
-| 409 Conflict | The request conflicts with current state of the resource. |
-| 500, 502, 503, 504 Server Errors | Something went wrong on Streams' platform end. |
-
-#### Pagination
+### Pagination
 
 To start with, it's important to know a few facts about receiving paginated items:
 
@@ -66,16 +51,16 @@ The `Link` header will contain a list of element separated by comma pointing to 
 </api/v1/topics?page=1&pageSize=5>; rel="self"; pageSize="5",</api/v1/topics?page=1&pageSize=5>; rel="first"; pageSize="5",</api/v1/topics?page=2&pageSize=5>; rel="next"; pageSize="5",</api/v1/topics?page=5&pageSize=5>; rel="last"; pageSize="5"
 ```
 
-##### Navigating through the pages
+#### Navigating through the pages
 
 Now that you know how many pages there are to receive, you can start navigating through the pages to consume the results. You do this by passing in a `page` parameter.
 
 Changing the number of items received
 By passing the `pageSize` parameter, you can specify how many items you want each page to return, up to `1000` items.
 
-##### Sort items using pagination
+#### Sort items using pagination
 
-When using pagination, you can sort paginated items by specifying the `field` and the `direction` (ASC or DESC) in the query param `sort`. For example, to sort topics by name add the `sort=name,DESC` query param.
+When using pagination, you can sort paginated items by specifying the `field` and the `direction` (ASC or DESC) in the query parameter `sort`. For example, to sort topics by name add the `sort=name,DESC` query param.
 
 The field names allowed for sorting are :
 
@@ -84,6 +69,48 @@ The field names allowed for sorting are :
 * modifyTimestamp
 * publisher.type
 * publisher.payload.type
+
+### Search / Filtering
+
+All Streams Rest APIs (topics, subscriptions) support resource search / filtering.
+It is available on all `GET` endpoints by specifying a search expression in the `search` query parameter.
+
+Your search expression must comply with the following rules:
+
+* It must be passed as query parameter (e.g. `?search=<expression>`).
+* It can either contain a single or a combination of operands:
+    * A _simple_ expression is an operand that is used on its own as an expression.
+    * A _complex_ expression is the combination of two or more operands or combined operands, using the operators `AND` or `OR`.
+* _Parenthesis_ can be used to group operand (e.g. `( operand1 OR operand2 ) AND operand3`).
+* _Space_ must be used as delimiter.
+* Each _operand_ must use at least one of the 3 available operators:
+    * Equals (e.g. `property:value`).
+    * Not equals (e.g. `property!value`).
+    * Exists (e.g. `property?`).
+* Values containing white-spaces must be protected by _double quotes_ (e.g. `property:"a value with white spaces"`).
+
+{{< alert title="Note" >}}
+Note that search capability works:
+
+* on all attributes including key/value maps (except `config`).
+* on nested properties (e.g. `property.sub_property:value`).
+* in combination of [pagination](#pagination).
+{{< /alert >}}
+
+### Error codes
+
+Streams Topics API uses conventional HTTP response codes to indicate the success or failure of an API request.
+In general, codes in the `2xx` range indicate success, codes in the `4xx` range indicate an error that failed given the information provided (e.g., a required parameter was omitted, etc.), and codes in the `5xx` range indicate an error with Streams' servers.
+
+#### HTTP status code summary
+
+| Status Code | Description |
+|-------------|-------------|
+| 200 OK | Everything worked as expected. |
+| 400 Bad Request | The request was unacceptable, often due to missing a required parameter. |
+| 404 Not Found | The requested resource doesn't exist. |
+| 409 Conflict | The request conflicts with current state of the resource. |
+| 500, 502, 503, 504 Server Errors | Something went wrong on Streams' platform end. |
 
 ### Versioning
 
