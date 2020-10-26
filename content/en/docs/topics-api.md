@@ -70,9 +70,9 @@ The field names allowed for sorting are :
 * publisher.type
 * publisher.payload.type
 
-### Search / Filtering
+### Search
 
-All Streams Rest APIs (topics, subscriptions) support resource search / filtering.
+Streams Rest APIs (topics, subscriptions) support searching resources.
 It is available on all `GET` endpoints by specifying a search expression in the `search` query parameter.
 
 Your search expression must comply with the following rules:
@@ -80,7 +80,7 @@ Your search expression must comply with the following rules:
 * It must be passed as query parameter (e.g. `?search=<expression>`).
 * It can either contain a single or a combination of operands:
     * A _simple_ expression is an operand that is used on its own as an expression.
-    * A _complex_ expression is the combination of two or more operands or combined operands, using the operators `AND` or `OR`.
+    * A _complex_ expression is the combination of two or more operands using the operators `AND` or `OR`.
 * _Parenthesis_ can be used to group operand (e.g. `( operand1 OR operand2 ) AND operand3`).
 * _Space_ must be used as delimiter.
 * Each _operand_ must use at least one of the 3 available operators:
