@@ -8,7 +8,7 @@ description: Learn how to configure and use the Streams Webhook Subscriber.
 
 ## Overview
 
-Streams Webhook subscriber allows clients to be notified via a HTTP Post requests made by Streams to the endpoint that was provided during their subscription.
+Streams Webhook subscriber allows clients to be notified via HTTP Post requests made by Streams to the endpoint provided during their subscription.
 
 ## Creating a Webhook subscription
 
