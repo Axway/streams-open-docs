@@ -139,6 +139,75 @@ To disable database encryption **and** TLS (not recommended for production use),
 * `mariadb.tls.enabled` and `mariadb.encryption.enabled` to `false`
 * `mariadb.master.extraEnvVarsSecret` and `mariadb.slave.extraEnvVarsSecret` to `null`
 
+### Kafka security settings
+
+By default, Kafka is configured with SASL authentication and TLS encryption for clients and brokers.
+As there is no sensitive data in Zookeeper, the communications with Zookeeper are in plaintext without authentication.
+
+#### SASL authentication
+
+In order to have SASL authentication working, you need to create the following secret containing Kafka credentials:
+
+```sh
+export NAMESPACE="my-namespace"
+export KAFKA_CLIENT_PASSWORD="my-kakfa-client-password"
+export KAFKA_INTERBROKER_PASSWORD="my-kakfa-interbroker-password"
+
+kubectl -n ${NAMESPACE} create secret generic streams-kafka-credentials-secret --from-literal="client-passwords=${KAFKA_INTERBROKER_PASSWORD},${KAFKA_CLIENT_PASSWORD}" --from-literal="inter-broker-password=${KAFKA_INTERBROKER_PASSWORD}" --from-literal="client-password=${KAFKA_CLIENT_PASSWORD}"
+```
+
+#### TLS encryption
+
+In order to configure TLS encryption, you need to have a valid truststore and one certificate per brokers. They must be all integrated into Java Key Stores (JKS) files.
+Be careful as each broker needs its own keystore and a different CN name matching the Kafka pod hostname as described in [bitnami documentation](https://github.com/bitnami/charts/tree/master/bitnami/kafka#enable-security-for-kafka-and-zookeeper).
+We provide you with a script to help with truststore and keystore generation (this is actually a patch of the script in bitnami documentation in order to deal properly with kubernetes deployment).
+You can also use your own truststore/privatekey:
+
+```sh
+cd tools
+./kafka-generate-ssl.sh
+```
+
+Then, create a secret which contains all the previously generated files
+
+```sh
+export NAMESPACE="my-namespace"
+export KAFKA_SECRET_PASSWORD="my-kakfa-secret-password"
+kubectl -n ${NAMESPACE} create secret generic streams-kafka-client-jks-secret --from-file="./truststore/kafka.truststore.jks" --from-file=./keystore/kafka-0.keystore.jks --from-file=./keystore/kafka-1.keystore.jks --from-file=./keystore/kafka-2.keystore.jks --from-literal="jks-password=${KAFKA_SECRET_PASSWORD}"
+```
+
+#### Disable security
+
+To disable security you need to find & replace in `values.yaml` and `values-ha.yaml` all occurences of the following:
+
+```sh
+--streams.kafka.security-protocol="SASL_SSL"
+--streams.kafka.sasl-mechanism="SCRAM-SHA-256"
+```
+
+by the following:
+
+```sh
+--streams.kafka.security-protocol="PLAINTEXT"
+--streams.kafka.sasl-mechanism="PLAIN"
+```
+
+and set the following parameters in `values.yaml` to these values (leave other parameters unchanged):
+
+```sh
+kafka:
+  auth:
+    tls:
+      enabled: false
+    clientProtocol: plaintext
+    interBrokerProtocol: plaintext
+    saslInterBrokerMechanism: plain
+```
+
+{{< alert title="Note" >}}
+Do not use for production.
+{{< /alert >}}
+
 ### Ingress TLS settings
 
 SSL/TLS is enabled by default on our embedded Ingress controller. If you don't provide any certificate, SSL will be enabled thanks to a nginx embedded fake SSL certificate.
