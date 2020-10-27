@@ -8,7 +8,7 @@ description: Learn how to configure and use the Streams Kafka Subscriber.
 
 ## Overview
 
-Streams Kafka subscriber allows clients to subscribe to a topic using an external kafka cluster. All messages published to Streams Topic will be transferred to Kafka cluster and topic configured.
+Streams Kafka subscriber allows clients to route events published in a Streams topic to an external Kafka topic.
 
 ## Creating a Kafka subscription
 
