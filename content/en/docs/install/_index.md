@@ -89,7 +89,7 @@ export NAMESPACE="my-namespace"
 export MARIADB_ROOT_PASSWORD="my-mariadb-root-password"
 export MARIADB_PASSWORD="my-mariadb-user-password"
 export MARIADB_REPLICATION_PASSWORD="my-mariadb-replication-password"
-kubectl create secret generic streams-database-password-secret --from-literal=mariadb-root-password=${MARIADB_ROOT_PASSWORD} --from-literal=mariadb-password=${MARIADB_PASSWORD}  --from-literal=mariadb-replication-password=${MARIADB_REPLICATION_PASSWORD} -n ${NAMESPACE}
+kubectl create secret generic streams-database-passwords-secret --from-literal=mariadb-root-password=${MARIADB_ROOT_PASSWORD} --from-literal=mariadb-password=${MARIADB_PASSWORD}  --from-literal=mariadb-replication-password=${MARIADB_REPLICATION_PASSWORD} -n ${NAMESPACE}
 ```
 
 #### Security
@@ -153,7 +153,7 @@ export NAMESPACE="my-namespace"
 export KAFKA_CLIENT_PASSWORD="my-kakfa-client-password"
 export KAFKA_INTERBROKER_PASSWORD="my-kakfa-interbroker-password"
 
-kubectl -n ${NAMESPACE} create secret generic streams-kafka-credentials-secret --from-literal="client-passwords=${KAFKA_INTERBROKER_PASSWORD},${KAFKA_CLIENT_PASSWORD}" --from-literal="inter-broker-password=${KAFKA_INTERBROKER_PASSWORD}" --from-literal="client-password=${KAFKA_CLIENT_PASSWORD}"
+kubectl -n ${NAMESPACE} create secret generic streams-kafka-passwords-secret --from-literal="client-passwords=${KAFKA_INTERBROKER_PASSWORD},${KAFKA_CLIENT_PASSWORD}" --from-literal="inter-broker-password=${KAFKA_INTERBROKER_PASSWORD}" --from-literal="client-password=${KAFKA_CLIENT_PASSWORD}"
 ```
 
 #### TLS encryption
@@ -181,15 +181,13 @@ kubectl -n ${NAMESPACE} create secret generic streams-kafka-client-jks-secret --
 To disable Kafka security features, you need to find & replace in `values.yaml` and `values-ha.yaml` all occurences of the following:
 
 ```sh
---streams.kafka.security-protocol="SASL_SSL"
---streams.kafka.sasl-mechanism="SCRAM-SHA-256"
+--streams.kafka.security-config.security-protocol="SASL_SSL"
 ```
 
 by the following:
 
 ```sh
---streams.kafka.security-protocol="PLAINTEXT"
---streams.kafka.sasl-mechanism="PLAIN"
+--streams.kafka.security-config.security-protocol="PLAINTEXT"
 ```
 
 and set the following parameters in `values.yaml` to these values (leave other parameters unchanged):
@@ -328,6 +326,7 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | ingress.tlsSecretName                 | Embedded ingress SSL/TLS certificate secret name | no | streams-ingress-tls-secret |
 | mariadb.tls.enabled                   | MariaDB tls enabled                 | no        | yes           |
 | mariadb.encryption.enabled            | MariaDB Transparent Data Encryption enabled | no | yes          |
+| streams.kafka.security-config.security-protocol | Kafka security (enabled="SASL_SSL", disabled="PLAINTEXT") | yes | SASL_SSL |
 | hub.replicaCount                      | Hub replica count                   | no        | 2             |
 | hub.ports.containerPort               | Http port to reach the Streams Topics API | no  | 8080          |
 | subscriberWebhook.replicaCount        | Subscriber Webhook replica count    | no        | 2             |
@@ -418,7 +417,7 @@ Similarly, all [secrets](#secrets-management) created for the Streams release in
 export NAMESPACE="my-namespace"
 export REGISTRY_SECRET_NAME="my-registry-secret-name"
 
-kubectl -n "${NAMESPACE}" delete secrets "${REGISTRY_SECRET_NAME}" streams-database-password-secret streams-database-secret streams-ingress-tls-secret
+kubectl -n "${NAMESPACE}" delete secrets "${REGISTRY_SECRET_NAME}" streams-database-passwords-secret streams-database-secret streams-kafka-passwords-secret streams-kafka-client-jks-secret streams-ingress-tls-secret
 ```
 
 ## Backup & Disaster recovery
