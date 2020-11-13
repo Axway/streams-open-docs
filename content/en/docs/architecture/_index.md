@@ -643,7 +643,7 @@ Apache ZooKeeper is used by Kafka.
 Source Docker image:
 
 * Repository: bitnami/zookeeper
-* Tag: 3.6.2
+* Tag: 3.6.2-debian-10-r58
 
 Pod name: `streams-zookeeper`
 
