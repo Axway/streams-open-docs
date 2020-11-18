@@ -340,8 +340,9 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | publisherSfdc.enabled                 | Enable/Disable Publisher SFDC       | no        | false         |
 | publisherSfdc.replicaCount            | Publisher SFDC replica count        | no        | 2             |
 | mariadb.metrics.enabled               | Activate metrics endpoint for MariaDB | no      | false         |
-| kafka.metrics.jmx.enabled             | Activate metrics endpoint for Kafka | no        | false         |
-| kafka.zookeeper.metrics.enabled       | Activate metrics endpoint for Zookeeper | no    | false         |
+| kafka.metrics.kafka.enabled           | Activate metrics endpoint for Kafka | no        | false         |
+| kafka.metrics.jmx.enabled             | Activate metrics endpoint for Kafka additional metrics | no        | false         |
+| zookeeper.metrics.enabled             | Activate metrics endpoint for Zookeeper | no    | false         |
 | ingress-nginx.controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
 | actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
 
