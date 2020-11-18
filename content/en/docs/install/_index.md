@@ -105,8 +105,30 @@ First of all, you must create a database which will be used by Streams:
 export DB_HOST="my-db-host"
 export DB_PORT="my-db-port"
 export DB_USER="my-db-user"
-export DB_NAME="my-streams-db"
+export DB_NAME="streams"
 mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p -e "CREATE DATABASE ${DB_NAME};"
+```
+
+* Then, you should create a dedicated streams user:
+
+```sh
+export DB_HOST="my-db-host"
+export DB_PORT="my-db-port"
+export DB_USER="my-db-user"
+export DB_STREAMS_USER="my-streams-db-user"
+export DB_STREAMS_PASS="my-streams-db-password"
+mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p -e "CREATE USER IF NOT EXISTS '${DB_STREAMS_USER}'@'%' IDENTIFIED BY '${DB_STREAMS_PASS}';"
+```
+
+* This user should at least have the right to select, insert, update, and delete on Streams database. It's also recommended to force the TLS authentication for this user (`REQUIRE SSL`). You can grant this privileges with:
+
+```sh
+export DB_HOST="my-db-host"
+export DB_PORT="my-db-port"
+export DB_USER="my-db-user"
+export DB_NAME="streams"
+export DB_STREAMS_USER="my-streams-db-user"
+mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p -e "GRANT SELECT, INSERT, UPDATE, DELETE ON ${DB_NAME}.* TO ${DB_STREAMS_USER} REQUIRE SSL;"
 ```
 
 Then you must provide information to the Streams installation. You should edit the `values.yaml` file and set the `externalMariadb` entry as follow:
@@ -116,7 +138,7 @@ externalMariadb:
   host: "my-db-host"
   port: my-db-port
   db:
-    name: "my-streams-db-name"
+    name: "streams"
     user: "my-streams-db-user"
   rootUsername: "my-streams-db-root-user"
 ```
@@ -136,7 +158,7 @@ kubectl create secret generic streams-database-passwords-secret --from-literal=m
 
 For security purpose, it's highly recommended to enable TLS communication between your database and Streams microservices. You can enable [One-Way TLS](https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-one-way-tls-for-mariadb-clients) or [Two-Way TLS](https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-two-way-tls-for-mariadb-clients).
 
-{{< alert title="Note" >}} If you use a provider as AWS RDS for your MariaDB database, make sure the Two-Way method is available. (e.g. not available with AWS RDS).{{< /alert >}}
+{{< alert title="Note" >}} If you use a provider for your MariaDB database, make sure the Two-Way method is available. (e.g. not available with AWS RDS).{{< /alert >}}
 
 According to your choice, you must:
 
@@ -156,7 +178,7 @@ export NAMESPACE="my-namespace"
 kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem -n ${NAMESPACE}
 ```
 
-You can follow the official documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate. *Remember to set the Common Name correctly.*
+You can follow the official documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate. Make sure to set the Common Name correctly.
 
 #### Helm chart MariaDB configuration
 
