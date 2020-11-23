@@ -318,15 +318,12 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| mariadb.tls.enabled                   | MariaDB tls enabled                 | no        | yes           |
-| mariadb.encryption.enabled            | MariaDB encryption enabled          | no        | yes           |
 | ingress-nginx.enabled                 | Enable/Disable NGINX                | no        | true          |
 | ingress.host | Domain name used for incoming HTTP requests if `ingress-nginx.enabled` is set to true | no | k8s.yourdomain.tld |
 | ingress.tlsenabled                    | Enable embedded ingress SSL/TLS     | no        | true          |
 | ingress.tlsSecretName                 | Embedded ingress SSL/TLS certificate secret name | no | streams-ingress-tls-secret |
 | mariadb.tls.enabled                   | MariaDB tls enabled                 | no        | yes           |
 | mariadb.encryption.enabled            | MariaDB Transparent Data Encryption enabled | no | yes          |
-| streams.kafka.security-config.security-protocol | Kafka security (enabled="SASL_SSL", disabled="PLAINTEXT") | yes | SASL_SSL |
 | hub.replicaCount                      | Hub replica count                   | no        | 2             |
 | hub.ports.containerPort               | Http port to reach the Streams Topics API | no  | 8080          |
 | subscriberWebhook.replicaCount        | Subscriber Webhook replica count    | no        | 2             |
