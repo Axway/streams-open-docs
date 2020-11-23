@@ -1,20 +1,19 @@
 ---
-title: Streams Security Guidance
-linkTitle: Security Guidance
+title: Secure Development Lifecycle
+linkTitle: Secure Development Lifecycle
 weight: 8
 date: 2020-09-18
-description: This guide describes the security features of Streams and provides instructions and best practices for strengthening its security.
+description: This guide describes the secure development lifecycle
 ---
 
-This guide provides instructions and recommendations to help you strengthen the security of Streams. Security descriptions include:
+Axway implements a Secure Development Lifecycle (SDL) in product development. A dedicated team, the Axway Product Security Group (PSG), manages the SDL in association with all the Axway Research and Development (R&D) product teams.
 
-* How the product was developed in a secure way
-* A list of main security features
-* Secure configuration parameters, including the Secure by Default configuration
-* Best practices to use this product in a secure way
+The SDL consists of a set of standard phases and processes. In this spiral development model, requirements and design are frequently revisited to ensure that risks are assessed and eliminated. The following diagram illustrates the simplified Microsoft SDL model that Axway follows.
 
-This guide is targeted at the following audiences:
+![Secure Development Lifecycle model](/Images/security/securelifecycle.png)
 
-* Security teams in charge of auditing the security of the product
-* Global network engineers
-* Product administrators
+Axway development teams follow Agile practices and implement SDL processes and controls throughout the development lifecycle. For example, threat-modeling is an important part of the design phase and a final security review is required before product release. These processes and control points ensure that products meet the initial security requirements and pass the technical criteria established by Axway PSG and the larger security community.
+
+Development teams use a broad suite of industry-standard tools in the implementation and verification phases of the SDL. Teams run both static and dynamic analysis tools to identify potential code weaknesses and to discover security issues that could be exposed at runtime. The R&D Teams also run suites of attack surface tools and penetration testing tools on products to ensure that they meet gating criteria defined by PSG via the SDL. Teams also run other enhanced test scenarios required by our most security-conscious customers. provides tool suite information and our customized usage profiles on request.
+
+Axway implements a new product introduction (NPI) process that supports the release of new products and major product revisions. This process requires a final security review that includes development and test artifacts. The NPI also ensures that the SDL is started early in development to optimize the delivery of secured products for you, our customer.
