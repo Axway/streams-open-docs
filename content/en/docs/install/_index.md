@@ -435,8 +435,6 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | publisherKafka.replicaCount           | Publisher Kafka replica count       | no        | 2             |
 | publisherSfdc.enabled                 | Enable/Disable Publisher SFDC       | no        | false         |
 | publisherSfdc.replicaCount            | Publisher SFDC replica count        | no        | 2             |
-| kafka.metrics.jmx.enabled             | Activate metrics endpoint for Kafka | no        | false         |
-| kafka.zookeeper.metrics.enabled       | Activate metrics endpoint for Zookeeper | no    | false         |
 | actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
 
 ##### MariaDB parameters
@@ -444,17 +442,31 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
 | mariadb.enabled                       | MariaDB installed in K8s with the Helm chart. If set to false, the `externalMariadb` parameter will be used | no | true |
-| mariadb.tls.enabled                   | MariaDB tls enabled                 | no        | true           |
-| mariadb.encryption.enabled            | MariaDB encryption enabled          | no        | true           |
-| mariadb.encryption.enabled            | MariaDB Transparent Data Encryption enabled | no | true        |
-| mariadb.metrics.enabled               | Activate metrics endpoint for MariaDB | no      | false            |
-| externalMariadb.host                 | Host of the external Mariadb (Only used when `mariadb.enabled` set to false) | no | my.db.host |
-| externalMariadb.port                 | Port of the external Mariadb (Only used when `mariadb.enabled` set to false) | no | 3306 |
-| externalMariadb.db.name              | Name of the MySQL database used for Streams (Only used when `mariadb.enabled` set to false) | no | streams |
-| externalMariadb.db.user              | Username of the external Mariadb used by Streams (Only used when `mariadb.enabled` set to false) | no | streams |
-| externalMariadb.rootUsername         | Root username of the external Mariadb used by Streams (Only used when `mariadb.enabled` set to false) | no | root |
-| externalMariadb.tls.enabled          | External MariaDB tls enabled (Only used when `mariadb.enabled` set to false) | no | true |
-| externalMariadb.tls.twoWay          | External MariaDB Two-Way tls enabled (Only used when `mariadb.enabled` set to false) | no | true |
+| mariadb.tls.enabled                   | MariaDB tls enabled                 | no        | true          |
+| mariadb.encryption.enabled            | MariaDB encryption enabled          | no        | true          |
+| mariadb.encryption.enabled            | MariaDB Transparent Data Encryption enabled | no | true         |
+| mariadb.metrics.enabled               | Activate metrics endpoint for MariaDB | no      | false         |
+| externalMariadb.host                  | Host of the external Mariadb (Only used when `mariadb.enabled` set to false) | no | my.db.host |
+| externalMariadb.port                  | Port of the external Mariadb (Only used when `mariadb.enabled` set to false) | no | 3306 |
+| externalMariadb.db.name               | Name of the MySQL database used for Streams (Only used when `mariadb.enabled` set to false) | no | streams |
+| externalMariadb.db.user               | Username of the external Mariadb used by Streams (Only used when `mariadb.enabled` set to false) | no | streams |
+| externalMariadb.rootUsername          | Root username of the external Mariadb used by Streams (Only used when `mariadb.enabled` set to false) | no | root |
+| externalMariadb.tls.enabled           | External MariaDB tls enabled (Only used when `mariadb.enabled` set to false) | no | true |
+| externalMariadb.tls.twoWay            | External MariaDB Two-Way tls enabled (Only used when `mariadb.enabled` set to false) | no | true |
+
+##### Kafka parameters
+
+| Parameter                             | Description                         | Mandatory | Default value |
+| ------------------------------------- | ----------------------------------- | --------- | ------------- |
+| kafka.metrics.jmx.enabled             | Activate metrics endpoint for Kafka | no        | false         |
+| kafka.zookeeper.metrics.enabled       | Activate metrics endpoint for Zookeeper | no    | false         |
+| kafka.metrics.kafka.enabled           | Activate metrics endpoint for Kafka | no        | false         |
+
+##### Zookeeper parameters
+
+| Parameter                             | Description                         | Mandatory | Default value |
+| ------------------------------------- | ----------------------------------- | --------- | ------------- |
+| zookeeper.metrics.enabled             | Activate metrics endpoint for Zookeeper | no    | false         |
 
 ##### Ingress parameters
 
