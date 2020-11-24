@@ -422,7 +422,6 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| streams.kafka.security-config.security-protocol | Kafka security (enabled="SASL_SSL", disabled="PLAINTEXT") | yes | SASL_SSL |
 | hub.replicaCount                      | Hub replica count                   | no        | 2             |
 | hub.ports.containerPort               | Http port to reach the Streams Topics API | no  | 8080          |
 | subscriberWebhook.replicaCount        | Subscriber Webhook replica count    | no        | 2             |
@@ -442,8 +441,7 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
 | mariadb.enabled                       | MariaDB installed in K8s with the Helm chart. If set to false, the `externalMariadb` parameter will be used | no | true |
-| mariadb.tls.enabled                   | MariaDB tls enabled                 | no        | true          |
-| mariadb.encryption.enabled            | MariaDB encryption enabled          | no        | true          |
+| mariadb.tls.enabled                   | MariaDB TLS enabled                 | no        | true          |
 | mariadb.encryption.enabled            | MariaDB Transparent Data Encryption enabled | no | true         |
 | mariadb.metrics.enabled               | Activate metrics endpoint for MariaDB | no      | false         |
 | externalMariadb.host                  | Host of the external Mariadb (Only used when `mariadb.enabled` set to false) | no | my.db.host |
