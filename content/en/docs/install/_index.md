@@ -458,7 +458,7 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| kafka.metrics.kafka.enabled           | Activate metrics endpoint for Kafka | no        | false         |
+| kafka.metrics.jmx.enabled             | Activate metrics endpoint for Kafka | no        | false         |
 
 ##### Zookeeper parameters
 
