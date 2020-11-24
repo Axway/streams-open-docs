@@ -115,7 +115,7 @@ mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p -e "CREATE DATABASE ${D
 export DB_HOST="my-db-host"
 export DB_PORT="my-db-port"
 export DB_USER="my-db-user"
-export DB_STREAMS_USER="my-streams-db-user"
+export DB_STREAMS_USER="streams"
 export DB_STREAMS_PASS="my-streams-db-password"
 mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p -e "CREATE USER IF NOT EXISTS '${DB_STREAMS_USER}'@'%' IDENTIFIED BY '${DB_STREAMS_PASS}';"
 ```
@@ -127,7 +127,7 @@ export DB_HOST="my-db-host"
 export DB_PORT="my-db-port"
 export DB_USER="my-db-user"
 export DB_NAME="streams"
-export DB_STREAMS_USER="my-streams-db-user"
+export DB_STREAMS_USER="streams"
 mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p -e "GRANT SELECT, INSERT, UPDATE, DELETE ON ${DB_NAME}.* TO ${DB_STREAMS_USER} REQUIRE SSL;"
 ```
 
@@ -139,7 +139,7 @@ externalMariadb:
   port: my-db-port
   db:
     name: "streams"
-    user: "my-streams-db-user"
+    user: "streams"
   rootUsername: "my-streams-db-root-user"
 ```
 
