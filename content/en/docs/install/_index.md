@@ -302,6 +302,13 @@ kafka:
     clientProtocol: plaintext
     interBrokerProtocol: plaintext
     saslInterBrokerMechanism: plain
+# Comment the lines as follows
+# extraEnvVars:
+#   - name: KAFKA_CERTIFICATE_PASSWORD
+#     valueFrom:
+#       secretKeyRef:
+#         name: "streams-kafka-client-jks-secret"
+#         key: "jks-password"
 ```
 
 {{< alert title="Note" >}}
