@@ -164,19 +164,21 @@ According to your choice, you must:
 
 * For One-Way TLS:
     * Provide the CA certificate by creating a secret:
-
-```sh
-export NAMESPACE="my-namespace"
-kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem -n ${NAMESPACE}
-```
+    ```sh
+    export NAMESPACE="my-namespace"
+    kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem -n ${NAMESPACE}
+    ```
+    * Set the [Helm parameters](#helm-parameters) `externalMariadb.tls.twoWay` to `false`.
 
 * For Two-Way TLS:
     * Provide the CA certificate, the server certificate and the server key by creating a secret:
+    ```sh
+    export NAMESPACE="my-namespace"
+    kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem -n ${NAMESPACE}
+    ```
 
-```sh
-export NAMESPACE="my-namespace"
-kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem -n ${NAMESPACE}
-```
+* For no TLS:
+    * Set the [Helm parameters](#helm-parameters) `externalMariadb.tls.enabled` to `false`.
 
 You can follow the official documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate. Make sure to set the Common Name correctly.
 
@@ -196,15 +198,17 @@ kubectl create secret generic streams-database-passwords-secret --from-literal=m
 
 ##### Helm chart MariaDB Security
 
+By default, MariaDB is configured with [TLS communication](#tls) and [Transparent Data Encryption](#transparent-data-encryption-tde) enabled.
+
 ###### TLS
 
-By default, Streams Helm will set up TLS communication between MariaDB and Streams microservices, so you have to provide a CA certificate, a server certificate and a server key. The main requirement is that the server certificate's Common Name must be set up with *streams-database*.
+In order to configure the TLS communication between MariaDB and Streams microservices, you have to provide a CA certificate, a server certificate and a server key. The main requirement is that the server certificate's Common Name must be set up with *streams-database*.
 
 You can follow the official documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate. *Remember to set the Common Name correctly.*
 
 ###### Transparent Data Encryption (TDE)
 
-Mariadb data-at-rest encryption is also enabled by default, so you must provide a keyfile.
+In order to configure the Mariadb data-at-rest encryption, you must provide a keyfile.
 The keyfile must contain a 32-bit integer identifier followed by the hex-encoded encryption key separated by semicolon such as: `<encryption_key_id>`;`<hex-encoded_encryption_key>`.
 
 To generate the keyfile, run the following command:
@@ -213,33 +217,43 @@ To generate the keyfile, run the following command:
 echo "1;$(openssl rand -hex 32)" > keyfile
 ```
 
-###### Secrets
+###### MariaDB security configuration
 
-Depending on your security choices, you must create a secret containing both TLS certificates and TDE keyfile, one or none of them:
+Depending on your security choices, you must:
 
-```sh
-export NAMESPACE="my-namespace"
-kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem --from-file=KEYFILE=keyfile -n ${NAMESPACE}
-```
+* For TLS and TDE:
+    * Create a secret containing both [TLS](#tls) certificates and [TDE](#transparent-data-encryption-tde) keyfile:
+    ```sh
+    export NAMESPACE="my-namespace"
+    kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem --from-file=KEYFILE=keyfile -n ${NAMESPACE}
+    ```
 
-or only for TLS
+* For TLS only:
+    * Create a secret containing the [TLS](#tls) certificates:
+    ```sh
+    export NAMESPACE="my-namespace"
+    kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem -n ${NAMESPACE}
+    ```
+    * Set the [Helm parameters](#helm-parameters) `mariadb.encryption.enabled` to `false`.
 
-```sh
-export NAMESPACE="my-namespace"
-kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem -n ${NAMESPACE}
-```
+* For TDE only:
+    * Create a secret containing the [TDE](#transparent-data-encryption-tde) keyfile:
+    ```sh
+    export NAMESPACE="my-namespace"
+    kubectl create secret generic streams-database-secret --from-file=KEYFILE=keyfile -n ${NAMESPACE}
+    ```
+    * Set the [Helm parameters](#helm-parameters) `mariadb.tls.enabled` to `false`.
 
-or only for TDE
+###### Disable MariaDB security features
 
-```sh
-export NAMESPACE="my-namespace"
-kubectl create secret generic streams-database-secret --from-file=KEYFILE=keyfile -n ${NAMESPACE}
-```
-
-To disable database encryption **and** TLS (not recommended for production use), you should not create the secret above, set the [Helm parameters](#helm-parameters):
+To disable MariaDB encryption **and** TLS, you must set the following [Helm parameters](#helm-parameters):
 
 * `mariadb.tls.enabled` and `mariadb.encryption.enabled` to `false`
 * `mariadb.master.extraEnvVarsSecret` and `mariadb.slave.extraEnvVarsSecret` to `null`
+
+{{< alert title="Note" >}}
+Not recommended for production.
+{{< /alert >}}
 
 ### Kafka security settings
 
