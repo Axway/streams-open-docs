@@ -80,7 +80,111 @@ imagePullSecrets:
 
 ### MariaDB settings
 
-#### Password
+The MariaDB database is automatically installed by default on your K8s cluster with the Streams Helm chart. But using an external one is recommended in production.
+
+To disable the MariaDB installation, you can either:
+
+* Edit the `values.yaml` file and set the `mariadb.enabled` entry as follow:
+
+```yaml
+mariadb:
+  enabled: false
+```
+
+* or specify `--set mariadb.enabled=false` in the Helm Chart installation command.
+
+Then, according to your choice, configure your [external MariaDB](#external-mariadb-configuration) or your [automatically installed MariaDB](#helm-chart-mariadb-configuration).
+
+#### External MariaDB configuration
+
+First of all, you must create a database which will be used by Streams:
+
+* Connect to you MariaDB and create the database:
+
+```sh
+export DB_HOST="my-db-host"
+export DB_PORT="my-db-port"
+export DB_USER="my-db-user"
+export DB_NAME="streams"
+mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p -e "CREATE DATABASE ${DB_NAME};"
+```
+
+* Then, you should create a dedicated streams user:
+
+```sh
+export DB_HOST="my-db-host"
+export DB_PORT="my-db-port"
+export DB_USER="my-db-user"
+export DB_STREAMS_USER="streams"
+export DB_STREAMS_PASS="my-streams-db-password"
+mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p -e "CREATE USER IF NOT EXISTS '${DB_STREAMS_USER}'@'%' IDENTIFIED BY '${DB_STREAMS_PASS}';"
+```
+
+* This user should at least have the right to select, insert, update, and delete on Streams database. It's also recommended to force the TLS authentication for this user (`REQUIRE SSL`). You can grant this privileges with:
+
+```sh
+export DB_HOST="my-db-host"
+export DB_PORT="my-db-port"
+export DB_USER="my-db-user"
+export DB_NAME="streams"
+export DB_STREAMS_USER="streams"
+mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p -e "GRANT SELECT, INSERT, UPDATE, DELETE ON ${DB_NAME}.* TO ${DB_STREAMS_USER} REQUIRE SSL;"
+```
+
+Then you must provide information to the Streams installation. You should edit the `values.yaml` file and set the `externalMariadb` entry as follow:
+
+```yaml
+externalMariadb:
+  host: "my-db-host"
+  port: my-db-port
+  db:
+    name: "streams"
+    user: "streams"
+  rootUsername: "my-streams-db-root-user"
+```
+
+##### External MariaDB passwords
+
+Passwords are required for Streams microservices to securely connect to Mariadb.
+
+```sh
+export NAMESPACE="my-namespace"
+export MARIADB_ROOT_PASSWORD="my-mariadb-root-password"
+export MARIADB_PASSWORD="my-mariadb-user-password"
+kubectl create secret generic streams-database-passwords-secret --from-literal=mariadb-root-password=${MARIADB_ROOT_PASSWORD} --from-literal=mariadb-password=${MARIADB_PASSWORD} -n ${NAMESPACE}
+```
+
+##### External MariaDB TLS
+
+For security purpose, it's highly recommended to enable TLS communication between your database and Streams microservices. You can enable [One-Way TLS](https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-one-way-tls-for-mariadb-clients) or [Two-Way TLS](https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-two-way-tls-for-mariadb-clients).
+
+{{< alert title="Note" >}} If you use a provider for your MariaDB database, make sure the Two-Way method is available. (e.g. not available with AWS RDS).{{< /alert >}}
+
+According to your choice, you must:
+
+* For One-Way TLS:
+    * Provide the CA certificate by creating a secret:
+    ```sh
+    export NAMESPACE="my-namespace"
+    kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem -n ${NAMESPACE}
+    ```
+    * Set the [Helm parameters](#helm-parameters) `externalMariadb.tls.twoWay` to `false`.
+
+* For Two-Way TLS:
+    * Provide the CA certificate, the server certificate and the server key by creating a secret:
+    ```sh
+    export NAMESPACE="my-namespace"
+    kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem -n ${NAMESPACE}
+    ```
+
+* For no TLS:
+    * Set the [Helm parameters](#helm-parameters) `externalMariadb.tls.enabled` to `false`.
+
+You can follow the official documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate. Make sure to set the Common Name correctly.
+
+#### Helm chart MariaDB configuration
+
+##### Helm chart MariaDB passwords
 
 Passwords are required for Streams microservices to securely connect to Mariadb.
 
@@ -92,17 +196,19 @@ export MARIADB_REPLICATION_PASSWORD="my-mariadb-replication-password"
 kubectl create secret generic streams-database-passwords-secret --from-literal=mariadb-root-password=${MARIADB_ROOT_PASSWORD} --from-literal=mariadb-password=${MARIADB_PASSWORD}  --from-literal=mariadb-replication-password=${MARIADB_REPLICATION_PASSWORD} -n ${NAMESPACE}
 ```
 
-#### Security
+##### Helm chart MariaDB Security
 
-##### TLS
+By default, MariaDB is configured with [TLS communication](#tls) and [Transparent Data Encryption](#transparent-data-encryption-tde) enabled.
 
-By default, Streams Helm will set up TLS communication between MariaDB and Streams microservices, so you have to provide a CA certificate, a server certificate and a server key. The main requirement is that the server certificate's Common Name must be set up with *streams-database*.
+###### TLS
+
+In order to configure the TLS communication between MariaDB and Streams microservices, you have to provide a CA certificate, a server certificate and a server key. The main requirement is that the server certificate's Common Name must be set up with *streams-database*.
 
 You can follow the official documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate. *Remember to set the Common Name correctly.*
 
-##### Transparent Data Encryption (TDE)
+###### Transparent Data Encryption (TDE)
 
-Mariadb data-at-rest encryption is also enabled by default, so you must provide a keyfile.
+In order to configure the Mariadb data-at-rest encryption, you must provide a keyfile.
 The keyfile must contain a 32-bit integer identifier followed by the hex-encoded encryption key separated by semicolon such as: `<encryption_key_id>`;`<hex-encoded_encryption_key>`.
 
 To generate the keyfile, run the following command:
@@ -111,33 +217,43 @@ To generate the keyfile, run the following command:
 echo "1;$(openssl rand -hex 32)" > keyfile
 ```
 
-##### Secrets
+###### MariaDB security configuration
 
-Depending on your security choices, you must create a secret containing both TLS certificates and TDE keyfile, one or none of them:
+Depending on your security choices, you must:
 
-```sh
-export NAMESPACE="my-namespace"
-kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem --from-file=KEYFILE=keyfile -n ${NAMESPACE}
-```
+* For TLS and TDE:
+    * Create a secret containing both [TLS](#tls) certificates and [TDE](#transparent-data-encryption-tde) keyfile:
+    ```sh
+    export NAMESPACE="my-namespace"
+    kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem --from-file=KEYFILE=keyfile -n ${NAMESPACE}
+    ```
 
-or only for TLS
+* For TLS only:
+    * Create a secret containing the [TLS](#tls) certificates:
+    ```sh
+    export NAMESPACE="my-namespace"
+    kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem -n ${NAMESPACE}
+    ```
+    * Set the [Helm parameters](#helm-parameters) `mariadb.encryption.enabled` to `false`.
 
-```sh
-export NAMESPACE="my-namespace"
-kubectl create secret generic streams-database-secret --from-literal=CA_PEM="$(cat ca.pem)" --from-literal=SERVER_CERT_PEM="$(cat server-cert.pem)" --from-literal=SERVER_KEY_PEM="$(cat server-key.pem)" -n ${NAMESPACE}
-```
+* For TDE only:
+    * Create a secret containing the [TDE](#transparent-data-encryption-tde) keyfile:
+    ```sh
+    export NAMESPACE="my-namespace"
+    kubectl create secret generic streams-database-secret --from-file=KEYFILE=keyfile -n ${NAMESPACE}
+    ```
+    * Set the [Helm parameters](#helm-parameters) `mariadb.tls.enabled` to `false`.
 
-or only for TDE
+###### Disable MariaDB security features
 
-```sh
-export NAMESPACE="my-namespace"
-kubectl create secret generic streams-database-secret --from-literal=KEYFILE="$(cat keyfile)" -n ${NAMESPACE}
-```
-
-To disable database encryption **and** TLS (not recommended for production use), you should not create the secret above, set the [Helm parameters](#helm-parameters):
+To disable MariaDB encryption **and** TLS, you must set the following [Helm parameters](#helm-parameters):
 
 * `mariadb.tls.enabled` and `mariadb.encryption.enabled` to `false`
 * `mariadb.master.extraEnvVarsSecret` and `mariadb.slave.extraEnvVarsSecret` to `null`
+
+{{< alert title="Note" >}}
+Not recommended for production.
+{{< /alert >}}
 
 ### Kafka security settings
 
@@ -200,6 +316,13 @@ kafka:
     clientProtocol: plaintext
     interBrokerProtocol: plaintext
     saslInterBrokerMechanism: plain
+# Comment the lines as follows
+# extraEnvVars:
+#   - name: KAFKA_CERTIFICATE_PASSWORD
+#     valueFrom:
+#       secretKeyRef:
+#         name: "streams-kafka-client-jks-secret"
+#         key: "jks-password"
 ```
 
 {{< alert title="Note" >}}
@@ -316,17 +439,10 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 
 #### Helm parameters
 
+##### Streams parameters
+
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| mariadb.tls.enabled                   | MariaDB tls enabled                 | no        | yes           |
-| mariadb.encryption.enabled            | MariaDB encryption enabled          | no        | yes           |
-| ingress-nginx.enabled                 | Enable/Disable NGINX                | no        | true          |
-| ingress.host | Domain name used for incoming HTTP requests if `ingress-nginx.enabled` is set to true | no | k8s.yourdomain.tld |
-| ingress.tlsenabled                    | Enable embedded ingress SSL/TLS     | no        | true          |
-| ingress.tlsSecretName                 | Embedded ingress SSL/TLS certificate secret name | no | streams-ingress-tls-secret |
-| mariadb.tls.enabled                   | MariaDB tls enabled                 | no        | yes           |
-| mariadb.encryption.enabled            | MariaDB Transparent Data Encryption enabled | no | yes          |
-| streams.kafka.security-config.security-protocol | Kafka security (enabled="SASL_SSL", disabled="PLAINTEXT") | yes | SASL_SSL |
 | hub.replicaCount                      | Hub replica count                   | no        | 2             |
 | hub.ports.containerPort               | Http port to reach the Streams Topics API | no  | 8080          |
 | subscriberWebhook.replicaCount        | Subscriber Webhook replica count    | no        | 2             |
@@ -339,12 +455,45 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | publisherKafka.replicaCount           | Publisher Kafka replica count       | no        | 2             |
 | publisherSfdc.enabled                 | Enable/Disable Publisher SFDC       | no        | false         |
 | publisherSfdc.replicaCount            | Publisher SFDC replica count        | no        | 2             |
-| mariadb.metrics.enabled               | Activate metrics endpoint for MariaDB | no      | false         |
-| kafka.metrics.kafka.enabled           | Activate metrics endpoint for Kafka | no        | false         |
-| kafka.metrics.jmx.enabled             | Activate metrics endpoint for Kafka additional metrics | no        | false         |
-| zookeeper.metrics.enabled             | Activate metrics endpoint for Zookeeper | no    | false         |
-| ingress-nginx.controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
 | actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
+
+##### MariaDB parameters
+
+| Parameter                             | Description                         | Mandatory | Default value |
+| ------------------------------------- | ----------------------------------- | --------- | ------------- |
+| mariadb.enabled                       | MariaDB installed in K8s with the Helm chart. If set to false, the `externalMariadb` parameter will be used | no | true |
+| mariadb.tls.enabled                   | MariaDB TLS enabled                 | no        | true          |
+| mariadb.encryption.enabled            | MariaDB Transparent Data Encryption enabled | no | true         |
+| mariadb.metrics.enabled               | Activate metrics endpoint for MariaDB | no      | false         |
+| externalMariadb.host                  | Host of the external Mariadb (Only used when `mariadb.enabled` set to false) | no | my.db.host |
+| externalMariadb.port                  | Port of the external Mariadb (Only used when `mariadb.enabled` set to false) | no | 3306 |
+| externalMariadb.db.name               | Name of the MySQL database used for Streams (Only used when `mariadb.enabled` set to false) | no | streams |
+| externalMariadb.db.user               | Username of the external Mariadb used by Streams (Only used when `mariadb.enabled` set to false) | no | streams |
+| externalMariadb.rootUsername          | Root username of the external Mariadb used by Streams (Only used when `mariadb.enabled` set to false) | no | root |
+| externalMariadb.tls.enabled           | External MariaDB tls enabled (Only used when `mariadb.enabled` set to false) | no | true |
+| externalMariadb.tls.twoWay            | External MariaDB Two-Way tls enabled (Only used when `mariadb.enabled` set to false) | no | true |
+
+##### Kafka parameters
+
+| Parameter                             | Description                         | Mandatory | Default value |
+| ------------------------------------- | ----------------------------------- | --------- | ------------- |
+| kafka.metrics.jmx.enabled             | Activate metrics endpoint for Kafka | no        | false         |
+
+##### Zookeeper parameters
+
+| Parameter                             | Description                         | Mandatory | Default value |
+| ------------------------------------- | ----------------------------------- | --------- | ------------- |
+| zookeeper.metrics.enabled             | Activate metrics endpoint for Zookeeper | no    | false         |
+
+##### Ingress parameters
+
+| Parameter                             | Description                         | Mandatory | Default value |
+| ------------------------------------- | ----------------------------------- | --------- | ------------- |
+| ingress-nginx.enabled                 | Enable/Disable NGINX                | no        | true          |
+| ingress.host | Domain name used for incoming HTTP requests if `ingress-nginx.enabled` is set to true | no | k8s.yourdomain.tld |
+| ingress.tlsenabled                    | Enable embedded ingress SSL/TLS     | no        | true          |
+| ingress.tlsSecretName                 | Embedded ingress SSL/TLS certificate secret name | no | streams-ingress-tls-secret |
+| ingress-nginx.controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
 
 {{< alert title="Note" >}}
 If you want to configure a parameter from a dependency chart, [MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb), [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka), you need to add the chart prefix name to the command line argument. For example:
