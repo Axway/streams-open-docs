@@ -3,10 +3,8 @@ title: Streams Security Guidance
 linkTitle: Security Guidance
 weight: 8
 date: 2020-09-18
-description: This section describes the security features of Streams and provides instructions and best practices for strengthening its security.
+description: This section describes how the the product was developed in a secure way, and a link to the streams security guide, available in restricted avaibility.
 ---
-
-This section provides information about:
 
 * How the product was developed in a secure way
 * A link to the [security guide](https://docs.axway.com/bundle/Streams_20_SecurityGuide_allOS_en_HTML5/), which is in restricted availibility
