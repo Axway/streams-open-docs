@@ -22,6 +22,6 @@
     "grunt": "^1.0.4",
     "grunt-markdownlint": "^2.6.0",
     "minimist": "^1.2.5",
-    "postcss-cli": "^5.0.1"
+    "postcss-cli": "^7.1.2"
   }
 }
