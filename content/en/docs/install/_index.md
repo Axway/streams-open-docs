@@ -106,6 +106,7 @@ export DB_HOST="my-db-host"
 export DB_PORT="my-db-port"
 export DB_USER="my-db-user"
 export DB_NAME="streams"
+
 mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p -e "CREATE DATABASE ${DB_NAME};"
 ```
 
@@ -117,6 +118,7 @@ export DB_PORT="my-db-port"
 export DB_USER="my-db-user"
 export DB_STREAMS_USER="streams"
 export DB_STREAMS_PASS="my-streams-db-password"
+
 mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p -e "CREATE USER IF NOT EXISTS '${DB_STREAMS_USER}'@'%' IDENTIFIED BY '${DB_STREAMS_PASS}';"
 ```
 
@@ -128,6 +130,7 @@ export DB_PORT="my-db-port"
 export DB_USER="my-db-user"
 export DB_NAME="streams"
 export DB_STREAMS_USER="streams"
+
 mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p -e "GRANT SELECT, INSERT, UPDATE, DELETE ON ${DB_NAME}.* TO ${DB_STREAMS_USER} REQUIRE SSL;"
 ```
 
@@ -151,6 +154,7 @@ Passwords are required for Streams microservices to securely connect to Mariadb.
 export NAMESPACE="my-namespace"
 export MARIADB_ROOT_PASSWORD="my-mariadb-root-password"
 export MARIADB_PASSWORD="my-mariadb-user-password"
+
 kubectl create secret generic streams-database-passwords-secret --from-literal=mariadb-root-password=${MARIADB_ROOT_PASSWORD} --from-literal=mariadb-password=${MARIADB_PASSWORD} -n ${NAMESPACE}
 ```
 
@@ -193,6 +197,7 @@ export NAMESPACE="my-namespace"
 export MARIADB_ROOT_PASSWORD="my-mariadb-root-password"
 export MARIADB_PASSWORD="my-mariadb-user-password"
 export MARIADB_REPLICATION_PASSWORD="my-mariadb-replication-password"
+
 kubectl create secret generic streams-database-passwords-secret --from-literal=mariadb-root-password=${MARIADB_ROOT_PASSWORD} --from-literal=mariadb-password=${MARIADB_PASSWORD}  --from-literal=mariadb-replication-password=${MARIADB_REPLICATION_PASSWORD} -n ${NAMESPACE}
 ```
 
@@ -255,78 +260,109 @@ To disable MariaDB encryption **and** TLS, you must set the following [Helm para
 Not recommended for production.
 {{< /alert >}}
 
-### Kafka security settings
+### Kafka settings
 
-By default, Kafka is configured with [SASL authentication](https://docs.confluent.io/current/kafka/authentication_sasl/index.html#authentication-with-sasl) and [TLS encryption](https://docs.confluent.io/current/kafka/encryption.html#encryption-with-ssl) for clients and brokers.
-As there is no sensitive data in Zookeeper, the communications with Zookeeper are in plaintext without authentication.
+A Kafka cluster is automatically installed by default on your K8s cluster with the Streams Helm chart. But using an external one is recommended in production.
 
-#### SASL authentication
+To disable the Kafka installation, you can either:
 
-In order to have SASL authentication working, you need to create the following secret containing Kafka credentials:
+* Edit the `values.yaml` file and set the `kafka.enabled` entry as follow:
 
-```sh
-export NAMESPACE="my-namespace"
-export KAFKA_CLIENT_PASSWORD="my-kakfa-client-password"
-export KAFKA_INTERBROKER_PASSWORD="my-kakfa-interbroker-password"
-
-kubectl -n ${NAMESPACE} create secret generic streams-kafka-passwords-secret --from-literal="client-passwords=${KAFKA_INTERBROKER_PASSWORD},${KAFKA_CLIENT_PASSWORD}" --from-literal="inter-broker-password=${KAFKA_INTERBROKER_PASSWORD}" --from-literal="client-password=${KAFKA_CLIENT_PASSWORD}"
-```
-
-#### TLS encryption
-
-In order to configure TLS encryption, you need to have a valid truststore and one certificate per broker. They must all be integrated into Java Key Stores (JKS) files.
-Be careful as each broker needs its own keystore and a dedicated CN name matching the Kafka pod hostname as described in [bitnami documentation](https://github.com/bitnami/charts/tree/master/bitnami/kafka#enable-security-for-kafka-and-zookeeper).
-We provide you with a script to help with truststore and keystore generation (based on bitnami's script that properly handles Kubernetes deployment).
-You can also use your own truststore/privatekey:
-
-```sh
-cd tools
-./kafka-generate-ssl.sh
-```
-
-Then, create a secret which contains all the previously generated files:
-
-```sh
-export NAMESPACE="my-namespace"
-export KAFKA_SECRET_PASSWORD="my-kakfa-secret-password"
-kubectl -n ${NAMESPACE} create secret generic streams-kafka-client-jks-secret --from-file="./truststore/kafka.truststore.jks" --from-file=./keystore/kafka-0.keystore.jks --from-file=./keystore/kafka-1.keystore.jks --from-file=./keystore/kafka-2.keystore.jks --from-literal="jks-password=${KAFKA_SECRET_PASSWORD}"
-```
-
-#### Disable Kafka security features
-
-To disable Kafka security features, you need to find & replace in `values.yaml` and `values-ha.yaml` all occurences of the following:
-
-```sh
---streams.kafka.security-config.security-protocol="SASL_SSL"
-```
-
-by the following:
-
-```sh
---streams.kafka.security-config.security-protocol="PLAINTEXT"
-```
-
-and set the following parameters in `values.yaml` to these values (leave other parameters unchanged):
-
-```sh
+```yaml
 kafka:
-  auth:
-    tls:
-      enabled: false
-    clientProtocol: plaintext
-    interBrokerProtocol: plaintext
-    saslInterBrokerMechanism: plain
-# Comment the lines as follows
-# extraEnvVars:
-#   - name: KAFKA_CERTIFICATE_PASSWORD
-#     valueFrom:
-#       secretKeyRef:
-#         name: "streams-kafka-client-jks-secret"
-#         key: "jks-password"
+  enabled: false
 ```
+
+* or specify `--set kafka.enabled=false` in the Helm Chart installation command.
+
+Then, according to your choice, configure your [external Kafka](#external-kafka-configuration) or your [automatically installed Kafka](#helm-chart-kafka-configuration).
+
+#### External Kafka configuration
+
+You must provide information to the Streams installation. You should edit the values.yaml file and set the `externalKafka` entry as follow:
+
+```yaml
+externalKafka:
+  bootstrapServers: "my.kafka.broker.1:port,my.broker.2:port[...]"
+```
+
+##### External Kafka security settings
+
+For security purpose, it’s highly recommended to enable [SASL authentication](https://docs.confluent.io/current/kafka/authentication_sasl/index.html#authentication-with-sasl) and [TLS encryption](https://docs.confluent.io/current/kafka/encryption.html#encryption-with-ssl) for Kafka clients and brokers. You can enable both or neither.
 
 {{< alert title="Note" >}}
-Do not use for production.
+Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enable or neither.
+{{< /alert >}}
+
+According to you choice, you must:
+
+* For SCRAM and TLS enabled:
+    * Provide the user password using secret:
+    ```sh
+    export NAMESPACE="my-namespace"
+    export KAFKA_USER_PASSWORD="my-kafka-password"
+
+    kubectl create secret generic streams-kafka-passwords-secret --from-literal=client-passwords=${KAFKA_USER_PASSWORD} -n ${NAMESPACE}
+    ```
+    * Provide a jks containing the kafka TLS truststore and its password:
+    ```sh
+    export NAMESPACE="my-namespace"
+    export KAFKA_JKS_PASSWORD="my-kafka-jks-password"
+    export KAFKA_JKS_PATH="my-kafka-jks-path"
+
+    kubectl create secret generic streams-kafka-client-jks-secret --from-file=kafka.truststore.jks=${KAFKA_JKS_PATH} --from-literal=jks-password=${KAFKA_JKS_PASSWORD} -n ${NAMESPACE}
+    ```
+    * Set the [Helm parameters](#helm-parameters) `externalKafka.auth.clientUsername` with your Kafka username.
+
+* For no security:
+    * Set the [Helm parameters](#helm-parameters) `externalKafka.auth.clientProtocol` to `plaintext`.
+
+#### Helm chart Kafka configuration
+
+##### Helm chart Kafka security settings
+
+For security purpose, it’s highly recommended to enable [SASL authentication](https://docs.confluent.io/current/kafka/authentication_sasl/index.html#authentication-with-sasl) and [TLS encryption](https://docs.confluent.io/current/kafka/encryption.html#encryption-with-ssl) for Kafka clients and brokers. You can enable both or neither.
+
+SASL and TLS are enabled by default. As there is no sensitive data in Zookeeper, the communications with Zookeeper are in plaintext without authentication.
+
+{{< alert title="Note" >}}
+Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enable or neither.
+{{< /alert >}}
+
+According to you choice, you must:
+
+* For SCRAM and TLS enabled:
+    * Provide Kafka credentials using secret:
+    ```sh
+    export NAMESPACE="my-namespace"
+    export KAFKA_CLIENT_PASSWORD="my-kakfa-client-password"
+    export KAFKA_INTERBROKER_PASSWORD="my-kakfa-interbroker-password"
+
+    kubectl -n ${NAMESPACE} create secret generic streams-kafka-passwords-secret --from-literal="client-passwords=${KAFKA_CLIENT_PASSWORD}" --from-literal="inter-broker-password=${KAFKA_INTERBROKER_PASSWORD}" Z
+    ```
+    * In order to configure TLS encryption, you need to have a valid truststore and one certificate per broker.
+        * They must all be integrated into Java Key Stores (JKS) files. Be careful as each broker needs its own keystore and a dedicated CN name matching the Kafka pod hostname as described in [bitnami documentation](https://github.com/bitnami/charts/tree/master/bitnami/kafka#enable-security-for-kafka-and-zookeeper).
+        * We provide you with a script to help with truststore and keystore generation (based on bitnami's script that properly handles Kubernetes deployment). You can also use your own truststore/privatekey:
+        ```sh
+        cd tools
+        ./kafka-generate-ssl.sh
+        ```
+        * Create a secret which contains all the previously generated files:
+        ```sh
+        export NAMESPACE="my-namespace"
+        export KAFKA_SECRET_PASSWORD="my-kakfa-secret-password"
+        kubectl -n ${NAMESPACE} create secret generic streams-kafka-client-jks-secret --from-file="./truststore/kafka.truststore.jks" --from-file=./keystore/kafka-0.keystore.jks --from-file=./keystore/kafka-1.keystore.jks --from-file=./keystore/kafka-2.keystore.jks --from-literal="jks-password=${KAFKA_SECRET_PASSWORD}"
+        ```
+
+* For no security:
+    * Set the following [Helm parameters](#helm-parameters):
+        * `kafka.auth.clientProtocol` to `plaintext`
+        * `kafka.auth.interBrokerProtocol` to `plaintext`
+        * `kafka.auth.jaas` to `null`
+        * `kafka.extraEnvVars` to `null`
+
+{{< alert title="Note" >}}
+Do not use all security disabled for production.
 {{< /alert >}}
 
 ### Ingress TLS settings
@@ -477,7 +513,12 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
+| kafka.enabled                         | Kafka installed in K8s with the Helm chart. If set to false, the `externalKafka` parameter will be used | no | true |
+| kafka.auth.clientProtocol             | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext") | no | sasl_tls |
+| kafka.auth.interBrokerProtocol        | Authentication protocol internaly used by Kafka broker (must be "sasl_tls" or "plaintext") | no | sasl_tls |
 | kafka.metrics.jmx.enabled             | Activate metrics endpoint for Kafka | no        | false         |
+| externalKafka.auth.clientUsername     | Username of the external Mariadb used by Streams (Only used when `kafka.enabled` set to false) | no | streams |
+| externalKafka.auth.clientProtocol     | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext" ; only used when `kafka.enabled` set to false)) | no | sasl_tls |
 
 ##### Zookeeper parameters
 
