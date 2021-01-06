@@ -80,7 +80,7 @@ imagePullSecrets:
 
 ### MariaDB settings
 
-The MariaDB database is automatically installed by default on your K8s cluster with the Streams Helm chart. But using an external one is recommended in production.
+The MariaDB database is automatically installed by default on your K8s cluster with the Streams Helm chart. But using an external one is recommended for production.
 
 To disable the MariaDB installation, you can either:
 
@@ -262,42 +262,28 @@ Not recommended for production.
 
 ### Kafka settings
 
-A Kafka cluster is automatically installed by default on your K8s cluster with the Streams Helm chart. But using an external one is recommended in production.
+By default, a Kafka cluster is automatically installed on your K8s cluster with the Streams Helm chart. But using an external one is recommended for production.
 
-To disable the Kafka installation, you can either:
-
-* Edit the `values.yaml` file and set the `kafka.enabled` entry as follow:
-
-```yaml
-kafka:
-  enabled: false
-```
-
-* or specify `--set kafka.enabled=false` in the Helm Chart installation command.
+To disable the Kafka installation, you can specify `--set kafka.enabled=false` in the Helm Chart installation command.
 
 Then, according to your choice, configure your [external Kafka](#external-kafka-configuration) or your [automatically installed Kafka](#helm-chart-kafka-configuration).
 
 #### External Kafka configuration
 
-You must provide information to the Streams installation. You should edit the values.yaml file and set the `externalKafka` entry as follow:
-
-```yaml
-externalKafka:
-  bootstrapServers: "my.kafka.broker.1:port,my.broker.2:port[...]"
-```
+You must provide information to the Streams installation. You should specify `--set externalKafka.bootstrapServers="my.kafka.broker.1:port,my.broker.2:port[...]"` in the Helm Chart installation command.
 
 ##### External Kafka security settings
 
 For security purpose, it’s highly recommended to enable [SASL authentication](https://docs.confluent.io/current/kafka/authentication_sasl/index.html#authentication-with-sasl) and [TLS encryption](https://docs.confluent.io/current/kafka/encryption.html#encryption-with-ssl) for Kafka clients and brokers. You can enable both or neither.
 
 {{< alert title="Note" >}}
-Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enable or neither.
+Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enable or none of the two.
 {{< /alert >}}
 
 According to you choice, you must:
 
 * For SCRAM and TLS enabled:
-    * Provide the user password using secret:
+    * Provide the user password using a k8s secret:
     ```sh
     export NAMESPACE="my-namespace"
     export KAFKA_USER_PASSWORD="my-kafka-password"
@@ -314,7 +300,7 @@ According to you choice, you must:
     ```
     * Set the [Helm parameters](#helm-parameters) `externalKafka.auth.clientUsername` with your Kafka username.
 
-* For no security:
+* For security disabled:
     * Set the [Helm parameters](#helm-parameters) `externalKafka.auth.clientProtocol` to `plaintext`.
 
 #### Helm chart Kafka configuration
@@ -326,13 +312,13 @@ For security purpose, it’s highly recommended to enable [SASL authentication](
 SASL and TLS are enabled by default. As there is no sensitive data in Zookeeper, the communications with Zookeeper are in plaintext without authentication.
 
 {{< alert title="Note" >}}
-Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enable or neither.
+Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enable or none of the two.
 {{< /alert >}}
 
 According to you choice, you must:
 
 * For SCRAM and TLS enabled:
-    * Provide Kafka credentials using secret:
+    * Provide Kafka credentials using a k8s secret:
     ```sh
     export NAMESPACE="my-namespace"
     export KAFKA_CLIENT_PASSWORD="my-kakfa-client-password"
@@ -354,15 +340,15 @@ According to you choice, you must:
         kubectl -n ${NAMESPACE} create secret generic streams-kafka-client-jks-secret --from-file="./truststore/kafka.truststore.jks" --from-file=./keystore/kafka-0.keystore.jks --from-file=./keystore/kafka-1.keystore.jks --from-file=./keystore/kafka-2.keystore.jks --from-literal="jks-password=${KAFKA_SECRET_PASSWORD}"
         ```
 
-* For no security:
+* For security disabled:
     * Set the following [Helm parameters](#helm-parameters):
         * `kafka.auth.clientProtocol` to `plaintext`
         * `kafka.auth.interBrokerProtocol` to `plaintext`
-        * `kafka.auth.jaas` to `null`
+        * `kafka.auth.jaas.existingSecret` to `null`
         * `kafka.extraEnvVars` to `null`
 
 {{< alert title="Note" >}}
-Do not use all security disabled for production.
+Disabling security is not recommended for production.
 {{< /alert >}}
 
 ### Ingress TLS settings
