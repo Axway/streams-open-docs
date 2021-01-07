@@ -270,7 +270,7 @@ Then, according to your choice, configure your [external Kafka](#external-kafka-
 
 #### External Kafka configuration
 
-You must provide information to the Streams installation. You should specify `--set externalKafka.bootstrapServers="my.kafka.broker.1:port,my.broker.2:port[...]"` in the Helm Chart installation command.
+You must provide information to the Streams installation. You should specify `--set externalKafka.bootstrapServers="my.kafka.broker.1:port\,my.broker.2:port[...]"` in the Helm Chart installation command.
 
 ##### External Kafka security settings
 
