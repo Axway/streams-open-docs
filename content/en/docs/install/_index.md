@@ -93,9 +93,9 @@ mariadb:
 
 * or specify `--set mariadb.enabled=false` in the Helm Chart installation command.
 
-Then, according to your choice, configure your [external MariaDB](#external-mariadb-configuration) or your [automatically installed MariaDB](#helm-chart-mariadb-configuration).
+Then, according to your choice, configure your [externalized MariaDB](#externalized-mariadb-configuration) or your [automatically installed MariaDB](#embedded-mariadb-configuration).
 
-#### External MariaDB configuration
+#### Externalized MariaDB configuration
 
 First of all, you must create a database which will be used by Streams:
 
@@ -146,7 +146,7 @@ externalMariadb:
   rootUsername: "my-streams-db-root-user"
 ```
 
-##### External MariaDB passwords
+##### Externalized MariaDB passwords
 
 Passwords are required for Streams microservices to securely connect to Mariadb.
 
@@ -158,7 +158,7 @@ export MARIADB_PASSWORD="my-mariadb-user-password"
 kubectl create secret generic streams-database-passwords-secret --from-literal=mariadb-root-password=${MARIADB_ROOT_PASSWORD} --from-literal=mariadb-password=${MARIADB_PASSWORD} -n ${NAMESPACE}
 ```
 
-##### External MariaDB TLS
+##### Externalized MariaDB TLS
 
 For security purpose, it's highly recommended to enable TLS communication between your database and Streams microservices. You can enable [One-Way TLS](https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-one-way-tls-for-mariadb-clients) or [Two-Way TLS](https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-two-way-tls-for-mariadb-clients).
 
@@ -186,9 +186,9 @@ According to your choice, you must:
 
 You can follow the official documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate. Make sure to set the Common Name correctly.
 
-#### Helm chart MariaDB configuration
+#### Embedded MariaDB configuration
 
-##### Helm chart MariaDB passwords
+##### Embedded MariaDB passwords
 
 Passwords are required for Streams microservices to securely connect to Mariadb.
 
@@ -201,7 +201,7 @@ export MARIADB_REPLICATION_PASSWORD="my-mariadb-replication-password"
 kubectl create secret generic streams-database-passwords-secret --from-literal=mariadb-root-password=${MARIADB_ROOT_PASSWORD} --from-literal=mariadb-password=${MARIADB_PASSWORD}  --from-literal=mariadb-replication-password=${MARIADB_REPLICATION_PASSWORD} -n ${NAMESPACE}
 ```
 
-##### Helm chart MariaDB Security
+##### Embedded MariaDB Security
 
 By default, MariaDB is configured with [TLS communication](#tls) and [Transparent Data Encryption](#transparent-data-encryption-tde) enabled.
 
@@ -266,13 +266,13 @@ By default, a Kafka cluster is automatically installed on your K8s cluster with 
 
 To disable the Kafka installation, you can specify `--set kafka.enabled=false` in the Helm Chart installation command.
 
-Then, according to your choice, configure your [external Kafka](#external-kafka-configuration) or your [automatically installed Kafka](#helm-chart-kafka-configuration).
+Then, according to your choice, configure your [externalized Kafka](#externalized-kafka-configuration) or your [automatically installed Kafka](#embedded-kafka-configuration).
 
-#### External Kafka configuration
+#### Externalized Kafka configuration
 
 You must provide information to the Streams installation. You should specify `--set externalKafka.bootstrapServers="my.kafka.broker.1:port\,my.broker.2:port[...]"` in the Helm Chart installation command.
 
-##### External Kafka security settings
+##### Externalized Kafka security settings
 
 For security purpose, it’s highly recommended to enable [SASL authentication](https://docs.confluent.io/current/kafka/authentication_sasl/index.html#authentication-with-sasl) and [TLS encryption](https://docs.confluent.io/current/kafka/encryption.html#encryption-with-ssl) for Kafka clients and brokers. You can enable both or neither.
 
@@ -303,9 +303,9 @@ According to you choice, you must:
 * For security disabled:
     * Set the [Helm parameters](#helm-parameters) `externalKafka.auth.clientProtocol` to `plaintext`.
 
-#### Helm chart Kafka configuration
+#### Embedded Kafka configuration
 
-##### Helm chart Kafka security settings
+##### Embedded Kafka security settings
 
 For security purpose, it’s highly recommended to enable [SASL authentication](https://docs.confluent.io/current/kafka/authentication_sasl/index.html#authentication-with-sasl) and [TLS encryption](https://docs.confluent.io/current/kafka/encryption.html#encryption-with-ssl) for Kafka clients and brokers. You can enable both or neither.
 
@@ -487,13 +487,13 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | mariadb.tls.enabled                   | MariaDB TLS enabled                 | no        | true          |
 | mariadb.encryption.enabled            | MariaDB Transparent Data Encryption enabled | no | true         |
 | mariadb.metrics.enabled               | Activate metrics endpoint for MariaDB | no      | false         |
-| externalMariadb.host                  | Host of the external Mariadb (Only used when `mariadb.enabled` set to false) | no | my.db.host |
-| externalMariadb.port                  | Port of the external Mariadb (Only used when `mariadb.enabled` set to false) | no | 3306 |
+| externalMariadb.host                  | Host of the externalized MariaDB (Only used when `mariadb.enabled` set to false) | no | my.db.host |
+| externalMariadb.port                  | Port of the externalized MariaDB (Only used when `mariadb.enabled` set to false) | no | 3306 |
 | externalMariadb.db.name               | Name of the MySQL database used for Streams (Only used when `mariadb.enabled` set to false) | no | streams |
-| externalMariadb.db.user               | Username of the external Mariadb used by Streams (Only used when `mariadb.enabled` set to false) | no | streams |
-| externalMariadb.rootUsername          | Root username of the external Mariadb used by Streams (Only used when `mariadb.enabled` set to false) | no | root |
-| externalMariadb.tls.enabled           | External MariaDB tls enabled (Only used when `mariadb.enabled` set to false) | no | true |
-| externalMariadb.tls.twoWay            | External MariaDB Two-Way tls enabled (Only used when `mariadb.enabled` set to false) | no | true |
+| externalMariadb.db.user               | Username of the externalized MariaDB used by Streams (Only used when `mariadb.enabled` set to false) | no | streams |
+| externalMariadb.rootUsername          | Root username of the externalized MariaDB used by Streams (Only used when `mariadb.enabled` set to false) | no | root |
+| externalMariadb.tls.enabled           | Externalized MariaDB tls enabled (Only used when `mariadb.enabled` set to false) | no | true |
+| externalMariadb.tls.twoWay            | Externalized MariaDB Two-Way tls enabled (Only used when `mariadb.enabled` set to false) | no | true |
 
 ##### Kafka parameters
 
@@ -503,7 +503,7 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | kafka.auth.clientProtocol             | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext") | no | sasl_tls |
 | kafka.auth.interBrokerProtocol        | Authentication protocol internaly used by Kafka broker (must be "sasl_tls" or "plaintext") | no | sasl_tls |
 | kafka.metrics.jmx.enabled             | Activate metrics endpoint for Kafka | no        | false         |
-| externalKafka.auth.clientUsername     | Username of the external Mariadb used by Streams (Only used when `kafka.enabled` set to false) | no | streams |
+| externalKafka.auth.clientUsername     | Username of the externalized Kafka used by Streams (Only used when `kafka.enabled` set to false) | no | streams |
 | externalKafka.auth.clientProtocol     | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext" ; only used when `kafka.enabled` set to false)) | no | sasl_tls |
 
 ##### Zookeeper parameters
