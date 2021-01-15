@@ -9,7 +9,7 @@ description: Install Streams on-premise, or deploy in your private cloud, and le
 ## Prerequisites
 
 * Kubernetes 1.18+
-* Helm 3.0.2+
+* Helm 3.2.0+
 * RBAC enabled
 * PersistentVolumes and LoadBalancer provisioner supported by the underlying infrastructure
 * Resources:
@@ -398,7 +398,12 @@ helm install "${HELM_RELEASE_NAME}" . \
 ```
 
 {{< alert title="Note" >}}
-The default configuration only accepts incoming HTTP/HTTPS requests to `k8s.yourdomain.tld`.
+You will be required to specify a hostname. If you do not have one yet, you can use any temporary value and edit it later.
+For this entire documentation we are using k8s.yourdomain.tld as an _example_ value.
+You can use the following flag :
+```
+--set ingress.host=k8s.yourdomain.tld
+```
 Refer to [Ingress host configuration](#ingress-host-configuration) and [Helm parameters](#helm-parameters) for further details.
 {{< /alert >}}
 
@@ -453,10 +458,6 @@ As the provided environment is configured with localhost, you may need to reconf
 curl "https://k8s.yourdomain.tld/subscribers/sse/topics/{TOPIC_ID}"
 ```
 
-{{< alert title="Note" >}}
-The default configuration only accepts incoming HTTP/HTTPS requests to `k8s.yourdomain.tld`.
-Refer to the [Helm parameters](#helm-parameters) for further details.
-{{< /alert >}}
 
 #### Helm parameters
 
@@ -465,13 +466,13 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
 | hub.replicaCount                      | Hub replica count                   | no        | 2             |
-| hub.ports.containerPort               | Http port to reach the Streams Topics API | no  | 8080          |
+| hub.service.port               | Http port to reach the Streams Topics API | no  | 8080          |
 | subscriberWebhook.replicaCount        | Subscriber Webhook replica count    | no        | 2             |
-| subscriberWebhook.ports.containerPort | Http port to subscribe to a topic   | no        | 8080          |
+| subscriberWebhook.service.port | Http port to subscribe to a topic   | no        | 8080          |
 | publisherHttpPoller.replicaCount      | Publisher HTTP Poller replica count | no        | 2             |
 | publisherHttpPost.enabled             | Enable/Disable Publisher HTTP Post  | no        | true          |
 | publisherHttpPost.replicaCount        | Publisher HTTP Post replica count   | no        | 2             |
-| publisherHttpPost.ports.containerPort | Http port to publish to a topic     | no        | 8080          |
+| publisherHttpPost.service.port | Http port to publish to a topic     | no        | 8080          |
 | publisherKafka.enabled                | Enable/Disable Publisher Kafka      | no        | true          |
 | publisherKafka.replicaCount           | Publisher Kafka replica count       | no        | 2             |
 | publisherSfdc.enabled                 | Enable/Disable Publisher SFDC       | no        | false         |
@@ -516,7 +517,7 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
 | ingress-nginx.enabled                 | Enable/Disable NGINX                | no        | true          |
-| ingress.host | Domain name used for incoming HTTP requests if `ingress-nginx.enabled` is set to true | no | k8s.yourdomain.tld |
+| ingress.host | Domain name used for incoming HTTP requests if `ingress-nginx.enabled` is set to true | yes | none |
 | ingress.tlsenabled                    | Enable embedded ingress SSL/TLS     | no        | true          |
 | ingress.tlsSecretName                 | Embedded ingress SSL/TLS certificate secret name | no | streams-ingress-tls-secret |
 | ingress-nginx.controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
