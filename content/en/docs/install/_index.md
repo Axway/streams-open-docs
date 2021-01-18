@@ -261,6 +261,7 @@ Not recommended for production.
 {{< /alert >}}
 
 ### Kafka settings
+
 By default, a Kafka cluster is automatically installed on your K8s cluster with the Streams Helm chart. But using an external one is recommended for production.
 
 To disable the Kafka installation, you can specify `--set embeddedKafka.enabled=false` in the Helm Chart installation command.
@@ -401,9 +402,11 @@ helm install "${HELM_RELEASE_NAME}" . \
 You will be required to specify a hostname. If you do not have one yet, you can use any temporary value and edit it later.
 For this entire documentation we are using k8s.yourdomain.tld as an _example_ value.
 You can use the following flag :
+
 ```
 --set ingress.host=k8s.yourdomain.tld
 ```
+
 Refer to [Ingress host configuration](#ingress-host-configuration) and [Helm parameters](#helm-parameters) for further details.
 {{< /alert >}}
 
@@ -457,7 +460,6 @@ As the provided environment is configured with localhost, you may need to reconf
 ```sh
 curl "https://k8s.yourdomain.tld/subscribers/sse/topics/{TOPIC_ID}"
 ```
-
 
 #### Helm parameters
 
