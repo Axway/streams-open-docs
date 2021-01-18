@@ -88,7 +88,7 @@ To disable the MariaDB installation, you can either:
 
 ```yaml
 embeddedMariadb:
-enabled: false
+  enabled: false
 ```
 
 * or specify `--set embeddedMariadb.enabled=false` in the Helm Chart installation command.
