@@ -688,6 +688,40 @@ Pod characteristics for HA deployment mode:
 | ------------------ | --- | ------ | --------- | ----------- |
 | 2                  | 1   | 512 MB | n/a       | 8 GB        |
 
+### Database considerations
+
+Streams manages 2 types of connection pool for the database:
+
+* [Liquibase](https://www.liquibase.org/):
+    * At several microservices startup, schema database management (liquibase) creates a connection pool with 10 parallel connections. Using these connections (with user _root_), database tables are created/updated if needed in order to reach the expected state for the current version. Then, the connections are closed and the microservices can resume regular startup.
+* [Hikari](https://github.com/brettwooldridge/HikariCP):
+    * Each microservice which depends on the database maintains a connection pool of 10 threads. Connections are established using user _streams_. When a database call needs to be performed (e.g. topic creation, liveness probe...), either an existing idle connection is available and used for this call or, all the connections in the pool are already in use and the call is queued.
+    * A connection remains in the pool during `maxLifetime` (default: 280s). When maxLifetime is reached and if the connection is not in use, it will be dropped from the pool and a new one will be created in order to keep the pool size at 10 connections.
+
+For best performances with Streams, MariaDB should be configured as follows:
+
+* [`wait-timeout`](https://mariadb.com/docs/reference/es/system-variables/wait_timeout/)
+    * Any connection to the database that stays idle during this value will be destroyed.
+    * 5 minutes is a good value, so reconnection are not too frequent and zombie connections due to potential k8s pod or node crash can be managed fast enough.
+    * Keep in mind to set your Streams installation `maxLifetime` below this value. For instance, a microservice connection will die after remaining `maxLifetime` seconds in the pool, but if a pod crashes and the connection cannot be closed properly after `maxLifetime`, it will eventually be destroyed after `wait-timeout`.
+
+* [`max-connections`](https://mariadb.com/docs/reference/es/system-variables/max_connections/)
+    * This value is set to 500 by default for HA setup.
+    * The formula to compute the number of connections maintained by Streams platform is:
+    ```
+    streams_db_connections = (number_of_pods_depending_on_db) * (pool_size)
+    
+    Example:
+    Assuming a platform deployed with hub, webhook subscriber, http post publisher with 2 replicas each:
+    number_of_pods_depending_on_db = (hub*2+post*2+webhook*2) = 6
+    streams_db_connections = 6 * 10 = 60
+    ```
+    * One may also take into account the load expected on the platform which may lead to increase the number of microservice replicas. It is recommended to compute the `streams_db_connections` with the highest number of pod replicas expected for the platform to handle high load.
+    Several connections are also established by MariaDB itself (5 for InnoDB and 1 for replication).
+    A safety margin must also be considered in case of a k8s pod or node crash where zombie connections would be held during `wait-timeout` while pods are being re-created along with their connection pool.
+
+Refer to the [Embedded MariaDB tuning](/docs/install#embedded-mariadb-tuning) documentation for further details on setting all these parameters in the Helm Streams installation.
+
 ### Logging/tracing
 
 Logs for a pod are accessible via Kubernetes API:

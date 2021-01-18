@@ -143,6 +143,8 @@ externalMariadb:
   rootUsername: "my-streams-db-root-user"
 ```
 
+Finally, set the [Helm parameters](#helm-parameters) `streams.serviceArgs.spring.datasource.hikari.maxLifetime` to a value (in seconds) according to the `wait-timeout` value of your MariaDB database (refer to the [MariaDB considerations](/docs/architecture#mariadb-considerations) documentation for further details).
+
 ##### External MariaDB passwords
 
 Passwords are required for Streams microservices to securely connect to Mariadb.
@@ -254,6 +256,16 @@ To disable MariaDB encryption **and** TLS, you must set the following [Helm para
 {{< alert title="Note" >}}
 Not recommended for production.
 {{< /alert >}}
+
+##### Embedded MariaDB tuning
+
+These values of the embedded MariaDB configuration can be updated:
+
+* The `wait-timeout` variable can be updated by setting the [Helm parameters](#helm-parameters) `embeddedMariadb.waitTimeout`.
+
+* The `max-connections` variable can be updated by setting the [Helm parameters](#helm-parameters) `embeddedMariadb.maxConnections`.
+
+{{< alert title="Note" >}}Please, refer to the [MariaDB considerations](/docs/architecture#mariadb-considerations) documentation for further details.{{< /alert >}}
 
 ### Kafka security settings
 
@@ -456,6 +468,7 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | publisherSfdc.enabled                 | Enable/Disable Publisher SFDC       | no        | false         |
 | publisherSfdc.replicaCount            | Publisher SFDC replica count        | no        | 2             |
 | actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
+| streams.serviceArgs.spring.datasource.hikari.maxLifetime | Maximum lifetime in milliseconds for a Streams database connection | no | 280000 |
 
 ##### MariaDB parameters
 
@@ -465,6 +478,8 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | mariadb.tls.enabled                   | MariaDB TLS enabled                 | no        | true          |
 | mariadb.encryption.enabled            | MariaDB Transparent Data Encryption enabled | no | true         |
 | mariadb.metrics.enabled               | Activate metrics endpoint for MariaDB | no      | false         |
+| embeddedMariadb.maxConnections        | Maximum number of parallel client connections to MariaDB | no | 500 |
+| embeddedMariadb.waitTimeout           | Time in seconds that MariaDB waits for activity on a connection before closing it | no | 300 |
 | externalMariadb.host                  | Host of the external Mariadb (Only used when `mariadb.enabled` set to false) | no | my.db.host |
 | externalMariadb.port                  | Port of the external Mariadb (Only used when `mariadb.enabled` set to false) | no | 3306 |
 | externalMariadb.db.name               | Name of the MySQL database used for Streams (Only used when `mariadb.enabled` set to false) | no | streams |
