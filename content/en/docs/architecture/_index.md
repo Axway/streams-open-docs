@@ -20,7 +20,7 @@ This document describes all major areas in deploying and maintaining Streams, in
 ## Overview
 
 Streams is an event hub that makes it easy to exchange messages between devices, services and applications. It only supports container-based deployment. The purpose of this document is to share Axway reference architecture for the container-based deployment of a Streams solution on Kubernetes. It will address many architectural, development and operational aspects of the proposed architecture.  
-Because the technology chosen, Docker and Kubernetes, are portable across on-premises environments and many cloud providers, most of the information in this guide should apply to those environments. But we include specific recommendations for AWS as one of the most common deployment targets.
+Because the technology chosen, Docker and Kubernetes, are portable across on-premise environments and many cloud providers, most of the information in this guide should apply to those environments. But we include specific recommendations for AWS as one of the most common deployment targets.
 The target audience for the document is architects, developers, and operations personnel. To get the most value from this document, a reader should have a good knowledge of Docker, Kubernetes and API.
 
 ## General Architecture
@@ -87,7 +87,7 @@ Administrative tasks should be executed safely. We recommend you to use a bastio
 
 * Kubernetes master nodes for managing a cluster
 * Kubernetes Dashboard
-* RBDMS and Kafka
+* RDBMS and Kafka
 * Debugging any issue with a Kubernetes cluster
 
 The bastion must have high traceability with specific RBAC permissions to allow a few selected users to access infrastructure components.
@@ -245,7 +245,7 @@ In addition, each Java service defines heap memory management with the help of J
 | Description                                                           | Type     |
 | --------------------------------------------------------------------- | -------- |
 | Limit memory and CPU usage to protect the cluster                     | Required |
-| Adjust Java opts (Xmx & Xms) to allocate enough resources to services | Required |
+| Adjust Java opts (Xms & Xmx) to allocate enough resources to services | Required |
 
 {{< alert title="Note" >}}Axway provides the recommended values. Be aware that removing pod and JVM resource limits will result in a non-functional platform.{{< /alert >}}
 
@@ -369,19 +369,9 @@ We do not provide any specific guidelines for using Horizontal Pod Autoscaler wi
 
 ##### External traffic
 
-We use the NGINX Ingress Controller to expose both management and subscription APIs. NGINX Ingress Controller automatically creates a Load Balancer in the cloud provider infrastructure so that the APIs can be reached from the outside using the load balancer DNS hostname. Once known, this hostname must be updated in the ingress resource thanks to the `values.yaml` file:
+We use the NGINX Ingress Controller to expose both management and subscription APIs. NGINX Ingress Controller automatically creates a Load Balancer in the cloud provider infrastructure so that the APIs can be reached from the outside using the load balancer DNS hostname. Once known, this hostname must be updated in the ingress resource thanks to the value of the helm parameter `ingress.host`.
 
-```yaml
-ingress:
-  host: "k8s.yourdomain.tld"
-```
-
-SSL/TLS is activated by default unless you have deliberately disabled it by setting:
-
-```yaml
-ingress:
-  tlsenabled: false
-```
+SSL/TLS is activated by default unless you have deliberately disabled it by setting `ingress.tlsenabled=false`.
 
 The ingress controller handles SSL/TLS termination with to the correct certificate/secret (more setup details)
 
@@ -395,13 +385,18 @@ The ingress controller handles SSL/TLS termination with to the correct certifica
 Without secrets, all passwords are set in clear in Manifest. Kubernetes define “secret” objects to encode in base64 all sensitive information. Using Kubernetes Secrets is very useful for variables in containers, Docker registry login, and technical token for shared storage.
 Here is the list of secrets related to Streams installation:
 
-| Description  | Type                                |
-| ------------ | ----------------------------------- |
-| default      | kubernetes.io/service-account-token |
-| mariadb      | Opaque                              |
-| Nginx secret | Opaque                              |
-| Nginx token  | kubernetes.io/service-account-token |
-| helm         | kubernetes.io/service-account-token |
+| Description                           | Type                                |
+| --------------------------------------| ----------------------------------- |
+| default                               | kubernetes.io/service-account-token |
+| registry-secret-name                  | kubernetes.io/dockerconfigjson      |
+| mariadb database-passwords-secret     | Opaque                              |
+| mariadb database-secret               | Opaque                              |
+| kafka client-jks-secret               | Opaque                              |
+| kafka passwords-secret                | Opaque                              |
+| kafka token                           | kubernetes.io/service-account-token |
+| Nginx secret                          | kubernetes.io/tls                   |
+| Nginx token                           | kubernetes.io/service-account-token |
+| helm                                  | helm.sh/release.v1                  |
 
 ### Streams implementation details
 
@@ -429,7 +424,7 @@ Pod characteristics of the SSE Subscriber for HA deployment mode:
 * Kubernetes object: deployment
 * Exposed traffic http port by default: 8080 (can be modified during installation)
 * Resource limits: 2 CPUs & 3 GB
-* Xmx & Xms: 2 GB  
+* Xms & Xmx: 2 GB  
 * Auto-scaling: no
 * Replicas: 2
 
@@ -455,7 +450,7 @@ Pod characteristics of the subscriber webhook for HA deployment mode:
 * Kubernetes object: deployment  
 * Exposed traffic http port by default: 8080 (can be modified during installation)
 * Resource limits: 2 CPUs & 3 GB
-* Xmx & Xms: 2 GB  
+* Xms & Xmx: 2 GB  
 * Automatic scalability: No
 * Replicas: 2
 
@@ -481,7 +476,7 @@ Pod characteristics of the subscriber Kafka for HA deployment mode:
 * Kubernetes object: deployment  
 * Exposed traffic http port by default: 8080 (can be modified during installation)
 * Resource limits: 2 CPUs & 3 GB
-* Xmx & Xms: 2 GB  
+* Xms & Xmx: 2 GB  
 * Automatic scalability: No
 * Replicas: 2
 
@@ -505,7 +500,7 @@ Pod characteristics of the hub for HA deployment mode:
 * Kubernetes object: deployment
 * Exposed traffic http port: 8080 (can be modified during installation)
 * Resources limit: 2 CPUs & 3 GB
-* Xmx & Xms: 2 GB
+* Xms & Xmx: 2 GB
 * Automatic scalability: no
 * Replicas: 2
 
@@ -606,7 +601,7 @@ Pod characteristics of the publisher SFDC for HA deployment mode:
 
 #### Summary table
 
-| Component             | Exposes API | Exposed Port | Resources Limits | Xmx & Xms | Requires                  | Ingress traffic | Egress traffic  |
+| Component             | Exposes API | Exposed Port | Resources Limits | Xms & Xmx | Requires                  | Ingress traffic | Egress traffic  |
 | --------------------- | ----------- | ------------ | ---------------- | --------- | ------------------------- | --------------- | --------------- |
 | SSE Subscriber        | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | Kafka                     | Yes             | No              |
 | Webhook  Subscriber   | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | MariaDB, Kafka, Zookeeper | Yes             | Yes             |
@@ -626,30 +621,30 @@ Apache Kafka is used as stream-processing layer.
 Source Docker image:
 
 * Repository: bitnami/kafka
-* Tag: 2.6.0-debian-10-r78
+* Tag: 2.6.0-debian-10-r110
 
 Pod name: `streams-kafka`.
 
 Pod characteristics for HA deployment mode:
 
-| Replicas           | CPU | Memory | Xmx & Xms | Persistence |
+| Replicas           | CPU | Memory | Xms & Xmx | Persistence |
 | ------------------ | --- | ------ | --------- | ----------- |
 | 3 (one in each AZ) | 1   | 4 GB   | 3 GB      | 200 GB      |
 
 #### ZooKeeper
 
-Apache ZooKeeper is used by Kafka.
+Apache ZooKeeper is used by our microservices for discovery and by Kafka (when embedded in installation).
 
 Source Docker image:
 
 * Repository: bitnami/zookeeper
-* Tag: 3.6.2-debian-10-r58
+* Tag: 3.6.2-debian-10-r112
 
 Pod name: `streams-zookeeper`
 
 Pod characteristics for HA deployment mode:
 
-| Replicas           | CPU | Memory | Xmx & Xms | Persistence |
+| Replicas           | CPU | Memory | Xms & Xmx | Persistence |
 | ------------------ | --- | ------ | --------- | ----------- |
 | 3 (one in each AZ) | 1   | 512 MB | n/a       | 8 GB        |
 
@@ -660,7 +655,7 @@ MariaDB is our persistence layer.
 Source Docker image:
 
 * Repository: bitnami/mariadb
-* Tag: 10.4.14
+* Tag: 10.4.17
 
 Pod names:
 
@@ -669,12 +664,29 @@ Pod names:
 
 Pod characteristics for HA deployment mode:
 
-| Name              | Replicas | CPU | Memory  | Xmx & Xms | Persistence |
+| Name              | Replicas | CPU | Memory  | Xms & Xmx | Persistence |
 | ----------------- |--------- | --- | ------- | --------- | ----------- |
 | MariaDB master    | 1        | 1   | 1024 MB | n/a       | 8 GB        |
 | MariaDB slave     | 1        | 1   | 1024 MB | n/a       | 8 GB        |
 
 {{< alert title="Note" >}}MariaDB is deployed in master/slave mode with asynchronous commit for replication but the failover is not done automatically.{{< /alert >}}
+
+#### Nginx
+
+Nginx is the ingress controller in front of Streams APIs.
+
+Source Docker image:
+
+* Repository: k8s.gcr.io/ingress-nginx/controller
+* Tag: v0.43.0
+
+Pod name: `streams-ingress-nginx-controller`
+
+Pod characteristics for HA deployment mode:
+
+| Replicas           | CPU | Memory | Xms & Xmx | Persistence |
+| ------------------ | --- | ------ | --------- | ----------- |
+| 2                  | 1   | 512 MB | n/a       | 8 GB        |
 
 ### Logging/tracing
 
