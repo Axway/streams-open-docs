@@ -262,7 +262,7 @@ Not recommended for production.
 
 ### Kafka settings
 
-By default, a Kafka cluster is automatically installed on your K8s cluster with the Streams Helm chart. But using an external one is recommended for production.
+By default, an embedded Kafka cluster is installed on your K8s cluster next to Streams. For production, we recommend that you use an externalized one instead.
 
 To disable the Kafka installation, you can specify `--set kafka.enabled=false` in the Helm Chart installation command.
 
