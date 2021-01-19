@@ -13,7 +13,6 @@ description: Install Streams on-premise, or deploy in your private cloud, and le
 * RBAC enabled
 * PersistentVolumes and LoadBalancer provisioner supported by the underlying infrastructure
 * Resources:
-
     * Minimal non-HA configuration: `9` CPUs and `10` GB RAM dedicated to the platform.
     * Minimal HA configuration: `34` CPUs and `51` GB RAM dedicated to the platform.
 
@@ -344,6 +343,31 @@ kubectl create secret tls streams-ingress-tls-secret --key=${INGRESS_TLS_KEY_PAT
 
 To disable SSL/TLS (not recommended for production use), see [Helm parameters](#helm-parameters).
 
+### Add self-signed TLS certificates
+
+TLS endpoints to which Streams services connect must have a valid TLS certificate. If your endpoints uses self-signed certificates, you must add them to Streams services as trusted certificates.
+
+Get ready with your certificates in PEM format and:
+
+* Create one or several secrets containing your PEM files:
+
+```sh
+export NAMESPACE="my-namespace"
+export SECRET_NAME="my-secret"
+export PEM_PATH="my-pem-path"
+
+kubectl create secret generic "${SECRET_NAME}" -n "${NAMESPACE}" --from-file="${PEM_PATH}" [--from-file=<other-pem-path>]
+```
+
+* Set the [Helm parameters](#helm-parameters) `streams.extraCertificatesSecrets` as follows:
+
+```sh
+--set streams.extraCertificatesSecrets="{my-secret}"
+
+# or if you have several secrets
+--set streams.extraCertificatesSecrets="{my-secret,my-second-secret}"
+```
+
 ### Helm install command
 
 #### Non HA configuration
@@ -437,9 +461,9 @@ The default configuration only accepts incoming HTTP/HTTPS requests to `k8s.your
 Refer to the [Helm parameters](#helm-parameters) for further details.
 {{< /alert >}}
 
-#### Helm parameters
+### Helm parameters
 
-##### Streams parameters
+#### Streams parameters
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
@@ -455,9 +479,10 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | publisherKafka.replicaCount           | Publisher Kafka replica count       | no        | 2             |
 | publisherSfdc.enabled                 | Enable/Disable Publisher SFDC       | no        | false         |
 | publisherSfdc.replicaCount            | Publisher SFDC replica count        | no        | 2             |
+| streams.extraCertificatesSecrets      | List of secrets containing TLS certs to add as trusted by Streams | no | [] |
 | actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
 
-##### MariaDB parameters
+#### MariaDB parameters
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
@@ -473,19 +498,19 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | externalMariadb.tls.enabled           | External MariaDB tls enabled (Only used when `mariadb.enabled` set to false) | no | true |
 | externalMariadb.tls.twoWay            | External MariaDB Two-Way tls enabled (Only used when `mariadb.enabled` set to false) | no | true |
 
-##### Kafka parameters
+#### Kafka parameters
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
 | kafka.metrics.jmx.enabled             | Activate metrics endpoint for Kafka | no        | false         |
 
-##### Zookeeper parameters
+#### Zookeeper parameters
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
 | zookeeper.metrics.enabled             | Activate metrics endpoint for Zookeeper | no    | false         |
 
-##### Ingress parameters
+#### Ingress parameters
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
@@ -498,14 +523,14 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 {{< alert title="Note" >}}
 If you want to configure a parameter from a dependency chart, [MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb), [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka), you need to add the chart prefix name to the command line argument. For example:
 
-```
+```sh
 --set mariadb.image.tag=latest --set kafka.replicaCount=2 `
 ```
 
 Please refer to the dependency chart's documentation to get the list of parameters.
 {{< /alert >}}
 
-#### Monitoring
+### Monitoring
 
 Streams ships with monitoring. You can activate metrics with the parameters listed in the table above (under "Activate metrics endpoint"),
 which will open endpoints designed to be scrapped by [Prometheus](https://prometheus.io).
