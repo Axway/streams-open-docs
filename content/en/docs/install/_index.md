@@ -80,7 +80,7 @@ imagePullSecrets:
 
 ### MariaDB settings
 
-The MariaDB database is automatically installed by default on your K8s cluster with the Streams Helm chart. But using an external one is recommended for production.
+By default, an embedded MariaDB database is installed on your K8s cluster next to Streams. For production, we recommend that you use an externalized one instead.
 
 To disable the MariaDB installation, you can either:
 
