@@ -345,7 +345,7 @@ To disable SSL/TLS (not recommended for production use), see [Helm parameters](#
 
 ### Add self-signed TLS certificates
 
-TLS endpoints to which the Streams services connect must have a valid TLS certificate. If your endpoint uses self-signed certificates, you must add them to Streams services as trusted certificates.
+TLS endpoints to which Streams services connect must have a valid TLS certificate. If your endpoints uses self-signed certificates, you must add them to Streams services as trusted certificates.
 
 Get ready with your certificates in PEM format and:
 
