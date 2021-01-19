@@ -385,18 +385,17 @@ The ingress controller handles SSL/TLS termination with to the correct certifica
 Without secrets, all passwords are set in clear in Manifest. Kubernetes define “secret” objects to encode in base64 all sensitive information. Using Kubernetes Secrets is very useful for variables in containers, Docker registry login, and technical token for shared storage.
 Here is the list of secrets related to Streams installation:
 
-| Description                           | Type                                |
-| --------------------------------------| ----------------------------------- |
-| default                               | kubernetes.io/service-account-token |
-| registry-secret-name                  | kubernetes.io/dockerconfigjson      |
-| mariadb database-passwords-secret     | Opaque                              |
-| mariadb database-secret               | Opaque                              |
-| kafka client-jks-secret               | Opaque                              |
-| kafka passwords-secret                | Opaque                              |
-| kafka token                           | kubernetes.io/service-account-token |
-| Nginx secret                          | kubernetes.io/tls                   |
-| Nginx token                           | kubernetes.io/service-account-token |
-| helm                                  | helm.sh/release.v1                  |
+| Description                   | Name                      | Type                                |
+| ----------------------------- | ------------------------- | ----------------------------------- |
+| docker registry credentials   | registry-secret-name      | kubernetes.io/dockerconfigjson      |
+| mariadb credentials           | database-passwords-secret | Opaque                              |
+| mariadb encryption            | database-secret           | Opaque                              |
+| kafka truststore credentials  | client-jks-secret         | Opaque                              |
+| kafka credentials             | passwords-secret          | Opaque                              |
+| kafka service account         | kafka-token               | kubernetes.io/service-account-token |
+| Nginx tls certificates        | ingress-tls-secret        | kubernetes.io/tls                   |
+| Nginx service account         | ingress-nginx-token       | kubernetes.io/service-account-token |
+| helm release internal info    | helm                      | helm.sh/release.v1                  |
 
 ### Streams implementation details
 
@@ -633,7 +632,7 @@ Pod characteristics for HA deployment mode:
 
 #### ZooKeeper
 
-Apache ZooKeeper is used by our microservices for discovery and by Kafka (when embedded in installation).
+Apache ZooKeeper is used by our microservices and by Kafka (when embedded in installation).
 
 Source Docker image:
 
@@ -692,11 +691,11 @@ Pod characteristics for HA deployment mode:
 
 Streams manages 2 types of connection pool for the database:
 
-* [Liquibase](https://www.liquibase.org/):
-    * At several microservices startup, schema database management (liquibase) creates a connection pool with 10 parallel connections. Using these connections (with user _root_), database tables are created/updated if needed in order to reach the expected state for the current version. Then, the connections are closed and the microservices can resume regular startup.
+* Tomcat:
+    * At several microservices startup, schema database management ([liquibase](https://www.liquibase.org/)) creates a connection pool with 10 parallel connections. Using these connections (with user _root_), database tables are created/updated if needed in order to reach the expected state for the current version. Then, the connections are closed and the microservices can resume regular startup.
 * [Hikari](https://github.com/brettwooldridge/HikariCP):
-    * Each microservice which depends on the database maintains a connection pool of 10 threads. Connections are established using user _streams_. When a database call needs to be performed (e.g. topic creation, liveness probe...), either an existing idle connection is available and used for this call or, all the connections in the pool are already in use and the call is queued.
-    * A connection remains in the pool during `maxLifetime` (default: 280s). When maxLifetime is reached and if the connection is not in use, it will be dropped from the pool and a new one will be created in order to keep the pool size at 10 connections.
+    * Each microservice which depends on the database maintains a connection pool of `maximumPoolSize` threads (default: 10). Connections are established using user _streams_. When a database call needs to be performed (e.g. topic creation, liveness probe...), either an existing idle connection is available and used for this call or, all the connections in the pool are already in use and the call is queued during `connectionTimeout` (default: 25s).
+    * A connection remains in the pool during `maxLifetime` (default: 280s). When maxLifetime is reached and if the connection is not in use, it will be dropped from the pool and a new one will be created in order to keep the pool size at `maximumPoolSize` connections.
 
 For best performances with Streams, MariaDB should be configured as follows:
 
@@ -709,7 +708,7 @@ For best performances with Streams, MariaDB should be configured as follows:
     * This value is set to 500 by default for HA setup.
     * The formula to compute the number of connections maintained by Streams platform is:
     ```
-    streams_db_connections = (number_of_pods_depending_on_db) * (pool_size)
+    streams_db_connections = (number_of_pods_depending_on_db) * (maximumPoolSize)
     
     Example:
     Assuming a platform deployed with hub, webhook subscriber, http post publisher with 2 replicas each:
