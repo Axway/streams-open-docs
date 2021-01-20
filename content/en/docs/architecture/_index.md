@@ -153,7 +153,7 @@ We recommend using SSD disks with low latency. The storage is used by the Kafka,
 
 ### Load balancer
 
-A load balancer is required in front of the cluster. We use the Kubernetes object called ingress controller that is responsible for fulfilling the ingress rules. A NGINX ingress controller is, by default, deployed with our Helm chart installation. For better performance, we recommend you to use a L4 Load balancer. See your Cloud provider documentation to configure it (e.g. [AWS Load Balancing](https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html))
+A load balancer is required in front of the cluster. We use the Kubernetes object called ingress controller that is responsible for fulfilling the ingress rules. A NGINX ingress controller is, by default, deployed with our Helm chart installation. For better performance, we recommend you to use a L4 Load balancer. See your Cloud provider documentation to configure it (e.g. [AWS Load Balancing](https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html)).
 
 #### Network
 
