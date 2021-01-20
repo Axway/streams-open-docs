@@ -715,7 +715,7 @@ For best performances with Streams, MariaDB should be configured as follows:
     number_of_pods_depending_on_db = (hub*2+post*2+webhook*2) = 6
     streams_db_connections = 6 * 10 = 60
     ```
-    * One may also take into account the load expected on the platform which may lead to increase the number of microservice replicas. It is recommended to compute the `streams_db_connections` with the highest number of pod replicas expected for the platform to handle high load.
+    * One may also take into account the expected load on the platform, which may lead to an increase in the number of microservice replicas. It is recommended to compute the `streams_db_connections` with the highest number of pod replicas expected so that the platform can properly handle peak load.
     Several connections are also established by MariaDB itself (5 for InnoDB and 1 for replication).
     A safety margin must also be considered in case of a k8s pod or node crash where zombie connections would be held during `wait-timeout` while pods are being re-created along with their connection pool.
 
