@@ -702,7 +702,7 @@ For best performances with Streams, MariaDB should be configured as follows:
 * [`wait-timeout`](https://mariadb.com/docs/reference/es/system-variables/wait_timeout/)
     * Any connection to the database that stays idle during this value will be destroyed.
     * 5 minutes is recommended so that reconnections are not too frequent and zombie connections that are due to potential k8s pod / node crashes can be managed in a timely manner.
-    * Keep in mind to set your Streams installation `maxLifetime` below this value. For instance, a microservice connection will die after remaining `maxLifetime` seconds in the pool, but if a pod crashes and the connection cannot be closed properly after `maxLifetime`, it will eventually be destroyed after `wait-timeout`.
+    * Remember to set your Streams installation `maxLifetime` below this value. For instance, a microservice connection will die after remaining `maxLifetime` seconds in the pool, but if a pod crashes and the connection cannot be closed properly after `maxLifetime`, it will eventually be destroyed after `wait-timeout`.
 
 * [`max-connections`](https://mariadb.com/docs/reference/es/system-variables/max_connections/)
     * This value is set to 500 by default for HA setup.
