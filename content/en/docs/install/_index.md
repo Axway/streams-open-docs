@@ -528,7 +528,7 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | kafka.auth.clientProtocol             | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext") | no | sasl_tls |
 | kafka.auth.interBrokerProtocol        | Authentication protocol internaly used by Kafka broker (must be "sasl_tls" or "plaintext") | no | sasl_tls |
 | kafka.metrics.jmx.enabled             | Activate metrics endpoint for Kafka | no        | false         |
-| externalKafka.auth.clientUsername     | Username of the externalized Kafka used by Streams (Only used when `kafka.enabled` set to false) | no | streams |
+| externalKafka.auth.clientUsername     | Username of the externalized Kafka used by Streams (only used when `kafka.enabled` set to false) | no | streams |
 | externalKafka.auth.clientProtocol     | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext" ; only used when `kafka.enabled` set to false)) | no | sasl_tls |
 
 #### Zookeeper parameters
