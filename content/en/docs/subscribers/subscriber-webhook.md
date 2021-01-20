@@ -88,7 +88,7 @@ You can change the default time window of the retrieved history with `start` and
 
 ### Webhook exchanges status codes
 
-Below the list of HTTP status codes that can be returned when interacting with the exchanges history:
+The following HTTP status codes can be returned when interacting with the exchanges history:
 
 | Code | Comment |
 |------|---------|
