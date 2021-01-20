@@ -279,7 +279,7 @@ For security purposes, it’s highly recommended to enable [SASL authentication]
 Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enabled or neither of the two.
 {{< /alert >}}
 
-According to you choice, you must:
+According to your choice, you must:
 
 * For SCRAM and TLS enabled:
     * Provide the user password using a k8s secret:
