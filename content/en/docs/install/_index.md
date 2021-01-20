@@ -263,7 +263,7 @@ Not recommended for production.
 
 ##### Embedded MariaDB tuning
 
-These values of the embedded MariaDB configuration can be updated:
+The following embedded MariaDB configuration values can be updated:
 
 * The `wait-timeout` variable can be updated by setting the [Helm parameters](#helm-parameters) `embeddedMariadb.waitTimeout`.
 
