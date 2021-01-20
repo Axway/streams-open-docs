@@ -385,17 +385,17 @@ The ingress controller handles SSL/TLS termination with to the correct certifica
 Without secrets, all passwords are set in clear in Manifest. Kubernetes define “secret” objects to encode in base64 all sensitive information. Using Kubernetes Secrets is very useful for variables in containers, Docker registry login, and technical token for shared storage.
 Here is the list of secrets related to Streams installation:
 
-| Description                   | Name                      | Type                                |
-| ----------------------------- | ------------------------- | ----------------------------------- |
-| docker registry credentials   | registry-secret-name      | kubernetes.io/dockerconfigjson      |
-| mariadb credentials           | database-passwords-secret | Opaque                              |
-| mariadb encryption            | database-secret           | Opaque                              |
-| kafka truststore credentials  | client-jks-secret         | Opaque                              |
-| kafka credentials             | passwords-secret          | Opaque                              |
-| kafka service account         | kafka-token               | kubernetes.io/service-account-token |
-| Nginx tls certificates        | ingress-tls-secret        | kubernetes.io/tls                   |
-| Nginx service account         | ingress-nginx-token       | kubernetes.io/service-account-token |
-| helm release internal info    | helm                      | helm.sh/release.v1                  |
+| Description                   | Name                                | Type                                |
+| ----------------------------- | ----------------------------------- | ----------------------------------- |
+| docker registry credentials   | my-registry-secret-name             | kubernetes.io/dockerconfigjson      |
+| mariadb credentials           | streams-database-passwords-secret   | Opaque                              |
+| mariadb encryption            | streams-database-secret             | Opaque                              |
+| kafka truststore credentials  | streams-kafka-client-jks-secret     | Opaque                              |
+| kafka credentials             | streams-kafka-passwords-secret      | Opaque                              |
+| kafka service account         | streams-kafka-token                 | kubernetes.io/service-account-token |
+| Nginx tls certificates        | streams-ingress-tls-secret          | kubernetes.io/tls                   |
+| Nginx service account         | <releasename>-ingress-nginx-token   | kubernetes.io/service-account-token |
+| helm release internal info    | sh.helm.release.v1.<releasename>.v1 | helm.sh/release.v1                  |
 
 ### Streams implementation details
 
