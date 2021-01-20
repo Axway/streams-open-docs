@@ -371,7 +371,7 @@ We do not provide any specific guidelines for using Horizontal Pod Autoscaler wi
 
 We use the NGINX Ingress Controller to expose both management and subscription APIs. NGINX Ingress Controller automatically creates a load balancer in the cloud provider infrastructure so that the APIs can be reached from the outside using the load balancer DNS hostname. Once known, this hostname must be updated in the ingress resource helm parameter `ingress.host`.
 
-SSL/TLS is enabled by default on NGINX ingress controller unless you have explicitly disabled it (`ingress.tlsenabled=false`).
+SSL/TLS is enabled by default on NGINX Ingress Controller unless you have explicitly disabled it (`ingress.tlsenabled=false`).
 
 The ingress controller handles SSL/TLS termination with to the correct certificate/secret (more setup details)
 
