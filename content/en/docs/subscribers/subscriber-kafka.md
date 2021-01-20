@@ -80,7 +80,7 @@ List of HTTP status codes that can be returned when trying to get a kafka subscr
 
 ## Testing a Kafka subscription
 
-You can test a kafka subscription by making an HTTP Post request on the following endpoint:
+You can test a Kafka subscription by making an HTTP POST request on the following endpoint:
 
 `POST /subscribers/kafka/subscriptions/{subscriptionId}/test`
 
