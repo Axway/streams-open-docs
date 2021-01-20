@@ -82,7 +82,7 @@ List of HTTP status codes that can be returned when trying to get a kafka subscr
 
 You can test a kafka subscription by making an HTTP Post request on the following endpoint:
 
-`POST /subscribers/webhook/subscriptions/{subscriptionId}/test`
+`POST /subscribers/kafka/subscriptions/{subscriptionId}/test`
 
 The request body can contain any JSON object and will be sent as is to the identified subscription.
 
