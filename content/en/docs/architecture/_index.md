@@ -697,7 +697,7 @@ Streams manages 2 types of connection pool for the database:
     * Each microservice, which depends on the database, maintains a connection pool of `maximumPoolSize` threads (default: 10). Connections are established using user _streams_. When a database call needs to be performed (e.g. topic creation, liveness probe...), either an existing idle connection is available and used for this call, or all the connections in the pool are already in use and the call is queued during `connectionTimeout` (default: 25s).
     * A connection remains in the pool during `maxLifetime` (default: 280s). When maxLifetime is reached and if the connection is not in use, it will be dropped from the pool and a new one will be created in order to keep the pool size at `maximumPoolSize` connections.
 
-For best performances with Streams, MariaDB should be configured as follows:
+For the best performance with Streams, MariaDB should be configured as follows:
 
 * [`wait-timeout`](https://mariadb.com/docs/reference/es/system-variables/wait_timeout/)
     * Any connection to the database that stays idle during this value will be destroyed.
