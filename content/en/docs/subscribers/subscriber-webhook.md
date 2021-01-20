@@ -82,11 +82,11 @@ You can test a webhook subscription by making an HTTP Post request on the follow
 
 `POST /subscribers/webhook/subscriptions/{subscriptionId}/test`
 
-The body could contain any JSON object and will be sent as is to the subscription identified.
+The request body can contain any JSON object and will be sent as is to the identified subscription.
 
 ### Test status codes
 
-Below the list of HTTP status codes that can be returned when trying to test a webhook subscription:
+Below the list of HTTP status codes that can be returned while testing a webhook subscription:
 
 | Code | Comment |
 |------|---------|

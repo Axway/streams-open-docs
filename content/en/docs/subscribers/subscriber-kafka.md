@@ -84,11 +84,11 @@ You can test a kafka subscription by making an HTTP Post request on the followin
 
 `POST /subscribers/webhook/subscriptions/{subscriptionId}/test`
 
-The body could contain any JSON object and will be sent as is to the subscription identified.
+The request body can contain any JSON object and will be sent as is to the identified subscription.
 
 ### Test status codes
 
-Below the list of HTTP status codes that can be returned when trying to test a kafka subscription:
+Below the list of HTTP status codes that can be returned while testing a Kafka subscription:
 
 | Code | Comment |
 |------|---------|
@@ -98,7 +98,7 @@ Below the list of HTTP status codes that can be returned when trying to test a k
 
 ## Getting kafka subscriptions for a topic
 
-In order to get existing subscriptions, simply do the following GET request on your topic:
+In order to get existing subscriptions, just do the following `GET` request on your topic:
 
 `GET /subscribers/kafka/topics/{topicId}/subscriptions`
 
