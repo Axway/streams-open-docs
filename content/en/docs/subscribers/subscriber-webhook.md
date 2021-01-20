@@ -96,7 +96,7 @@ The following HTTP status codes can be returned while testing a webhook subscrip
 
 ## Getting webhook subscriptions for a topic
 
-In order to get existing subscriptions, simply do the following GET request on your topic:
+To get existing subscriptions, do the following GET request on your topic:
 
 `GET /subscribers/webhook/topics/{topicId}/subscriptions`
 
