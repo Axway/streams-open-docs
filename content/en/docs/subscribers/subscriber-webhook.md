@@ -93,7 +93,7 @@ Below the list of HTTP status codes that can be returned when trying to get exch
 | Code | Comment |
 |------|---------|
 | 200 Ok | Indicates that the exchanges history requested is valid and has been retrieved. |
-| 400 Bad Request | Indicates that the provided data are invalid. |
+| 400 Bad Request | Indicates that the request is invalid. |
 
 #### Webhook exchange samples
 
