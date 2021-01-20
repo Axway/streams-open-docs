@@ -289,7 +289,7 @@ According to your choice, you must:
 
     kubectl create secret generic streams-kafka-passwords-secret --from-literal=client-passwords=${KAFKA_USER_PASSWORD} -n ${NAMESPACE}
     ```
-    * Provide a jks containing the kafka TLS truststore and its password:
+    * Provide a JKS containing the Kafka TLS truststore and its password:
     ```sh
     export NAMESPACE="my-namespace"
     export KAFKA_JKS_PASSWORD="my-kafka-jks-password"
