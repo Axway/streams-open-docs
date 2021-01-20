@@ -383,7 +383,7 @@ The ingress controller handles SSL/TLS termination with to the correct certifica
 ##### Secrets
 
 Without secrets, all passwords are set in clear in Manifest. Kubernetes define “secret” objects to encode in base64 all sensitive information. Using Kubernetes Secrets is very useful for variables in containers, Docker registry login, and technical token for shared storage.
-Here is the list of secrets related to Streams installation:
+The following list of secrets relate to the Streams installation:
 
 | Description                   | Name                                | Type                                |
 | ----------------------------- | ----------------------------------- | ----------------------------------- |
