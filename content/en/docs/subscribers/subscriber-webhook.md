@@ -86,7 +86,7 @@ The request body can contain any JSON object and will be sent as is to the ident
 
 ### Test status codes
 
-Below the list of HTTP status codes that can be returned while testing a webhook subscription:
+The following HTTP status codes can be returned while testing a webhook subscription:
 
 | Code | Comment |
 |------|---------|
