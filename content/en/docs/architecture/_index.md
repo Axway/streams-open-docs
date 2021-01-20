@@ -153,7 +153,7 @@ We recommend using SSD disks with low latency. The storage is used by the Kafka,
 
 ### Load balancer
 
-A load balancer is required in front of the cluster. We use the Kubernetes object called ingress controller that is responsible for fulfilling the ingress rules. A Nginx ingress controller is, by default, deployed with our Helm chart installation. For better performance, we recommend you to use a L4 Load balancer. See your Cloud provider documentation to configure it (e.g. [AWS Load Balancing](https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html))
+A load balancer is required in front of the cluster. We use the Kubernetes object called ingress controller that is responsible for fulfilling the ingress rules. A NGINX ingress controller is, by default, deployed with our Helm chart installation. For better performance, we recommend you to use a L4 Load balancer. See your Cloud provider documentation to configure it (e.g. [AWS Load Balancing](https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html))
 
 #### Network
 
@@ -189,7 +189,7 @@ We recommend the use of [CALICO](https://kubernetes.io/docs/concepts/cluster-adm
 
 Kubernetes Role-based access control ([RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)) is a method of regulating access to your Kubernetes cluster and resources based on the roles of individual users within an enterprise. Streams requires RBAC to be enabled for secrets management and third-party dependencies:
 
-* Nginx (fine tuning of ingress controller permissions)
+* NGINX (fine tuning of ingress controller permissions)
 
 It is recommended to set people or application permissions to manage resources:
 
@@ -299,7 +299,7 @@ nodeSelector:
   application: streams
 ```
 
-For 3rd parties pods (Nginx, Kafka, Zookeeper and MariaDB) you have to define it for each of them:
+For 3rd parties pods (NGINX, Kafka, Zookeeper and MariaDB) you have to define it for each of them:
 
 ```
 nginx-ingress:
@@ -371,7 +371,7 @@ We do not provide any specific guidelines for using Horizontal Pod Autoscaler wi
 
 We use the NGINX Ingress Controller to expose both management and subscription APIs. NGINX Ingress Controller automatically creates a Load Balancer in the cloud provider infrastructure so that the APIs can be reached from the outside using the load balancer DNS hostname. Once known, this hostname must be updated in the ingress resource thanks to the value of the helm parameter `ingress.host`.
 
-SSL/TLS is activated by default unless you have deliberately disabled it by setting `ingress.tlsenabled=false`.
+SSL/TLS is enabled by default on NGINX ingress controller unless you have explicitly disabled it (`ingress.tlsenabled=false`).
 
 The ingress controller handles SSL/TLS termination with to the correct certificate/secret (more setup details)
 
@@ -393,8 +393,8 @@ Here is the list of secrets related to Streams installation:
 | kafka truststore credentials  | streams-kafka-client-jks-secret     | Opaque                              |
 | kafka credentials             | streams-kafka-passwords-secret      | Opaque                              |
 | kafka service account         | streams-kafka-token                 | kubernetes.io/service-account-token |
-| Nginx tls certificates        | streams-ingress-tls-secret          | kubernetes.io/tls                   |
-| Nginx service account         | \<releasename\>-ingress-nginx-token   | kubernetes.io/service-account-token |
+| NGINX tls certificates        | streams-ingress-tls-secret          | kubernetes.io/tls                   |
+| NGINX service account         | \<releasename\>-ingress-nginx-token   | kubernetes.io/service-account-token |
 | helm release internal info    | sh.helm.release.v1.\<releasename\>.v1 | helm.sh/release.v1                  |
 
 ### Streams implementation details
@@ -670,9 +670,9 @@ Pod characteristics for HA deployment mode:
 
 {{< alert title="Note" >}}MariaDB is deployed in master/slave mode with asynchronous commit for replication but the failover is not done automatically.{{< /alert >}}
 
-#### Nginx
+#### NGINX
 
-Nginx is the ingress controller in front of Streams APIs.
+NGINX is the ingress controller in front of Streams APIs.
 
 Source Docker image:
 
