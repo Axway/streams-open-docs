@@ -20,7 +20,7 @@ This document describes all major areas in deploying and maintaining Streams, in
 ## Overview
 
 Streams is an event hub that makes it easy to exchange messages between devices, services and applications. It only supports container-based deployment. The purpose of this document is to share Axway reference architecture for the container-based deployment of a Streams solution on Kubernetes. It will address many architectural, development and operational aspects of the proposed architecture.  
-Because the technology chosen, Docker and Kubernetes, are portable across on-premise environments and many cloud providers, most of the information in this guide should apply to those environments. But we include specific recommendations for AWS as one of the most common deployment targets.
+Because Docker and Kubernetes are portable across on-premise environments and many cloud providers, most of the information in this guide should apply to those environments. However, specific AWS recommendations are also provided, as it is one of the most common deployment targets.
 The target audience for the document is architects, developers, and operations personnel. To get the most value from this document, a reader should have a good knowledge of Docker, Kubernetes and API.
 
 ## General Architecture
