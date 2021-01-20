@@ -78,7 +78,7 @@ List of HTTP status codes that can be returned when trying to get a kafka subscr
 | 200 Ok | Indicates that the subscription requested is valid and has been retrieved. |
 | 404 Not found | Indicates that the requested URL or subscription requested does not exist. |
 
-## Testing a kafka subscription
+## Testing a Kafka subscription
 
 You can test a kafka subscription by making an HTTP Post request on the following endpoint:
 
