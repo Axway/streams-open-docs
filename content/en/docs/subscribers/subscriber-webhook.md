@@ -82,7 +82,7 @@ Use the following `GET` request to retrieve the history of webhook exchanges (re
 
 `GET /subscribers/webhook/subscriptions/{subscriptionId}/exchanges`
 
-The default time window of the retrieved history can be changed with `start` and `end` query params (date-time in ISO 8601 format, eg: 2021-01-10T10:13:32Z):
+You can change the default time window of the retrieved history with `start` and `end` query params (date-time in ISO 8601 format, eg: 2021-01-10T10:13:32Z):
 
 `GET /subscribers/webhook/subscriptions/{subscriptionId}/exchanges?start=2021-01-10T10:13:30Z&end=2021-01-10T10:13:32Z`
 
