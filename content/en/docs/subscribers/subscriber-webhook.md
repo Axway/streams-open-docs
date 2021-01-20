@@ -78,11 +78,13 @@ Below the list of HTTP status codes that can be returned when trying to get a ka
 
 ## Getting webhook exchanges for a subscription
 
-In order to know all exchanges done with the `webhookUrl` of a subscription during the last 5 minutes, simply do the following GET request:
+In order to know all exchanges done for a subscription during the last 5 minutes, simply do the following GET request:
 
 `GET /subscribers/webhook/subscriptions/{subscriptionId}/exchanges`
 
-The default time window of the retrieved history can be changed with `start` and `end` query params (date-time in ISO 8601 format, eg: 2021-01-10T10:13:32Z).
+The default time window of the retrieved history can be changed with `start` and `end` query params (date-time in ISO 8601 format, eg: 2021-01-10T10:13:32Z):
+
+`GET /subscribers/webhook/subscriptions/{subscriptionId}/exchanges?start=2021-01-10T10:13:30Z&end=2021-01-10T10:13:32Z`
 
 ### Webhook exchanges status codes
 
