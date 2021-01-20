@@ -78,7 +78,7 @@ Below the list of HTTP status codes that can be returned when trying to get a ka
 
 ## Getting webhook exchanges for a subscription
 
-In order to know all exchanges done for a subscription during the last 5 minutes, simply do the following GET request:
+In order to retrieve the history of webhook exchanges (requests and responses) that have occurred for a subscription in the last 5 minutes, just do the following `GET` request:
 
 `GET /subscribers/webhook/subscriptions/{subscriptionId}/exchanges`
 
