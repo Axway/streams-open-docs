@@ -269,7 +269,7 @@ The following embedded MariaDB configuration values can be updated:
 
 * The `max-connections` variable can be updated by setting the [Helm parameters](#helm-parameters) `embeddedMariadb.maxConnections`.
 
-{{< alert title="Note" >}}Please, refer to the [MariaDB considerations](/docs/architecture#mariadb-considerations) documentation for further details.{{< /alert >}}
+{{< alert title="Note" >}}Refer to the [MariaDB considerations](/docs/architecture#mariadb-considerations) documentation for further details.{{< /alert >}}
 
 ### Kafka settings
 
