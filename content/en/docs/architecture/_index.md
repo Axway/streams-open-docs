@@ -716,7 +716,7 @@ For best performances with Streams, MariaDB should be configured as follows:
     streams_db_connections = 6 * 10 = 60
     ```
     * Also take into account the expected load on the platform, which may lead to an increase in the number of microservice replicas. It is recommended to compute the `streams_db_connections` with the highest number of pod replicas expected so that the platform can properly handle peak load.
-    Several connections are also established by MariaDB itself (5 for InnoDB and 1 for replication).
+    Several connections are also established by MariaDB (five for InnoDB and one for replication).
     A safety margin must also be considered in case of a k8s pod or node crash where zombie connections would be held during `wait-timeout` while pods are being re-created along with their connection pool.
 
 Refer to the [Embedded MariaDB tuning](/docs/install#embedded-mariadb-tuning) documentation for further details on setting all these parameters in the Helm Streams installation.
