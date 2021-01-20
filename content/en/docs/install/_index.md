@@ -364,7 +364,7 @@ Disabling security is not recommended for production.
 
 ### Ingress TLS settings
 
-SSL/TLS is enabled by default on the embedded Ingress controller. If you don't provide any certificate, SSL will be enabled thanks to a NGINX embedded fake SSL certificate.
+SSL/TLS is enabled by default on the embedded Ingress controller. If you don't provide a certificate, SSL will be enabled with a NGINX embedded fake SSL certificate.
 You can provide an SSL/TLS certificate for the domain name you are using (either CN or SAN fields should match the `ingress.host` [Helm parameter](#helm-parameters)):
 
 ```sh
