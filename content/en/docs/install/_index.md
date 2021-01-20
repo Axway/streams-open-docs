@@ -265,7 +265,7 @@ Not recommended for production.
 
 The following embedded MariaDB configuration values can be updated:
 
-* The `wait-timeout` variable can be updated by setting the [Helm parameters](#helm-parameters) `embeddedMariadb.waitTimeout`.
+* `wait-timeout` - update by setting the [Helm parameters](#helm-parameters) `embeddedMariadb.waitTimeout`.
 
 * The `max-connections` variable can be updated by setting the [Helm parameters](#helm-parameters) `embeddedMariadb.maxConnections`.
 
