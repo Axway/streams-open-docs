@@ -311,7 +311,7 @@ For security purposes, it’s highly recommended to enable [SASL authentication]
 SASL and TLS are enabled by default. As there is no sensitive data in Zookeeper, the communications with Zookeeper are in plaintext without authentication.
 
 {{< alert title="Note" >}}
-Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enable or none of the two.
+Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enabled or neither of the two.
 {{< /alert >}}
 
 According to you choice, you must:
