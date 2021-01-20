@@ -314,7 +314,7 @@ SASL and TLS are enabled by default. As there is no sensitive data in Zookeeper,
 Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enabled or neither of the two.
 {{< /alert >}}
 
-According to you choice, you must:
+According to your choice, you must:
 
 * For SCRAM and TLS enabled:
     * Provide Kafka credentials using a k8s secret:
