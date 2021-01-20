@@ -276,7 +276,7 @@ You must provide information to the Streams installation. You should specify `--
 For security purposes, it’s highly recommended to enable [SASL authentication](https://docs.confluent.io/current/kafka/authentication_sasl/index.html#authentication-with-sasl) and [TLS encryption](https://docs.confluent.io/current/kafka/encryption.html#encryption-with-ssl) for Kafka clients and brokers. You can enable both or neither.
 
 {{< alert title="Note" >}}
-Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enable or none of the two.
+Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enabled or neither of the two.
 {{< /alert >}}
 
 According to you choice, you must:
