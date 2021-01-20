@@ -265,7 +265,7 @@ By default, an embedded Kafka cluster is installed on your K8s cluster next to S
 
 To disable the Kafka installation, you can specify `--set kafka.enabled=false` in the Helm Chart installation command.
 
-Then, according to your choice, configure your [externalized Kafka](#externalized-kafka-configuration) or your [automatically installed Kafka](#embedded-kafka-configuration).
+Then, according to your choice, configure your [externalized Kafka](#externalized-kafka-configuration) or your [embedded Kafka](#embedded-kafka-configuration).
 
 #### Externalized Kafka configuration
 
