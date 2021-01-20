@@ -92,7 +92,7 @@ mariadb:
 
 * or specify `--set mariadb.enabled=false` in the Helm Chart installation command.
 
-Then, according to your choice, configure your [externalized MariaDB](#externalized-mariadb-configuration) or your [automatically installed MariaDB](#embedded-mariadb-configuration).
+Then, according to your choice, configure your [externalized MariaDB](#externalized-mariadb-configuration) or your [embedded MariaDB](#embedded-mariadb-configuration).
 
 #### Externalized MariaDB configuration
 
