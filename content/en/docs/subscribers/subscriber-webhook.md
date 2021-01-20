@@ -76,7 +76,7 @@ Below the list of HTTP status codes that can be returned when trying to get a ka
 | 200 Ok | Indicates that the subscription requested is valid and has been retrieved. |
 | 404 Not found | Indicates that the requested URL or subscription requested does not exist. |
 
-## Getting webhook exchanges for a subscription
+## Getting the webhook notification history for a subscription
 
 In order to retrieve the history of webhook exchanges (requests and responses) that have occurred for a subscription in the last 5 minutes, just do the following `GET` request:
 
