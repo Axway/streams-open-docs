@@ -187,7 +187,7 @@ We recommend the use of [CALICO](https://kubernetes.io/docs/concepts/cluster-adm
 
 ##### RBAC Permission
 
-Kubernetes Role-based access control ([RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)) is a method of regulating access to your Kubernetes cluster and resources based on the roles of individual users within an enterprise. Streams requires RBAC to be enabled for secrets management and third-party dependencies:
+Kubernetes' role-based access control ([RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)) is a method of regulating access to your Kubernetes cluster and resources based on the roles of individual users within an enterprise. Streams requires RBAC to be enabled for secrets management and third-party dependencies:
 
 * NGINX (fine tuning of ingress controller permissions)
 
