@@ -320,7 +320,7 @@ According to your choice, you must:
 
 * For SCRAM and TLS enabled:
     * Provide Kafka credentials using a k8s secret:
-    
+
     ```sh
     export NAMESPACE="my-namespace"
     export KAFKA_CLIENT_PASSWORD="my-kakfa-client-password"
@@ -328,24 +328,24 @@ According to your choice, you must:
 
     kubectl -n ${NAMESPACE} create secret generic streams-kafka-passwords-secret --from-literal="client-passwords=${KAFKA_CLIENT_PASSWORD}" --from-literal="inter-broker-password=${KAFKA_INTERBROKER_PASSWORD}" Z
     ```
-    
+
     * In order to configure TLS encryption, you need to have a valid truststore and one certificate per broker.
         * They must all be integrated into Java Key Stores (JKS) files. Be careful, as each broker needs its own keystore and a dedicated CN name matching the Kafka pod hostname as described in [bitnami documentation](https://github.com/bitnami/charts/tree/master/bitnami/kafka#enable-security-for-kafka-and-zookeeper).
         * We provide you with a script to help with truststore and keystore generation (based on bitnami's script that properly handles Kubernetes deployment). You can also use your own truststore/privatekey:
-        
+
         ```sh
         cd tools
         ./kafka-generate-ssl.sh
         ```
-        
+
         * Create a secret which contains all the previously generated files:
-        
+
         ```sh
         export NAMESPACE="my-namespace"
         export KAFKA_SECRET_PASSWORD="my-kakfa-secret-password"
         kubectl -n ${NAMESPACE} create secret generic streams-kafka-client-jks-secret --from-file="./truststore/kafka.truststore.jks" --from-file=./keystore/kafka-0.keystore.jks --from-file=./keystore/kafka-1.keystore.jks --from-file=./keystore/kafka-2.keystore.jks --from-literal="jks-password=${KAFKA_SECRET_PASSWORD}"
         ```
-        
+
 * For security disabled:
     * Set the following [Helm parameters](#helm-parameters):
         * `embeddedKafka.auth.clientProtocol` to `plaintext`
