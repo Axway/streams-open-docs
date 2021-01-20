@@ -394,8 +394,8 @@ Here is the list of secrets related to Streams installation:
 | kafka credentials             | streams-kafka-passwords-secret      | Opaque                              |
 | kafka service account         | streams-kafka-token                 | kubernetes.io/service-account-token |
 | Nginx tls certificates        | streams-ingress-tls-secret          | kubernetes.io/tls                   |
-| Nginx service account         | <releasename>-ingress-nginx-token   | kubernetes.io/service-account-token |
-| helm release internal info    | sh.helm.release.v1.<releasename>.v1 | helm.sh/release.v1                  |
+| Nginx service account         | \<releasename\>-ingress-nginx-token   | kubernetes.io/service-account-token |
+| helm release internal info    | sh.helm.release.v1.\<releasename\>.v1 | helm.sh/release.v1                  |
 
 ### Streams implementation details
 
