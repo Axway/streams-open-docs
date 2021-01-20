@@ -13,7 +13,6 @@ description: Install Streams on-premise, or deploy in your private cloud, and le
 * RBAC enabled
 * PersistentVolumes and LoadBalancer provisioner supported by the underlying infrastructure
 * Resources:
-
     * Minimal non-HA configuration: `9` CPUs and `10` GB RAM dedicated to the platform.
     * Minimal HA configuration: `34` CPUs and `51` GB RAM dedicated to the platform.
 
@@ -80,7 +79,7 @@ imagePullSecrets:
 
 ### MariaDB settings
 
-The MariaDB database is automatically installed by default on your K8s cluster with the Streams Helm chart. But using an external one is recommended for production.
+By default, an embedded MariaDB database is installed on your K8s cluster next to Streams. For production, we recommend that you use an externalized one instead.
 
 To disable the MariaDB installation, you can either:
 
@@ -93,7 +92,7 @@ embeddedMariadb:
 
 * or specify `--set embeddedMariadb.enabled=false` in the Helm Chart installation command.
 
-Then, according to your choice, configure your [externalized MariaDB](#externalized-mariadb-configuration) or your [automatically installed MariaDB](#embedded-mariadb-configuration).
+Then, according to your choice, configure your [externalized MariaDB](#externalized-mariadb-configuration) or your [embedded MariaDB](#embedded-mariadb-configuration).
 
 #### Externalized MariaDB configuration
 
@@ -160,7 +159,7 @@ kubectl create secret generic streams-database-passwords-secret --from-literal=m
 
 ##### Externalized MariaDB TLS
 
-For security purpose, it's highly recommended to enable TLS communication between your database and Streams microservices. You can enable [One-Way TLS](https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-one-way-tls-for-mariadb-clients) or [Two-Way TLS](https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-two-way-tls-for-mariadb-clients).
+For security purposes, it's highly recommended to enable TLS communication between your database and Streams microservices. You can enable [One-Way TLS](https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-one-way-tls-for-mariadb-clients) or [Two-Way TLS](https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-two-way-tls-for-mariadb-clients).
 
 {{< alert title="Note" >}} If you use a provider for your MariaDB database, make sure the Two-Way method is available. (e.g. not available with AWS RDS).{{< /alert >}}
 
@@ -262,11 +261,11 @@ Not recommended for production.
 
 ### Kafka settings
 
-By default, a Kafka cluster is automatically installed on your K8s cluster with the Streams Helm chart. But using an external one is recommended for production.
+By default, an embedded Kafka cluster is installed on your K8s cluster next to Streams. For production, we recommend that you use an externalized one instead.
 
 To disable the Kafka installation, you can specify `--set embeddedKafka.enabled=false` in the Helm Chart installation command.
 
-Then, according to your choice, configure your [externalized Kafka](#externalized-kafka-configuration) or your [automatically installed Kafka](#embedded-kafka-configuration).
+Then, according to your choice, configure your [externalized Kafka](#externalized-kafka-configuration) or your [embedded Kafka](#embedded-kafka-configuration).
 
 #### Externalized Kafka configuration
 
@@ -274,13 +273,13 @@ You must provide information to the Streams installation. You should specify `--
 
 ##### Externalized Kafka security settings
 
-For security purpose, it’s highly recommended to enable [SASL authentication](https://docs.confluent.io/current/kafka/authentication_sasl/index.html#authentication-with-sasl) and [TLS encryption](https://docs.confluent.io/current/kafka/encryption.html#encryption-with-ssl) for Kafka clients and brokers. You can enable both or neither.
+For security purposes, it’s highly recommended to enable [SASL authentication](https://docs.confluent.io/current/kafka/authentication_sasl/index.html#authentication-with-sasl) and [TLS encryption](https://docs.confluent.io/current/kafka/encryption.html#encryption-with-ssl) for Kafka clients and brokers. You can enable both or neither.
 
 {{< alert title="Note" >}}
-Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enable or none of the two.
+Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enabled or neither of the two.
 {{< /alert >}}
 
-According to you choice, you must:
+According to your choice, you must:
 
 * For SCRAM and TLS enabled:
     * Provide the user password using a k8s secret:
@@ -290,7 +289,8 @@ According to you choice, you must:
 
     kubectl create secret generic streams-kafka-passwords-secret --from-literal=client-passwords=${KAFKA_USER_PASSWORD} -n ${NAMESPACE}
     ```
-    * Provide a jks containing the kafka TLS truststore and its password:
+    * Provide a JKS containing the Kafka TLS truststore and its password:
+
     ```sh
     export NAMESPACE="my-namespace"
     export KAFKA_JKS_PASSWORD="my-kafka-jks-password"
@@ -298,6 +298,7 @@ According to you choice, you must:
 
     kubectl create secret generic streams-kafka-client-jks-secret --from-file=kafka.truststore.jks=${KAFKA_JKS_PATH} --from-literal=jks-password=${KAFKA_JKS_PASSWORD} -n ${NAMESPACE}
     ```
+
     * Set the [Helm parameters](#helm-parameters) `externalizedKafka.auth.clientUsername` with your Kafka username.
 
 * For security disabled:
@@ -307,18 +308,19 @@ According to you choice, you must:
 
 ##### Embedded Kafka security settings
 
-For security purpose, it’s highly recommended to enable [SASL authentication](https://docs.confluent.io/current/kafka/authentication_sasl/index.html#authentication-with-sasl) and [TLS encryption](https://docs.confluent.io/current/kafka/encryption.html#encryption-with-ssl) for Kafka clients and brokers. You can enable both or neither.
+For security purposes, it’s highly recommended to enable [SASL authentication](https://docs.confluent.io/current/kafka/authentication_sasl/index.html#authentication-with-sasl) and [TLS encryption](https://docs.confluent.io/current/kafka/encryption.html#encryption-with-ssl) for Kafka clients and brokers. You can enable both or neither.
 
 SASL and TLS are enabled by default. As there is no sensitive data in Zookeeper, the communications with Zookeeper are in plaintext without authentication.
 
 {{< alert title="Note" >}}
-Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enable or none of the two.
+Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enabled or neither of the two.
 {{< /alert >}}
 
-According to you choice, you must:
+According to your choice, you must:
 
 * For SCRAM and TLS enabled:
     * Provide Kafka credentials using a k8s secret:
+    
     ```sh
     export NAMESPACE="my-namespace"
     export KAFKA_CLIENT_PASSWORD="my-kakfa-client-password"
@@ -326,20 +328,24 @@ According to you choice, you must:
 
     kubectl -n ${NAMESPACE} create secret generic streams-kafka-passwords-secret --from-literal="client-passwords=${KAFKA_CLIENT_PASSWORD}" --from-literal="inter-broker-password=${KAFKA_INTERBROKER_PASSWORD}" Z
     ```
+    
     * In order to configure TLS encryption, you need to have a valid truststore and one certificate per broker.
-        * They must all be integrated into Java Key Stores (JKS) files. Be careful as each broker needs its own keystore and a dedicated CN name matching the Kafka pod hostname as described in [bitnami documentation](https://github.com/bitnami/charts/tree/master/bitnami/kafka#enable-security-for-kafka-and-zookeeper).
+        * They must all be integrated into Java Key Stores (JKS) files. Be careful, as each broker needs its own keystore and a dedicated CN name matching the Kafka pod hostname as described in [bitnami documentation](https://github.com/bitnami/charts/tree/master/bitnami/kafka#enable-security-for-kafka-and-zookeeper).
         * We provide you with a script to help with truststore and keystore generation (based on bitnami's script that properly handles Kubernetes deployment). You can also use your own truststore/privatekey:
+        
         ```sh
         cd tools
         ./kafka-generate-ssl.sh
         ```
+        
         * Create a secret which contains all the previously generated files:
+        
         ```sh
         export NAMESPACE="my-namespace"
         export KAFKA_SECRET_PASSWORD="my-kakfa-secret-password"
         kubectl -n ${NAMESPACE} create secret generic streams-kafka-client-jks-secret --from-file="./truststore/kafka.truststore.jks" --from-file=./keystore/kafka-0.keystore.jks --from-file=./keystore/kafka-1.keystore.jks --from-file=./keystore/kafka-2.keystore.jks --from-literal="jks-password=${KAFKA_SECRET_PASSWORD}"
         ```
-
+        
 * For security disabled:
     * Set the following [Helm parameters](#helm-parameters):
         * `embeddedKafka.auth.clientProtocol` to `plaintext`
@@ -365,6 +371,31 @@ kubectl create secret tls streams-ingress-tls-secret --key=${INGRESS_TLS_KEY_PAT
 ```
 
 To disable SSL/TLS (not recommended for production use), see [Helm parameters](#helm-parameters).
+
+### Add self-signed TLS certificates
+
+TLS endpoints to which Streams services connect must have a valid TLS certificate. If your endpoints uses self-signed certificates, you must add them to Streams services as trusted certificates.
+
+Get ready with your certificates in PEM format and:
+
+* Create one or several secrets containing your PEM files:
+
+```sh
+export NAMESPACE="my-namespace"
+export SECRET_NAME="my-secret"
+export PEM_PATH="my-pem-path"
+
+kubectl create secret generic "${SECRET_NAME}" -n "${NAMESPACE}" --from-file="${PEM_PATH}" [--from-file=<other-pem-path>]
+```
+
+* Set the [Helm parameters](#helm-parameters) `streams.extraCertificatesSecrets` as follows:
+
+```sh
+--set streams.extraCertificatesSecrets="{my-secret}"
+
+# or if you have several secrets
+--set streams.extraCertificatesSecrets="{my-secret,my-second-secret}"
+```
 
 ### Helm install command
 
@@ -461,9 +492,14 @@ As the provided environment is configured with localhost, you may need to reconf
 curl "https://k8s.yourdomain.tld/subscribers/sse/topics/{TOPIC_ID}"
 ```
 
-#### Helm parameters
+{{< alert title="Note" >}}
+The default configuration only accepts incoming HTTP/HTTPS requests to `k8s.yourdomain.tld`.
+Refer to the [Helm parameters](#helm-parameters) for further details.
+{{< /alert >}}
 
-##### Streams parameters
+### Helm parameters
+
+#### Streams parameters
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
@@ -479,42 +515,43 @@ curl "https://k8s.yourdomain.tld/subscribers/sse/topics/{TOPIC_ID}"
 | publisherKafka.replicaCount           | Publisher Kafka replica count       | no        | 2             |
 | publisherSfdc.enabled                 | Enable/Disable Publisher SFDC       | no        | false         |
 | publisherSfdc.replicaCount            | Publisher SFDC replica count        | no        | 2             |
+| streams.extraCertificatesSecrets      | List of secrets containing TLS certs to add as trusted by Streams | no | [] |
 | actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
 
-##### MariaDB parameters
+#### MariaDB parameters
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| embeddedMariadb.enabled                       | MariaDB installed in K8s with the Helm chart. If set to false, the `externalizedMariadb` parameter will be used | no | true |
-| embeddedMariadb.tls.enabled                   | MariaDB TLS enabled                 | no        | true          |
-| embeddedMariadb.encryption.enabled            | MariaDB Transparent Data Encryption enabled | no | true         |
-| embeddedMariadb.metrics.enabled               | Activate metrics endpoint for MariaDB | no      | false         |
-| externalizedMariadb.host                  | Host of the externalized MariaDB (Only used when `embeddedMariadb.enabled` set to false) | no | my.db.host |
-| externalizedMariadb.port                  | Port of the externalized MariaDB (Only used when `embeddedMariadb.enabled` set to false) | no | 3306 |
-| externalizedMariadb.db.name               | Name of the MySQL database used for Streams (Only used when `embeddedMariadb.enabled` set to false) | no | streams |
-| externalizedMariadb.db.user               | Username of the externalized MariaDB used by Streams (Only used when `embeddedMariadb.enabled` set to false) | no | streams |
-| externalizedMariadb.rootUsername          | Root username of the externalized MariaDB used by Streams (Only used when `embeddedMariadb.enabled` set to false) | no | root |
-| externalizedMariadb.tls.enabled           | Externalized MariaDB tls enabled (Only used when `embeddedMariadb.enabled` set to false) | no | true |
-| externalizedMariadb.tls.twoWay            | Externalized MariaDB Two-Way tls enabled (Only used when `embeddedMariadb.enabled` set to false) | no | true |
+| embeddedMariadb.enabled               | MariaDB installed in K8s with the Helm chart. If set to false, the `externalizedMariadb` parameter will be used | no | true |
+| embeddedMariadb.tls.enabled           | MariaDB TLS enabled                 | no        | true          |
+| embeddedMariadb.encryption.enabled    | MariaDB Transparent Data Encryption enabled | no | true         |
+| embeddedMariadb.metrics.enabled       | Activate metrics endpoint for MariaDB | no      | false         |
+| externalizedMariadb.host              | Host of the externalized MariaDB (Only used when `embeddedMariadb.enabled` set to false) | no | my.db.host |
+| externalizedMariadb.port              | Port of the externalized MariaDB (Only used when `embeddedMariadb.enabled` set to false) | no | 3306 |
+| externalizedMariadb.db.name           | Name of the MySQL database used for Streams (Only used when `embeddedMariadb.enabled` set to false) | no | streams |
+| externalizedMariadb.db.user           | Username of the externalized MariaDB used by Streams (Only used when `embeddedMariadb.enabled` set to false) | no | streams |
+| externalizedMariadb.rootUsername      | Root username of the externalized MariaDB used by Streams (Only used when `embeddedMariadb.enabled` set to false) | no | root |
+| externalizedMariadb.tls.enabled       | Externalized MariaDB tls enabled (Only used when `embeddedMariadb.enabled` set to false) | no | true |
+| externalizedMariadb.tls.twoWay        | Externalized MariaDB Two-Way tls enabled (only used when `embeddedMariadb.enabled` set to false) | no | true |
 
-##### Kafka parameters
+#### Kafka parameters
 
-| Parameter                             | Description                         | Mandatory | Default value |
-| ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| embeddedKafka.enabled                         | Kafka installed in K8s with the Helm chart. If set to false, the `externalizedKafka` parameter will be used | no | true |
-| embeddedKafka.auth.clientProtocol             | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext") | no | sasl_tls |
-| embeddedKafka.auth.interBrokerProtocol        | Authentication protocol internaly used by Kafka broker (must be "sasl_tls" or "plaintext") | no | sasl_tls |
-| embeddedKafka.metrics.jmx.enabled             | Activate metrics endpoint for Kafka | no        | false         |
-| externalizedKafka.auth.clientUsername     | Username of the externalized Kafka used by Streams (Only used when `embeddedKafka.enabled` set to false) | no | streams |
-| externalizedKafka.auth.clientProtocol     | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext" ; only used when `embeddedKafka.enabled` set to false)) | no | sasl_tls |
+| Parameter                               | Description                         | Mandatory | Default value |
+| --------------------------------------- | ----------------------------------- | --------- | ------------- |
+| embeddedKafka.enabled                   | Kafka installed in K8s with the Helm chart. If set to false, the `externalizedKafka` parameter will be used | no | true |
+| embeddedKafka.auth.clientProtocol       | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext") | no | sasl_tls |
+| embeddedKafka.auth.interBrokerProtocol  | Authentication protocol internaly used by Kafka broker (must be "sasl_tls" or "plaintext") | no | sasl_tls |
+| embeddedKafka.metrics.jmx.enabled       | Activate metrics endpoint for Kafka | no        | false         |
+| externalizedKafka.auth.clientUsername   | Username of the externalized Kafka used by Streams (only used when `embeddedKafka.enabled` set to false) | no | streams |
+| externalizedKafka.auth.clientProtocol   | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext" ; only used when `embeddedKafka.enabled` set to false)) | no | sasl_tls |
 
-##### Zookeeper parameters
+#### Zookeeper parameters
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
 | zookeeper.metrics.enabled             | Activate metrics endpoint for Zookeeper | no    | false         |
 
-##### Ingress parameters
+#### Ingress parameters
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
@@ -534,7 +571,7 @@ If you want to configure a parameter from a dependency chart, [MariaDB](https://
 Please refer to the dependency chart's documentation to get the list of parameters.
 {{< /alert >}}
 
-#### Monitoring
+### Monitoring
 
 Streams ships with monitoring. You can activate metrics with the parameters listed in the table above (under "Activate metrics endpoint"),
 which will open endpoints designed to be scrapped by [Prometheus](https://prometheus.io).
