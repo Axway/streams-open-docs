@@ -299,7 +299,7 @@ nodeSelector:
   application: streams
 ```
 
-For 3rd parties pods (NGINX, Kafka, Zookeeper and MariaDB) you have to define it for each of them:
+You must define it for each of the 3rd party pods (NGINX, Kafka, Zookeeper and MariaDB):
 
 ```
 nginx-ingress:
