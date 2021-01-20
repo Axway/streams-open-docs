@@ -98,7 +98,7 @@ The following HTTP status codes can be returned while testing a Kafka subscripti
 
 ## Getting kafka subscriptions for a topic
 
-In order to get existing subscriptions, just do the following `GET` request on your topic:
+Use the following `GET` request on your topic to get existing subscriptions:
 
 `GET /subscribers/kafka/topics/{topicId}/subscriptions`
 
