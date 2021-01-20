@@ -78,7 +78,7 @@ Below the list of HTTP status codes that can be returned when trying to get a ka
 
 ## Getting the webhook notification history for a subscription
 
-In order to retrieve the history of webhook exchanges (requests and responses) that have occurred for a subscription in the last 5 minutes, just do the following `GET` request:
+Use the following `GET` request to retrieve the history of webhook exchanges (requests and responses) that have occurred for a subscription in the last 5 minutes:
 
 `GET /subscribers/webhook/subscriptions/{subscriptionId}/exchanges`
 
