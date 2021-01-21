@@ -431,7 +431,7 @@ helm install "${HELM_RELEASE_NAME}" . \
 
 {{< alert title="Note" >}}
 You will be required to specify a hostname. If you do not have one yet, you can use any temporary value and edit it later.
-For this entire documentation we are using k8s.yourdomain.tld as an _example_ value.
+Throughout this documentation, we are using k8s.yourdomain.tld as an _example_ value.
 You can use the following flag :
 
 ```
