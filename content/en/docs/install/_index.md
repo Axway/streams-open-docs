@@ -173,7 +173,7 @@ According to your choice, you must:
     ```
     * Set the [Helm parameters](#helm-parameters) `externalizedMariadb.tls.twoWay` to `false`.
 
-* For Two-Way TLS:
+* For two-way TLS:
     * Provide the CA certificate, the server certificate and the server key by creating a secret:
     ```sh
     export NAMESPACE="my-namespace"
