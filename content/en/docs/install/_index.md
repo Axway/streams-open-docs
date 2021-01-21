@@ -9,7 +9,7 @@ description: Install Streams on-premise, or deploy in your private cloud, and le
 ## Prerequisites
 
 * Kubernetes 1.18+
-* Helm 3.0.2+
+* Helm 3.2.0+
 * RBAC enabled
 * PersistentVolumes and LoadBalancer provisioner supported by the underlying infrastructure
 * Resources:
@@ -83,14 +83,14 @@ By default, an embedded MariaDB database is installed on your K8s cluster next t
 
 To disable the MariaDB installation, you can either:
 
-* Edit the `values.yaml` file and set the `mariadb.enabled` entry as follow:
+* Edit the `values.yaml` file and set the `embeddedMariadb.enabled` entry as follow:
 
 ```yaml
-mariadb:
+embeddedMariadb:
   enabled: false
 ```
 
-* or specify `--set mariadb.enabled=false` in the Helm Chart installation command.
+* or specify `--set embeddedMariadb.enabled=false` in the Helm Chart installation command.
 
 Then, according to your choice, configure your [externalized MariaDB](#externalized-mariadb-configuration) or your [embedded MariaDB](#embedded-mariadb-configuration).
 
@@ -133,10 +133,10 @@ export DB_STREAMS_USER="streams"
 mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p -e "GRANT SELECT, INSERT, UPDATE, DELETE ON ${DB_NAME}.* TO ${DB_STREAMS_USER} REQUIRE SSL;"
 ```
 
-Then you must provide information to the Streams installation. You should edit the `values.yaml` file and set the `externalMariadb` entry as follow:
+Then you must provide information to the Streams installation. You should edit the `values.yaml` file and set the `externalizedMariadb` entry as follows:
 
 ```yaml
-externalMariadb:
+externalizedMariadb:
   host: "my-db-host"
   port: my-db-port
   db:
@@ -173,9 +173,9 @@ According to your choice, you must:
     export NAMESPACE="my-namespace"
     kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem -n ${NAMESPACE}
     ```
-    * Set the [Helm parameters](#helm-parameters) `externalMariadb.tls.twoWay` to `false`.
+    * Set the [Helm parameters](#helm-parameters) `externalizedMariadb.tls.twoWay` to `false`.
 
-* For Two-Way TLS:
+* For two-way TLS:
     * Provide the CA certificate, the server certificate and the server key by creating a secret:
     ```sh
     export NAMESPACE="my-namespace"
@@ -183,9 +183,9 @@ According to your choice, you must:
     ```
 
 * For no TLS:
-    * Set the [Helm parameters](#helm-parameters) `externalMariadb.tls.enabled` to `false`.
+    * Set the [Helm parameters](#helm-parameters) `externalizedMariadb.tls.enabled` to `false`.
 
-You can follow the official documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate. Make sure to set the Common Name correctly.
+See the official documentation provided by MariaDB [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificates. Make sure to set the Common Name correctly.
 
 #### Embedded MariaDB configuration
 
@@ -240,7 +240,7 @@ Depending on your security choices, you must:
     export NAMESPACE="my-namespace"
     kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem -n ${NAMESPACE}
     ```
-    * Set the [Helm parameters](#helm-parameters) `mariadb.encryption.enabled` to `false`.
+    * Set the [Helm parameters](#helm-parameters) `embeddedMariadb.encryption.enabled` to `false`.
 
 * For TDE only:
     * Create a secret containing the [TDE](#transparent-data-encryption-tde) keyfile:
@@ -248,14 +248,14 @@ Depending on your security choices, you must:
     export NAMESPACE="my-namespace"
     kubectl create secret generic streams-database-secret --from-file=KEYFILE=keyfile -n ${NAMESPACE}
     ```
-    * Set the [Helm parameters](#helm-parameters) `mariadb.tls.enabled` to `false`.
+    * Set the [Helm parameters](#helm-parameters) `embeddedMariadb.tls.enabled` to `false`.
 
 ###### Disable MariaDB security features
 
 To disable MariaDB encryption **and** TLS, you must set the following [Helm parameters](#helm-parameters):
 
-* `mariadb.tls.enabled` and `mariadb.encryption.enabled` to `false`
-* `mariadb.master.extraEnvVarsSecret` and `mariadb.slave.extraEnvVarsSecret` to `null`
+* `embeddedMariadb.tls.enabled` and `embeddedMariadb.encryption.enabled` to `false`
+* `embeddedMariadb.master.extraEnvVarsSecret` and `embeddedMariadb.slave.extraEnvVarsSecret` to `null`
 
 {{< alert title="Note" >}}
 Not recommended for production.
@@ -275,13 +275,13 @@ The following embedded MariaDB configuration values can be updated:
 
 By default, an embedded Kafka cluster is installed on your K8s cluster next to Streams. For production, we recommend that you use an externalized one instead.
 
-To disable the Kafka installation, you can specify `--set kafka.enabled=false` in the Helm Chart installation command.
+To disable the Kafka installation, you can specify `--set embeddedKafka.enabled=false` in the Helm Chart installation command.
 
 Then, according to your choice, configure your [externalized Kafka](#externalized-kafka-configuration) or your [embedded Kafka](#embedded-kafka-configuration).
 
 #### Externalized Kafka configuration
 
-You must provide information to the Streams installation. You should specify `--set externalKafka.bootstrapServers="my.kafka.broker.1:port\,my.broker.2:port[...]"` in the Helm Chart installation command.
+You must provide information to the Streams installation. You should specify `--set externalizedKafka.bootstrapServers="my.kafka.broker.1:port\,my.broker.2:port[...]"` in the Helm Chart installation command.
 
 ##### Externalized Kafka security settings
 
@@ -302,6 +302,7 @@ According to your choice, you must:
     kubectl create secret generic streams-kafka-passwords-secret --from-literal=client-passwords=${KAFKA_USER_PASSWORD} -n ${NAMESPACE}
     ```
     * Provide a JKS containing the Kafka TLS truststore and its password:
+
     ```sh
     export NAMESPACE="my-namespace"
     export KAFKA_JKS_PASSWORD="my-kafka-jks-password"
@@ -309,10 +310,11 @@ According to your choice, you must:
 
     kubectl create secret generic streams-kafka-client-jks-secret --from-file=kafka.truststore.jks=${KAFKA_JKS_PATH} --from-literal=jks-password=${KAFKA_JKS_PASSWORD} -n ${NAMESPACE}
     ```
-    * Set the [Helm parameters](#helm-parameters) `externalKafka.auth.clientUsername` with your Kafka username.
+
+    * Set the [Helm parameters](#helm-parameters) `externalizedKafka.auth.clientUsername` with your Kafka username.
 
 * For security disabled:
-    * Set the [Helm parameters](#helm-parameters) `externalKafka.auth.clientProtocol` to `plaintext`.
+    * Set the [Helm parameters](#helm-parameters) `externalizedKafka.auth.clientProtocol` to `plaintext`.
 
 #### Embedded Kafka configuration
 
@@ -330,6 +332,7 @@ According to your choice, you must:
 
 * For SCRAM and TLS enabled:
     * Provide Kafka credentials using a k8s secret:
+
     ```sh
     export NAMESPACE="my-namespace"
     export KAFKA_CLIENT_PASSWORD="my-kakfa-client-password"
@@ -337,14 +340,18 @@ According to your choice, you must:
 
     kubectl -n ${NAMESPACE} create secret generic streams-kafka-passwords-secret --from-literal="client-passwords=${KAFKA_CLIENT_PASSWORD}" --from-literal="inter-broker-password=${KAFKA_INTERBROKER_PASSWORD}"
     ```
+
     * In order to configure TLS encryption, you need to have a valid truststore and one certificate per broker.
         * They must all be integrated into Java Key Stores (JKS) files. Be careful, as each broker needs its own keystore and a dedicated CN name matching the Kafka pod hostname as described in [bitnami documentation](https://github.com/bitnami/charts/tree/master/bitnami/kafka#enable-security-for-kafka-and-zookeeper).
         * We provide you with a script to help with truststore and keystore generation (based on bitnami's script that properly handles Kubernetes deployment). You can also use your own truststore/privatekey:
+
         ```sh
         cd tools
         ./kafka-generate-ssl.sh
         ```
+
         * Create a secret which contains all the previously generated files:
+
         ```sh
         export NAMESPACE="my-namespace"
         export KAFKA_SECRET_PASSWORD="my-kakfa-secret-password"
@@ -353,10 +360,10 @@ According to your choice, you must:
 
 * For security disabled:
     * Set the following [Helm parameters](#helm-parameters):
-        * `kafka.auth.clientProtocol` to `plaintext`
-        * `kafka.auth.interBrokerProtocol` to `plaintext`
-        * `kafka.auth.jaas.existingSecret` to `null`
-        * `kafka.extraEnvVars` to `null`
+        * `embeddedKafka.auth.clientProtocol` to `plaintext`
+        * `embeddedKafka.auth.interBrokerProtocol` to `plaintext`
+        * `embeddedKafka.auth.jaas.existingSecret` to `null`
+        * `embeddedKafka.extraEnvVars` to `null`
 
 {{< alert title="Note" >}}
 Disabling security is not recommended for production.
@@ -435,7 +442,14 @@ helm install "${HELM_RELEASE_NAME}" . \
 ```
 
 {{< alert title="Note" >}}
-The default configuration only accepts incoming HTTP/HTTPS requests to `k8s.yourdomain.tld`.
+You will be required to specify a hostname. If you do not have one yet, you can use any temporary value and edit it later.
+Throughout this documentation, we are using k8s.yourdomain.tld as an _example_ value.
+You can use the following flag :
+
+```
+--set ingress.host=k8s.yourdomain.tld
+```
+
 Refer to [Ingress host configuration](#ingress-host-configuration) and [Helm parameters](#helm-parameters) for further details.
 {{< /alert >}}
 
@@ -502,13 +516,13 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
 | hub.replicaCount                      | Hub replica count                   | no        | 2             |
-| hub.ports.containerPort               | Http port to reach the Streams Topics API | no  | 8080          |
+| hub.service.port               | Http port to reach the Streams Topics API | no  | 8080          |
 | subscriberWebhook.replicaCount        | Subscriber Webhook replica count    | no        | 2             |
-| subscriberWebhook.ports.containerPort | Http port to subscribe to a topic   | no        | 8080          |
+| subscriberWebhook.service.port | Http port to subscribe to a topic   | no        | 8080          |
 | publisherHttpPoller.replicaCount      | Publisher HTTP Poller replica count | no        | 2             |
 | publisherHttpPost.enabled             | Enable/Disable Publisher HTTP Post  | no        | true          |
 | publisherHttpPost.replicaCount        | Publisher HTTP Post replica count   | no        | 2             |
-| publisherHttpPost.ports.containerPort | Http port to publish to a topic     | no        | 8080          |
+| publisherHttpPost.service.port | Http port to publish to a topic     | no        | 8080          |
 | publisherKafka.enabled                | Enable/Disable Publisher Kafka      | no        | true          |
 | publisherKafka.replicaCount           | Publisher Kafka replica count       | no        | 2             |
 | publisherSfdc.enabled                 | Enable/Disable Publisher SFDC       | no        | false         |
@@ -521,30 +535,30 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| mariadb.enabled                       | MariaDB installed in K8s with the Helm chart. If set to false, the `externalMariadb` parameter will be used | no | true |
-| mariadb.tls.enabled                   | MariaDB TLS enabled                 | no        | true          |
-| mariadb.encryption.enabled            | MariaDB Transparent Data Encryption enabled | no | true         |
-| mariadb.metrics.enabled               | Activate metrics endpoint for MariaDB | no      | false         |
+| embeddedMariadb.enabled               | MariaDB installed in K8s with the Helm chart. If set to false, the `externalizedMariadb` parameter will be used | no | true |
+| embeddedMariadb.tls.enabled           | MariaDB TLS enabled                 | no        | true          |
+| embeddedMariadb.encryption.enabled    | MariaDB Transparent Data Encryption enabled | no | true         |
+| embeddedMariadb.metrics.enabled       | Activate metrics endpoint for MariaDB | no      | false         |
 | embeddedMariadb.maxConnections        | Maximum number of parallel client connections to MariaDB | no | 500 |
 | embeddedMariadb.waitTimeout           | Time in seconds that MariaDB waits for activity on a connection before closing it | no | 300 |
-| externalMariadb.host                  | Host of the externalized MariaDB (Only used when `mariadb.enabled` set to false) | no | my.db.host |
-| externalMariadb.port                  | Port of the externalized MariaDB (Only used when `mariadb.enabled` set to false) | no | 3306 |
-| externalMariadb.db.name               | Name of the MySQL database used for Streams (Only used when `mariadb.enabled` set to false) | no | streams |
-| externalMariadb.db.user               | Username of the externalized MariaDB used by Streams (Only used when `mariadb.enabled` set to false) | no | streams |
-| externalMariadb.rootUsername          | Root username of the externalized MariaDB used by Streams (Only used when `mariadb.enabled` set to false) | no | root |
-| externalMariadb.tls.enabled           | Externalized MariaDB tls enabled (Only used when `mariadb.enabled` set to false) | no | true |
-| externalMariadb.tls.twoWay            | Externalized MariaDB Two-Way tls enabled (Only used when `mariadb.enabled` set to false) | no | true |
+| externalizedMariadb.host              | Host of the externalized MariaDB (Only used when `embeddedMariadb.enabled` set to false) | no | my.db.host |
+| externalizedMariadb.port              | Port of the externalized MariaDB (Only used when `embeddedMariadb.enabled` set to false) | no | 3306 |
+| externalizedMariadb.db.name           | Name of the MySQL database used for Streams (Only used when `embeddedMariadb.enabled` set to false) | no | streams |
+| externalizedMariadb.db.user           | Username of the externalized MariaDB used by Streams (Only used when `embeddedMariadb.enabled` set to false) | no | streams |
+| externalizedMariadb.rootUsername      | Root username of the externalized MariaDB used by Streams (Only used when `embeddedMariadb.enabled` set to false) | no | root |
+| externalizedMariadb.tls.enabled       | Externalized MariaDB tls enabled (Only used when `embeddedMariadb.enabled` set to false) | no | true |
+| externalizedMariadb.tls.twoWay        | Externalized MariaDB Two-Way tls enabled (only used when `embeddedMariadb.enabled` set to false) | no | true |
 
 #### Kafka parameters
 
-| Parameter                             | Description                         | Mandatory | Default value |
-| ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| kafka.enabled                         | Kafka installed in K8s with the Helm chart. If set to false, the `externalKafka` parameter will be used | no | true |
-| kafka.auth.clientProtocol             | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext") | no | sasl_tls |
-| kafka.auth.interBrokerProtocol        | Authentication protocol internaly used by Kafka broker (must be "sasl_tls" or "plaintext") | no | sasl_tls |
-| kafka.metrics.jmx.enabled             | Activate metrics endpoint for Kafka | no        | false         |
-| externalKafka.auth.clientUsername     | Username of the externalized Kafka used by Streams (only used when `kafka.enabled` set to false) | no | streams |
-| externalKafka.auth.clientProtocol     | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext" ; only used when `kafka.enabled` set to false)) | no | sasl_tls |
+| Parameter                               | Description                         | Mandatory | Default value |
+| --------------------------------------- | ----------------------------------- | --------- | ------------- |
+| embeddedKafka.enabled                   | Kafka installed in K8s with the Helm chart. If set to false, the `externalizedKafka` parameter will be used | no | true |
+| embeddedKafka.auth.clientProtocol       | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext") | no | sasl_tls |
+| embeddedKafka.auth.interBrokerProtocol  | Authentication protocol internaly used by Kafka broker (must be "sasl_tls" or "plaintext") | no | sasl_tls |
+| embeddedKafka.metrics.jmx.enabled       | Activate metrics endpoint for Kafka | no        | false         |
+| externalizedKafka.auth.clientUsername   | Username of the externalized Kafka used by Streams (only used when `embeddedKafka.enabled` set to false) | no | streams |
+| externalizedKafka.auth.clientProtocol   | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext" ; only used when `embeddedKafka.enabled` set to false)) | no | sasl_tls |
 
 #### Zookeeper parameters
 
@@ -557,7 +571,7 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
 | ingress-nginx.enabled                 | Enable/Disable NGINX                | no        | true          |
-| ingress.host | Domain name used for incoming HTTP requests if `ingress-nginx.enabled` is set to true | no | k8s.yourdomain.tld |
+| ingress.host | Domain name used for incoming HTTP requests if `ingress-nginx.enabled` is set to true | yes | none |
 | ingress.tlsenabled                    | Enable embedded ingress SSL/TLS     | no        | true          |
 | ingress.tlsSecretName                 | Embedded ingress SSL/TLS certificate secret name | no | streams-ingress-tls-secret |
 | ingress-nginx.controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
@@ -565,8 +579,8 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 {{< alert title="Note" >}}
 If you want to configure a parameter from a dependency chart, [MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb), [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka), you need to add the chart prefix name to the command line argument. For example:
 
-```sh
---set mariadb.image.tag=latest --set kafka.replicaCount=2 `
+```
+--set embeddedMariadb.image.tag=latest --set embeddedKafka.replicaCount=2 `
 ```
 
 Please refer to the dependency chart's documentation to get the list of parameters.

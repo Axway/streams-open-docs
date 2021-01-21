@@ -76,9 +76,89 @@ Below the list of HTTP status codes that can be returned when trying to get a ka
 | 200 Ok | Indicates that the subscription requested is valid and has been retrieved. |
 | 404 Not found | Indicates that the requested URL or subscription requested does not exist. |
 
+## Testing a webhook subscription
+
+You can test a webhook subscription by making an HTTP Post request on the following endpoint:
+
+`POST /subscribers/webhook/subscriptions/{subscriptionId}/test`
+
+The request body can contain any JSON object and will be sent as is to the identified subscription.
+
+### Test status codes
+
+The following HTTP status codes can be returned while testing a webhook subscription:
+
+| Code | Comment |
+|------|---------|
+| 202 Accepted | Indicates that the payload has been successufuly sent to the subscription. |
+| 400 Bad Request | Indicates that the provided data are invalid. |
+| 404 Not found | Indicates that the requested URL does not exist. |
+
+## Getting the webhook notification history for a subscription
+
+Use the following `GET` request to retrieve the history of webhook exchanges (requests and responses) that have occurred for a subscription in the last 5 minutes:
+
+`GET /subscribers/webhook/subscriptions/{subscriptionId}/exchanges`
+
+You can change the default time window of the retrieved history with `start` and `end` query params (date-time in ISO 8601 format, eg: 2021-01-10T10:13:32Z):
+
+`GET /subscribers/webhook/subscriptions/{subscriptionId}/exchanges?start=2021-01-10T10:13:30Z&end=2021-01-10T10:13:32Z`
+
+### Webhook exchanges status codes
+
+The following HTTP status codes can be returned when interacting with the exchanges history:
+
+| Code | Comment |
+|------|---------|
+| 200 Ok | Indicates that the exchanges history requested is valid and has been retrieved. |
+| 400 Bad Request | Indicates that the request is invalid. |
+
+#### Webhook exchange samples
+
+```json
+[{
+  "subscriptionId": "9794665d-a566-40a6-9113-8f345ed90eb5",
+  "pipelineId": "3c83d607-f42f-4438-b4b1-b4856eb4dc4a",
+  "eventType": "snapshot",
+  "requestDatetime": "2021-01-18T10:13:32.127711Z",
+  "requestDuration": "PT0.153501S",
+  "requestUrl": "https://valid.url/of/webhook",
+  "responseCode": 200,
+  "responseHeaders": {
+    "Access-Control-Allow-Origin": "*",
+    "Connection": "keep-alive",
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  "responseBody": "{ \"success\": \"ok\" }",
+  "responseSize": "19B"
+},{
+  "subscriptionId": "9794665d-a566-40a6-9113-8f345ed90eb5",
+  "pipelineId": "941253bd-1551-4a22-9988-4e54b0de9c14",
+  "eventType": "snapshot",
+  "requestDatetime": "2021-01-18T16:25:05.547734Z",
+  "requestDuration": "PT0.195613S",
+  "requestRetry": "0/1",
+  "requestUrl": "https://valid.url/wrong/path",
+  "requestHeaders": {},
+  "responseCode": 404,
+  "errorMessage": "404 NOT_FOUND"
+},{
+  "subscriptionId": "9794665d-a566-40a6-9113-8f345ed90eb5",
+  "pipelineId": "941253bd-1551-4a22-9988-4e54b0de9c14",
+  "eventType": "snapshot",
+  "requestDatetime": "2021-01-18T16:25:05.743574Z",
+  "requestDuration": "PT0.195613S",
+  "requestRetry": "1/1",
+  "requestUrl": "https://valid.url/wrong/path",
+  "requestHeaders": {},
+  "responseCode": 404,
+  "errorMessage": "404 NOT_FOUND"
+}]
+```
+
 ## Getting webhook subscriptions for a topic
 
-In order to get existing subscriptions, simply do the following GET request on your topic:
+To get existing subscriptions, do the following GET request on your topic:
 
 `GET /subscribers/webhook/topics/{topicId}/subscriptions`
 
