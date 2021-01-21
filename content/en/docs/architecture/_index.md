@@ -20,7 +20,7 @@ This document describes all major areas in deploying and maintaining Streams, in
 ## Overview
 
 Streams is an event hub that makes it easy to exchange messages between devices, services and applications. It only supports container-based deployment. The purpose of this document is to share Axway reference architecture for the container-based deployment of a Streams solution on Kubernetes. It will address many architectural, development and operational aspects of the proposed architecture.  
-Because the technology chosen, Docker and Kubernetes, are portable across on-premises environments and many cloud providers, most of the information in this guide should apply to those environments. But we include specific recommendations for AWS as one of the most common deployment targets.
+Because Docker and Kubernetes are portable across on-premise environments and many cloud providers, most of the information in this guide should apply to those environments. However, specific AWS recommendations are also provided, as it is one of the most common deployment targets.
 The target audience for the document is architects, developers, and operations personnel. To get the most value from this document, a reader should have a good knowledge of Docker, Kubernetes and API.
 
 ## General Architecture
@@ -87,7 +87,7 @@ Administrative tasks should be executed safely. We recommend you to use a bastio
 
 * Kubernetes master nodes for managing a cluster
 * Kubernetes Dashboard
-* RBDMS and Kafka
+* RDBMS and Kafka
 * Debugging any issue with a Kubernetes cluster
 
 The bastion must have high traceability with specific RBAC permissions to allow a few selected users to access infrastructure components.
@@ -153,7 +153,7 @@ We recommend using SSD disks with low latency. The storage is used by the Kafka,
 
 ### Load balancer
 
-A load balancer is required in front of the cluster. We use the Kubernetes object called ingress controller that is responsible for fulfilling the ingress rules. A Nginx ingress controller is, by default, deployed with our Helm chart installation. For better performance, we recommend you to use a L4 Load balancer. See your Cloud provider documentation to configure it (e.g. [AWS Load Balancing](https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html))
+A load balancer is required in front of the cluster. We use the Kubernetes object called ingress controller that is responsible for fulfilling the ingress rules. A NGINX ingress controller is, by default, deployed with our Helm chart installation. For better performance, we recommend you to use a L4 Load balancer. See your Cloud provider documentation to configure it (e.g. [AWS Load Balancing](https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html)).
 
 #### Network
 
@@ -187,9 +187,9 @@ We recommend the use of [CALICO](https://kubernetes.io/docs/concepts/cluster-adm
 
 ##### RBAC Permission
 
-Kubernetes Role-based access control ([RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)) is a method of regulating access to your Kubernetes cluster and resources based on the roles of individual users within an enterprise. Streams requires RBAC to be enabled for secrets management and third-party dependencies:
+Kubernetes' role-based access control ([RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)) is a method of regulating access to your Kubernetes cluster and resources based on the roles of individual users within an enterprise. Streams requires RBAC to be enabled for secrets management and third-party dependencies:
 
-* Nginx (fine tuning of ingress controller permissions)
+* NGINX (fine tuning of ingress controller permissions)
 
 It is recommended to set people or application permissions to manage resources:
 
@@ -245,7 +245,7 @@ In addition, each Java service defines heap memory management with the help of J
 | Description                                                           | Type     |
 | --------------------------------------------------------------------- | -------- |
 | Limit memory and CPU usage to protect the cluster                     | Required |
-| Adjust Java opts (Xmx & Xms) to allocate enough resources to services | Required |
+| Adjust Java opts (Xms & Xmx) to allocate enough resources to services | Required |
 
 {{< alert title="Note" >}}Axway provides the recommended values. Be aware that removing pod and JVM resource limits will result in a non-functional platform.{{< /alert >}}
 
@@ -299,7 +299,7 @@ nodeSelector:
   application: streams
 ```
 
-For 3rd parties pods (Nginx, Kafka, Zookeeper and MariaDB) you have to define it for each of them:
+You must define it for each of the 3rd party pods (NGINX, Kafka, Zookeeper and MariaDB):
 
 ```
 nginx-ingress:
@@ -369,21 +369,11 @@ We do not provide any specific guidelines for using Horizontal Pod Autoscaler wi
 
 ##### External traffic
 
-We use the NGINX Ingress Controller to expose both management and subscription APIs. NGINX Ingress Controller automatically creates a Load Balancer in the cloud provider infrastructure so that the APIs can be reached from the outside using the load balancer DNS hostname. Once known, this hostname must be updated in the ingress resource thanks to the `values.yaml` file:
+We use the NGINX Ingress Controller to expose both management and subscription APIs. NGINX Ingress Controller automatically creates a load balancer in the cloud provider infrastructure so that the APIs can be reached from the outside using the load balancer DNS hostname. Once known, this hostname must be updated in the ingress resource helm parameter `ingress.host`.
 
-```yaml
-ingress:
-  host: "k8s.yourdomain.tld"
-```
+SSL/TLS is enabled by default on NGINX Ingress Controller unless you have explicitly disabled it (`ingress.tlsenabled=false`).
 
-SSL/TLS is activated by default unless you have deliberately disabled it by setting:
-
-```yaml
-ingress:
-  tlsenabled: false
-```
-
-The ingress controller handles SSL/TLS termination with to the correct certificate/secret (more setup details)
+The ingress controller handles the SSL/TLS termination thanks to a certificate stored in a k8s secret (refer to the [Ingress TLS settings](/docs/install#ingress-tls-settings) documentation for further details).
 
 | Description                                                       | Type        |
 | ----------------------------------------------------------------- | ----------- |
@@ -393,15 +383,19 @@ The ingress controller handles SSL/TLS termination with to the correct certifica
 ##### Secrets
 
 Without secrets, all passwords are set in clear in Manifest. Kubernetes define “secret” objects to encode in base64 all sensitive information. Using Kubernetes Secrets is very useful for variables in containers, Docker registry login, and technical token for shared storage.
-Here is the list of secrets related to Streams installation:
+The following list of secrets relate to the Streams installation:
 
-| Description  | Type                                |
-| ------------ | ----------------------------------- |
-| default      | kubernetes.io/service-account-token |
-| mariadb      | Opaque                              |
-| Nginx secret | Opaque                              |
-| Nginx token  | kubernetes.io/service-account-token |
-| helm         | kubernetes.io/service-account-token |
+| Description                   | Name                                | Type                                |
+| ----------------------------- | ----------------------------------- | ----------------------------------- |
+| docker registry credentials   | my-registry-secret-name             | kubernetes.io/dockerconfigjson      |
+| mariadb credentials           | streams-database-passwords-secret   | Opaque                              |
+| mariadb encryption            | streams-database-secret             | Opaque                              |
+| kafka truststore credentials  | streams-kafka-client-jks-secret     | Opaque                              |
+| kafka credentials             | streams-kafka-passwords-secret      | Opaque                              |
+| kafka service account         | streams-kafka-token                 | kubernetes.io/service-account-token |
+| NGINX tls certificates        | streams-ingress-tls-secret          | kubernetes.io/tls                   |
+| NGINX service account         | \<releasename\>-ingress-nginx-token   | kubernetes.io/service-account-token |
+| helm release internal info    | sh.helm.release.v1.\<releasename\>.v1 | helm.sh/release.v1                  |
 
 ### Streams implementation details
 
@@ -429,7 +423,7 @@ Pod characteristics of the SSE Subscriber for HA deployment mode:
 * Kubernetes object: deployment
 * Exposed traffic http port by default: 8080 (can be modified during installation)
 * Resource limits: 2 CPUs & 3 GB
-* Xmx & Xms: 2 GB  
+* Xms & Xmx: 2 GB  
 * Auto-scaling: no
 * Replicas: 2
 
@@ -455,7 +449,7 @@ Pod characteristics of the subscriber webhook for HA deployment mode:
 * Kubernetes object: deployment  
 * Exposed traffic http port by default: 8080 (can be modified during installation)
 * Resource limits: 2 CPUs & 3 GB
-* Xmx & Xms: 2 GB  
+* Xms & Xmx: 2 GB  
 * Automatic scalability: No
 * Replicas: 2
 
@@ -481,7 +475,7 @@ Pod characteristics of the subscriber Kafka for HA deployment mode:
 * Kubernetes object: deployment  
 * Exposed traffic http port by default: 8080 (can be modified during installation)
 * Resource limits: 2 CPUs & 3 GB
-* Xmx & Xms: 2 GB  
+* Xms & Xmx: 2 GB  
 * Automatic scalability: No
 * Replicas: 2
 
@@ -505,7 +499,7 @@ Pod characteristics of the hub for HA deployment mode:
 * Kubernetes object: deployment
 * Exposed traffic http port: 8080 (can be modified during installation)
 * Resources limit: 2 CPUs & 3 GB
-* Xmx & Xms: 2 GB
+* Xms & Xmx: 2 GB
 * Automatic scalability: no
 * Replicas: 2
 
@@ -606,7 +600,7 @@ Pod characteristics of the publisher SFDC for HA deployment mode:
 
 #### Summary table
 
-| Component             | Exposes API | Exposed Port | Resources Limits | Xmx & Xms | Requires                  | Ingress traffic | Egress traffic  |
+| Component             | Exposes API | Exposed Port | Resources Limits | Xms & Xmx | Requires                  | Ingress traffic | Egress traffic  |
 | --------------------- | ----------- | ------------ | ---------------- | --------- | ------------------------- | --------------- | --------------- |
 | SSE Subscriber        | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | Kafka                     | Yes             | No              |
 | Webhook  Subscriber   | Yes         | 8080         | 2 CPUs 3 GB      | 2 GB      | MariaDB, Kafka, Zookeeper | Yes             | Yes             |
@@ -626,30 +620,30 @@ Apache Kafka is used as stream-processing layer.
 Source Docker image:
 
 * Repository: bitnami/kafka
-* Tag: 2.6.0-debian-10-r78
+* Tag: 2.6.0-debian-10-r110
 
 Pod name: `streams-kafka`.
 
 Pod characteristics for HA deployment mode:
 
-| Replicas           | CPU | Memory | Xmx & Xms | Persistence |
+| Replicas           | CPU | Memory | Xms & Xmx | Persistence |
 | ------------------ | --- | ------ | --------- | ----------- |
 | 3 (one in each AZ) | 1   | 4 GB   | 3 GB      | 200 GB      |
 
 #### ZooKeeper
 
-Apache ZooKeeper is used by Kafka.
+Apache ZooKeeper is used by our microservices and by Kafka (when embedded in installation).
 
 Source Docker image:
 
 * Repository: bitnami/zookeeper
-* Tag: 3.6.2-debian-10-r58
+* Tag: 3.6.2-debian-10-r112
 
 Pod name: `streams-zookeeper`
 
 Pod characteristics for HA deployment mode:
 
-| Replicas           | CPU | Memory | Xmx & Xms | Persistence |
+| Replicas           | CPU | Memory | Xms & Xmx | Persistence |
 | ------------------ | --- | ------ | --------- | ----------- |
 | 3 (one in each AZ) | 1   | 512 MB | n/a       | 8 GB        |
 
@@ -660,7 +654,7 @@ MariaDB is our persistence layer.
 Source Docker image:
 
 * Repository: bitnami/mariadb
-* Tag: 10.4.14
+* Tag: 10.4.17
 
 Pod names:
 
@@ -669,12 +663,63 @@ Pod names:
 
 Pod characteristics for HA deployment mode:
 
-| Name              | Replicas | CPU | Memory  | Xmx & Xms | Persistence |
+| Name              | Replicas | CPU | Memory  | Xms & Xmx | Persistence |
 | ----------------- |--------- | --- | ------- | --------- | ----------- |
 | MariaDB master    | 1        | 1   | 1024 MB | n/a       | 8 GB        |
 | MariaDB slave     | 1        | 1   | 1024 MB | n/a       | 8 GB        |
 
 {{< alert title="Note" >}}MariaDB is deployed in master/slave mode with asynchronous commit for replication but the failover is not done automatically.{{< /alert >}}
+
+#### NGINX
+
+NGINX is the ingress controller in front of Streams APIs.
+
+Source Docker image:
+
+* Repository: k8s.gcr.io/ingress-nginx/controller
+* Tag: v0.43.0
+
+Pod name: `streams-ingress-nginx-controller`
+
+Pod characteristics for HA deployment mode:
+
+| Replicas           | CPU | Memory | Xms & Xmx | Persistence |
+| ------------------ | --- | ------ | --------- | ----------- |
+| 2                  | 1   | 512 MB | n/a       | 8 GB        |
+
+### Database considerations
+
+Streams manages 2 types of connection pool for the database:
+
+* Tomcat:
+    * At several microservices startup, schema database management ([liquibase](https://www.liquibase.org/)) creates a connection pool with 10 parallel connections. Using these connections (with user _root_), database tables are created/updated if needed in order to reach the expected state for the current version. Then, the connections are closed and the microservices can resume regular startup.
+* [Hikari](https://github.com/brettwooldridge/HikariCP):
+    * Each microservice, which depends on the database, maintains a connection pool of `maximumPoolSize` threads (default: 10). Connections are established using user _streams_. When a database call needs to be performed (e.g. topic creation, liveness probe...), either an existing idle connection is available and used for this call, or all the connections in the pool are already in use and the call is queued during `connectionTimeout` (default: 25s).
+    * A connection remains in the pool during `maxLifetime` (default: 280s). When maxLifetime is reached and if the connection is not in use, it will be dropped from the pool and a new one will be created in order to keep the pool size at `maximumPoolSize` connections.
+
+For the best performance with Streams, MariaDB should be configured as follows:
+
+* [`wait-timeout`](https://mariadb.com/docs/reference/es/system-variables/wait_timeout/)
+    * Any connection to the database that stays idle during this value will be destroyed.
+    * 5 minutes is recommended so that reconnections are not too frequent and zombie connections that are due to potential k8s pod / node crashes can be managed in a timely manner.
+    * Remember to set your Streams installation `maxLifetime` below this value. For instance, a microservice connection will die after remaining `maxLifetime` seconds in the pool, but if a pod crashes and the connection cannot be closed properly after `maxLifetime`, it will eventually be destroyed after `wait-timeout`.
+
+* [`max-connections`](https://mariadb.com/docs/reference/es/system-variables/max_connections/)
+    * This value is set to 500 by default for HA setup.
+    * The formula to compute the number of connections maintained by Streams platform is:
+    ```
+    streams_db_connections = (number_of_pods_depending_on_db) * (maximumPoolSize)
+    
+    Example:
+    Assuming a platform deployed with hub, webhook subscriber, http post publisher with 2 replicas each:
+    number_of_pods_depending_on_db = (hub*2+post*2+webhook*2) = 6
+    streams_db_connections = 6 * 10 = 60
+    ```
+    * Also take into account the expected load on the platform, which may lead to an increase in the number of microservice replicas. It is recommended to compute the `streams_db_connections` with the highest number of pod replicas expected so that the platform can properly handle peak load.
+    Several connections are also established by MariaDB (five for InnoDB and one for replication).
+    A safety margin must also be considered in case of a k8s pod or node crash where zombie connections would be held during `wait-timeout` while pods are being re-created along with their connection pool.
+
+Refer to the [Embedded MariaDB tuning](/docs/install#embedded-mariadb-tuning) documentation for further details on setting all these parameters in the Helm Streams installation.
 
 ### Logging/tracing
 

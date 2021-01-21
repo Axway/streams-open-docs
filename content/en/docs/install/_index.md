@@ -145,6 +145,8 @@ externalizedMariadb:
   rootUsername: "my-streams-db-root-user"
 ```
 
+Finally, set the [Helm parameters](#helm-parameters) `streams.serviceArgs.spring.datasource.hikari.maxLifetime` to a value (in seconds) according to the `wait-timeout` value of your MariaDB database (refer to the [MariaDB considerations](/docs/architecture#mariadb-considerations) documentation for further details).
+
 ##### Externalized MariaDB passwords
 
 Passwords are required for Streams microservices to securely connect to Mariadb.
@@ -259,6 +261,16 @@ To disable MariaDB encryption **and** TLS, you must set the following [Helm para
 Not recommended for production.
 {{< /alert >}}
 
+##### Embedded MariaDB tuning
+
+The following embedded MariaDB configuration values can be updated:
+
+* `wait-timeout` - update by setting the [Helm parameters](#helm-parameters) `embeddedMariadb.waitTimeout`.
+
+* `max-connections` - updated by setting the [Helm parameters](#helm-parameters) `embeddedMariadb.maxConnections`.
+
+{{< alert title="Note" >}}Refer to the [MariaDB considerations](/docs/architecture#mariadb-considerations) documentation for further details.{{< /alert >}}
+
 ### Kafka settings
 
 By default, an embedded Kafka cluster is installed on your K8s cluster next to Streams. For production, we recommend that you use an externalized one instead.
@@ -326,7 +338,7 @@ According to your choice, you must:
     export KAFKA_CLIENT_PASSWORD="my-kakfa-client-password"
     export KAFKA_INTERBROKER_PASSWORD="my-kakfa-interbroker-password"
 
-    kubectl -n ${NAMESPACE} create secret generic streams-kafka-passwords-secret --from-literal="client-passwords=${KAFKA_CLIENT_PASSWORD}" --from-literal="inter-broker-password=${KAFKA_INTERBROKER_PASSWORD}" Z
+    kubectl -n ${NAMESPACE} create secret generic streams-kafka-passwords-secret --from-literal="client-passwords=${KAFKA_CLIENT_PASSWORD}" --from-literal="inter-broker-password=${KAFKA_INTERBROKER_PASSWORD}"
     ```
 
     * In order to configure TLS encryption, you need to have a valid truststore and one certificate per broker.
@@ -359,7 +371,7 @@ Disabling security is not recommended for production.
 
 ### Ingress TLS settings
 
-SSL/TLS is enabled by default on the embedded Ingress controller. If you don't provide any certificate, SSL will be enabled thanks to a nginx embedded fake SSL certificate.
+SSL/TLS is enabled by default on the embedded Ingress controller. If you don't provide a certificate, SSL will be enabled with a NGINX embedded fake SSL certificate.
 You can provide an SSL/TLS certificate for the domain name you are using (either CN or SAN fields should match the `ingress.host` [Helm parameter](#helm-parameters)):
 
 ```sh
@@ -517,6 +529,7 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | publisherSfdc.replicaCount            | Publisher SFDC replica count        | no        | 2             |
 | streams.extraCertificatesSecrets      | List of secrets containing TLS certs to add as trusted by Streams | no | [] |
 | actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
+| streams.serviceArgs.spring.datasource.hikari.maxLifetime | Maximum lifetime in milliseconds for a Streams database connection | no | 280000 |
 
 #### MariaDB parameters
 
@@ -526,6 +539,8 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | embeddedMariadb.tls.enabled           | MariaDB TLS enabled                 | no        | true          |
 | embeddedMariadb.encryption.enabled    | MariaDB Transparent Data Encryption enabled | no | true         |
 | embeddedMariadb.metrics.enabled       | Activate metrics endpoint for MariaDB | no      | false         |
+| embeddedMariadb.maxConnections        | Maximum number of parallel client connections to MariaDB | no | 500 |
+| embeddedMariadb.waitTimeout           | Time in seconds that MariaDB waits for activity on a connection before closing it | no | 300 |
 | externalizedMariadb.host              | Host of the externalized MariaDB (Only used when `embeddedMariadb.enabled` set to false) | no | my.db.host |
 | externalizedMariadb.port              | Port of the externalized MariaDB (Only used when `embeddedMariadb.enabled` set to false) | no | 3306 |
 | externalizedMariadb.db.name           | Name of the MySQL database used for Streams (Only used when `embeddedMariadb.enabled` set to false) | no | streams |
