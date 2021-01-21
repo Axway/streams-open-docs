@@ -373,7 +373,7 @@ We use the NGINX Ingress Controller to expose both management and subscription A
 
 SSL/TLS is enabled by default on NGINX Ingress Controller unless you have explicitly disabled it (`ingress.tlsenabled=false`).
 
-The ingress controller handles SSL/TLS termination with a certificate manage with a k8s secret (refer to the [Ingress TLS settings](/docs/install#ingress-tls-settings) documentation for further details).
+The ingress controller handles the SSL/TLS termination thanks to a certificate stored in a k8s secret (refer to the [Ingress TLS settings](/docs/install#ingress-tls-settings) documentation for further details).
 
 | Description                                                       | Type        |
 | ----------------------------------------------------------------- | ----------- |
