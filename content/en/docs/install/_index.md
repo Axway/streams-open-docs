@@ -183,7 +183,7 @@ According to your choice, you must:
 * For no TLS:
     * Set the [Helm parameters](#helm-parameters) `externalizedMariadb.tls.enabled` to `false`.
 
-You can follow the official documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate. Make sure to set the Common Name correctly.
+See the official documentation provided by MariaDB [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificates. Make sure to set the Common Name correctly.
 
 #### Embedded MariaDB configuration
 
