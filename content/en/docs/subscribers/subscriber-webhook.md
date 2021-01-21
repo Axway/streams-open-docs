@@ -76,6 +76,24 @@ Below the list of HTTP status codes that can be returned when trying to get a ka
 | 200 Ok | Indicates that the subscription requested is valid and has been retrieved. |
 | 404 Not found | Indicates that the requested URL or subscription requested does not exist. |
 
+## Testing a webhook subscription
+
+You can test a webhook subscription by making an HTTP Post request on the following endpoint:
+
+`POST /subscribers/webhook/subscriptions/{subscriptionId}/test`
+
+The request body can contain any JSON object and will be sent as is to the identified subscription.
+
+### Test status codes
+
+The following HTTP status codes can be returned while testing a webhook subscription:
+
+| Code | Comment |
+|------|---------|
+| 202 Accepted | Indicates that the payload has been successufuly sent to the subscription. |
+| 400 Bad Request | Indicates that the provided data are invalid. |
+| 404 Not found | Indicates that the requested URL does not exist. |
+
 ## Getting the webhook notification history for a subscription
 
 Use the following `GET` request to retrieve the history of webhook exchanges (requests and responses) that have occurred for a subscription in the last 5 minutes:
@@ -140,7 +158,7 @@ The following HTTP status codes can be returned when interacting with the exchan
 
 ## Getting webhook subscriptions for a topic
 
-In order to get existing subscriptions, simply do the following GET request on your topic:
+To get existing subscriptions, do the following GET request on your topic:
 
 `GET /subscribers/webhook/topics/{topicId}/subscriptions`
 
