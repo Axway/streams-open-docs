@@ -36,9 +36,22 @@ cd ${INSTALL_DIR}/helm/streams
 
 Refer to Kubernetes documentation to create [secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
 
+### Helm parameters management
+
+There are different ways to manage your custom [Helm parameters](#helm-parameters), but the best way depends on your use case. You can:
+
+* Use `--set key=value` when running the `helm install` or `helm upgrade` command.
+    * Example: `helm install <name> <chart> --set key=value`
+* Edit `values.yaml` or `values-ha.yaml` files and change any values you need.
+* Create a custom values file (e.g. `my-values.yaml`) where you overwrite the parameters you want and pass it to `helm install` or `helm upgrade` command.
+    * Example: `helm install -f values.yaml -f values-ha.yaml -f my-values.yaml <name> <chart>`
+    * The last `values` file in the command line above will overwrite any conflicting parameter.
+
+Once your choice is made, we recommend you stick to it so that the [helm chart upgrade](#upgrade) is easier.
+
 ### Kubernetes namespace
 
-We recommend to deploy Streams components inside a dedicated namespace. To create a namespace, run the following command:
+We recommend you deploy Streams components inside a dedicated namespace. To create a namespace, run the following command:
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -64,33 +77,17 @@ To use Axway [DockerHub](https://hub.docker.com/) as your container registry:
 
 * Set `REGISTRY_SERVER` to `https://index.docker.io/v1/`.
 * Set `REGISTRY_USERNAME` with your DockerHub account username.
-* set `REGISTRY_PASSWORD` with your DockerHub account password or an [access token](https://hub.docker.com/settings/security) for more security.
+* Set `REGISTRY_PASSWORD` with your DockerHub account password or an [access token](https://hub.docker.com/settings/security) for more security.
 
-Finally, to use the secret you just created, you can either:
+Finally, to use the secret you just created, set the secret name in the `imagePullSecrets` array. For instance:
 
-* Edit the `values.yaml` file and set the `imagePullSecrets` entry as follow:
-
-```yaml
-imagePullSecrets:
-  - name: my-registry-secret-name
-```
-
-* or specify `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` in the Helm Chart installation command.
+* Add `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` in the Helm Chart installation command.
 
 ### MariaDB settings
 
 By default, an embedded MariaDB database is installed on your K8s cluster next to Streams. For production, we recommend that you use an externalized one instead.
 
-To disable the MariaDB installation, you can either:
-
-* Edit the `values.yaml` file and set the `embeddedMariadb.enabled` entry as follow:
-
-```yaml
-embeddedMariadb:
-  enabled: false
-```
-
-* or specify `--set embeddedMariadb.enabled=false` in the Helm Chart installation command.
+To disable MariaDB installation, set `embeddedMariadb.enabled` to `false`.
 
 Then, according to your choice, configure your [externalized MariaDB](#externalized-mariadb-configuration) or your [embedded MariaDB](#embedded-mariadb-configuration).
 
@@ -133,17 +130,11 @@ export DB_STREAMS_USER="streams"
 mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p -e "GRANT SELECT, INSERT, UPDATE, DELETE ON ${DB_NAME}.* TO ${DB_STREAMS_USER} REQUIRE SSL;"
 ```
 
-Then you must provide information to the Streams installation. You should edit the `values.yaml` file and set the `externalizedMariadb` entry as follows:
+You must now provide information to the Streams installation. Set the following parameters:
 
-```yaml
-externalizedMariadb:
-  host: "my-db-host"
-  port: my-db-port
-  db:
-    name: "streams"
-    user: "streams"
-  rootUsername: "my-streams-db-root-user"
-```
+* `externalizedMariadb.host`
+* `externalizedMariadb.port`
+* `externalizedMariadb.rootUsername`
 
 Finally, set the [Helm parameters](#helm-parameters) `streams.serviceArgs.spring.datasource.hikari.maxLifetime` to a value (in seconds) according to the `wait-timeout` value of your MariaDB database (refer to the [MariaDB considerations](/docs/architecture#mariadb-considerations) documentation for further details).
 
@@ -275,13 +266,15 @@ The following embedded MariaDB configuration values can be updated:
 
 By default, an embedded Kafka cluster is installed on your K8s cluster next to Streams. For production, we recommend that you use an externalized one instead.
 
-To disable the Kafka installation, you can specify `--set embeddedKafka.enabled=false` in the Helm Chart installation command.
+To disable the Kafka installation, set `embeddedKafka.enabled` to `false` in the Helm Chart installation command.
 
 Then, according to your choice, configure your [externalized Kafka](#externalized-kafka-configuration) or your [embedded Kafka](#embedded-kafka-configuration).
 
 #### Externalized Kafka configuration
 
-You must provide information to the Streams installation. You should specify `--set externalizedKafka.bootstrapServers="my.kafka.broker.1:port\,my.broker.2:port[...]"` in the Helm Chart installation command.
+You must provide information to the Streams installation. Specify `externalizedKafka.bootstrapServers` in the Helm Chart installation command, for instance (escape the comma!):
+
+* `--set externalizedKafka.bootstrapServers="my.kafka.broker.1:port\,my.broker.2:port[...]"`
 
 ##### Externalized Kafka security settings
 
@@ -400,14 +393,7 @@ export PEM_PATH="my-pem-path"
 kubectl create secret generic "${SECRET_NAME}" -n "${NAMESPACE}" --from-file="${PEM_PATH}" [--from-file=<other-pem-path>]
 ```
 
-* Set the [Helm parameters](#helm-parameters) `streams.extraCertificatesSecrets` as follows:
-
-```sh
---set streams.extraCertificatesSecrets="{my-secret}"
-
-# or if you have several secrets
---set streams.extraCertificatesSecrets="{my-secret,my-second-secret}"
-```
+* Set the [Helm parameters](#helm-parameters) `streams.extraCertificatesSecrets` to your `$SECRET_NAME`. If you have more than one secrets, they must be separated by a comma.
 
 ### Helm install command
 
@@ -443,12 +429,8 @@ helm install "${HELM_RELEASE_NAME}" . \
 
 {{< alert title="Note" >}}
 You will be required to specify a hostname. If you do not have one yet, you can use any temporary value and edit it later.
-Throughout this documentation, we are using k8s.yourdomain.tld as an _example_ value.
-You can use the following flag :
-
-```
---set ingress.host=k8s.yourdomain.tld
-```
+Throughout this documentation, `k8s.yourdomain.tld` is used as an _example_ value.
+You can change it with the `ingress.host` parameter.
 
 Refer to [Ingress host configuration](#ingress-host-configuration) and [Helm parameters](#helm-parameters) for further details.
 {{< /alert >}}
@@ -597,7 +579,7 @@ which will open endpoints designed to be scrapped by [Prometheus](https://promet
 
 To upgrade your Streams installation with a new minor version or update your configuration:
 
-* Optional: update the `values.yaml` files with any custom configuration
+* Optional: update any of your `values.yaml` files with a custom configuration
 * Upgrade your Streams installation:
 
 ```sh
@@ -607,10 +589,10 @@ export HELM_RELEASE_NAME="my-release"
 helm upgrade "${HELM_RELEASE_NAME}" . [-f values.yaml] [-f values-ha.yaml] [--set key=value[,key=value]] -n "${NAMESPACE}"
 ```
 
-Be careful, any difference in the `values.yaml` file or in the `--set` parameter from the initial installation will be upgraded too.
+Be careful, any difference in any of the `values.yaml` files or in the `--set` parameter from the initial installation will also be upgraded.
 So, if you initially installed Streams with `-f values.yaml` or `-f values-ha.yaml`, you have to specify the same parameters for the upgrade.
 
-Note that, to avoid downtime during the upgrade, it is recommended to have at least `2` replicas of each pod before upgrading the Chart.
+To avoid downtime during the upgrade, it is recommended to have at least `2` replicas of each pod before upgrading the Chart.
 
 After an upgrade, a rollback is possible with the following command:
 
