@@ -87,7 +87,7 @@ Finally, to use the secret you just created, set the secret name in the `imagePu
 
 By default, an embedded MariaDB database is installed on your K8s cluster next to Streams. For production, we recommend that you use an externalized one instead.
 
-To disable MariaDB installation, you must set `embeddedMariadb.enabled` to `false`.
+To disable MariaDB installation, set `embeddedMariadb.enabled` to `false`.
 
 Then, according to your choice, configure your [externalized MariaDB](#externalized-mariadb-configuration) or your [embedded MariaDB](#embedded-mariadb-configuration).
 
