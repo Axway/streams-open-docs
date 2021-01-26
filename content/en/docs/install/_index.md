@@ -130,7 +130,7 @@ export DB_STREAMS_USER="streams"
 mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p -e "GRANT SELECT, INSERT, UPDATE, DELETE ON ${DB_NAME}.* TO ${DB_STREAMS_USER} REQUIRE SSL;"
 ```
 
-Then you must provide information to the Streams installation. You should set the following parameters:
+You must now provide information to the Streams installation. Set the following parameters:
 
 * `externalizedMariadb.host`
 * `externalizedMariadb.port`
