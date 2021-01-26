@@ -51,7 +51,7 @@ Once your choice is made, we recommend you stick to it so that the [helm chart u
 
 ### Kubernetes namespace
 
-We recommend to deploy Streams components inside a dedicated namespace. To create a namespace, run the following command:
+We recommend you deploy Streams components inside a dedicated namespace. To create a namespace, run the following command:
 
 ```sh
 export NAMESPACE="my-namespace"
