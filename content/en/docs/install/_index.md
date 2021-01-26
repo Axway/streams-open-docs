@@ -430,7 +430,7 @@ helm install "${HELM_RELEASE_NAME}" . \
 {{< alert title="Note" >}}
 You will be required to specify a hostname. If you do not have one yet, you can use any temporary value and edit it later.
 Throughout this documentation, `k8s.yourdomain.tld` is used as an _example_ value.
-You can change it thanks to `ingress.host` parameter.
+You can change it with the `ingress.host` parameter.
 
 Refer to [Ingress host configuration](#ingress-host-configuration) and [Helm parameters](#helm-parameters) for further details.
 {{< /alert >}}
