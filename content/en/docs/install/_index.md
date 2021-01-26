@@ -81,7 +81,7 @@ To use Axway [DockerHub](https://hub.docker.com/) as your container registry:
 
 Finally, to use the secret you just created, set the secret name in the `imagePullSecrets` array. For instance:
 
-* add `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` in the Helm Chart installation command.
+* Add `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` in the Helm Chart installation command.
 
 ### MariaDB settings
 
