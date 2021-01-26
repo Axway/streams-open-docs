@@ -589,7 +589,7 @@ export HELM_RELEASE_NAME="my-release"
 helm upgrade "${HELM_RELEASE_NAME}" . [-f values.yaml] [-f values-ha.yaml] [--set key=value[,key=value]] -n "${NAMESPACE}"
 ```
 
-Be careful, any difference in any of the `values.yaml` files or in the `--set` parameter from the initial installation will be upgraded too.
+Be careful, any difference in any of the `values.yaml` files or in the `--set` parameter from the initial installation will also be upgraded.
 So, if you initially installed Streams with `-f values.yaml` or `-f values-ha.yaml`, you have to specify the same parameters for the upgrade.
 
 Note that, to avoid downtime during the upgrade, it is recommended to have at least `2` replicas of each pod before upgrading the Chart.
