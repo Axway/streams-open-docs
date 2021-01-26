@@ -266,7 +266,7 @@ The following embedded MariaDB configuration values can be updated:
 
 By default, an embedded Kafka cluster is installed on your K8s cluster next to Streams. For production, we recommend that you use an externalized one instead.
 
-To disable the Kafka installation, you can set `embeddedKafka.enabled` to `false` in the Helm Chart installation command.
+To disable the Kafka installation, set `embeddedKafka.enabled` to `false` in the Helm Chart installation command.
 
 Then, according to your choice, configure your [externalized Kafka](#externalized-kafka-configuration) or your [embedded Kafka](#embedded-kafka-configuration).
 
