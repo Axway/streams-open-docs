@@ -38,7 +38,7 @@ Refer to Kubernetes documentation to create [secrets](https://kubernetes.io/docs
 
 ### Helm parameters management
 
-There are different ways to manage your custom [Helm parameters](#helm-parameters) and the best way depends on your use case. You can:
+There are different ways to manage your custom [Helm parameters](#helm-parameters), but the best way depends on your use case. You can:
 
 * use `--set key=value` when running the `helm install` or `helm upgrade` command.
     * Example: `helm install <name> <chart> --set key=value`
