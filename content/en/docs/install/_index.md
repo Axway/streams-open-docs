@@ -47,7 +47,7 @@ There are different ways to manage your custom [Helm parameters](#helm-parameter
     * Example: `helm install -f values.yaml -f values-ha.yaml -f my-values.yaml <name> <chart>`
     * The last `values` file in the command line above will overwrite any conflicting parameter.
 
-Once your choice is made, we recommend to stick to it so that the [helm chart upgrade](#Upgrade) is easier.
+Once your choice is made, we recommend to stick to it so that the [helm chart upgrade](#upgrade) is easier.
 
 ### Kubernetes namespace
 
@@ -79,7 +79,7 @@ To use Axway [DockerHub](https://hub.docker.com/) as your container registry:
 * Set `REGISTRY_USERNAME` with your DockerHub account username.
 * set `REGISTRY_PASSWORD` with your DockerHub account password or an [access token](https://hub.docker.com/settings/security) for more security.
 
-Finally, to use the secret you just created, you have to set the secret `name` in the `imagePullSecrets` array. For instance:
+Finally, to use the secret you just created, you have to set the secret name in the `imagePullSecrets` array. For instance:
 
 * add `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` in the Helm Chart installation command.
 
