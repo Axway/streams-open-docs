@@ -40,7 +40,7 @@ Refer to Kubernetes documentation to create [secrets](https://kubernetes.io/docs
 
 There are different ways to manage your custom [Helm parameters](#helm-parameters), but the best way depends on your use case. You can:
 
-* use `--set key=value` when running the `helm install` or `helm upgrade` command.
+* Use `--set key=value` when running the `helm install` or `helm upgrade` command.
     * Example: `helm install <name> <chart> --set key=value`
 * edit `values.yaml` or `values-ha.yaml` files and change any values you need.
 * create a custom values file (e.g. `my-values.yaml`) where you overwrite the parameters you want and pass it to `helm install` or `helm upgrade` command.
