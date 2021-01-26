@@ -77,7 +77,7 @@ To use Axway [DockerHub](https://hub.docker.com/) as your container registry:
 
 * Set `REGISTRY_SERVER` to `https://index.docker.io/v1/`.
 * Set `REGISTRY_USERNAME` with your DockerHub account username.
-* set `REGISTRY_PASSWORD` with your DockerHub account password or an [access token](https://hub.docker.com/settings/security) for more security.
+* Set `REGISTRY_PASSWORD` with your DockerHub account password or an [access token](https://hub.docker.com/settings/security) for more security.
 
 Finally, to use the secret you just created, you have to set the secret name in the `imagePullSecrets` array. For instance:
 
