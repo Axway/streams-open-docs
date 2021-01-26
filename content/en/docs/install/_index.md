@@ -47,7 +47,7 @@ There are different ways to manage your custom [Helm parameters](#helm-parameter
     * Example: `helm install -f values.yaml -f values-ha.yaml -f my-values.yaml <name> <chart>`
     * The last `values` file in the command line above will overwrite any conflicting parameter.
 
-Once your choice is made, we recommend to stick to it so that the [helm chart upgrade](#upgrade) is easier.
+Once your choice is made, we recommend you stick to it so that the [helm chart upgrade](#upgrade) is easier.
 
 ### Kubernetes namespace
 
