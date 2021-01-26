@@ -272,7 +272,7 @@ Then, according to your choice, configure your [externalized Kafka](#externalize
 
 #### Externalized Kafka configuration
 
-You must provide information to the Streams installation. You should specify `externalizedKafka.bootstrapServers` in the Helm Chart installation command, for instance (escape the comma!):
+You must provide information to the Streams installation. Specify `externalizedKafka.bootstrapServers` in the Helm Chart installation command, for instance (escape the comma!):
 
 * `--set externalizedKafka.bootstrapServers="my.kafka.broker.1:port\,my.broker.2:port[...]"`
 
