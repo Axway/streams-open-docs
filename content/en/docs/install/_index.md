@@ -676,7 +676,7 @@ export REGISTRY_SECRET_NAME="my-registry-secret-name"
 kubectl -n "${NAMESPACE}" delete secrets "${REGISTRY_SECRET_NAME}" streams-database-passwords-secret streams-database-secret streams-kafka-passwords-secret streams-kafka-client-jks-secret "${HELM_RELEASE_NAME}-ingress-nginx-admission
 ```
 
-In case you have provided your own SSL/TLS certificate for the ingress, you can also delete it by doing :
+If you provided your own SSL/TLS certificate for the ingress, you can use the following command to delete it:
 
 ```sh
 export NAMESPACE="my-namespace"
