@@ -411,7 +411,7 @@ To disable SSL/TLS (not recommended for production use), see [Helm parameters](#
 
 #### Ingress CORS
 
-Cross-Origin Resource Sharing (CORS) is enabled by default with the default values defined in the [Nginx documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#enable-cors). You can disable it by setting the [Helm parameters](#helm-parameters) `ingress.annotations.nginx.ingress.kubernetes.io/enable-cors` to `"false"`.
+Cross-Origin Resource Sharing (CORS) is enabled by default with the default values defined in [Nginx documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#enable-cors). You can disable it by setting the [Helm parameters](#helm-parameters) `ingress.annotations.nginx.ingress.kubernetes.io/enable-cors` to `"false"`.
 
 Otherwise, you can configure it by adding annotations to the `ingress` parameter (See the [Nginx documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#enable-cors) for further details).
 
