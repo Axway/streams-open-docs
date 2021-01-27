@@ -83,6 +83,10 @@ Finally, to use the secret you just created, set the secret name in the `imagePu
 
 * Add `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` in the Helm Chart installation command.
 
+In case you want to use a custom Docker Registry, you should modify accordingly the `images.repository` used for Streams images.
+For Axway [DockerHub](https://hub.docker.com/) :
+* Add `--set images.repository=axway` in the Helm Chart installation command.
+
 ### MariaDB settings
 
 By default, an embedded MariaDB database is installed on your K8s cluster next to Streams. For production, we recommend that you use an externalized one instead.
@@ -487,25 +491,11 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 
 ### Helm parameters
 
-#### Streams parameters
+#### Docker registry parameters
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| hub.replicaCount                      | Hub replica count                   | no        | 2             |
-| hub.service.port               | Http port to reach the Streams Topics API | no  | 8080          |
-| subscriberWebhook.replicaCount        | Subscriber Webhook replica count    | no        | 2             |
-| subscriberWebhook.service.port | Http port to subscribe to a topic   | no        | 8080          |
-| publisherHttpPoller.replicaCount      | Publisher HTTP Poller replica count | no        | 2             |
-| publisherHttpPost.enabled             | Enable/Disable Publisher HTTP Post  | no        | true          |
-| publisherHttpPost.replicaCount        | Publisher HTTP Post replica count   | no        | 2             |
-| publisherHttpPost.service.port | Http port to publish to a topic     | no        | 8080          |
-| publisherKafka.enabled                | Enable/Disable Publisher Kafka      | no        | true          |
-| publisherKafka.replicaCount           | Publisher Kafka replica count       | no        | 2             |
-| publisherSfdc.enabled                 | Enable/Disable Publisher SFDC       | no        | false         |
-| publisherSfdc.replicaCount            | Publisher SFDC replica count        | no        | 2             |
-| streams.extraCertificatesSecrets      | List of secrets containing TLS certs to add as trusted by Streams | no | [] |
-| actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
-| streams.serviceArgs.spring.datasource.hikari.maxLifetime | Maximum lifetime in milliseconds for a Streams database connection | no | 280000 |
+| imagePullSecrets[0].name              | Image registry keys                 | no        |               |
 
 #### MariaDB parameters
 
@@ -551,6 +541,27 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | ingress.tlsenabled                    | Enable embedded ingress SSL/TLS     | no        | true          |
 | ingress.tlsSecretName                 | Embedded ingress SSL/TLS certificate secret name | no | streams-ingress-tls-secret |
 | ingress-nginx.controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
+
+#### Streams parameters
+
+| Parameter                             | Description                         | Mandatory | Default value |
+| ------------------------------------- | ----------------------------------- | --------- | ------------- |
+| images.repository                     | Streams Images repository           | yes       | axway         |
+| hub.replicaCount                      | Hub replica count                   | no        | 2             |
+| hub.service.port                | Http port to reach the Streams Topics API | no        | 8080          |
+| subscriberWebhook.replicaCount        | Subscriber Webhook replica count    | no        | 2             |
+| subscriberWebhook.service.port | Http port to subscribe to a topic          | no        | 8080          |
+| publisherHttpPoller.replicaCount      | Publisher HTTP Poller replica count | no        | 2             |
+| publisherHttpPost.enabled             | Enable/Disable Publisher HTTP Post  | no        | true          |
+| publisherHttpPost.replicaCount        | Publisher HTTP Post replica count   | no        | 2             |
+| publisherHttpPost.service.port | Http port to publish to a topic     | no        | 8080          |
+| publisherKafka.enabled                | Enable/Disable Publisher Kafka      | no        | true          |
+| publisherKafka.replicaCount           | Publisher Kafka replica count       | no        | 2             |
+| publisherSfdc.enabled                 | Enable/Disable Publisher SFDC       | no        | false         |
+| publisherSfdc.replicaCount            | Publisher SFDC replica count        | no        | 2             |
+| streams.extraCertificatesSecrets      | List of secrets containing TLS certs to add as trusted by Streams | no | [] |
+| actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
+| streams.serviceArgs.spring.datasource.hikari.maxLifetime | Maximum lifetime in milliseconds for a Streams database connection | no | 280000 |
 
 {{< alert title="Note" >}}
 If you want to configure a parameter from a dependency chart ([MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb), [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka), [Zookeeper](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper) or [Nginx](https://github.com/kubernetes/ingress-nginx)), you need to add the chart prefix name to the command line argument. For example:
