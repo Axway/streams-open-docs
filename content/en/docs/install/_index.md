@@ -372,7 +372,7 @@ Disabling security is not recommended for production.
 
 Depending on your Cloud provider, deploying a load balancer may require additional parameters (refer to your own Cloud provider for further details).
 
-For instance, if you use AWS, you must define the load balancer type (See the [Reference Architecture](/docs/architecture#load-balancer) for further details with regards to this choice) by setting the [Helm parameters](#helm-parameters) `ingress-nginx.controller.service.annotations.service.beta.kubernetes.io/aws-load-balancer-type` to `nlb`. For instance:
+For instance, for AWS, you must define the load balancer type (see the [Reference Architecture](/docs/architecture#load-balancer) for further details with regards to this choice) by setting the [Helm parameters](#helm-parameters) `ingress-nginx.controller.service.annotations.service.beta.kubernetes.io/aws-load-balancer-type` to `nlb`:
 
 * Add `--set "ingress-nginx.controller.service.annotations.service\.beta\.kubernetes\.io/aws-load-balancer-type"="nlb"` in the Helm Chart installation command.
 
