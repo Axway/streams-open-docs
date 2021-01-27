@@ -83,7 +83,7 @@ Finally, to use the secret you just created, set the secret name in the `imagePu
 
 * Add `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` in the Helm Chart installation command.
 
-In case you want to use a custom Docker registry, you should set `images.repository` accordingly to your custom registry (see [Streams parameters](#streams-parameters)).
+To use a custom Docker registry, set `images.repository` accordingly to your custom registry (see [Streams parameters](#streams-parameters)).
 
 ### MariaDB settings
 
