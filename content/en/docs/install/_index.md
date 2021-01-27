@@ -563,6 +563,16 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
 | streams.serviceArgs.spring.datasource.hikari.maxLifetime | Maximum lifetime in milliseconds for a Streams database connection | no | 280000 |
 
+#### Monitoring parameters
+
+| Parameter                             | Description                         | Mandatory | Default value |
+| ------------------------------------- | ----------------------------------- | --------- | ------------- |
+| embeddedMariadb.metrics.enabled       | Activate metrics endpoint for MariaDB | no      | false         |
+| zookeeper.metrics.enabled             | Activate metrics endpoint for Zookeeper | no    | false         |
+| embeddedKafka.metrics.jmx.enabled     | Activate metrics endpoint for Kafka | no        | false         |
+| ingress-nginx.controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
+| actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
+
 {{< alert title="Note" >}}
 If you want to configure a parameter from a dependency chart ([MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb), [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka), [Zookeeper](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper) or [Nginx](https://github.com/kubernetes/ingress-nginx)), you need to add the chart prefix name to the command line argument. For example:
 
@@ -575,10 +585,10 @@ Please refer to the dependency chart's documentation to get the list of paramete
 
 ### Monitoring
 
-Streams ships with monitoring. You can activate metrics with the parameters listed in the table above (under "Activate metrics endpoint"),
+Streams ships with monitoring. You can activate metrics with the parameters listed in [Monitoring parameters](#monitoring-parameters),
 which will open endpoints designed to be scrapped by [Prometheus](https://prometheus.io).
 
-{{< alert title="Note" >}}You may need to add CPU and memory to the containers.{{< /alert >}}
+{{< alert title="Note" >}}Enabled monitoring can increase CPU and memory loads.{{< /alert >}}
 
 ## Upgrade
 
