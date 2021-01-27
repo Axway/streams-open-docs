@@ -203,7 +203,7 @@ By default, MariaDB is configured with [TLS communication](#tls) and [Transparen
 
 To configure the TLS communication between MariaDB and Streams microservices, provide a CA certificate, a server certificate and a server key.
 
-You can follow the official documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate.
+Refer to the official documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate.
 
 {{< alert title="Note" >}}
 The server certificate's Common Name must be set up with *streams-database*.
