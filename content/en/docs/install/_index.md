@@ -613,7 +613,7 @@ Please refer to the dependency chart's documentation to get the list of paramete
 Streams ships with monitoring. You can activate metrics with the parameters listed in [Monitoring parameters](#monitoring-parameters),
 which will open endpoints designed to be scrapped by [Prometheus](https://prometheus.io).
 
-{{< alert title="Note" >}}Enabled monitoring can increase CPU and memory loads.{{< /alert >}}
+{{< alert title="Note" >}}Enabling monitoring can increase CPU and memory loads.{{< /alert >}}
 
 ## Upgrade
 
