@@ -417,7 +417,7 @@ Otherwise, you can configure it by adding annotations to the `ingress` parameter
 
 For example, you can specify another value to the _cors allow origin_ configuration with the `ingress.annotations.nginx.ingress.kubernetes.io/cors-allow-origin` parameter. For instance, if you want to allow cross origin request from the domain name `https://origin-site.com`:
 
-* Add `--set "ingress.annotations.nginx\.ingress\.kubernetes\.io/cors-allow-origin"="http(s)://origin-site.com:port"` in the Helm Chart installation command.
+* Add `--set "ingress.annotations.nginx\.ingress\.kubernetes\.io/cors-allow-origin"="https://origin-site.com"` in the Helm Chart installation command.
 
 ### Add self-signed TLS certificates
 
