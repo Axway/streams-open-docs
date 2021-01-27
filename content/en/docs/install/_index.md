@@ -392,7 +392,7 @@ export NAMESPACE="my-namespace"
 kubectl -n ${NAMESPACE} get ing streams -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'
 ```
 
-Then upgrade your Streams installation with the [Helm parameters](#helm-parameters) `ingress.host` set with the previous retrieved DNS name (Refer to the [Helm upgrade](#upgrade) for further details).
+Then upgrade your Streams installation with the [Helm parameters](#helm-parameters) `ingress.host` set with the DNS name retrieved previously (Refer to the [Helm upgrade](#upgrade) for further details).
 
 #### Ingress TLS
 
