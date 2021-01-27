@@ -379,9 +379,9 @@ For instance, for AWS, you must define the load balancer type (see the [Referenc
 #### Ingress hostname
 
 You must specify a hostname for the ingress installed with Streams helm chart:
- 
- * Use `ingress.host` parameter to specify the hostname. 
- 
+
+* Use `ingress.host` parameter to specify the hostname.
+
 {{< alert title="Note" >}} _k8s.yourdomain.tld_ is used throughout this documentation as an example hostname value.{{< /alert >}}
 
 If you do not have a hostname yet, use a temporary value and edit it later.
@@ -418,7 +418,7 @@ Otherwise, you can configure it by adding annotations to the `ingress` parameter
 
 For example, you can specify a value to the _cors allow origin_ configuration with the `ingress.annotations.nginx.ingress.kubernetes.io/cors-allow-origin` parameter. For instance, if you want to allow cross origin request from the domain name `https://origin-site.com`:
 
- * Add `--set "ingress.annotations.nginx\.ingress\.kubernetes\.io/cors-allow-origin"="https://origin-site.com"` in the Helm Chart installation command.
+* Add `--set "ingress.annotations.nginx\.ingress\.kubernetes\.io/cors-allow-origin"="https://origin-site.com"` in the Helm Chart installation command.
 
 ### Add self-signed TLS certificates
 
