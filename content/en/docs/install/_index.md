@@ -608,7 +608,7 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
 
 {{< alert title="Note" >}}
-If you want to configure a parameter from a dependency chart ([MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb), [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka), [Zookeeper](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper) or [Nginx](https://github.com/kubernetes/ingress-nginx)), you need to add the chart prefix name to the command line argument. For example:
+If you want to configure a parameter from a dependency chart ([MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb), [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka), [Zookeeper](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper) or [Nginx](https://github.com/kubernetes/ingress-nginx)), you must add the chart prefix name to the command line argument. For example:
 
 ```
 --set embeddedMariadb.image.tag=latest --set embeddedKafka.replicaCount=2 `
