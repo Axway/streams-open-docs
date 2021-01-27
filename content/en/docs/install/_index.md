@@ -436,26 +436,6 @@ helm install "${HELM_RELEASE_NAME}" . \
   -n "${NAMESPACE}"
 ```
 
-<<<<<<< HEAD
-{{< alert title="Note" >}}
-You will be required to specify a hostname. If you do not have one yet, you can use any temporary value and edit it later.
-Throughout this documentation, `k8s.yourdomain.tld` is used as an _example_ value.
-You can change it with the `ingress.host` parameter.
-
-Refer to [Ingress host configuration](#ingress-host-configuration) and [Helm parameters](#helm-parameters) for further details.
-{{< /alert >}}
-
-#### Ingress host configuration
-
-{{< alert title="Note" >}}
-Do not use for production.
-{{< /alert >}}
-
-The ingress controller automatically deploys a load balancer on the underlying infrastructure. You may want to use its auto-generated DNS if you are not all set for production yet.
-If this is the case, after the installation has been performed, you can edit the `streams` ingress resource and replace the host `k8s.yourdomain.tld` with the auto-generated DNS of your load balancer.
-
-=======
->>>>>>> ac792a1... fix dead links + add Helm dependencies links + update ingress host setup section
 ### Validate the installation
 
 If Streams is successfully installed, the output of the `helm install` command should be (for non-HA configuration):
