@@ -378,7 +378,7 @@ Throughout this documentation, we are using _k8s.yourdomain.tld_ as an example v
 #### Ingress TLS
 
 SSL/TLS is enabled by default on the embedded Ingress controller. If you don't provide a certificate, SSL will be enabled with a NGINX embedded fake SSL certificate.
-You can provide an SSL/TLS certificate for the domain name you are using (either CN or SAN fields should match the `ingress.host` [Helm parameter](#helm-parameters)):
+You can provide a SSL/TLS certificate for the domain name you are using (either CN or SAN fields should match the `ingress.host` [Helm parameter](#helm-parameters)):
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -622,9 +622,18 @@ Similarly, all [secrets](#secrets-management) created for the Streams release in
 
 ```sh
 export NAMESPACE="my-namespace"
+export HELM_RELEASE_NAME="my-release"
 export REGISTRY_SECRET_NAME="my-registry-secret-name"
 
-kubectl -n "${NAMESPACE}" delete secrets "${REGISTRY_SECRET_NAME}" streams-database-passwords-secret streams-database-secret streams-kafka-passwords-secret streams-kafka-client-jks-secret streams-ingress-tls-secret
+kubectl -n "${NAMESPACE}" delete secrets "${REGISTRY_SECRET_NAME}" streams-database-passwords-secret streams-database-secret streams-kafka-passwords-secret streams-kafka-client-jks-secret "${HELM_RELEASE_NAME}-ingress-nginx-admission
+```
+
+In case you have provided your own SSL/TLS certificate for the ingress, you can also delete it by doing :
+
+```sh
+export NAMESPACE="my-namespace"
+
+kubectl -n "${NAMESPACE}" delete secrets streams-ingress-tls-secret
 ```
 
 ## Backup & Disaster recovery
