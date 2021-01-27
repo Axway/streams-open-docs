@@ -415,7 +415,6 @@ export NAMESPACE="my-namespace"
 export HELM_RELEASE_NAME="my-release"
 
 helm install "${HELM_RELEASE_NAME}" . \
-  [--set <parameter>=<value>] \
   -f values.yaml \
   -n "${NAMESPACE}"
 ```
@@ -430,7 +429,6 @@ export NAMESPACE="my-namespace"
 export HELM_RELEASE_NAME="my-release"
 
 helm install "${HELM_RELEASE_NAME}" . \
-  [--set <parameter>=<value>] \
   -f values.yaml \
   -f values-ha.yaml \
   -n "${NAMESPACE}"
