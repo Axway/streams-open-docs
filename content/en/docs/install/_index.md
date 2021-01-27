@@ -83,10 +83,7 @@ Finally, to use the secret you just created, set the secret name in the `imagePu
 
 * Add `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` in the Helm Chart installation command.
 
-In case you want to use a custom Docker Registry, you should modify accordingly the `images.repository` used for Streams images.
-For Axway [DockerHub](https://hub.docker.com/) :
-
-* Add `--set images.repository=axway` in the Helm Chart installation command.
+In case you want to use a custom Docker registry, you should set `images.repository` accordingly to your custom registry (see [Streams parameters](#streams-parameters)).
 
 ### MariaDB settings
 
@@ -415,7 +412,7 @@ Cross-Origin Resource Sharing (CORS) is enabled by default with the default valu
 
 Otherwise, you can configure it by adding annotations to the `ingress` parameter (See the [Nginx documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#enable-cors) for further details).
 
-For example, you can specify another value to the _cors allow origin_ configuration with the `ingress.annotations.nginx.ingress.kubernetes.io/cors-allow-origin` parameter. For instance, if you want to allow cross origin request from the domain name `https://origin-site.com`:
+For example, you can specify a value to the _cors allow origin_ configuration with the `ingress.annotations.nginx.ingress.kubernetes.io/cors-allow-origin` parameter. For instance, if you want to allow cross origin request from the domain name `https://origin-site.com`:
 
 * Add `--set "ingress.annotations.nginx\.ingress\.kubernetes\.io/cors-allow-origin"="https://origin-site.com"` in the Helm Chart installation command.
 
@@ -436,6 +433,13 @@ kubectl create secret generic "${SECRET_NAME}" -n "${NAMESPACE}" --from-file="${
 ```
 
 * Set the [Helm parameters](#helm-parameters) `streams.extraCertificatesSecrets` to your `$SECRET_NAME`. If you have more than one secrets, they must be separated by a comma.
+
+### Monitoring
+
+Streams ships with monitoring. You can activate metrics with the parameters listed in [Monitoring parameters](#monitoring-parameters),
+which will open endpoints designed to be scrapped by [Prometheus](https://prometheus.io).
+
+{{< alert title="Note" >}}Enabling monitoring may increase CPU and memory loads.{{< /alert >}}
 
 ### Helm install command
 
@@ -572,6 +576,7 @@ Refer to the [Helm parameters](#helm-parameters) for further details.
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
 | images.repository                     | Streams Images repository           | yes       | axway         |
+| imagePullSecrets[0].name              | Image registry keys                 | no        |               |
 | hub.replicaCount                      | Hub replica count                   | no        | 2             |
 | hub.service.port                | Http port to reach the Streams Topics API | no        | 8080          |
 | subscriberWebhook.replicaCount        | Subscriber Webhook replica count    | no        | 2             |
@@ -607,13 +612,6 @@ If you want to configure a parameter from a dependency chart ([MariaDB](https://
 
 Please refer to the dependency chart's documentation to get the list of parameters.
 {{< /alert >}}
-
-### Monitoring
-
-Streams ships with monitoring. You can activate metrics with the parameters listed in [Monitoring parameters](#monitoring-parameters),
-which will open endpoints designed to be scrapped by [Prometheus](https://prometheus.io).
-
-{{< alert title="Note" >}}Enabling monitoring can increase CPU and memory loads.{{< /alert >}}
 
 ## Upgrade
 
