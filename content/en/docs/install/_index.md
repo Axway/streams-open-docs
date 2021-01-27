@@ -85,6 +85,7 @@ Finally, to use the secret you just created, set the secret name in the `imagePu
 
 In case you want to use a custom Docker Registry, you should modify accordingly the `images.repository` used for Streams images.
 For Axway [DockerHub](https://hub.docker.com/) :
+
 * Add `--set images.repository=axway` in the Helm Chart installation command.
 
 ### MariaDB settings
@@ -203,7 +204,7 @@ By default, MariaDB is configured with [TLS communication](#tls) and [Transparen
 
 ###### TLS
 
-In order to configure the TLS communication between MariaDB and Streams microservices, you have to provide a CA certificate, a server certificate and a server key. 
+In order to configure the TLS communication between MariaDB and Streams microservices, you have to provide a CA certificate, a server certificate and a server key.
 
 You can follow the official documentation provided by Mariadb [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificate.
 
