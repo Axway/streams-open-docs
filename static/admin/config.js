@@ -72,14 +72,14 @@ const collections = [{
   label: 'Streams Publishers documentation',
   label_singular: 'page in Streams Publishers section',
   description: 'All pages relating to Streams Publishers.',
-  format: 'frontmatter',
+  format: 'frontmatter'
 }, {
   ...docsDefaults('subscribers', 'streams'),
   name: 'subscribers',
   label: 'Streams Subscribers documentation',
   label_singular: 'page in Streams Subscribers section',
   description: 'All pages relating to Streams Subscribers.',
-  format: 'frontmatter',
+  format: 'frontmatter'
 }, {
   ...docsDefaults('install', 'streams'),
   name: 'install',
@@ -92,7 +92,7 @@ const collections = [{
   label: 'Capacity planning and performance',
   label_singular: 'page in Streams Capacity Planning section',
   description: 'All pages relating to capacity planning and performance tests.',
-  format: 'frontmatter',
+  format: 'frontmatter'
 }, {
   ...docsDefaults('security', 'security'),
   name: 'security',
@@ -105,7 +105,14 @@ const collections = [{
   label: 'Streams Reference Architecture documentation',
   label_singular: 'page in Streams Reference Architecture section',
   description: 'All pages relating to Reference Architecture.',
-  format: 'frontmatter',
+  format: 'frontmatter'
+}, {
+  ...docsDefaults('relnotes', 'relnotes'),
+  name: 'relnotes',
+  label: 'Release notes',
+  label_singular: 'page in Streams release note section',
+  description: 'Release notes for Streams releases.',
+  format: 'frontmatter'
 }];
 
 const cms_branch = window.location.hostname.includes('develop') ? 'develop' : 'master'; // Additional config for a develop branch and develop site
