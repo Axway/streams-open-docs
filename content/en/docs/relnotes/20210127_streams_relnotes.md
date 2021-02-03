@@ -29,19 +29,19 @@ The Webhook Subscription status `subscriptionStatus` is now automatically set to
 Following enhancements have been made to Streams Helm Chart:
 
 * Helm chart dependency images upgraded:
-    * Kafka new docker image tag: 2.6.0-debian-10-r110
-    * Zookeeper new docker image tag: 3.6.2-debian-10-r112
-    * MariaDB new docker image tag: 10.4.17
-    * Nginx new docker image tag: v0.43.0
+    * Kafka new docker image tag: `2.6.0-debian-10-r110`
+    * Zookeeper new docker image tag: `3.6.2-debian-10-r112`
+    * MariaDB new docker image tag: `10.4.17`
+    * Nginx new docker image tag: `v0.43.0`
 
 * Helm chart dependencies upgraded:
-    * Nginx helm chart new version: 3.20.1
+    * Nginx helm chart new version: `3.20.1`
 
 * Helm chart refactoring:
     * All common microservice parameters can be set in a single place.
-    * AdditionalJavaOpts has been added.
-    * JvmMemoryOpts will be computed automatically from k8s resources if not specified.
-    * Ingress host helm chart parameter is now mandatory at installation.
+    * `AdditionalJavaOpts` has been added.
+    * `JvmMemoryOpts` will be computed automatically from k8s resources if not specified.
+    * `ingress.host` helm chart parameter is now mandatory at installation. See [Ingress hostname](/docs/install/#ingress-hostname) section for details.
 
 ## Deprecated features
 <!-- Add features that are deprecated here -->
@@ -56,56 +56,11 @@ To stay current and align our offerings with customer demand and best practices,
 
 ## Fixed issues
 
-### Fixed Known issues
-
 There are no fixed known issue in this version.
 
 ### Fixed security vulnerabilities
 
-| Internal ID  | Case ID | CVE            | Description |
-| ------------ | ------- | -------------- | ----------- |
-| STREAMS-1616 | none    | CVE-2020-8231  | cURL vulnerability on Nginx image |
-| STREAMS-1612 | none    | CVE-2020-28928 | Musl vulnerability on Nginx image |
-| STREAMS-1611 | none    | CVE-2020-1971  | OpenSSL vulnerability on Nginx |
-| STREAMS-1609 | none    | CVE-2020-8286  | cURL vulnerability on Nginx image |
-| STREAMS-1608 | none    | CVE-2020-8285  | cURL vulnerability on Nginx image |
-| STREAMS-1601 | none    | CVE-2020-1971  | OpenSSL vulnerability on MariaDB |
-| STREAMS-1600 | none    | CVE-2020-1971  | OpenSSL vulnerability on Zookeeper |
-| STREAMS-1599 | none    | CVE-2020-1971  | OpenSSL vulnerability on Kafka Third Party |
-| STREAMS-1598 | none    | CVE-2020-1971  | OpenSSL vulnerability on Streams |
-| STREAMS-1510 | none    | CVE-2020-28241 | Libmaxminddb vulnerability on Nginx image |
-| STREAMS-1332 | none    | CVE-2020-24977 | libxml2 vulnerability on Nginx image |
-| STREAMS-1332 | none    | CVE-2019-20633 | patch vulnerability on Nginx image |
-
-## Known issues
-
-The following are known issues for this update.
-
-| Internal ID  | Case ID | Description |
-| ------------ | ------- | ----------- |
-| STREAMS-1546 | none    | Webhook subscription can receive data after its deletion |
-| STREAMS-1544 | none    | Webhook subscription doesn't restart when Kafka/MariaDB reboot too quickly |
-| STREAMS-1582 | none    | Warning logs at startup related to Kafka parameters |
-| STREAMS-1582 | none    | Case sensitivity is different between keys and values in search expression |
-
-## Known security vulnerabilities
-
-| Internal ID  | Case ID | CVE            | Description |
-| ------------ | ------- | -------------- | ----------- |
-| STREAMS-1322 | none    |                | Default Access-Control-Allow-Origin config is unprotective |
-| STREAMS-1540 | none    |                | AppSpider scans must also reference urls with existing topicId and subscriptionId |
-| STREAMS-1397 | none    |                | No TLS connection between master and slave for MariaDB |
-| STREAMS-1236 | none    |                | Kafka data-at-rest unencrypted |
-| STREAMS-1644 | none    | CVE-2020-29361 | p11-kit vulnerability on Kafka image |
-| STREAMS-1645 | none    | CVE-2020-29363 | p11-kit vulnerability on Kafka image |
-| STREAMS-1646 | none    | CVE-2020-29362 | p11-kit vulnerability on Kafka image |
-| STREAMS-1321 | none    | CVE-2019-17571 | Log4j-1.2.17 vulnerability on Kafka and Zookeeper images |
-| STREAMS-1449 | none    | CVE-2020-27216 | Jetty vulnerability on Zookeeper image |
-| STREAMS-1610 | none    | CVE-2020-27218 | Jetty vulnerability on Kafka image |
-| STREAMS-1615 | none    | CVE-2020-27218 | Jetty vulnerability on Zookeeper image |
-| STREAMS-1617 | none    | CVE-2020-8286  | cURL vulnerability on MariaDB image |
-| STREAMS-1607 | none    | CVE-2020-8286  | cURL vulnerability on Kafka image |
-| STREAMS-1613 | none    | CVE-2020-8286  | cURL vulnerability on Zookeeper image |
+There are no fixed security vulnerabilities in this version.
 
 ## Documentation
 
