@@ -27,7 +27,21 @@ The Webhook Subscription status `subscriptionStatus` is now automatically set to
 ### Streams Helm Chart enhancements
 
 Following enhancements have been made to Streams Helm Chart:
-<!-- TODO: Describe impact for customer -->
+
+* Helm chart dependency images upgraded:
+    * Kafka new docker image tag: 2.6.0-debian-10-r110
+    * Zookeeper new docker image tag: 3.6.2-debian-10-r112
+    * MariaDB new docker image tag: 10.4.17
+    * Nginx new docker image tag: v0.43.0
+
+* Helm chart dependencies upgraded:
+    * Nginx helm chart new version: 3.20.1
+
+* Helm chart refactoring:
+    * All common microservice parameters can be set in a single place.
+    * AdditionalJavaOpts has been added.
+    * JvmMemoryOpts will be computed automatically from k8s resources if not specified.
+    * Ingress host helm chart parameter is now mandatory at installation.
 
 ## Deprecated features
 <!-- Add features that are deprecated here -->
