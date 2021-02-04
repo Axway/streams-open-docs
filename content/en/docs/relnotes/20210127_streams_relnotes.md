@@ -56,7 +56,7 @@ To stay current and align our offerings with customer demand and best practices,
 
 ## Fixed issues
 
-There are no fixed known issue in this version.
+There are no fixed issue in this version.
 
 ### Fixed security vulnerabilities
 
