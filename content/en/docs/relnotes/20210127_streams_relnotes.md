@@ -85,12 +85,6 @@ To find all available documents for this product version:
 
 Customers with active support contracts need to log in to access restricted content.
 
-The following reference documents are also available:
-
-* [Streams Security guide](https://docs.axway.com/bundle/Streams_20_SecurityGuide_allOS_en_HTML5/)
-
-<!-- TODO Add links to Streams 3rd Party Librairies here-->
-
 ## Support services
 
 The Axway Global Support team provides worldwide 24 x 7 support for customers with active support agreements.
