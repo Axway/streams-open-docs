@@ -1,5 +1,5 @@
 ---
-title: Streams Jan 2021 Release Notes
+title: Streams January 2021 Release Notes
 linkTitle: Streams Jan 2021 Release Notes
 weight: 150
 date: 2021-02-03
