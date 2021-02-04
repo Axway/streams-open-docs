@@ -7,7 +7,7 @@ date: 2021-02-03
 
 ## Summary
 
-Streams is available as a set of Docker containers deployable in Kubernetes thanks to a Helm Chart.
+Streams is available as a set of Docker containers deployable in Kubernetes by using a Helm Chart.
 For a summary of the system requirements, see [Install Streams](/docs/install/).
 
 ## New features and enhancements
