@@ -26,7 +26,7 @@ The webhook subscription status `subscriptionStatus` is now automatically set to
 
 ### Streams Helm chart enhancements
 
-Following enhancements have been made to Streams Helm chart:
+The following enhancements have been made to Streams Helm chart:
 
 * Helm chart dependency images upgraded:
     * Kafka new docker image tag: `2.6.0-debian-10-r110`
