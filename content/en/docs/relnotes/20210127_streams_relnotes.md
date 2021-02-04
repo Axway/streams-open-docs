@@ -52,7 +52,7 @@ As part of this review, no capabilities have been deprecated.
 ## Removed features
 <!-- Add features that are removed here -->
 
-To stay current and align our offerings with customer demand and best practices, Axway might discontinue support for some capabilities. As part of this review, no capabilities have been removed.
+To stay current and align our offerings with customer demand and best practices, Axway might discontinue support for some capabilities. No capabilities have been removed in this version.
 
 ## Fixed issues
 
