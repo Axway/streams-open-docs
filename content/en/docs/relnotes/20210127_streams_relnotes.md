@@ -32,7 +32,7 @@ Following enhancements have been made to Streams Helm Chart:
     * Kafka new docker image tag: `2.6.0-debian-10-r110`
     * Zookeeper new docker image tag: `3.6.2-debian-10-r112`
     * MariaDB new docker image tag: `10.4.17`
-    * Nginx new docker image tag: `v0.43.0`
+    * NGINX new docker image tag: `v0.43.0`
 
 * Helm chart dependencies upgraded:
     * Nginx helm chart new version: `3.20.1`
