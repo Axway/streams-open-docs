@@ -46,7 +46,7 @@ Following enhancements have been made to Streams Helm chart:
 ## Deprecated features
 <!-- Add features that are deprecated here -->
 
-As part of our software development life cycle we constantly review our Streams offering.
+As part of our software development life cycle, we constantly review our Streams offering.
 As part of this review, no capabilities have been deprecated.
 
 ## Removed features
