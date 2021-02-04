@@ -7,7 +7,7 @@ date: 2021-02-03
 
 ## Summary
 
-Streams is available as a set of Docker containers deployable in Kubernetes by using a Helm Chart.
+Streams is available as a set of Docker containers deployable in Kubernetes by using a Helm chart.
 For a summary of the system requirements, see [Install Streams](/docs/install/).
 
 ## New features and enhancements
@@ -24,9 +24,9 @@ It is important, especially when upgrading from an earlier version, to be aware 
 
 The webhook subscription status `subscriptionStatus` is now automatically set to `suspended` when the webhook endpoint responds with `410 GONE` status code. When subscription status is `suspended`, Streams no longer attempts to send webhook notifications. The subscription can be reactivated by setting `subscriptionStatus` to `active` via a `PATCH` operation on `/subscribers/webhook/subscriptions/{{subscriptionId}}` endpoint.
 
-### Streams Helm Chart enhancements
+### Streams Helm chart enhancements
 
-Following enhancements have been made to Streams Helm Chart:
+Following enhancements have been made to Streams Helm chart:
 
 * Helm chart dependency images upgraded:
     * Kafka new docker image tag: `2.6.0-debian-10-r110`
@@ -35,13 +35,13 @@ Following enhancements have been made to Streams Helm Chart:
     * NGINX new docker image tag: `v0.43.0`
 
 * Helm chart dependencies upgraded:
-    * Nginx helm chart new version: `3.20.1`
+    * NGINX Helm chart new version: `3.20.1`
 
 * Helm chart refactoring:
     * All common microservice parameters can be set in a single place.
     * `AdditionalJavaOpts` has been added.
     * `JvmMemoryOpts` will be computed automatically from k8s resources if not specified.
-    * `ingress.host` helm chart parameter is now mandatory at installation. See [Ingress hostname](/docs/install/#ingress-hostname) section for details.
+    * `ingress.host` Helm chart parameter is now mandatory at installation. See [Ingress hostname](/docs/install/#ingress-hostname) section for details.
 
 ## Deprecated features
 <!-- Add features that are deprecated here -->
