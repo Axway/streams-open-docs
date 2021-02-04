@@ -22,7 +22,7 @@ It is important, especially when upgrading from an earlier version, to be aware 
 
 ### Webhook subscription status
 
-The Webhook Subscription status `subscriptionStatus` is now automatically set to `suspended` when the Webhook endpoint responds with `410 GONE` status code. When subscription is status is `suspended`, Streams no longer attempts to send Webhook notifications. The subscription can be reactivated by setting `subscriptionStatus` to `active` via a `PATCH` operation on `/subscribers/webhook/subscriptions/{{subscriptionId}}` endpoint.
+The webhook subscription status `subscriptionStatus` is now automatically set to `suspended` when the webhook endpoint responds with `410 GONE` status code. When subscription status is `suspended`, Streams no longer attempts to send webhook notifications. The subscription can be reactivated by setting `subscriptionStatus` to `active` via a `PATCH` operation on `/subscribers/webhook/subscriptions/{{subscriptionId}}` endpoint.
 
 ### Streams Helm Chart enhancements
 
