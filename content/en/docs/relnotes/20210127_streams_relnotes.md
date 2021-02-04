@@ -12,7 +12,7 @@ For a summary of the system requirements, see [Install Streams](/docs/install/).
 
 ## New features and enhancements
 <!-- Add the new features here -->
-* [Webhook Exchange History](/docs/subscribers/subscriber-webhook/#getting-the-webhook-notification-history-for-a-subscription) to give API consumers access to the history of exchanges (requests/responses) that occurred between Streams and their Webhook endpoint.
+* [Webhook Exchange History](/docs/subscribers/subscriber-webhook/#getting-the-webhook-notification-history-for-a-subscription) to give API consumers access to the history of exchanges (requests/responses) that occurred between Streams and their webhook endpoint.
 * [Webhook Testing Endpoint](/docs/subscribers/subscriber-webhook/#testing-a-webhook-subscription) to enable API consumers to send test payloads to their webhook endpoint.
 
 ## Important changes
