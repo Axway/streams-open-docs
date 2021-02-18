@@ -47,7 +47,7 @@ description: Use the following parameters to edit your configuration.
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
 | zookeeper.metrics.enabled             | Activate metrics endpoint for Zookeeper | no    | false         |
 
-##Ingress parameters
+## Ingress parameters
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
