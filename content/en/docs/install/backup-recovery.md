@@ -1,6 +1,6 @@
 ---
-title: Uninstalling
-linkTitle: Uninstall
+title: Backup and disaster recovery
+linkTitle: Backup and disaster recovery
 weight: 4
 date: 2021-02-18
 description: Learn how to perform regular backups of data and configurations and that can be used to recover from a disaster.
