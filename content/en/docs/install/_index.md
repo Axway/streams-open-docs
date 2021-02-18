@@ -1,9 +1,10 @@
 ---
-title: Install Streams
+title: Installing Streams
 linkTitle: Install Streams
 weight: 7
-date: 2020-09-18
-description: Install Streams on-premise, or deploy in your private cloud, and learn how to upgrade an existing installation.
+date: 2021-02-18
+hide_readingtime: true
+description: Install Streams on-premise, or deploy in your private cloud.
 ---
 
 ## Prerequisites
@@ -38,7 +39,7 @@ Refer to Kubernetes documentation to create [secrets](https://kubernetes.io/docs
 
 ### Helm parameters management
 
-There are different ways to manage your custom [Helm parameters](#helm-parameters), but the best way depends on your use case. You can:
+There are different ways to manage your custom [Helm parameters](/docs/install/helm-parameters/), but the best way depends on your use case. You can:
 
 * Use `--set key=value` when running the `helm install` or `helm upgrade` command.
     * Example: `helm install <name> <chart> --set key=value`
@@ -47,7 +48,7 @@ There are different ways to manage your custom [Helm parameters](#helm-parameter
     * Example: `helm install -f values.yaml -f values-ha.yaml -f my-values.yaml <name> <chart>`
     * The last `values` file in the command line above will overwrite any conflicting parameter.
 
-Once your choice is made, we recommend you stick to it so that the [helm chart upgrade](#upgrade) is easier.
+Once your choice is made, we recommend you stick to it so that the [helm chart upgrade](/docs/install/upgrade/) is easier.
 
 ### Kubernetes namespace
 
@@ -83,7 +84,7 @@ Finally, to use the secret you just created, set the secret name in the `imagePu
 
 * Add `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` in the Helm Chart installation command.
 
-To use a custom Docker registry, set `images.repository` accordingly to your custom registry (see [Streams parameters](#streams-parameters)).
+To use a custom Docker registry, set `images.repository` accordingly to your custom registry (see [Streams parameters](/docs/install/helm-parameters#streams-parameters)).
 
 ### MariaDB settings
 
@@ -138,7 +139,7 @@ You must now provide information to the Streams installation. Set the following 
 * `externalizedMariadb.port`
 * `externalizedMariadb.rootUsername`
 
-Finally, set the [Helm parameters](#helm-parameters) `streams.serviceArgs.spring.datasource.hikari.maxLifetime` to a value (in seconds) according to the `wait-timeout` value of your MariaDB database (refer to the [database considerations](/docs/architecture#database-considerations) documentation for further details).
+Finally, set the [Helm parameters](/docs/install/helm-parameters/) `streams.serviceArgs.spring.datasource.hikari.maxLifetime` to a value (in seconds) according to the `wait-timeout` value of your MariaDB database (refer to the [database considerations](/docs/architecture#database-considerations) documentation for further details).
 
 ##### Externalized MariaDB passwords
 
@@ -166,7 +167,7 @@ According to your choice, you must:
     export NAMESPACE="my-namespace"
     kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem -n ${NAMESPACE}
     ```
-    * Set the [Helm parameters](#helm-parameters) `externalizedMariadb.tls.twoWay` to `false`.
+    * Set the [Helm parameters](/docs/install/helm-parameters/) `externalizedMariadb.tls.twoWay` to `false`.
 
 * For two-way TLS:
     * Provide the CA certificate, the server certificate and the server key by creating a secret:
@@ -176,7 +177,7 @@ According to your choice, you must:
     ```
 
 * For no TLS:
-    * Set the [Helm parameters](#helm-parameters) `externalizedMariadb.tls.enabled` to `false`.
+    * Set the [Helm parameters](/docs/install/helm-parameters/) `externalizedMariadb.tls.enabled` to `false`.
 
 See the official documentation provided by MariaDB [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificates. Make sure to set the Common Name correctly.
 
@@ -237,7 +238,7 @@ Depending on your security choices, you must:
     export NAMESPACE="my-namespace"
     kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem -n ${NAMESPACE}
     ```
-    * Set the [Helm parameters](#helm-parameters) `embeddedMariadb.encryption.enabled` to `false`.
+    * Set the [Helm parameters](/docs/install/helm-parameters/) `embeddedMariadb.encryption.enabled` to `false`.
 
 * For TDE only:
     * Create a secret containing the [TDE](#transparent-data-encryption-tde) keyfile:
@@ -245,11 +246,11 @@ Depending on your security choices, you must:
     export NAMESPACE="my-namespace"
     kubectl create secret generic streams-database-secret --from-file=KEYFILE=keyfile -n ${NAMESPACE}
     ```
-    * Set the [Helm parameters](#helm-parameters) `embeddedMariadb.tls.enabled` to `false`.
+    * Set the [Helm parameters](/docs/install/helm-parameters/) `embeddedMariadb.tls.enabled` to `false`.
 
 ###### Disable MariaDB security features
 
-To disable MariaDB encryption **and** TLS, you must set the following [Helm parameters](#helm-parameters):
+To disable MariaDB encryption **and** TLS, you must set the following [Helm parameters](/docs/install/helm-parameters/):
 
 * `embeddedMariadb.tls.enabled` and `embeddedMariadb.encryption.enabled` to `false`
 * `embeddedMariadb.master.extraEnvVarsSecret` and `embeddedMariadb.slave.extraEnvVarsSecret` to `null`
@@ -262,9 +263,9 @@ Not recommended for production.
 
 The following embedded MariaDB configuration values can be updated:
 
-* `wait-timeout` - update by setting the [Helm parameters](#helm-parameters) `embeddedMariadb.waitTimeout`.
+* `wait-timeout` - update by setting the [Helm parameters](/docs/install/helm-parameters/) `embeddedMariadb.waitTimeout`.
 
-* `max-connections` - updated by setting the [Helm parameters](#helm-parameters) `embeddedMariadb.maxConnections`.
+* `max-connections` - updated by setting the [Helm parameters](/docs/install/helm-parameters/) `embeddedMariadb.maxConnections`.
 
 {{< alert title="Note" >}}Refer to the [database considerations](/docs/architecture#database-considerations) documentation for further details.{{< /alert >}}
 
@@ -310,10 +311,10 @@ According to your choice, you must:
     kubectl create secret generic streams-kafka-client-jks-secret --from-file=kafka.truststore.jks=${KAFKA_JKS_PATH} --from-literal=jks-password=${KAFKA_JKS_PASSWORD} -n ${NAMESPACE}
     ```
 
-    * Set the [Helm parameters](#helm-parameters) `externalizedKafka.auth.clientUsername` with your Kafka username.
+    * Set the [Helm parameters](/docs/install/helm-parameters/) `externalizedKafka.auth.clientUsername` with your Kafka username.
 
 * For security disabled:
-    * Set the [Helm parameters](#helm-parameters) `externalizedKafka.auth.clientProtocol` to `plaintext`.
+    * Set the [Helm parameters](/docs/install/helm-parameters/) `externalizedKafka.auth.clientProtocol` to `plaintext`.
 
 #### Embedded Kafka configuration
 
@@ -358,7 +359,7 @@ According to your choice, you must:
         ```
 
 * For security disabled:
-    * Set the following [Helm parameters](#helm-parameters):
+    * Set the following [Helm parameters](/docs/install/helm-parameters/):
         * `embeddedKafka.auth.clientProtocol` to `plaintext`
         * `embeddedKafka.auth.interBrokerProtocol` to `plaintext`
         * `embeddedKafka.auth.jaas.existingSecret` to `null`
@@ -372,7 +373,7 @@ Disabling security is not recommended for production.
 
 Depending on your Cloud provider, deploying a load balancer may require additional parameters (refer to your own Cloud provider for further details).
 
-For instance, for AWS, you must define the load balancer type (see the [Reference Architecture](/docs/architecture#load-balancer) for further details with regards to this choice) by setting the [Helm parameters](#helm-parameters) `ingress-nginx.controller.service.annotations.service.beta.kubernetes.io/aws-load-balancer-type` to `nlb`:
+For instance, for AWS, you must define the load balancer type (see the [Reference Architecture](/docs/architecture#load-balancer) for further details with regards to this choice) by setting the [Helm parameters](/docs/install/helm-parameters/) `ingress-nginx.controller.service.annotations.service.beta.kubernetes.io/aws-load-balancer-type` to `nlb`:
 
 * Add `--set "ingress-nginx.controller.service.annotations.service\.beta\.kubernetes\.io/aws-load-balancer-type"="nlb"` in the Helm Chart installation command.
 
@@ -393,12 +394,12 @@ export NAMESPACE="my-namespace"
 kubectl -n ${NAMESPACE} get ing streams -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'
 ```
 
-Then upgrade your Streams installation with the [Helm parameters](#helm-parameters) `ingress.host` set with the DNS name retrieved previously (Refer to the [Helm upgrade](#upgrade) for further details).
+Then upgrade your Streams installation with the [Helm parameters](/docs/install/helm-parameters/) `ingress.host` set with the DNS name retrieved previously (Refer to the [Helm upgrade](/docs/install/upgrade/) for further details).
 
 #### Ingress TLS
 
 SSL/TLS is enabled by default on the embedded Ingress controller. If you don't provide a certificate, SSL will be enabled with a NGINX embedded fake SSL certificate.
-To provide a SSL/TLS certificate for the domain name you are using (either CN or SAN fields should match the `ingress.host` [Helm parameter](#helm-parameters)):
+To provide a SSL/TLS certificate for the domain name you are using (either CN or SAN fields should match the `ingress.host` [Helm parameter](/docs/install/helm-parameters/)):
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -408,11 +409,11 @@ export INGRESS_TLS_CHAIN_PATH="my-chain-path"
 kubectl create secret tls streams-ingress-tls-secret --key=${INGRESS_TLS_KEY_PATH} --cert="${INGRESS_TLS_CHAIN_PATH}" -n "${NAMESPACE}"
 ```
 
-To disable SSL/TLS (not recommended for production use), see [Helm parameters](#helm-parameters).
+To disable SSL/TLS (not recommended for production use), see [Helm parameters](/docs/install/helm-parameters/).
 
 #### Ingress CORS
 
-Cross-Origin Resource Sharing (CORS) is disabled by default. You can enable it by setting the [Helm parameter](#helm-parameters) `ingress.annotations.nginx.ingress.kubernetes.io/enable-cors` to `"true"`:
+Cross-Origin Resource Sharing (CORS) is disabled by default. You can enable it by setting the [Helm parameter](/docs/install/helm-parameters/) `ingress.annotations.nginx.ingress.kubernetes.io/enable-cors` to `"true"`:
 
 * Add `--set-string "ingress.annotations.nginx\.ingress\.kubernetes\.io/enable-cors"="true"` in the Helm Chart installation command (make sure you enter `--set-string`).
 
@@ -438,7 +439,7 @@ export PEM_PATH="my-pem-path"
 kubectl create secret generic "${SECRET_NAME}" -n "${NAMESPACE}" --from-file="${PEM_PATH}" [--from-file=<other-pem-path>]
 ```
 
-* Set the [Helm parameters](#helm-parameters) `streams.extraCertificatesSecrets` to your `$SECRET_NAME`. If you have more than one secrets, they must be separated by a comma.
+* Set the [Helm parameters](/docs/install/helm-parameters/) `streams.extraCertificatesSecrets` to your `$SECRET_NAME`. If you have more than one secrets, they must be separated by a comma.
 
 ### Monitoring
 
@@ -465,7 +466,7 @@ helm install "${HELM_RELEASE_NAME}" . \
 #### HA configuration
 
 The command below deploys Streams on the Kubernetes cluster in High availability (recommend for production).  This can take a few minutes.
-Note that optional [Helm parameters](#helm-parameters) can be specified to customize the installation.
+Note that optional [Helm parameters](/docs/install/helm-parameters/) can be specified to customize the installation.
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -521,178 +522,5 @@ curl "https://k8s.yourdomain.tld/subscribers/sse/topics/{TOPIC_ID}"
 
 {{< alert title="Note" >}}
 The default configuration only accepts incoming HTTP/HTTPS requests to `k8s.yourdomain.tld`.
-Refer to the [Helm parameters](#helm-parameters) for further details.
+Refer to the [Helm parameters](/docs/install/helm-parameters/) for further details.
 {{< /alert >}}
-
-### Helm parameters
-
-#### Docker registry parameters
-
-| Parameter                             | Description                         | Mandatory | Default value |
-| ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| imagePullSecrets[0].name              | Image registry keys                 | no        |               |
-
-#### MariaDB parameters
-
-| Parameter                             | Description                         | Mandatory | Default value |
-| ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| embeddedMariadb.enabled               | MariaDB installed in K8s with the Helm chart. If set to false, the `externalizedMariadb` parameter will be used | no | true |
-| embeddedMariadb.tls.enabled           | MariaDB TLS enabled                 | no        | true          |
-| embeddedMariadb.encryption.enabled    | MariaDB Transparent Data Encryption enabled | no | true         |
-| embeddedMariadb.metrics.enabled       | Activate metrics endpoint for MariaDB | no      | false         |
-| embeddedMariadb.maxConnections        | Maximum number of parallel client connections to MariaDB | no | 500 |
-| embeddedMariadb.waitTimeout           | Time in seconds that MariaDB waits for activity on a connection before closing it | no | 300 |
-| externalizedMariadb.host              | Host of the externalized MariaDB (Only used when `embeddedMariadb.enabled` set to false) | no | my.db.host |
-| externalizedMariadb.port              | Port of the externalized MariaDB (Only used when `embeddedMariadb.enabled` set to false) | no | 3306 |
-| externalizedMariadb.db.name           | Name of the MySQL database used for Streams (Only used when `embeddedMariadb.enabled` set to false) | no | streams |
-| externalizedMariadb.db.user           | Username of the externalized MariaDB used by Streams (Only used when `embeddedMariadb.enabled` set to false) | no | streams |
-| externalizedMariadb.rootUsername      | Root username of the externalized MariaDB used by Streams (Only used when `embeddedMariadb.enabled` set to false) | no | root |
-| externalizedMariadb.tls.enabled       | Externalized MariaDB tls enabled (Only used when `embeddedMariadb.enabled` set to false) | no | true |
-| externalizedMariadb.tls.twoWay        | Externalized MariaDB Two-Way tls enabled (only used when `embeddedMariadb.enabled` set to false) | no | true |
-
-#### Kafka parameters
-
-| Parameter                               | Description                         | Mandatory | Default value |
-| --------------------------------------- | ----------------------------------- | --------- | ------------- |
-| embeddedKafka.enabled                   | Kafka installed in K8s with the Helm chart. If set to false, the `externalizedKafka` parameter will be used | no | true |
-| embeddedKafka.auth.clientProtocol       | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext") | no | sasl_tls |
-| embeddedKafka.auth.interBrokerProtocol  | Authentication protocol internaly used by Kafka broker (must be "sasl_tls" or "plaintext") | no | sasl_tls |
-| embeddedKafka.metrics.jmx.enabled       | Activate metrics endpoint for Kafka | no        | false         |
-| externalizedKafka.auth.clientUsername   | Username of the externalized Kafka used by Streams (only used when `embeddedKafka.enabled` set to false) | no | streams |
-| externalizedKafka.auth.clientProtocol   | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext" ; only used when `embeddedKafka.enabled` set to false)) | no | sasl_tls |
-
-#### Zookeeper parameters
-
-| Parameter                             | Description                         | Mandatory | Default value |
-| ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| zookeeper.metrics.enabled             | Activate metrics endpoint for Zookeeper | no    | false         |
-
-#### Ingress parameters
-
-| Parameter                             | Description                         | Mandatory | Default value |
-| ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| ingress-nginx.enabled                 | Enable/Disable NGINX                | no        | true          |
-| ingress.host | Domain name used for incoming HTTP requests if `ingress-nginx.enabled` is set to true | yes | none |
-| ingress.tlsenabled                    | Enable embedded ingress SSL/TLS     | no        | true          |
-| ingress.tlsSecretName                 | Embedded ingress SSL/TLS certificate secret name | no | streams-ingress-tls-secret |
-| ingress-nginx.controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
-
-#### Streams parameters
-
-| Parameter                             | Description                         | Mandatory | Default value |
-| ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| images.repository                     | Streams Images repository           | yes       | axway         |
-| imagePullSecrets[0].name              | Image registry keys                 | no        |               |
-| hub.replicaCount                      | Hub replica count                   | no        | 2             |
-| hub.service.port                | Http port to reach the Streams Topics API | no        | 8080          |
-| subscriberWebhook.replicaCount        | Subscriber Webhook replica count    | no        | 2             |
-| subscriberWebhook.service.port | Http port to subscribe to a topic          | no        | 8080          |
-| publisherHttpPoller.replicaCount      | Publisher HTTP Poller replica count | no        | 2             |
-| publisherHttpPost.enabled             | Enable/Disable Publisher HTTP Post  | no        | true          |
-| publisherHttpPost.replicaCount        | Publisher HTTP Post replica count   | no        | 2             |
-| publisherHttpPost.service.port | Http port to publish to a topic     | no        | 8080          |
-| publisherKafka.enabled                | Enable/Disable Publisher Kafka      | no        | true          |
-| publisherKafka.replicaCount           | Publisher Kafka replica count       | no        | 2             |
-| publisherSfdc.enabled                 | Enable/Disable Publisher SFDC       | no        | false         |
-| publisherSfdc.replicaCount            | Publisher SFDC replica count        | no        | 2             |
-| streams.extraCertificatesSecrets      | List of secrets containing TLS certs to add as trusted by Streams | no | [] |
-| actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
-| streams.serviceArgs.spring.datasource.hikari.maxLifetime | Maximum lifetime in milliseconds for a Streams database connection | no | 280000 |
-
-#### Monitoring parameters
-
-| Parameter                             | Description                         | Mandatory | Default value |
-| ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| embeddedMariadb.metrics.enabled       | Activate metrics endpoint for MariaDB | no      | false         |
-| zookeeper.metrics.enabled             | Activate metrics endpoint for Zookeeper | no    | false         |
-| embeddedKafka.metrics.jmx.enabled     | Activate metrics endpoint for Kafka | no        | false         |
-| ingress-nginx.controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
-| actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
-
-{{< alert title="Note" >}}
-If you want to configure a parameter from a dependency chart ([MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb), [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka), [Zookeeper](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper) or [Nginx](https://github.com/kubernetes/ingress-nginx)), you must add the chart prefix name to the command line argument. For example:
-
-```
---set embeddedMariadb.image.tag=latest --set embeddedKafka.replicaCount=2 `
-```
-
-Please refer to the dependency chart's documentation to get the list of parameters.
-{{< /alert >}}
-
-## Upgrade
-
-To upgrade your Streams installation with a new minor version or update your configuration:
-
-* Optional: update any of your `values.yaml` files with a custom configuration
-* Upgrade your Streams installation:
-
-```sh
-export NAMESPACE="my-namespace"
-export HELM_RELEASE_NAME="my-release"
-
-helm upgrade "${HELM_RELEASE_NAME}" . [-f values.yaml] [-f values-ha.yaml] [--set key=value[,key=value]] -n "${NAMESPACE}"
-```
-
-Be careful, any difference in any of the `values.yaml` files or in the `--set` parameter from the initial installation will also be upgraded.
-So, if you initially installed Streams with `-f values.yaml` or `-f values-ha.yaml`, you have to specify the same parameters for the upgrade.
-
-To avoid downtime during the upgrade, it is recommended to have at least `2` replicas of each pod before upgrading the Chart.
-
-After an upgrade, a rollback is possible with the following command:
-
-```sh
-export NAMESPACE="my-namespace"
-export HELM_RELEASE_NAME="my-release"
-
-helm rollback "${HELM_RELEASE_NAME}" -n "${NAMESPACE}"
-```
-
-## Uninstallation
-
-To uninstall Streams, run following command:
-
-```sh
-export NAMESPACE="my-namespace"
-export HELM_RELEASE_NAME="my-release"
-
-helm uninstall "${HELM_RELEASE_NAME}" -n "${NAMESPACE}"
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release.
-
-Note that PersistentVolumeClaims required by Kafka and MariaDB are NOT deleted when the release is deleted. If you wish to delete them you can do it with the following command:
-
-```sh
-export NAMESPACE="my-namespace"
-
-kubectl -n "${NAMESPACE}" get persistentvolumeclaims --no-headers=true | awk '/streams/{print $1}' | xargs kubectl delete -n "${NAMESPACE}" persistentvolumeclaims
-```
-
-Similarly, all [secrets](#secrets-management) created for the Streams release installation aren't deleted either with the release uninstallation. To delete them, you can run the following command:
-
-```sh
-export NAMESPACE="my-namespace"
-export HELM_RELEASE_NAME="my-release"
-export REGISTRY_SECRET_NAME="my-registry-secret-name"
-
-kubectl -n "${NAMESPACE}" delete secrets "${REGISTRY_SECRET_NAME}" streams-database-passwords-secret streams-database-secret streams-kafka-passwords-secret streams-kafka-client-jks-secret "${HELM_RELEASE_NAME}-ingress-nginx-admission
-```
-
-If you provided your own SSL/TLS certificate for the ingress, you can use the following command to delete it:
-
-```sh
-export NAMESPACE="my-namespace"
-
-kubectl -n "${NAMESPACE}" delete secrets streams-ingress-tls-secret
-```
-
-## Backup & Disaster recovery
-
-It is essential for the smooth operation of Streams to perform regular backups of data and configurations. There are two kinds of data that we encourage to backup:
-
-* Configurations: Helm chart installation files - If you apply any modification to the default Streams helm chart, such as editing the values.yaml file, we recommend tracking the changes and back up the code in a source code repository. We recommend using git to address this point.
-* Data: persistent volumes of Kubernetes services - We do not provide any procedure to backup/restore volume data as it will mainly depend on your iPaaS. Nevertheless, you can have a look at stash project that enables the backup/restore of stateful applications (MariaDB, Kafka, Zookeeper) into AWS S3 buckets, for instance.
-
-For a disaster recovery procedure, you should have access to cloud resources in another region. Using backed-up configurations/data and Streams helm chart, you should be able to run a new installation in a new Kubernetes cluster in another region.
-
-{{< alert title="Note" >}}The information provided in this section are only guidelines to help you implement your own disaster recovery procedure which needs to take into consideration your own constraints and environments. When disaster strikes, you must be prepared with a run book of specific actions to take that are proven to work, considering your specific environments.{{< /alert >}}
