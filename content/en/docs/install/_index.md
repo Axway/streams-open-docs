@@ -31,13 +31,15 @@ export INSTALL_DIR="MyInstallDirectory"
 cd ${INSTALL_DIR}/helm/streams
 ```
 
-## Helm Chart installation
+## Objectives
 
-### Secrets management
+Learn how to install / configure helm chart and then validate the installation.
+
+## Secrets management
 
 Refer to Kubernetes documentation to create [secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
 
-### Helm parameters management
+## Helm parameters management
 
 There are different ways to manage your custom [Helm parameters](/docs/install/helm-parameters/), but the best way depends on your use case. You can:
 
@@ -50,7 +52,7 @@ There are different ways to manage your custom [Helm parameters](/docs/install/h
 
 Once your choice is made, we recommend you stick to it so that the [helm chart upgrade](/docs/install/upgrade/) is easier.
 
-### Kubernetes namespace
+## Kubernetes namespace
 
 We recommend you deploy Streams components inside a dedicated namespace. To create a namespace, run the following command:
 
@@ -59,7 +61,7 @@ export NAMESPACE="my-namespace"
 kubectl create namespace "${NAMESPACE}"
 ```
 
-### Docker Registry settings
+## Docker Registry settings
 
 Docker images must be hosted on a docker registry accessible from your Kubernetes cluster.
 In order to securely store registry login credentials, we recommend using Kubernetes [secrets](https://kubernetes.io/docs/concepts/configuration/secret/):  
@@ -86,7 +88,7 @@ Finally, to use the secret you just created, set the secret name in the `imagePu
 
 To use a custom Docker registry, set `images.repository` accordingly to your custom registry (see [Streams parameters](/docs/install/helm-parameters#streams-parameters)).
 
-### MariaDB settings
+## MariaDB settings
 
 By default, an embedded MariaDB database is installed on your K8s cluster next to Streams. For production, we recommend that you use an externalized one instead.
 
@@ -94,7 +96,7 @@ To disable MariaDB installation, set `embeddedMariadb.enabled` to `false`.
 
 Then, according to your choice, configure your [externalized MariaDB](#externalized-mariadb-configuration) or your [embedded MariaDB](#embedded-mariadb-configuration).
 
-#### Externalized MariaDB configuration
+### Externalized MariaDB configuration
 
 First of all, you must create a database which will be used by Streams:
 
@@ -141,7 +143,7 @@ You must now provide information to the Streams installation. Set the following 
 
 Finally, set the [Helm parameters](/docs/install/helm-parameters/) `streams.serviceArgs.spring.datasource.hikari.maxLifetime` to a value (in seconds) according to the `wait-timeout` value of your MariaDB database (refer to the [database considerations](/docs/architecture#database-considerations) documentation for further details).
 
-##### Externalized MariaDB passwords
+#### Externalized MariaDB passwords
 
 Passwords are required for Streams microservices to securely connect to Mariadb.
 
@@ -153,7 +155,7 @@ export MARIADB_PASSWORD="my-mariadb-user-password"
 kubectl create secret generic streams-database-passwords-secret --from-literal=mariadb-root-password=${MARIADB_ROOT_PASSWORD} --from-literal=mariadb-password=${MARIADB_PASSWORD} -n ${NAMESPACE}
 ```
 
-##### Externalized MariaDB TLS
+#### Externalized MariaDB TLS
 
 For security purposes, it's highly recommended to enable TLS communication between your database and Streams microservices. You can enable [One-Way TLS](https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-one-way-tls-for-mariadb-clients) or [Two-Way TLS](https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-two-way-tls-for-mariadb-clients).
 
@@ -181,9 +183,9 @@ According to your choice, you must:
 
 See the official documentation provided by MariaDB [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/) to generate self-signed certificates. Make sure to set the Common Name correctly.
 
-#### Embedded MariaDB configuration
+### Embedded MariaDB configuration
 
-##### Embedded MariaDB passwords
+#### Embedded MariaDB passwords
 
 Passwords are required for Streams microservices to securely connect to Mariadb.
 
@@ -196,11 +198,11 @@ export MARIADB_REPLICATION_PASSWORD="my-mariadb-replication-password"
 kubectl create secret generic streams-database-passwords-secret --from-literal=mariadb-root-password=${MARIADB_ROOT_PASSWORD} --from-literal=mariadb-password=${MARIADB_PASSWORD}  --from-literal=mariadb-replication-password=${MARIADB_REPLICATION_PASSWORD} -n ${NAMESPACE}
 ```
 
-##### Embedded MariaDB Security
+#### Embedded MariaDB Security
 
 By default, MariaDB is configured with [TLS communication](#tls) and [Transparent Data Encryption](#transparent-data-encryption-tde) enabled.
 
-###### TLS
+##### TLS
 
 To configure the TLS communication between MariaDB and Streams microservices, provide a CA certificate, a server certificate and a server key.
 
@@ -210,7 +212,7 @@ Refer to the official documentation provided by Mariadb [Certificate Creation wi
 The server certificate's Common Name must be set up with *streams-database*.
 {{< /alert >}}
 
-###### Transparent Data Encryption (TDE)
+##### Transparent Data Encryption (TDE)
 
 In order to configure the Mariadb data-at-rest encryption, you must provide a keyfile.
 The keyfile must contain a 32-bit integer identifier followed by the hex-encoded encryption key separated by semicolon such as: `<encryption_key_id>`;`<hex-encoded_encryption_key>`.
@@ -221,7 +223,7 @@ To generate the keyfile, run the following command:
 echo "1;$(openssl rand -hex 32)" > keyfile
 ```
 
-###### MariaDB security configuration
+##### MariaDB security configuration
 
 Depending on your security choices, you must:
 
@@ -248,7 +250,7 @@ Depending on your security choices, you must:
     ```
     * Set the [Helm parameters](/docs/install/helm-parameters/) `embeddedMariadb.tls.enabled` to `false`.
 
-###### Disable MariaDB security features
+##### Disable MariaDB security features
 
 To disable MariaDB encryption **and** TLS, you must set the following [Helm parameters](/docs/install/helm-parameters/):
 
@@ -259,7 +261,7 @@ To disable MariaDB encryption **and** TLS, you must set the following [Helm para
 Not recommended for production.
 {{< /alert >}}
 
-##### Embedded MariaDB tuning
+#### Embedded MariaDB tuning
 
 The following embedded MariaDB configuration values can be updated:
 
@@ -269,7 +271,7 @@ The following embedded MariaDB configuration values can be updated:
 
 {{< alert title="Note" >}}Refer to the [database considerations](/docs/architecture#database-considerations) documentation for further details.{{< /alert >}}
 
-### Kafka settings
+## Kafka settings
 
 By default, an embedded Kafka cluster is installed on your K8s cluster next to Streams. For production, we recommend that you use an externalized one instead.
 
@@ -277,13 +279,13 @@ To disable the Kafka installation, set `embeddedKafka.enabled` to `false` in the
 
 Then, according to your choice, configure your [externalized Kafka](#externalized-kafka-configuration) or your [embedded Kafka](#embedded-kafka-configuration).
 
-#### Externalized Kafka configuration
+### Externalized Kafka configuration
 
 You must provide information to the Streams installation. Specify `externalizedKafka.bootstrapServers` in the Helm Chart installation command, for instance (escape the comma!):
 
 * `--set externalizedKafka.bootstrapServers="my.kafka.broker.1:port\,my.broker.2:port[...]"`
 
-##### Externalized Kafka security settings
+#### Externalized Kafka security settings
 
 For security purposes, it’s highly recommended to enable [SASL authentication](https://docs.confluent.io/current/kafka/authentication_sasl/index.html#authentication-with-sasl) and [TLS encryption](https://docs.confluent.io/current/kafka/encryption.html#encryption-with-ssl) for Kafka clients and brokers. You can enable both or neither.
 
@@ -316,9 +318,9 @@ According to your choice, you must:
 * For security disabled:
     * Set the [Helm parameters](/docs/install/helm-parameters/) `externalizedKafka.auth.clientProtocol` to `plaintext`.
 
-#### Embedded Kafka configuration
+### Embedded Kafka configuration
 
-##### Embedded Kafka security settings
+#### Embedded Kafka security settings
 
 For security purposes, it’s highly recommended to enable [SASL authentication](https://docs.confluent.io/current/kafka/authentication_sasl/index.html#authentication-with-sasl) and [TLS encryption](https://docs.confluent.io/current/kafka/encryption.html#encryption-with-ssl) for Kafka clients and brokers. You can enable both or neither.
 
@@ -369,7 +371,7 @@ According to your choice, you must:
 Disabling security is not recommended for production.
 {{< /alert >}}
 
-### Ingress settings
+## Ingress settings
 
 Depending on your Cloud provider, deploying a load balancer may require additional parameters (refer to your own Cloud provider for further details).
 
@@ -377,7 +379,7 @@ For instance, for AWS, you must define the load balancer type (see the [Referenc
 
 * Add `--set "ingress-nginx.controller.service.annotations.service\.beta\.kubernetes\.io/aws-load-balancer-type"="nlb"` in the Helm Chart installation command.
 
-#### Ingress hostname
+### Ingress hostname
 
 You must specify a hostname for the ingress installed with Streams helm chart:
 
@@ -396,7 +398,7 @@ kubectl -n ${NAMESPACE} get ing streams -o jsonpath='{.status.loadBalancer.ingre
 
 Then upgrade your Streams installation with the [Helm parameters](/docs/install/helm-parameters/) `ingress.host` set with the DNS name retrieved previously (Refer to the [Helm upgrade](/docs/install/upgrade/) for further details).
 
-#### Ingress TLS
+### Ingress TLS
 
 SSL/TLS is enabled by default on the embedded Ingress controller. If you don't provide a certificate, SSL will be enabled with a NGINX embedded fake SSL certificate.
 To provide a SSL/TLS certificate for the domain name you are using (either CN or SAN fields should match the `ingress.host` [Helm parameter](/docs/install/helm-parameters/)):
@@ -411,7 +413,7 @@ kubectl create secret tls streams-ingress-tls-secret --key=${INGRESS_TLS_KEY_PAT
 
 To disable SSL/TLS (not recommended for production use), see [Helm parameters](/docs/install/helm-parameters/).
 
-#### Ingress CORS
+### Ingress CORS
 
 Cross-Origin Resource Sharing (CORS) is disabled by default. You can enable it by setting the [Helm parameter](/docs/install/helm-parameters/) `ingress.annotations.nginx.ingress.kubernetes.io/enable-cors` to `"true"`:
 
@@ -423,7 +425,7 @@ For example, you can specify a value to the _cors allow origin_ configuration wi
 
 * Add `--set "ingress.annotations.nginx\.ingress\.kubernetes\.io/cors-allow-origin"="https://origin-site.com"` in the Helm Chart installation command.
 
-### Add self-signed TLS certificates
+## Add self-signed TLS certificates
 
 TLS endpoints to which Streams services connect must have a valid TLS certificate. If your endpoints uses self-signed certificates, you must add them to Streams services as trusted certificates.
 
@@ -441,16 +443,16 @@ kubectl create secret generic "${SECRET_NAME}" -n "${NAMESPACE}" --from-file="${
 
 * Set the [Helm parameters](/docs/install/helm-parameters/) `streams.extraCertificatesSecrets` to your `$SECRET_NAME`. If you have more than one secrets, they must be separated by a comma.
 
-### Monitoring
+## Monitoring
 
 Streams ships with monitoring. You can activate metrics with the parameters listed in [Monitoring parameters](#monitoring-parameters),
 which will open endpoints designed to be scrapped by [Prometheus](https://prometheus.io).
 
 {{< alert title="Note" >}}Enabling monitoring may increase CPU and memory loads.{{< /alert >}}
 
-### Helm install command
+## Helm install command
 
-#### Non HA configuration
+### Non HA configuration
 
 The command below deploys Streams components in a non-HA configuration with 1 replica per microservices (not recommended for production use). This can take a few minutes.
 
@@ -463,7 +465,7 @@ helm install "${HELM_RELEASE_NAME}" . \
   -n "${NAMESPACE}"
 ```
 
-#### HA configuration
+### HA configuration
 
 The command below deploys Streams on the Kubernetes cluster in High availability (recommend for production).  This can take a few minutes.
 Note that optional [Helm parameters](/docs/install/helm-parameters/) can be specified to customize the installation.
@@ -478,7 +480,7 @@ helm install "${HELM_RELEASE_NAME}" . \
   -n "${NAMESPACE}"
 ```
 
-### Validate the installation
+## Validate the installation
 
 If Streams is successfully installed, the output of the `helm install` command should be (for non-HA configuration):
 

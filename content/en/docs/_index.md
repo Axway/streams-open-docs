@@ -21,7 +21,7 @@ Get involved in Streams (v2) Early Adopter Program to:
 * Understand and contribute to how Axway wants to transform how organizations create, manage and consume APIs.
 * Understand the value of upcoming releases, provide feedback, concrete requirements & use cases.
 * Implement pilots to get proof points on expected value and hands-on experience on upcoming releases.
-* Contribute to [Streams Roadmap](https://community.axway.com/s/amplify-streams) with new ideas, and influence the direction.
+* Contribute to Streams Roadmap with new ideas, and influence the direction.
 
 Contact your sales representative to join the community today!
 
