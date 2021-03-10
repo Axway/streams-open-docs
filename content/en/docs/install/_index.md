@@ -361,6 +361,7 @@ According to your choice, you must:
     * Set the following [Helm parameters](#helm-parameters):
         * `embeddedKafka.auth.clientProtocol` to `plaintext`
         * `embeddedKafka.auth.interBrokerProtocol` to `plaintext`
+        * `embeddedKafka.auth.saslInterBrokerMechanism` to `plain`
         * `embeddedKafka.auth.jaas.existingSecret` to `null`
         * `embeddedKafka.extraEnvVars` to `null`
 
