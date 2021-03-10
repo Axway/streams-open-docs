@@ -363,6 +363,7 @@ According to your choice, you must:
         * `embeddedKafka.auth.interBrokerProtocol` to `plaintext`
         * `embeddedKafka.auth.jaas.existingSecret` to `null`
         * `embeddedKafka.extraEnvVars` to `null`
+        * `embeddedKafka.auth.saslInterBrokerMechanism` to `plain`
 
 {{< alert title="Note" >}}
 Disabling security is not recommended for production.
