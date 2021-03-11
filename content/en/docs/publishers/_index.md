@@ -45,7 +45,28 @@ Setting `alwayOn` flag to `false`, can be useful to enable the publisher to avoi
 
 ### Publishing payloads
 
-A publisher can publishes updated version of a data set over time.
+A publisher support two different payload type that you can manage when creating a topic.
+
+```json
+{
+  "name": "myTopic",
+  "publisher": {
+    "type": "http-poller|http-post|kafka|sfdc",
+    "config": { ... },
+    "payload": {
+      "type": "snapshot|event"
+    }
+    ...
+  }
+  ...
+}
+```
+
+{{< alert title="Note" >}} Payload type cannot be changed after the topic has been created.{{< /alert >}}
+
+#### Snapshot payload
+
+Publisher can publishes updated version of a data set over time. Those data can either be Json Array or Json Object.
 Whenever a change is detected compare to the previous payload published, Streams will notify subscribers based on their subscription modes.
 
 Let's take a real life example with a subscriber being subscribed using `snapshot-patch` mode.
@@ -104,3 +125,7 @@ As a result subscribers to the topic will receive a `patch` event:
 ```
 
 JSON patch is not the only subscription mode available. See [Subscription modes](../subscribers#subscription-modes) section for more details.
+
+#### Event payload
+
+Publisher can also publish new events over time representing by a Json Object. Those event will be routed to all subscribers defined in your topic without any changes. In this case the subscription mode is forced to `event`.  See [Subscription modes](../subscribers#subscription-modes) section for more details.

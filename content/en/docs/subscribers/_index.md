@@ -42,6 +42,7 @@ Each subscriber can choose between different modes that determine how the data w
 |-------------------|-------------|
 | snapshot-only     | Streams sends to the subscriber the entire content (snapshot), each time a change is detected. Note: Use this mode for content which is infrequently and fully updated. |
 | snapshot-patch    | Streams sends an initial event containing the entire content (snapshot), subsequent events will contain only the changed fields in the form of an array of JSON Patch operations. Refer to [Understanding snapshot-patch mode](#understanding-snapshot-patch-mode) section for details. |
+| event    | Streams sends the published events as is over time. |
 | **default** | If more than one mode is allowed, the default subscription mode is the one defined by defaultSubscriptionMode of the subscriber's configuration. |
 
 For each subscriber's config, the allowedSubscriptionModes and defaultSubscriptionMode attributes must be specified.
@@ -63,6 +64,8 @@ For each subscriber's config, the allowedSubscriptionModes and defaultSubscripti
   ...
 }
 ```
+
+{{< alert title="Note" >}} The allowed and default subscription modes depend on the publisher payload type defined for the topic.{{< /alert >}}
 
 ### Restricting subscription mode
 
@@ -89,6 +92,13 @@ You can restrict the list of subscription modes in which subscribers can subscri
 ### Defining default subscription mode
 
 You can define the default subscription mode thanks to `defaultSubscriptionMode` attribute in associated subscriber's configuration.
+In case you don't define a default subscription mode, one is defined either by using the first item of allowedSubscriptionModes or depending on the publisher payload type.
+
+| Publisher Payload type | defaultSubscriptionMode |
+|----------------|--------------|
+| snapshot | snapshot-patch |
+| event | event |
+
 The default subscription mode will be used when client does not specify any subscription mode in its subscription request.
 
 ### Understanding snapshot-patch mode
