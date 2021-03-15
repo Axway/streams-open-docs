@@ -445,7 +445,7 @@ kubectl create secret generic "${SECRET_NAME}" -n "${NAMESPACE}" --from-file="${
 
 ## Monitoring
 
-Streams ships with monitoring. You can activate metrics with the parameters listed in [Monitoring parameters](#monitoring-parameters),
+Streams ships with monitoring. You can activate metrics with the parameters listed in [Monitoring parameters](/docs/install/helm-parameters/#monitoring-parameters),
 which will open endpoints designed to be scrapped by [Prometheus](https://prometheus.io).
 
 {{< alert title="Note" >}}Enabling monitoring may increase CPU and memory loads.{{< /alert >}}
