@@ -91,7 +91,7 @@ data: {
 ### Understanding `snapshot-patch` subscription mode
 
 The subscribers will only receive **incremental updates** computed by Streams between the last two payloads published in the topic.
-For example, in the context of a brokerage app, if a user subscribes to 10 different symbols, each symbol contains different fields such as identifier, last, bid, ask. But only a few of them really change at every market tick. When using `snapshot-patch` mode, Streams will automatically computes the differential data and sends the corresponding JSON patch operations to the subscribers avoiding to resend fields that have not changed.
+For example, in the context of a brokerage app, if a user subscribes to 10 different symbols, each symbol contains different fields such as identifier, last, bid, ask. But only a few of them really change at every market tick. When using `snapshot-patch` mode, Streams automatically computes the differential data and sends the corresponding JSON patch operations to the subscribers, avoiding the resending of fields that have not changed.
 
 Once an initial `snapshot` event has been emitted, it will be followed by `patch` events when Streams detects a change in the published content.
 
