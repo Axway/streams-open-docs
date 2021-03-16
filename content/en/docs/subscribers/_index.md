@@ -8,7 +8,7 @@ description: Learn how to use the different types of Subscribers supported by St
 
 Streams supports different subscriber types. In order for a subscriber to receive events associated to a topic, it must subscribe either via:
 
-* **Server-Sent Events** which enables Streams to push data to subscribers (e.g client applications) through a persistent HTTP connection.
+* **Server-Sent Events** which enables Streams to push data to subscribers (e.g., client applications) through a persistent HTTP connection.
 * **Webhook** which enables Streams to notify the subscribers via a HTTP Post request performed against the registered endpoint (webhook receiver).
 * **Kafka** which enables Streams to publish data to a Kafka topic/partition.
 
