@@ -231,7 +231,7 @@ You can restrict the list of subscription modes in which subscribers can subscri
 
 ## Defining default subscription mode
 
-You can define the default subscription mode thanks to `defaultSubscriptionMode` attribute in associated subscriber's configuration.
+You can define the default subscription mode with the  `defaultSubscriptionMode` attribute in the associated subscriber's configuration.
 In case you don't define a default subscription mode, one is defined either by using the first item of `allowedSubscriptionModes` or depending on the publisher payload type.
 
 | Publisher Payload type | defaultSubscriptionMode |
