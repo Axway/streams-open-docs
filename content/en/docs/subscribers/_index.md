@@ -34,7 +34,7 @@ If no subscribers is defined, the [SSE subscriber](../subscribers/subscriber-sse
 ## Subscription modes
 
 The subscription mode determines with which format and type of events the data will be sent to the subscribers.
-Each subscriber can choose between different modes that determine how the data will be transmitted as far as the selected subscription mode is allowed in subscriber's configuration.
+Each subscriber can choose between different modes that determine how the data will be transmitted (based on the selected subscription mode in the subscriber's configuration).
 
 | Publisher Payload type | Subscription mode | Description |
 |------------------------|-------------------|-------------|
