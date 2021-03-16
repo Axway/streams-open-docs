@@ -24,7 +24,7 @@ When creating your topic, you must define a name for the topic, the type of publ
 
 ### Type of data source
 
-Streams can adapt to different type of data sources. We distinguish data sources that provide a full data set (snapshot) from data sources able to directly publish events.
+Streams can adapt to different type of data sources. We distinguish between data sources that provide a full data set (snapshot) and data sources that directly publish events.
 
 #### Configuring the type of data source
 
