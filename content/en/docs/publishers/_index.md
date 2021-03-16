@@ -89,7 +89,7 @@ For example, a change on the Lead object in Salesforce:
 }
 ```
 
-When configured to connect to an `event` data source, Streams does not compute **incremental updates** and acts as an Event Hub that forwards events as is to all subscribers defined in the topic. In this case the subscription mode is forced to `event`. See [Subscription modes](../subscribers#subscription-modes) section for more details.
+When configured to connect to an `event` data source, Streams does not compute **incremental updates** but acts as an Event Hub that forwards events, as is, to all subscribers defined in the topic. In this case, the subscription mode is forced to `event`. See [Subscription modes](../subscribers#subscription-modes) section for more details.
 
 ### Publishing in the absence of a subscriber
 
