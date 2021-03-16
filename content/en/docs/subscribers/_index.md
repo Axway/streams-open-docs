@@ -239,5 +239,5 @@ In case you don't define a default subscription mode, one is defined either by u
 | snapshot               | snapshot-patch          |
 | event                  | event                   |
 
-* The default subscription mode will be used when client does not specify define any subscription mode in its subscription request.
+* The default subscription mode will be used when the client does not define a subscription mode in the subscription request.
 * If the subscriber subscribes to a topic with a subscription mode not allowed, its subscription request will be rejected.
