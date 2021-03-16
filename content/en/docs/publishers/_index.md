@@ -28,7 +28,7 @@ Streams can adapt to different type of data sources. We distinguish between data
 
 #### Configuring the type of data source
 
-You must configure Streams in regards of the type of data source it will connect to and set the `payload.type` attribute accordingly:
+You must configure Streams in regards to the type of data source it will connect to and set the `payload.type` attribute accordingly:
 
 ```json
 {
