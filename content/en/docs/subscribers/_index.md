@@ -38,7 +38,7 @@ Each subscriber can choose between different modes that determine how the data w
 
 | Publisher Payload type | Subscription mode | Description |
 |------------------------|-------------------|-------------|
-| `snapshot`   | `snapshot-only`   | Streams sends to the subscriber the entire content (snapshot), each time a change is detected. Note: Use this mode for content which is infrequently and fully updated. |
+| `snapshot`   | `snapshot-only`   | Streams sends to the subscriber the entire content (snapshot) each time a change is detected. Note: Use this mode for content which is infrequently and fully updated. |
 | `snapshot`   | `snapshot-patch`  | Streams sends an initial event containing the entire content (snapshot), subsequent events will contain only the changed fields in the form of an array of JSON Patch operations. Refer to [Understanding snapshot-patch mode](#understanding-snapshot-patch-mode) section for details. |
 | `event`      | `event`           | Streams sends the published events as is over time. |
 
