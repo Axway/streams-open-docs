@@ -95,7 +95,7 @@ When configured to connect to an `event` data source, Streams does not compute *
 
 You can control whether or not the publisher is allowed to publish content if no subscriber is currently subscribed to the topic.
 Setting `alwayOn` flag to `true` will ensures that any new subscriber will receive the latest published value as soon as they reconnect.
-Setting `alwayOn` flag to `false`, can be useful to enable the publisher to avoid publishing content in a topic which is currently not subscribed by any subscriber.
+Setting `alwayOn` flag to `false` enables the publisher to avoid publishing content in a topic that is currently not subscribed by any subscriber.
 
 ```json
 {
