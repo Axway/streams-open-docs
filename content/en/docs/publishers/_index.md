@@ -72,7 +72,7 @@ When configured to connect to a `snapshot` data source, Streams will always comp
 
 These data sources do not provide the complete data set but the events representing the change that occurred on a specific resource in the form of a Json Object.
 
-For example a change on the Lead object in Salesforce:
+For example, a change on the Lead object in Salesforce:
 
 ```json
 {
