@@ -50,7 +50,7 @@ You must configure Streams in regards to the type of data source it will connect
 
 To used when the data source provides an updated version of a full data set over time.
 
-For example an Rest Json API providing the list of top 10 headline news. In case of breaking news, an additional entry will be added to the response of the API, replacing the oldest entry:
+For example, a REST JSON API providing the list of the top 10 headline news. In case of breaking news, an additional entry will be added to the response of the API, replacing the oldest entry:
 
 ```json
 [{
