@@ -620,7 +620,7 @@ Apache Kafka is used as stream-processing layer.
 Source Docker image:
 
 * Repository: bitnami/kafka
-* Tag: 2.7.0-debian-10-r33
+* Tag: 2.7.0-debian-10-r65
 
 Pod name: `streams-kafka`.
 
@@ -637,7 +637,7 @@ Apache ZooKeeper is used by our microservices and by Kafka (when embedded in ins
 Source Docker image:
 
 * Repository: bitnami/zookeeper
-* Tag: 3.6.2-debian-10-r112
+* Tag: 3.6.2-debian-10-r156
 
 Pod name: `streams-zookeeper`
 
@@ -654,7 +654,7 @@ MariaDB is our persistence layer.
 Source Docker image:
 
 * Repository: bitnami/mariadb
-* Tag: 10.4.17
+* Tag: 10.4.18
 
 Pod names:
 
