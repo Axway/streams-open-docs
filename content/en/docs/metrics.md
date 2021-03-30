@@ -23,7 +23,7 @@ and has immediate meaning.
 * Counter: The more common metric type in Prometheus, a counter is a number that _always goes up_ (that restriction makes
 it more reliable). It is usually differentiated into a rate to get an indication of how fast that number is going up.
 
-* Timer : A timer records tasks durations by keeping a counter of completed tasks, and a counter of their cumulated time.
+* Timer: A timer records task durations by keeping a counter of completed tasks, and a counter of their cumulated time.
 Utilize those metrics through ratios and rates.
 
 ## Metrics
