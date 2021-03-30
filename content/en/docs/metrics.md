@@ -42,7 +42,7 @@ and unique identifier, as well as some custom labels when suitable.
 | Counter | streams_input_events_total              | Number of messages received by a Streams service          | rate(streams_input_events_total{streams_name="streams-subscriber-sse"}[2m]) |
 | Counter | streams_output_events_total             | Number of messages emitted by a Streams service           | rate(streams_input_events_total{data_type="patch"}[2m]) |
 
-The keyword global here refers to the fact that some metrics should have the same value everywhere,
+The keyword "global" refers to the scope of the metrics. Global metrics are reported by all instances of the same type of service and will have the same value regardless of the service instance that reports them;
 whereas, the others only give information about the service instance which reported them.
 
 ### Default Spring Boot metrics
