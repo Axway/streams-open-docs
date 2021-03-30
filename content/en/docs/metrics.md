@@ -35,7 +35,7 @@ and unique identifier, as well as some custom labels when suitable.
 
 | Type    | Metric                                  | Description                                               | Example usage |
 | -----   | --------------------------              | ---------------------------                               | ------        |
-| Gauge   | streams_global_topics                   | Number of topics in total on Streams                      |  |
+| Gauge   | streams_global_topics                   | Total number of Streams topics                       |  |
 | Gauge   | streams_global_persistent_subscriptions | Total number of persistent subscriptions    | streams_global_persistent_subscriptions{subscription_status="active"} |
 | Gauge   | streams_topics                          | Number of active topics on a Streams publisher            | streams_topics{streams_service="publisher-http-poller"} |
 | Gauge   | streams_active_subscriptions            | Number of active subscriptions on a Streams subscriber    | streams_topics{streams_service="subscriber-sse"} |
