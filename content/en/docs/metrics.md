@@ -50,7 +50,7 @@ whereas the others only give information about the service which reported them.
 Our frameworks provide a lot of additional metrics. However,
 we recommend you pay attention to the following timers:
 
-* http\_client\_request\_seconds : timer of the web requests _emitted_ by Streams (i.e. polling or webhook).
+* http\_client\_request\_seconds : timer of the web requests _emitted_ by Streams (i.e., polling or webhook).
 
 * http\_server\_requests\_seconds : timer of the web requests _received_ and handled by Streams (i.e., REST API, self-health check, and http-post).
 
