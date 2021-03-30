@@ -48,7 +48,7 @@ whereas the others only give information about the service which reported them.
 ### Default Spring Boot metrics
 
 Our frameworks provide a lot of additional metrics. However,
-we recommend you pay attention to the following timers in particular.
+we recommend you pay attention to the following timers:
 
 * http\_client\_request\_seconds : timer of the web requests _emitted_ by Streams (i.e. polling or webhook).
 
