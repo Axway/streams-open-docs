@@ -56,7 +56,7 @@ we recommend you pay attention to the following timers:
 
 These are split into a sum of cumulated seconds spent waiting for the requests,
 a counter of the number of the number of requests, and here a gauge of the maximum request time over the latest period of time.
-For instance, to get the average incoming requests processing time, you could plot :
+For example, to get the average incoming requests' processing time, you could plot:
 
 ```sh
 rate(http_server_requests_seconds_sum[2m])/rate(http_server_requests_seconds_count[2m])
