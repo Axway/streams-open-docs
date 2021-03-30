@@ -43,7 +43,7 @@ and unique identifier, as well as some custom labels when suitable.
 | Counter | streams_output_events_total             | Number of messages emitted by a Streams service           | rate(streams_input_events_total{data_type="patch"}[2m]) |
 
 The keyword global here refers to the fact that some metrics should have the same value everywhere,
-whereas the others only give information about the service which reported them.
+whereas, the others only give information about the service instance which reported them.
 
 ### Default Spring Boot metrics
 
