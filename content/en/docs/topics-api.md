@@ -6,25 +6,6 @@ date: 2019-04-02
 description: The Streams Topics API provides programmatic access to efficiently manage pub/sub topics.
 ---
 
-## DevOps integration
-
-Streams supports your DevOps processes by providing an API for you to automate your configuration and deployments.
-Streams Topics API enables you to fully manage every aspects of Streams topics.
-
-### What is DevOps?
-
-DevOps can be defined as a combination of people, processes, and technology that increases your organization's ability to quickly deliver quality services to your customers.
-
-* **People**: Developers, operations, product owners, testers, infrastructure engineers, and so on, all work together collaboratively as a team to build and deliver the service.
-* **Process**: Continuous improvement of the process to deliver a quality service is key.
-* **Technology**: Tools that automate the manual processes and integrate with other tools to make it easier and faster to develop, package, test, release, and deploy the service.
-
-### Streams DevOps approach
-
-Taking a DevOps approach to Event-Driven API management with Streams enables you to streamline the delivery of updates or new capabilities in your services to your customers and partners.
-
-Streams is a CI/CD native solution that you can easily snap in to your existing DevOps pipeline. Simplify and customize how you manage Event-Driven APIs across your organization by using the Streams Topics API to manage every aspects of your topics.
-
 ## Streams Topics API Overview
 
 Our API is organized around REST and has predictable, resource-oriented URLs, and uses HTTP response codes to indicate API errors.
@@ -44,11 +25,11 @@ You can specify how many items to receive (up to a maximum of `1000`) via the `p
 All paginated queries start at page `1`.
 Pagination information is provided by the `Link` header of a response.
 
-For example, let's make a request to the `GET /api/v1/topics` endpoint with the `pageSize` query param set to `5`.
-The `Link` header will contain a list of element separated by comma pointing to the different pages allowing you to navigate easily.
+For example, let's make a request to the `GET /streams/hub/api/v1/topics` endpoint with the `pageSize` query param set to `5`.
+The `links` section of the response body will contain a list of element separated by comma pointing to the different pages allowing you to navigate easily.
 
 ```
-</api/v1/topics?page=1&pageSize=5>; rel="self"; pageSize="5",</api/v1/topics?page=1&pageSize=5>; rel="first"; pageSize="5",</api/v1/topics?page=2&pageSize=5>; rel="next"; pageSize="5",</api/v1/topics?page=5&pageSize=5>; rel="last"; pageSize="5"
+"links":{"self":"/streams/hub/api/v1/topics?page=1&pageSize=5", "first":"/streams/hub/api/v1/topics?page=1&pageSize=5","next":"/streams/hub/api/v1/topics?page=2&pageSize=5","last":"/streams/hub/api/v1/topics?page=5&pageSize=5"}
 ```
 
 #### Navigating through the pages

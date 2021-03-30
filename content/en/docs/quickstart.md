@@ -27,7 +27,7 @@ Each topic must be associated with one [publisher](../publishers/) in charge of 
 
 To start, we will create a topic associated with a [HTTP Poller publisher](../publishers/publisher-http-poller) which will be responsible for polling a target URL and automatically publishing the content retrieved at the given polling period.
 
-To do so, perform a request `POST /topics` endpoint with following body:
+To do so, perform a request `POST /streams/hub/api/v1/topics` endpoint with following body:
 
 ```json
 {
@@ -55,7 +55,7 @@ We will use Streams [SSE Subscriber](../subscribers/subscriber-sse) by simply op
 export BASE_URL="base-url"
 export TOPIC_ID="topic-id"
 
-curl "${BASE_URL}/subscribers/sse/topics/${TOPIC_ID}"
+curl "${BASE_URL}/streams/subscribers/sse/api/v1/topics/${TOPIC_ID}"
 ```
 
 `base-url` depends on your deployment configuration. `topic-id` is the unique identifier of the topic automatically assigned on creation.

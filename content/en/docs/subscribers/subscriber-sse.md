@@ -32,7 +32,7 @@ You can quickly try by opening a terminal and running the following cURL command
 export BASE_URL="base-url"
 export TOPIC_ID="topic-id"
 
-curl -v "${BASE_URL}/subscribers/sse/topics/${TOPIC_ID}
+curl -v "${BASE_URL}/streams/subscribers/sse/api/v1/topics/${TOPIC_ID}
 ```
 
 where `topic-id` is the unique ID of the topic you want to subscribe to.
@@ -57,7 +57,7 @@ SSE flow can be compressed on demand using gzip or deflate methods. The followin
 export BASE_URL="base-url"
 export TOPIC_ID="topic-id"
 
-curl -v "${BASE_URL}/subscribers/sse/topics/${TOPIC_ID}" -H "Accept-Encoding: gzip, deflate" --compress
+curl -v "${BASE_URL}/streams/subscribers/sse/api/v1/topics/${TOPIC_ID}" -H "Accept-Encoding: gzip, deflate" --compress
 ```
 
 If this header is not provided, the default behavior is not to compress the data flow.

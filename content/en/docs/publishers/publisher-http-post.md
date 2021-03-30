@@ -13,7 +13,7 @@ Streams will then take care of storing and forwarding events to the subscribers.
 
 ### http-post publisher configuration
 
-In order to create a Streams topic associated to a http-post publisher, you must perform a request on `POST /topics` endpoint.
+In order to create a Streams topic associated to a http-post publisher, you must perform a request on `POST /streams/hub/api/v1/topics` endpoint.
 
 The http-post publisher does not require any specific configuration. The config attribute being mandatory, it must be provided with and empty object:
 
@@ -31,7 +31,7 @@ The http-post publisher does not require any specific configuration. The config 
 
 Once the topic is created, the external component can publish payloads using the following endpoint:
 
-`POST /publishers/http-post/topics/{{topicId}}`
+`POST /streams/publishers/http-post/api/v1/topics/{{topicId}}`
 
 Note that only `application/json` content is accepted. Below an example of a valid json payload:
 
@@ -60,5 +60,5 @@ Below the list of HTTP status codes that can be returned when trying to publish:
 | 404 Not found | Indicates that the requested URL does not exists. |
 | 405 Method Not Allowed | Indicates that the method used by Publisher is not allowed. Only POST verb is supported. |
 |  406 Not Acceptable | Indicates that the server cannot produce a response matching the list of acceptable values defined in the request's content negotiation headers. Only application/json is supported. |
-| 410 Gone | Indicates that the topic to which publisher is trying to publish is no longer available because of the following reasons: (1) The topic is configured with the alwaysOn option set to false and no subscriber is currently subscribed to the topic. As the number of subscribers can vary over time, we recommend to implement an exponential back off strategy but not to stop publication permanently. (2) The topic has been permanently deleted. In order to verify that a topic still exists or has been permanently deleted, you can request `GET /topics` endpoint. |
+| 410 Gone | Indicates that the topic to which publisher is trying to publish is no longer available because of the following reasons: (1) The topic is configured with the alwaysOn option set to false and no subscriber is currently subscribed to the topic. As the number of subscribers can vary over time, we recommend to implement an exponential back off strategy but not to stop publication permanently. (2) The topic has been permanently deleted. In order to verify that a topic still exists or has been permanently deleted, you can request `GET /streams/hub/api/v1/topics` endpoint. |
 | 415 Unsupported Media Type | Indicates that the server refuses to accept the request because the payload format defined in the publish request is in an unsupported format. Only application/json is supported. |

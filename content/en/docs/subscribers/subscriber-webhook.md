@@ -14,7 +14,7 @@ Streams Webhook subscriber allows clients to be notified via HTTP Post requests 
 
 You can create a webhook subscription by making an HTTP Post request on the following endpoint:
 
-`POST /subscribers/webhook/topics/{topicID}/subscriptions`
+`POST /streams/subscribers/webhook/api/v1/topics/{topicID}/subscriptions`
 
 The body must contain a JSON webhook subscription configuration as follow:
 
@@ -50,7 +50,7 @@ Below the list of HTTP status codes that can be returned when trying to create a
 
 In order to stop the sending of webhook notifications, simply delete the corresponding webhook subscription with following request:
 
-`DELETE /subscribers/webhook/subscriptions/{subscriptionId}`
+`DELETE /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}`
 
 ### Delete status codes
 
@@ -65,7 +65,7 @@ Below the list of HTTP status codes that can be returned when deleting the webho
 
 In order to get existing subscription, simply do the following GET request:
 
-`GET /subscribers/webhook/subscriptions/{subscriptionId}`
+`GET /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}`
 
 ### Get status codes
 
@@ -80,7 +80,7 @@ Below the list of HTTP status codes that can be returned when trying to get a ka
 
 You can test a webhook subscription by making an HTTP Post request on the following endpoint:
 
-`POST /subscribers/webhook/subscriptions/{subscriptionId}/test`
+`POST /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}/test`
 
 The request body can contain any JSON object and will be sent as is to the identified subscription.
 
@@ -98,11 +98,11 @@ The following HTTP status codes can be returned while testing a webhook subscrip
 
 Use the following `GET` request to retrieve the history of webhook exchanges (requests and responses) that have occurred for a subscription in the last 5 minutes:
 
-`GET /subscribers/webhook/subscriptions/{subscriptionId}/exchanges`
+`GET /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}/exchanges`
 
 You can change the default time window of the retrieved history with `start` and `end` query params (date-time in ISO 8601 format, eg: 2021-01-10T10:13:32Z):
 
-`GET /subscribers/webhook/subscriptions/{subscriptionId}/exchanges?start=2021-01-10T10:13:30Z&end=2021-01-10T10:13:32Z`
+`GET /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}/exchanges?start=2021-01-10T10:13:30Z&end=2021-01-10T10:13:32Z`
 
 ### Webhook exchanges status codes
 
@@ -160,7 +160,7 @@ The following HTTP status codes can be returned when interacting with the exchan
 
 To get existing subscriptions, do the following GET request on your topic:
 
-`GET /subscribers/webhook/topics/{topicId}/subscriptions`
+`GET /streams/subscribers/webhook/api/v1/topics/{topicId}/subscriptions`
 
 See [pagination](/docs/topics-api/#pagination) to get more information about how pagination and sorting works.
 
