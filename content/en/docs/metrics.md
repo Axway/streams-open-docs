@@ -30,7 +30,7 @@ Utilize those metrics through ratios and rates.
 
 ### Custom metrics
 
-We have implemented the following custom metrics. All of those have labels describing the service name, type,
+The following custom metrics have been implemented. They include labels describing the service name, type,
 and unique identifier, as well as some custom labels when suitable.
 
 | Type    | Metric                                  | Description                                               | Example usage |
