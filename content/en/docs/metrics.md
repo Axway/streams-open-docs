@@ -14,7 +14,7 @@ These are meant to be scraped by a Prometheus server and visualized through Graf
 
 ## Metrics types
 
-Although we assume your are familiare with the Prometheus metrics format, here is a quick explanation of the main
+Although we assume you are familiar with the Prometheus metrics format, here is a quick explanation of the main
 metrics types produced by [micrometer](https://micrometer.io/docs/registry/prometheus) and how to make use of them:
 
 * Gauge: A gauge is the simplest metric to use. Like the fuel gauge of a car, it is a value that goes up and down
