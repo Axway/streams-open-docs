@@ -53,7 +53,7 @@ The http-poller publisher requires some specific configuration.
 
 ### Removing http headers from configuration
 
-In order to remove a header from publisher's configuration, set its value to `null` when calling `PATCH /streams/hub/api/v1/topics/{{topicId}}` endpoint:
+To remove a header from publisher's configuration, set its value to `null` when calling `PATCH /streams/hub/api/v1/topics/{{topicId}}` endpoint:
 
 ```json
 {

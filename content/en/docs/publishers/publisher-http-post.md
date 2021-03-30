@@ -13,9 +13,9 @@ Streams will then take care of storing and forwarding events to the subscribers.
 
 ### http-post publisher configuration
 
-In order to create a Streams topic associated to a http-post publisher, you must perform a request on `POST /streams/hub/api/v1/topics` endpoint.
+To create a Streams topic associated to a http-post publisher, you must perform a request on `POST /streams/hub/api/v1/topics` endpoint.
 
-The http-post publisher does not require any specific configuration. The config attribute being mandatory, it must be provided with and empty object:
+The http-post publisher does not require any specific configuration. Since the config attribute is mandatory, it must be provided with and empty object:
 
 ```json
 {
@@ -33,7 +33,7 @@ Once the topic is created, the external component can publish payloads using the
 
 `POST /streams/publishers/http-post/api/v1/topics/{{topicId}}`
 
-Note that only `application/json` content is accepted. Below an example of a valid json payload:
+Note that only `application/json` content is accepted. Below is an example of a valid json payload:
 
 ```json
 {

@@ -26,7 +26,7 @@ All paginated queries start at page `1`.
 Pagination information is provided by the `Link` header of a response.
 
 For example, let's make a request to the `GET /streams/hub/api/v1/topics` endpoint with the `pageSize` query param set to `5`.
-The `links` section of the response body will contain a list of element separated by comma pointing to the different pages allowing you to navigate easily.
+The `links` section of the response body will contain a list of elements, separated by commas, pointing to the different pages, allowing you to navigate easily.
 
 ```
 "links":{"self":"/streams/hub/api/v1/topics?page=1&pageSize=5", "first":"/streams/hub/api/v1/topics?page=1&pageSize=5","next":"/streams/hub/api/v1/topics?page=2&pageSize=5","last":"/streams/hub/api/v1/topics?page=5&pageSize=5"}

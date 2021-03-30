@@ -50,7 +50,7 @@ Below the list of HTTP status codes that can be returned when trying to create a
 
 ## Stopping a kafka subscription
 
-In order to stop sending record to your kafka cluster, simply delete the corresponding kafka subscription with following request:
+To stop sending record to your kafka cluster, simply delete the corresponding kafka subscription with the following request:
 
 `DELETE /streams/subscribers/kafka/api/v1/subscriptions/{subscriptionId}`
 
@@ -65,7 +65,7 @@ Below the list of HTTP status codes that can be returned when deleting the kafka
 
 ## Getting a kafka subscription
 
-In order to get an existing subscription, simply do the following GET request:
+To get an existing subscription, use the following GET request:
 
 `GET /streams/subscribers/kafka/api/v1/subscriptions/{subscriptionId}`
 
@@ -102,7 +102,7 @@ Use the following `GET` request on your topic to get existing subscriptions:
 
 `GET /streams/subscribers/kafka/api/v1/topics/{topicId}/subscriptions`
 
-See [pagination](/docs/topics-api/#pagination) to get more information about how pagination and sorting work.
+See [pagination](/docs/topics-api/#pagination) for more information on how pagination and sorting work.
 
 The field names allowed for sorting are :
 

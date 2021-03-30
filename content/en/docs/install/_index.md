@@ -515,7 +515,7 @@ my-release-subscriber-webhook-84469bd68f-lqxgk                 1/1     Running  
 In order to check that Streams is running:
 
 1. Create a topic with default settings using the provided Postman collection and Postman environment.
-As the provided environment is configured with `${loadbalancer.baseUrl}` for all base URLs, you need to reconfigure it with your own DNS, for instance `baseUrl` will be changed from `${loadbalancer.baseUrl}` to `https://k8s.yourdomain.tld` and so on for other variables.
+As the provided environment is configured with `${loadbalancer.baseUrl}` for all base URLs, you must reconfigure it with your own DNS. For example, `baseUrl` will be changed from `${loadbalancer.baseUrl}` to `https://k8s.yourdomain.tld` and so on for other variables.
 2. Try to subscribe with SSE to your topic:
 
 ```sh

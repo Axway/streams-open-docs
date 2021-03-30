@@ -48,7 +48,7 @@ Below the list of HTTP status codes that can be returned when trying to create a
 
 ## Stopping a webhook subscription
 
-In order to stop the sending of webhook notifications, simply delete the corresponding webhook subscription with following request:
+To stop the sending of webhook notifications, simply delete the corresponding webhook subscription with following request:
 
 `DELETE /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}`
 
@@ -63,7 +63,7 @@ Below the list of HTTP status codes that can be returned when deleting the webho
 
 ## Getting a webhook subscription
 
-In order to get existing subscription, simply do the following GET request:
+To get an existing subscription, use the following GET request:
 
 `GET /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}`
 
@@ -158,11 +158,11 @@ The following HTTP status codes can be returned when interacting with the exchan
 
 ## Getting webhook subscriptions for a topic
 
-To get existing subscriptions, do the following GET request on your topic:
+To get existing subscriptions, use the following GET request on your topic:
 
 `GET /streams/subscribers/webhook/api/v1/topics/{topicId}/subscriptions`
 
-See [pagination](/docs/topics-api/#pagination) to get more information about how pagination and sorting works.
+See [pagination](/docs/topics-api/#pagination) for more information on how pagination and sorting works.
 
 The field names allowed for sorting are :
 
