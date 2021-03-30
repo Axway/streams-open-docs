@@ -55,7 +55,7 @@ we recommend you pay attention to the following timers:
 * http\_server\_requests\_seconds : timer of the web requests _received_ and handled by Streams (i.e. REST api, self health-check, and http-post).
 
 These are split into a sum of cumulated seconds spent waiting for the requests,
-a counter of the number of the number of requests, and here a gauge of the maximum request time over the latest period of time.
+a counter of the number of requests, and a gauge of the maximum request time over the latest period of time.
 For example, to get the average incoming requests' processing time, you could plot:
 
 ```sh
