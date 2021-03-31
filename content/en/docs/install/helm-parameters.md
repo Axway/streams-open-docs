@@ -6,12 +6,6 @@ date: 2021-02-18
 description: Use the following parameters to edit your configuration.
 ---
 
-## Docker registry parameters
-
-| Parameter                             | Description                         | Mandatory | Default value |
-| ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| imagePullSecrets[0].name              | Image registry keys                 | no        |               |
-
 ## MariaDB parameters
 
 | Parameter                             | Description                         | Mandatory | Default value |
@@ -38,6 +32,7 @@ description: Use the following parameters to edit your configuration.
 | embeddedKafka.auth.clientProtocol       | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext") | no | sasl_tls |
 | embeddedKafka.auth.interBrokerProtocol  | Authentication protocol internaly used by Kafka broker (must be "sasl_tls" or "plaintext") | no | sasl_tls |
 | embeddedKafka.metrics.jmx.enabled       | Activate metrics endpoint for Kafka | no        | false         |
+| externalizedKafka.bootstrapServers  | List of externalized Kafka bootstrap servers used by Streams (only used when `embeddedKafka.enabled` set to false) | no | my.broker.1:port,my.broker.2:port |
 | externalizedKafka.auth.clientUsername   | Username of the externalized Kafka used by Streams (only used when `embeddedKafka.enabled` set to false) | no | streams |
 | externalizedKafka.auth.clientProtocol   | Authentication protocol used by Kafka client (must be "sasl_tls" or "plaintext" ; only used when `embeddedKafka.enabled` set to false)) | no | sasl_tls |
 
@@ -65,8 +60,16 @@ description: Use the following parameters to edit your configuration.
 | imagePullSecrets[0].name              | Image registry keys                 | no        |               |
 | hub.replicaCount                      | Hub replica count                   | no        | 2             |
 | hub.service.port                | Http port to reach the Streams Topics API | no        | 8080          |
+| subscriberSse.enabled             | Enable/Disable Subscriber SSE  | no        | true          |
+| subscriberSse.replicaCount        | Subscriber SSE replica count    | no        | 2             |
+| subscriberSse.service.port | Http port to subscribe to a topic          | no        | 8080          |
+| subscriberWebhook.enabled             | Enable/Disable Subscriber Webhook  | no        | true          |
 | subscriberWebhook.replicaCount        | Subscriber Webhook replica count    | no        | 2             |
 | subscriberWebhook.service.port | Http port to subscribe to a topic          | no        | 8080          |
+| subscriberKafka.enabled             | Enable/Disable Subscriber Kafka  | no        | true          |
+| subscriberKafka.replicaCount        | Subscriber Kafka replica count    | no        | 2             |
+| subscriberKafka.service.port | Http port to subscribe to a topic          | no        | 8080          |
+| publisherHttpPoller.enabled             | Enable/Disable Publisher HTTP Poller  | no        | true          |
 | publisherHttpPoller.replicaCount      | Publisher HTTP Poller replica count | no        | 2             |
 | publisherHttpPost.enabled             | Enable/Disable Publisher HTTP Post  | no        | true          |
 | publisherHttpPost.replicaCount        | Publisher HTTP Post replica count   | no        | 2             |
