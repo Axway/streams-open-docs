@@ -28,11 +28,11 @@ Following change on Streams Rest APIs have been made to fully comply with Axway 
 
 | Component | Old Path | New Path  |
 | --------- | -------- | --------- |
-| Hub (Topics) | /api/v1/topics | /streams/hub/api/v1/topics |
-| Webhook Subscriber | /subscribers/webhook/topics/{{topicId}}/subscriptions | /streams/subscribers/webhook/api/v1/topics/{{topicId}}/subscriptions |
-| Kafka Subscriber | /subscribers/kafka/topics/{{topicId}}/subscriptions | /streams/subscribers/kafka/api/v1/topics/{{topicId}}/subscriptions |
-| HTTP Post Publisher | /publishers/http-post/topics/{{topicId}} | /streams/publishers/http-post/api/v1/topics/{{topicId}} |
-| SSE Subscriber | /streams/subscribers/sse/topics/{{topicId}} | /streams/subscribers/sse/api/v1/topics/{{topicId}} |
+| Hub (Topics) | /api/v1 | /streams/hub/api/v1 |
+| Webhook Subscriber | /subscribers/webhook | /streams/subscribers/webhook/api/v1 |
+| Kafka Subscriber | /subscribers/kafka/topics | /streams/subscribers/kafka/api/v1 |
+| HTTP Post Publisher | /publishers/http-post | /streams/publishers/http-post/api/v1 |
+| SSE Subscriber | /streams/subscribers/sse | /streams/subscribers/sse/api/v1 |
 
 #### Pagination
 
@@ -78,10 +78,6 @@ Following capabilities related to Streams Rest APIs are no longer supported:
 ## Fixed issues
 
 There are no fixed issue in this version.
-
-### Fixed security vulnerabilities
-
-There are no fixed security vulnerabilities in this version.
 
 ## Documentation
 
