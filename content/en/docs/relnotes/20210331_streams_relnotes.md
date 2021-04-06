@@ -50,19 +50,15 @@ APIs returning a list of elements now return a JSON Objet as root element and an
 The following enhancements have been made to Streams Helm chart:
 
 * Helm chart dependency images upgraded:
-    * Kafka new docker image tag: `2.6.0-debian-10-r110`
-    * Zookeeper new docker image tag: `3.6.2-debian-10-r112`
-    * MariaDB new docker image tag: `10.4.17`
-    * NGINX new docker image tag: `v0.43.0`
+    * Kafka new docker image tag: `2.7.0-debian-10-r104`
+    * Zookeeper new docker image tag: `3.6.2-debian-10-r186`
+    * MariaDB new docker image tag: `10.4.18-debian-10-r35`
 
 * Helm chart dependencies upgraded:
-    * NGINX Helm chart new version: `3.20.1`
+    * Kafka Helm chart new version: `12.7.1`
 
 * Helm chart refactoring:
-    * All common microservice parameters can be set in a single place.
-    * `AdditionalJavaOpts` has been added.
-    * `JvmMemoryOpts` will be computed automatically from k8s resources if not specified.
-    * `ingress.host` Helm chart parameter is now mandatory at installation. See [Ingress hostname](/docs/install/#ingress-hostname) section for details.
+    * CORS headers disabled by default (see [Ingress CORS](/docs/install/#ingress-cors)
 
 ## Deprecated features
 <!-- Add features that are deprecated here -->
