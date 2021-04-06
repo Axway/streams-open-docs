@@ -1,7 +1,7 @@
 ---
 title: Streams March 2021 Release Notes
 linkTitle: Streams March 2021 Release Notes
-weight: 150
+weight: 149
 date: 2021-02-03
 ---
 
@@ -58,7 +58,7 @@ The following enhancements have been made to Streams Helm chart:
     * Kafka Helm chart new version: `12.7.1`
 
 * Helm chart refactoring:
-    * CORS headers disabled by default (see [Ingress CORS](/docs/install/#ingress-cors)
+    * CORS headers disabled by default (see [Ingress CORS](/docs/install/#ingress-cors))
 
 ## Deprecated features
 <!-- Add features that are deprecated here -->
