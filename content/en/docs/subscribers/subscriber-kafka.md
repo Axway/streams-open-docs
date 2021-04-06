@@ -14,7 +14,7 @@ Streams Kafka subscriber allows clients to route events published in a Streams t
 
 You can create a kafka subscription by making an HTTP Post request on the following endpoint:
 
-`POST /subscribers/kafka/topics/{topicID}/subscriptions`
+`POST /streams/subscribers/kafka/api/v1/topics/{topicID}/subscriptions`
 
 The body must contain a JSON kafka subscription configuration as follow:
 
@@ -50,9 +50,9 @@ Below the list of HTTP status codes that can be returned when trying to create a
 
 ## Stopping a kafka subscription
 
-In order to stop sending record to your kafka cluster, simply delete the corresponding kafka subscription with following request:
+To stop sending record to your kafka cluster, simply delete the corresponding kafka subscription with the following request:
 
-`DELETE /subscribers/kafka/subscriptions/{subscriptionId}`
+`DELETE /streams/subscribers/kafka/api/v1/subscriptions/{subscriptionId}`
 
 ### Delete status codes
 
@@ -65,9 +65,9 @@ Below the list of HTTP status codes that can be returned when deleting the kafka
 
 ## Getting a kafka subscription
 
-In order to get an existing subscription, simply do the following GET request:
+To get an existing subscription, use the following GET request:
 
-`GET /subscribers/kafka/subscriptions/{subscriptionId}`
+`GET /streams/subscribers/kafka/api/v1/subscriptions/{subscriptionId}`
 
 ### Get status codes
 
@@ -82,7 +82,7 @@ List of HTTP status codes that can be returned when trying to get a kafka subscr
 
 You can test a Kafka subscription by making an HTTP POST request on the following endpoint:
 
-`POST /subscribers/kafka/subscriptions/{subscriptionId}/test`
+`POST /streams/subscribers/kafka/api/v1/subscriptions/{subscriptionId}/test`
 
 The request body can contain any JSON object and will be sent as is to the identified subscription.
 
@@ -100,9 +100,9 @@ The following HTTP status codes can be returned while testing a Kafka subscripti
 
 Use the following `GET` request on your topic to get existing subscriptions:
 
-`GET /subscribers/kafka/topics/{topicId}/subscriptions`
+`GET /streams/subscribers/kafka/api/v1/topics/{topicId}/subscriptions`
 
-See [pagination](/docs/topics-api/#pagination) to get more information about how pagination and sorting work.
+See [pagination](/docs/topics-api/#pagination) for more information on how pagination and sorting work.
 
 The field names allowed for sorting are :
 

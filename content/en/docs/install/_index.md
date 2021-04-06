@@ -393,8 +393,7 @@ It is recommended that for testing purposes you install Streams and use the DNS 
 
 ```sh
 export NAMESPACE="my-namespace"
-
-kubectl -n ${NAMESPACE} get ing streams -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'
+kubectl get ingress -o=jsonpath='{.items[?(@.metadata.name=="streams-hub")].status.loadBalancer.ingress[0].hostname}' -n ${NAMESPACE}
 ```
 
 Then upgrade your Streams installation with the [Helm parameters](/docs/install/helm-parameters/) `ingress.host` set with the DNS name retrieved previously (Refer to the [Helm upgrade](/docs/install/upgrade/) for further details).
@@ -516,11 +515,11 @@ my-release-subscriber-webhook-84469bd68f-lqxgk                 1/1     Running  
 In order to check that Streams is running:
 
 1. Create a topic with default settings using the provided Postman collection and Postman environment.
-As the provided environment is configured with localhost, you may need to reconfigure it with your own DNS, for instance `baseUrl` will be changed from `http://localhost:9001` to `https://k8s.yourdomain.tld` and so on for other variables.
+As the provided environment is configured with `${loadbalancer.baseUrl}` for all base URLs, you must reconfigure it with your own DNS. For example, `baseUrl` will be changed from `${loadbalancer.baseUrl}` to `https://k8s.yourdomain.tld` and so on for other variables.
 2. Try to subscribe with SSE to your topic:
 
 ```sh
-curl "https://k8s.yourdomain.tld/subscribers/sse/topics/{TOPIC_ID}"
+curl "https://k8s.yourdomain.tld/streams/subscribers/sse/api/v1/topics/{TOPIC_ID}"
 ```
 
 {{< alert title="Note" >}}
