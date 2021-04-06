@@ -37,7 +37,6 @@ Following change on Streams Rest APIs have been made to fully comply with Axway 
 #### Pagination
 
 Links related to [pagination](/docs/topics-api/#Pagination) are now provided as part of the response body.
-Links related information provided as `Link` Header is no longer provided.
 
 #### Json Object as root element of the response body
 
@@ -73,8 +72,12 @@ As part of this review, no capabilities have been deprecated.
 
 ## Removed features
 <!-- Add features that are removed here -->
+ To stay current and align our offerings with customer demand and best practices, Axway might discontinue support for some capabilities.
 
-To stay current and align our offerings with customer demand and best practices, Axway might discontinue support for some capabilities. No capabilities have been removed in this version.
+Following capabilities related to Streams Rest APIs are no longer supported:
+
+* Old Rest API Paths, refer to [New Rest API Paths](/docs/relnotes/20210331_streams_relnotes/#new-rest-api-paths).
+* Pagination related information provided as `Link` Header is no longer provided, refer to [Pagination](/docs/relnotes/20210331_streams_relnotes/#pagination).
 
 ## Fixed issues
 
