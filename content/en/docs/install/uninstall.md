@@ -27,7 +27,7 @@ export NAMESPACE="my-namespace"
 kubectl -n "${NAMESPACE}" get persistentvolumeclaims --no-headers=true | awk '/streams/{print $1}' | xargs kubectl delete -n "${NAMESPACE}" persistentvolumeclaims
 ```
 
-Similarly, all [secrets](#secrets-management) created for the Streams release installation aren't deleted with the release uninstallation. To delete them, you can run the following command:
+Similarly, all [secrets](/docs/install/#secrets-management) created for the Streams release installation aren't deleted with the release uninstallation. To delete them, you can run the following command:
 
 ```sh
 export NAMESPACE="my-namespace"
