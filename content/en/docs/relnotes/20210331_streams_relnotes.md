@@ -70,7 +70,7 @@ As part of this review, no capabilities have been deprecated.
 <!-- Add features that are removed here -->
  To stay current and align our offerings with customer demand and best practices, Axway might discontinue support for some capabilities.
 
-Following capabilities related to Streams Rest APIs are no longer supported:
+The following capabilities related to Streams Rest APIs are no longer supported:
 
 * Old Rest API Paths, refer to [New Rest API Paths](/docs/relnotes/20210331_streams_relnotes/#new-rest-api-paths).
 * Pagination related information provided as `Link` Header is no longer provided, refer to [Pagination](/docs/relnotes/20210331_streams_relnotes/#pagination).
