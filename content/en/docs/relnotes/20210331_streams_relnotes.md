@@ -22,7 +22,7 @@ It is important, especially when upgrading from an earlier version, to be aware 
 
 ### Streams REST APIs
 
-Following change on Streams Rest APIs have been made to fully comply with Axway Rest API Guidelines:
+The following changes have been made to the Streams Rest APIs to fully comply with Axway Rest API Guidelines:
 
 #### New Rest API Paths
 
