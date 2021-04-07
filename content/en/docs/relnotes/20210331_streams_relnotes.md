@@ -41,7 +41,7 @@ Links related to [pagination](/docs/topics-api/#Pagination) are now provided as 
 #### Json Object as root element of the response body
 
 Streams Rest APIs no longer return an `array` as root element of the response.
-APIs returning a list of elements now return a JSON Objet as root element and an `array` wrapped in `items` attribute.
+APIs returning a list of elements now return a JSON Object as root element and an `array` wrapped in `items` attribute.
 
 {{< alert title="Warning" color="warning" >}}Only new version of Streams Rest API is supported.{{< /alert >}}
 
