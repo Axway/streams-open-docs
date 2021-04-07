@@ -77,7 +77,7 @@ Following capabilities related to Streams Rest APIs are no longer supported:
 
 ## Fixed issues
 
-There are no fixed issue in this version.
+There are no fixed issues in this version.
 
 ## Documentation
 
