@@ -514,9 +514,10 @@ my-release-subscriber-webhook-84469bd68f-lqxgk                 1/1     Running  
 
 In order to check that Streams is running:
 
-1. Create a topic with default settings using the provided Postman collection and Postman environment.
-As the provided environment is configured with `${loadbalancer.baseUrl}` for all base URLs, you must reconfigure it with your own DNS. For example, `baseUrl` will be changed from `${loadbalancer.baseUrl}` to `https://k8s.yourdomain.tld` and so on for other variables.
-2. Try to subscribe with SSE to your topic:
+1. Import the provided Postman collections and environments. Select the environment designed
+for Kubernetes (instead of localhost). It has a variable named "loadBalancerBaseUrl" with the value "<SET_YOUR_HOSTNAME>". Change this to your hostname (e.g. "https://k8s.yourdomain.tld").
+2. Create a topic with default settings.
+3. Try to subscribe with SSE to your topic:
 
 ```sh
 curl "https://k8s.yourdomain.tld/streams/subscribers/sse/api/v1/topics/{TOPIC_ID}"
