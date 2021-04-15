@@ -512,10 +512,10 @@ my-release-subscriber-webhook-84469bd68f-lqxgk                 1/1     Running  
 [...]
 ```
 
-In order to check that Streams is running:
+To check that Streams is running:
 
 1. Import the provided Postman collections and environments. Select the environment designed
-for Kubernetes (instead of localhost). It has a variable named "loadBalancerBaseUrl" with the value "<SET_YOUR_HOSTNAME>". Change this to your hostname (e.g. "https://k8s.yourdomain.tld").
+for Kubernetes (instead of localhost). It has a variable named `loadBalancerBaseUrl` with the value `<SET_YOUR_HOSTNAME>`. Change this to your hostname (for example, `https://k8s.yourdomain.tld`).
 2. Create a topic with default settings.
 3. Try to subscribe with SSE to your topic:
 
