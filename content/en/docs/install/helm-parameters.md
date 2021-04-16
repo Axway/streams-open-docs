@@ -46,11 +46,11 @@ description: Use the following parameters to edit your configuration.
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| ingress-nginx.enabled                 | Enable/Disable NGINX                | no        | true          |
-| ingress.host | Domain name used for incoming HTTP requests if `ingress-nginx.enabled` is set to true | yes | none |
+| ingress-nginx-controller.enabled      | Enable/Disable NGINX                | no        | true          |
+| ingress.host | Domain name used for incoming HTTP requests if `ingress-nginx-controller.enabled` is set to true | yes | none |
 | ingress.tlsenabled                    | Enable embedded ingress SSL/TLS     | no        | true          |
 | ingress.tlsSecretName                 | Embedded ingress SSL/TLS certificate secret name | no | streams-ingress-tls-secret |
-| ingress-nginx.controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
+| ingress-nginx-controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
 
 ## Streams parameters
 
@@ -89,11 +89,11 @@ description: Use the following parameters to edit your configuration.
 | embeddedMariadb.metrics.enabled       | Activate metrics endpoint for MariaDB | no      | false         |
 | zookeeper.metrics.enabled             | Activate metrics endpoint for Zookeeper | no    | false         |
 | embeddedKafka.metrics.jmx.enabled     | Activate metrics endpoint for Kafka | no        | false         |
-| ingress-nginx.controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
+| ingress-nginx-controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
 | actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
 
 {{< alert title="Note" >}}
-If you want to configure a parameter from a dependency chart ([MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb), [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka), [Zookeeper](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper) or [Nginx](https://github.com/kubernetes/ingress-nginx)), you must add the chart prefix name to the command line argument. For example:
+If you want to configure a parameter from a dependency chart ([MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb), [Kafka](https://github.com/bitnami/charts/tree/master/bitnami/kafka), [Zookeeper](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper) or [Nginx](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller)), you must add the chart prefix name to the command line argument. For example:
 
 ```
 --set embeddedMariadb.image.tag=latest --set embeddedKafka.replicaCount=2 `

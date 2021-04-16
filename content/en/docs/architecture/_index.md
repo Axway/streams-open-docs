@@ -302,19 +302,18 @@ nodeSelector:
 You must define it for each of the 3rd party pods (NGINX, Kafka, Zookeeper and MariaDB):
 
 ```
-nginx-ingress:
-  controller:
-    nodeSelector:
-       application: streams
+nginx-ingress-controller:
+  nodeSelector:
+      application: streams
 [...]
-kafka:
+embeddedKafka:
   nodeSelector:
     application: streams
 zookeeper:
   nodeSelector:
     application: streams
 [...]
-mariadb:
+embeddedMariadb:
   master:
     nodeSelector:
       application: streams
@@ -394,7 +393,7 @@ The following list of secrets relate to the Streams installation:
 | kafka credentials             | streams-kafka-passwords-secret      | Opaque                              |
 | kafka service account         | streams-kafka-token                 | kubernetes.io/service-account-token |
 | NGINX tls certificates        | streams-ingress-tls-secret          | kubernetes.io/tls                   |
-| NGINX service account         | \<releasename\>-ingress-nginx-token   | kubernetes.io/service-account-token |
+| NGINX service account         | \<releasename\>-nginx-ingress-controller-token | kubernetes.io/service-account-token |
 | helm release internal info    | sh.helm.release.v1.\<releasename\>.v1 | helm.sh/release.v1                  |
 
 ### Streams implementation details
@@ -676,16 +675,16 @@ NGINX is the ingress controller in front of Streams APIs.
 
 Source Docker image:
 
-* Repository: k8s.gcr.io/ingress-nginx/controller
-* Tag: v0.43.0
+* Repository: bitnami/nginx-ingress-controller
+* Tag: 0.44.0-debian-10-r55
 
-Pod name: `streams-ingress-nginx-controller`
+Pod name: `streams-nginx-ingress-controller`
 
 Pod characteristics for HA deployment mode:
 
 | Replicas           | CPU | Memory | Xms & Xmx | Persistence |
 | ------------------ | --- | ------ | --------- | ----------- |
-| 2                  | 1   | 512 MB | n/a       | 8 GB        |
+| 2                  | 2   | 2048 MB | n/a       | 8 GB        |
 
 ### Database considerations
 
