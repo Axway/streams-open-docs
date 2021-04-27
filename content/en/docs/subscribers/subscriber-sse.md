@@ -87,7 +87,7 @@ If this header is not provided, the default behavior is not to compress the data
 
 SSE has the ability for clients to automatically reconnect if the connection is interrupted. Furthermore, the data stream continues from the point it disconnected, so no events are lost.
 
-Each messages sent by Streams are uniquely identified, so using the built-in header `Last-Event-id` after a reconnection, the client can tell to Streams where in the events streams to resume. Such mechanism is automaticaly integrated in most clients but you can also acheive it using curl command, using the example given above it will be :
+Each message sent by Streams is uniquely identified. Using the built-in header `Last-Event-Id` after reconnecting, the client can tell Streams where in the events streams to resume. Such mechanism is automatically integrated in most clients but you can also achieve it using curl command, using the example given above it will be:
 
 ```sh
 export BASE_URL="base-url"
