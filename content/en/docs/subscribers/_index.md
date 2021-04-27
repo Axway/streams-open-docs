@@ -33,7 +33,7 @@ If no subscribers is defined, the [SSE subscriber](../subscribers/subscriber-sse
 
 ## Quality Of Service (QoS)
 
-Streams has a strong requirement in term of quality but also in term of the performance. To get the best of those two aspects, Streams garanties **at least once** delivery, such as clients are certain to receive all events with good performances.
+Streams has strong requirements in terms of both quality of service and performance. To provide the best trade-off between these two conflicting aspects, Streams supports **at-least-once** delivery semantic.
 
 We ensure this quality of services by keeping for each subscriptions the last event id delivered, in order to resume from it in case of reconnection. The mechanism is internaly managed by Streams for persistent subscribers such as Webhook or Kafka subsribers but depends on a client side mechanism for SSE. Refer to [Last-Event-Id](../subscribers/subscriber-sse#last-event-id) section for details.
 
