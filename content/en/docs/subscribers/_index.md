@@ -31,6 +31,12 @@ When creating your topic, you can set it via subscribers config in the topic's c
 
 If no subscribers is defined, the [SSE subscriber](../subscribers/subscriber-sse) will be added by default.
 
+## Quality Of Service (QoS)
+
+Streams has a strong requirement in term of quality but also in term of the performance. To get the best of those two aspects, Streams garanties **at least once** delivery, such as clients are certain to receive all events with good performances.
+
+We ensure this quality of services by keeping for each subscriptions the last event id delivered, in order to resume from it in case of reconnection. The mechanism is internaly managed by Streams for persistent subscribers such as Webhook or Kafka subsribers but depends on a client side mechanism for SSE. Refer to [Last-Event-Id](../subscribers/subscriber-sse#last-event-id) section for details.
+
 ## Subscription modes
 
 The subscription mode determines the format of the data and the type of events that will be sent to the subscribers.

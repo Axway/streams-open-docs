@@ -6,9 +6,11 @@ date: 2019-04-02
 description: Learn how to configure and use the Streams Server-Sent Events Subscriber.
 ---
 
+Server-Sent Events (SSE) is part of the HTML5 standard. SSEs are sent over traditional HTTP, so it doesn't require a special protocol to get working. SSE embedded important features such event identifier, automatic reconnection or the ability to manage heterogeneous events.
+
 ## Enabling SSE subscription on a topic
 
-To enable Server-Sent Events subscribers to subscribe to a topic, you must configure a `sse` subscriber in the topic's configuration and optionally configured your desired [subscription modes](../#subscription-modes).
+To enable SSE clients to subscribe to a topic, you must configure a `sse` subscriber in the topic's configuration and optionally configured your desired [subscription modes](../#subscription-modes).
 
 ```json
 {
@@ -35,32 +37,9 @@ export TOPIC_ID="topic-id"
 curl -v "${BASE_URL}/streams/subscribers/sse/api/v1/topics/${TOPIC_ID}
 ```
 
-where `topic-id` is the unique ID of the topic you want to subscribe to.
+where `topic-id` is the unique identifier of the topic you want to subscribe to.
 
-If the connection is successfully established, Streams will respond with a 200 OK and a Content-Type: text/event-stream.
-
-### Transport protocol
-
-This subscriber relies on Server-sent Events (SSE) technology for its real-time data push capability.
-
-### Connection heartbeat
-
-In certain cases, some legacy network infrastructure may drop HTTP connections after a short timeout. To protect against such behaviors, Streams sends the client a comment line (starting with a ':' character) every 5 seconds. This comment line is ignored by the SSE client and has no effect other than a very limited network consumption.
-
-When no change is detected by Streams, the subscribers gets those heartbeats repeatedly until an event is finally sent.
-
-### Compression
-
-SSE flow can be compressed on demand using gzip or deflate methods. The following is an example of how to use the `Accept-Encoding` header:
-
-```sh
-export BASE_URL="base-url"
-export TOPIC_ID="topic-id"
-
-curl -v "${BASE_URL}/streams/subscribers/sse/api/v1/topics/${TOPIC_ID}" -H "Accept-Encoding: gzip, deflate" --compress
-```
-
-If this header is not provided, the default behavior is not to compress the data flow.
+If the connection is successfully established, Streams will respond with a 200 OK and a _Content-Type: text/event-stream_.
 
 ### How SSE is used
 
@@ -69,7 +48,7 @@ When you connect to an SSE server you receive an HTTP 200 OK code just like a re
 SSE is a text-based protocol. The following is an example of the server’s response once the connection is successfully established (the metadata, headers, status codes are omitted intentionally):
 
 {{< highlight go "linenos=inline" >}}
-id: 00ae73f5-5349-40c4-91b6-2e58a36b5365
+id: 00ae73f5-5349-40c4-91b6-2e58a36b5365#1
 event: snapshot
 data : [{
   "id": "acb07740-6b39-4e8b-a81a-0b678516088c",
@@ -90,6 +69,38 @@ Line number:
 `3`: `data` is the body of the message, always in JSON, in this case a JSON array.
 
 These three fields are always present and represent a single message also called an event.
+
+### Compression
+
+SSE can be compressed on demand using gzip or deflate methods. The following is an example of how to use the `Accept-Encoding` header:
+
+```sh
+export BASE_URL="base-url"
+export TOPIC_ID="topic-id"
+
+curl -v "${BASE_URL}/streams/subscribers/sse/api/v1/topics/${TOPIC_ID}" -H "Accept-Encoding: gzip, deflate" --compress
+```
+
+If this header is not provided, the default behavior is not to compress the data.
+
+### Last-Event-Id
+
+SSE has the ability for clients to automatically reconnect if the connection is interrupted. Furthermore, the data stream continues from the point it disconnected, so no events are lost.
+
+Each messages sent by Streams are uniquely identified, so using the built-in header `Last-Event-id` after a reconnection, the client can tell to Streams where in the events streams to resume. Such mechanism is automaticaly integrated in most clients but you can also acheive it using curl command, using the example given above it will be :
+
+```sh
+export BASE_URL="base-url"
+export TOPIC_ID="topic-id"
+
+curl -v "${BASE_URL}/streams/subscribers/sse/api/v1/topics/${TOPIC_ID}" -H "Last-Event-Id: 00ae73f5-5349-40c4-91b6-2e58a36b5365#1"
+```
+
+### Connection heartbeat
+
+In certain cases, some legacy network infrastructure may drop HTTP connections after a short timeout. To protect against such behaviors, Streams sends the client a comment line (starting with a ':' character) every 5 seconds. This comment line is ignored by the SSE client and has no effect other than a very limited network consumption.
+
+When no change is detected by Streams, the subscribers gets those heartbeats repeatedly until an event is finally sent.
 
 ### Type of SSE events
 
