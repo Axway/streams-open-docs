@@ -27,9 +27,10 @@ Kafka version has been upgrade to its latest version, 2.8.0. No action is requir
 The following enhancements have been made to Streams Helm chart:
 
 * Helm chart dependency images upgraded:
-    * Kafka new docker image tag: `2.8.0-debian-10-r10`
-    * Zookeeper new docker image tag: `3.7.0-debian-10-r16`
-    * MariaDB new docker image tag: `10.4.18-debian-10-r45`
+    * Kafka new docker image tag: `2.8.0-debian-10-r12`
+    * Zookeeper new docker image tag: `3.7.0-debian-10-r35`
+    * MariaDB new docker image tag: `10.4.18-debian-10-r66`
+    * NGINX new docker image tag: `0.44.0-debian-10-r58`
 
 ## Deprecated features
 <!-- As part of our software development life cycle, we constantly review our Streams offering. -->
