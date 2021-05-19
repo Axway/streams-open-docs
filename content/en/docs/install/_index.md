@@ -376,9 +376,9 @@ Disabling security is not recommended for production.
 
 Depending on your Cloud provider, deploying a load balancer may require additional parameters (refer to your own Cloud provider for further details).
 
-For instance, for AWS, you must define the load balancer type (see the [Reference Architecture](/docs/architecture#load-balancer) for further details with regards to this choice) by setting the [Helm parameters](/docs/install/helm-parameters/) `ingress-nginx-controller.service.annotations.service.beta.kubernetes.io/aws-load-balancer-type` to `nlb`:
+For instance, for AWS, you must define the load balancer type (see the [Reference Architecture](/docs/architecture#load-balancer) for further details with regards to this choice) by setting the [Helm parameters](/docs/install/helm-parameters/) `nginx-ingress-controller.service.annotations.service.beta.kubernetes.io/aws-load-balancer-type` to `nlb`:
 
-* Add `--set "ingress-nginx-controller.service.annotations.service\.beta\.kubernetes\.io/aws-load-balancer-type"="nlb"` in the Helm Chart installation command.
+* Add `--set "nginx-ingress-controller.service.annotations.service\.beta\.kubernetes\.io/aws-load-balancer-type"="nlb"` in the Helm Chart installation command.
 
 ### Ingress hostname
 
@@ -504,7 +504,7 @@ streams-kafka-0                                                1/1     Running  
 streams-mariadb-master-0                                       1/1     Running   0          116s
 streams-zookeeper-0                                            1/1     Running   0          116s
 my-release-hub-675c6f9f6-8gplz                                 1/1     Running   0          116s
-my-release-ingress-nginx-controller-58bfd85658-6plf5           1/1     Running   0          116s
+my-release-nginx-ingress-controller-58bfd85658-6plf5           1/1     Running   0          116s
 my-release-publisher-http-poller-6cc5cd9fc6-q564p              1/1     Running   0          116s
 my-release-publisher-http-post-5b745f864-dpws8                 1/1     Running   0          116s
 my-release-subscriber-sse-7fd8c56f48-wvgtq                     1/1     Running   0          116s

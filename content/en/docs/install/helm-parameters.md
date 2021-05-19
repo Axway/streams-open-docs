@@ -46,11 +46,11 @@ description: Use the following parameters to edit your configuration.
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| ingress-nginx-controller.enabled      | Enable/Disable NGINX                | no        | true          |
-| ingress.host | Domain name used for incoming HTTP requests if `ingress-nginx-controller.enabled` is set to true | yes | none |
+| nginx-ingress-controller.enabled      | Enable/Disable NGINX                | no        | true          |
+| ingress.host | Domain name used for incoming HTTP requests if `nginx-ingress-controller.enabled` is set to true | yes | none |
 | ingress.tlsenabled                    | Enable embedded ingress SSL/TLS     | no        | true          |
 | ingress.tlsSecretName                 | Embedded ingress SSL/TLS certificate secret name | no | streams-ingress-tls-secret |
-| ingress-nginx-controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
+| nginx-ingress-controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
 
 ## Streams parameters
 
@@ -89,7 +89,7 @@ description: Use the following parameters to edit your configuration.
 | embeddedMariadb.metrics.enabled       | Activate metrics endpoint for MariaDB | no      | false         |
 | zookeeper.metrics.enabled             | Activate metrics endpoint for Zookeeper | no    | false         |
 | embeddedKafka.metrics.jmx.enabled     | Activate metrics endpoint for Kafka | no        | false         |
-| ingress-nginx-controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
+| nginx-ingress-controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
 | actuator.prometheus.enabled           | Activate metrics endpoints for Streams services | no | false    |
 
 {{< alert title="Note" >}}
