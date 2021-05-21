@@ -10,6 +10,7 @@ description: Learn how to upgrade your Streams installation with a new minor ver
 
 To upgrade your Streams installation with a new minor version or update your configuration:
 
+* Check if there is any specific action to perform for the current release (see [Release Notes](/docs/relnotes/)).
 * Optional: update any of your `values.yaml` files with a custom configuration
 * Upgrade your Streams installation:
 

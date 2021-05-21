@@ -318,6 +318,10 @@ According to your choice, you must:
 * For security disabled:
     * Set the [Helm parameters](/docs/install/helm-parameters/) `externalizedKafka.auth.clientProtocol` to `plaintext`.
 
+#### Externalized Kafka topics settings
+
+You should ensure that `delete.topic.enable` is set to `true` in your Kafka installation. This is the default value in Kafka starting with [version 1.0.0](https://kafka.apache.org/documentation/#upgrade_100_notable). It will facilitate future upgrades for Streams.
+
 ### Embedded Kafka configuration
 
 #### Embedded Kafka security settings

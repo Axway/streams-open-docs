@@ -18,6 +18,18 @@ For a summary of the system requirements, see [Install Streams](/docs/install/).
 
 It is important, especially when upgrading from an earlier version, to be aware of the following changes in the behavior or operation of the product in this new version.
 
+### Kafka topics renamed
+
+The following topics have been renamed:
+
+* *stream-transform-snapshot-last* renamed to *streams-transform-snapshot*
+* *stream-transform-snapshot-patch* renamed to *streams-transform-snapshot*
+* *stream-publish-snapshot* renamed to *streams-publish-snapshot*
+* *stream-publish-event* renamed to *streams-publish-event*
+* *stream-transform-event* renamed to *streams-transform-event*
+* *stream-error* renamed to *streams-error*
+* *webhook-exchange* renamed to *streams-subscriber-webhook-exchange*
+
 ### Kafka upgrade to 2.8.0
 
 Kafka version has been upgrade to its latest version, 2.8.0. No action is required in case of an embedded kafka. However, in case your installation is using an external kafka, you must follow [Kafka - Upgrading From Previous Versions](https://kafka.apache.org/28/documentation.html#upgrade), to upgrade your Kafka's version.
