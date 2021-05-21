@@ -18,6 +18,28 @@ For a summary of the system requirements, see [Install Streams](/docs/install/).
 
 It is important, especially when upgrading from an earlier version, to be aware of the following changes in the behavior or operation of the product in this new version.
 
+### Kafka topics renamed
+
+Performing a helm upgrade (see [Upgrade](/docs/install/upgrade)) on this new version will trigger a job that will automatically flush all Kafka topics and rename the following:
+
+* *stream-transform-snapshot-last* renamed to *streams-transform-snapshot*
+* *stream-transform-snapshot-patch* renamed to *streams-transform-snapshot*
+* *stream-publish-snapshot* renamed to *streams-publish-snapshot*
+* *stream-publish-event* renamed to *streams-publish-event*
+* *stream-transform-event* renamed to *streams-transform-event*
+* *stream-error* renamed to *streams-error*
+* *webhook-exchange* renamed to *streams-subscriber-webhook-exchange*
+
+This job uses the Bitnami Kafka image (same image as the one in [Reference Architecture](/docs/architecture/#kafka)) so you must ensure the Kubernetes cluster is able to download it. This job will interact with your existing Kafka cluster in order to perform the flushing and renaming actions.
+
+{{< alert title="WARNING" >}}
+Due to the topics renaming, ALL KAFKA TOPICS WILL BE FLUSHED. All the data in these topics will be lost. Please make sure this is not an issue for you, in particular for *webhook exchange history* that will be flushed as well.
+{{< /alert >}}
+
+{{< alert title="WARNING" >}}
+The upgrade does not include any backup/restore procedure. This is your responsibility to backup Kafka data before performing the upgrade if you want to keep it as an archive.
+{{< /alert >}}
+
 ### Kafka upgrade to 2.8.0
 
 Kafka version has been upgrade to its latest version, 2.8.0. No action is required in case of an embedded kafka. However, in case your installation is using an external kafka, you must follow [Kafka - Upgrading From Previous Versions](https://kafka.apache.org/28/documentation.html#upgrade), to upgrade your Kafka's version.
