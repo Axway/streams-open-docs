@@ -16,7 +16,7 @@ For a summary of the system requirements, see [Install Streams](/docs/install/).
 ## Important changes
 <!-- Use this section to describe any changes in the behavior of the product (as a result of features or fixes), for example, new Java system properties in the jvm.xml file. This section could also be used for any important information that doesn't fit elsewhere. -->
 
-It is important, especially when upgrading from an earlier version, to be aware of the following changes in the behavior or operation of the product in this new version.
+It is important, especially when upgrading from the March release, to be aware of the following changes in the behavior or operation of the product in this new version.
 
 ### Kafka topics renamed
 
@@ -31,6 +31,8 @@ Performing a helm upgrade (see [Upgrade](/docs/install/upgrade)) on this new ver
 * *webhook-exchange* renamed to *streams-subscriber-webhook-exchange*
 
 This job uses the Bitnami Kafka image (same image as the one in [Reference Architecture](/docs/architecture/#kafka)) so you must ensure the Kubernetes cluster is able to download it. This job will interact with your existing Kafka cluster in order to perform the flushing and renaming actions.
+
+In order to perform these actions your Kafka cluster needs to have the `delete.topic.enable` flag set to `true` (usually the default behavior). If this is not the case, the upgrade will fail.
 
 {{< alert title="WARNING" >}}
 Due to the topics renaming, ALL KAFKA TOPICS WILL BE FLUSHED. All the data in these topics will be lost. Please make sure this is not an issue for you, in particular for *webhook exchange history* that will be flushed as well.
