@@ -13,6 +13,8 @@ For a summary of the system requirements, see [Install Streams](/docs/install/).
 ## New features and enhancements
 <!-- Add the new features here -->
 
+Streams now supports **at-least-once** delivery semantic to ensure that you receive all your messages. Streams handles this internally for persistent subscriptions and through the Last-Event-Id header for sse subscriptions, as described in the [Subscribers documentation](docs/subscribers/#quality-of-service-qos).
+
 ## Important changes
 <!-- Use this section to describe any changes in the behavior of the product (as a result of features or fixes), for example, new Java system properties in the jvm.xml file. This section could also be used for any important information that doesn't fit elsewhere. -->
 
