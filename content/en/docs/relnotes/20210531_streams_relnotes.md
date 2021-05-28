@@ -11,7 +11,7 @@ Streams is available as a set of Docker containers deployable in Kubernetes by u
 
 ## New features and enhancements
 
-Streams now supports **at-least-once** delivery semantic to ensure that you receive all your messages. Streams handles this internally for persistent subscriptions and through the `Last-Event-Id` header for [SSE subscriptions](docs/subscribers/#quality-of-service-qos).
+Streams now supports **at-least-once** delivery semantic to ensure that you receive all your messages. Streams handles this internally for persistent subscriptions and through the `Last-Event-Id` header for SSE subscriptions. For more information, see [Subscribers](/docs/subscribers/#quality-of-service-qos).
 
 ## Important changes
 <!-- Use this section to describe any changes in the behavior of the product (as a result of features or fixes), for example, new Java system properties in the jvm.xml file. This section could also be used for any important information that doesn't fit elsewhere. -->
