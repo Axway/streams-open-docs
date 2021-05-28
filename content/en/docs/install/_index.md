@@ -320,11 +320,9 @@ According to your choice, you must:
 
 #### Externalized Kafka topics settings
 
-You should ensure that `delete.topic.enable` is set to `true` in your Kafka installation. This is the default value in Kafka starting with [version 1.0.0](https://kafka.apache.org/documentation/#upgrade_100_notable). It will facilitate future upgrades for Streams.
+Ensure that `delete.topic.enable` is set to `true` in your [Kafka](https://kafka.apache.org/documentation/#upgrade_100_notable) installation.
 
-### Embedded Kafka configuration
-
-#### Embedded Kafka security settings
+### Embedded Kafka security settings
 
 For security purposes, it’s highly recommended to enable [SASL authentication](https://docs.confluent.io/current/kafka/authentication_sasl/index.html#authentication-with-sasl) and [TLS encryption](https://docs.confluent.io/current/kafka/encryption.html#encryption-with-ssl) for Kafka clients and brokers. You can enable both or neither.
 

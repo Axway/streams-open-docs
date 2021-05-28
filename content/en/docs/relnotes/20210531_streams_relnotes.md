@@ -7,13 +7,11 @@ date: 2021-05-03
 
 ## Summary
 
-Streams is available as a set of Docker containers deployable in Kubernetes by using a Helm chart.
-For a summary of the system requirements, see [Install Streams](/docs/install/).
+Streams is available as a set of Docker containers deployable in Kubernetes by using a Helm chart. For a summary of the system requirements, see [Install Streams](/docs/install/).
 
 ## New features and enhancements
-<!-- Add the new features here -->
 
-Streams now supports **at-least-once** delivery semantic to ensure that you receive all your messages. Streams handles this internally for persistent subscriptions and through the Last-Event-Id header for sse subscriptions, as described in the [Subscribers documentation](docs/subscribers/#quality-of-service-qos).
+Streams now supports **at-least-once** delivery semantic to ensure that you receive all your messages. Streams handles this internally for persistent subscriptions and through the `Last-Event-Id` header for [SSE subscriptions](docs/subscribers/#quality-of-service-qos).
 
 ## Important changes
 <!-- Use this section to describe any changes in the behavior of the product (as a result of features or fixes), for example, new Java system properties in the jvm.xml file. This section could also be used for any important information that doesn't fit elsewhere. -->
@@ -34,7 +32,7 @@ The following topics have been renamed:
 
 ### Kafka upgrade to 2.8.0
 
-Kafka version has been upgrade to its latest version, 2.8.0. No action is required in case of an embedded kafka. However, in case your installation is using an external kafka, you must follow [Kafka - Upgrading From Previous Versions](https://kafka.apache.org/28/documentation.html#upgrade), to upgrade your Kafka's version.
+Kafka version has been upgrade to its latest version, 2.8.0. No action is required in case of an embedded kafka. However, in case your installation is using an external kafka, you must follow [Kafka - Upgrading From Previous Versions](https://kafka.apache.org/28/documentation.html#upgrade) to upgrade your Kafka's version.
 
 ### Streams Helm chart enhancements
 
