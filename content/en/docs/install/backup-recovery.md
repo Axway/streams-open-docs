@@ -82,7 +82,136 @@ All Streams pods must be redeployed and running with the new configuration after
 
 ## Kafka
 
-TODO
+When Kafka cluster is managed outside of Kubernetes, you need to have a dedicated backup/restore procedure. The procedure is environment agnostic but SLA/OLA and RPO/RTO will depend on your Kafka installation / Cloud provider.
+
+### Disaster recovery procedure
+
+This procedure has been tested for MSK on AWS but can be used on any Kafka installation. It uses [MirrorMaker 2](https://cwiki.apache.org/confluence/display/KAFKA/KIP-382%3A+MirrorMaker+2.0) to mirror the cluster data & configuration to another Kafka cluster.
+
+### Backup procedure
+
+#### Requirements
+
+* Setup a new Kafka cluster with the same configuration as your production cluster. Setting up a cluster with lower resources for cost optimization is possible but you need to ensure your backup Kafka cluster is able to deal with all the messages that will be mirrored from the production Kafka cluster.
+
+* Setup a tooling instance using Kafka image (same image as for [embedded Kafka in Streams installation](/docs/architecture/#kafka). This instance must be able to access the production Kafka bootstrap server and the backup Kafka bootstrap server.
+
+This is highly recommended to monitor all the instances deployed in the context of this Disaster Recovery Plan.
+
+#### Enable Backup
+
+When your production environnement is up and running, you need to start MirrorMaker 2 from the tooling instance:
+
+```sh
+connect-mirror-maker.sh mm2.config
+```
+
+Make sure there is no error in the log flow. After several seconds, the mirroring is started and working (a running process with no logs means that it works). You can double check that Kafka is properly mirrored by listing the topics on the backup Kafka, for instance:
+
+```sh
+kafka-topics.sh --list --bootstrap-server <your backup Kafka bootstrap server here> --command-config ./config
+```
+
+Here is a MirrorMaker 2 sample configuration file where you only need to fill in the source and bootstrap servers, and your authentication parameters:
+
+```sh
+$ cat mm2.config
+# Licensed to the Apache Software Foundation (ASF) under A or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# see org.apache.kafka.clients.consumer.ConsumerConfig for more details
+
+# Sample MirrorMaker 2.0 top-level configuration file
+# Run with ./bin/connect-mirror-maker.sh connect-mirror-maker.properties
+
+# specify any number of cluster aliases
+clusters = source, target
+source.cluster.alias =
+target.cluster.alias =
+
+# connection information for each cluster
+# This is a comma separated host:port pairs for each cluster
+# for e.g. "host1:9096, host2:9096, host3:9096"
+# source is your production cluster, target is your backup cluster
+source.bootstrap.servers =
+target.bootstrap.servers =
+
+# enable and configure individual replication flows
+source->target.enabled = true
+
+# regex which defines which topics gets replicated. For eg "foo-.*"
+source->target.topics = streams.*
+
+target->source.enabled = false
+#target->source.topics = .*
+
+# Setting replication factor of newly created remote topics
+source.replication.factor = 1
+target.replication.factor = 1
+
+#Setup your authentication parameters here
+security.protocol=SASL_SSL
+sasl.mechanism=SCRAM-SHA-512
+sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="<username>" password="<password>";
+ssl.truststore.password=<keystorepassword>
+ssl.truststore.location=./<yourkeystore>.jks
+
+############################# Internal Topic Settings  #############################
+# The replication factor for mm2 internal topics "heartbeats", "B.checkpoints.internal" and
+# "mm2-offset-syncs.B.internal"
+# For anything other than development testing, a value greater than 1 is recommended to ensure availability such as 3.
+checkpoints.topic.replication.factor=3
+heartbeats.topic.replication.factor=3
+offset-syncs.topic.replication.factor=3
+
+# The replication factor for connect internal topics "mm2-configs.B.internal", "mm2-offsets.B.internal" and
+# "mm2-status.B.internal"
+# For anything other than development testing, a value greater than 1 is recommended to ensure availability such as 3.
+offset.storage.replication.factor=3
+status.storage.replication.factor=3
+config.storage.replication.factor=3
+
+# customize as needed
+# replication.policy.separator = _
+replication.policy.separator =
+# sync.topic.acls.enabled = false
+# emit.heartbeats.interval.seconds = 5
+```
+
+Here is a sample configuration for kafka command line tools:
+
+```sh
+$ cat staging.config
+security.protocol=SASL_SSL
+sasl.mechanism=SCRAM-SHA-512
+sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="<username>" password="<password>";
+ssl.truststore.password=<keystorepassword>
+ssl.truststore.location=./<yourkeystore>.jks
+```
+
+### Restore procedure
+
+In order to restore the data from you backup cluster, you first need to create a fresh production Kafka cluster with the same configuration as your initial production Kafka cluster that has failed.
+Then, you will have to configure MirrorMaker 2 to mirror the data from your backup cluster to the new production cluster. When it's done, you can reconfigure your Streams installation so that the microservices connect to the new production Kafka cluster. To sum up, the steps are the following:
+
+* Create a new Kafka production cluster
+* Stop MirrorMaker 2 which was configured in backup procedure
+* Start MirrorMaker 2 with backup cluster configured as source and new production cluster configured as target
+* When the mirroring is done, stop MirrorMaker 2
+* Reconfigure your Streams installation so that the microservices connect to the new production cluster, for instance: `helm -n ${NAMESPACE} get values ${HELM_RELEASE} /tmp/values.yaml && helm -n ${NAMESPACE} upgrade ${HELM_RELEASE} . -f /tmp/values.yaml --set externalizedKafka.bootstrapServers="<new-production-kafka-bootstrap-server>" --set ingress.host="<your-ingress-host>"`
+* At this step, your Streams installation should be back up and running. Once you have validated the new setup, you can proceed to next step
+* Start MirrorMaker 2 with new production cluster configured as source and backup cluster configured as target so that you get back to the normal backup procedure state
 
 ## Streams kubernetes installation
 
