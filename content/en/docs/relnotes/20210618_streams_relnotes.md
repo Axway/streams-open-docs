@@ -22,6 +22,20 @@ The following Helm chart dependency images were upgraded:
 * Zookeeper new docker image tag: `3.7.0-debian-10-r62`
 * MariaDB new docker image tag: `10.4.19-debian-10-r32`
 
+## Deprecated features
+<!-- As part of our software development life cycle, we constantly review our Streams offering. -->
+
+As part of this review, no capabilities have been deprecated.
+
+## Removed features
+<!-- To stay current and align our offerings with customer demand and best practices, Axway might discontinue support for some capabilities. -->
+
+As part of this review, no features have been deprecated.
+
+## Fixed issues
+
+There are no fixed issues in this version.
+
 ## Documentation
 
 There are no major changes in this update.
