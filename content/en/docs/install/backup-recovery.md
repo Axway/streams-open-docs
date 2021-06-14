@@ -10,8 +10,7 @@ It is essential for the smooth operation of Streams to perform regular backups o
 
 ## MariaDB
 
-As the database is managed outside Kubernetes, the all backup/restore procedures will depend on the Cloud Provider used.
-Therefore, SLA/OLA and RPO/RTO will depend on the Cloud Provider and the configuration of your backups.
+The procedures for the database will depend on your deployment infrastructure, moreover SLA/OLA and RPO/RTO will depend on the Cloud Provider chosen. As we recommend to manage database outside kubernetes, we will describe how to manage it with AWS.
 
 ### RDS AWS backup procedure
 
@@ -82,11 +81,9 @@ All Streams pods must be redeployed and running with the new configuration after
 
 ## Kafka
 
-When Kafka cluster is managed outside of Kubernetes, you need to have a dedicated backup/restore procedure. The procedure is environment agnostic but SLA/OLA and RPO/RTO will depend on your Kafka installation / Cloud provider.
+The procedures for the Kafka cluster is environment agnostic, however SLA/OLA and RPO/RTO will depend on your Cloud Provider. As we recommend to manage Kafka outside kubernetes, the following procedures has been tested with MSK on AWS but can be used on any Kafka installation
 
-### Disaster recovery procedure
-
-This procedure has been tested for MSK on AWS but can be used on any Kafka installation. It uses [MirrorMaker 2](https://cwiki.apache.org/confluence/display/KAFKA/KIP-382%3A+MirrorMaker+2.0) to mirror the cluster data & configuration to another Kafka cluster.
+It uses [MirrorMaker 2](https://cwiki.apache.org/confluence/display/KAFKA/KIP-382%3A+MirrorMaker+2.0) to mirror the cluster data & configuration to another Kafka cluster.
 
 ### Backup procedure
 
