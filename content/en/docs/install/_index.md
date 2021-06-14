@@ -52,11 +52,9 @@ There are different ways to manage your custom [Helm parameters](/docs/install/h
 
 Once your choice is made, we recommend you stick to it so that the [helm chart upgrade](/docs/install/upgrade/) is easier.
 
-## General Conditions for License/Subscription
+## General Conditions for License and Subscription services
 
-The Axway Products and/or Services shall be governed exclusively by the applicable General Terms and Conditions, located at [https://www.axway.com/en/legal/contract-documents](https://www.axway.com/en/legal/contract-documents).
-
-To accept them, you have to set the helm value `acceptGeneralConditions` to `yes` and proceed with the installation.
+Axway products and services are governed exclusively by Axway's [General Terms and Conditions](https://www.axway.com/en/legal/contract-documents). To accept them, set the helm value `acceptGeneralConditions` to `yes` and proceed with the installation.
 
 ## Kubernetes namespace
 
