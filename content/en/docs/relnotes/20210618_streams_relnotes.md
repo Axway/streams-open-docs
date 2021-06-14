@@ -9,6 +9,11 @@ date: 2021-06-14
 
 Streams is available as a set of Docker containers deployable in Kubernetes by using a Helm chart. For a summary of the system requirements, see [Install Streams](/docs/install/).
 
+## Important changes
+<!-- Use this section to describe any changes in the behavior of the product (as a result of features or fixes), for example, new Java system properties in the jvm.xml file. This section could also be used for any important information that doesn't fit elsewhere. -->
+
+It is important, especially when upgrading from an earlier version, to be aware of the following changes in the behavior or operation of the product in this new version.
+
 ### Streams Helm chart enhancements
 
 The following Helm chart dependency images were upgraded:
@@ -16,6 +21,10 @@ The following Helm chart dependency images were upgraded:
 * Kafka new docker image tag: `2.8.0-debian-10-r35`
 * Zookeeper new docker image tag: `3.7.0-debian-10-r62`
 * MariaDB new docker image tag: `10.4.19-debian-10-r32`
+
+## Documentation
+
+There are no major changes in this update.
 
 ### Related documentation
 
