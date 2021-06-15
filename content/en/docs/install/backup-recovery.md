@@ -361,7 +361,7 @@ export VELERO_NAMESPACE="<my-velero-namespace>"
 export VELERO_POD="$(kubectl get pod -n "${VELERO_NAMESPACE}" --no-headers -o=custom-columns=NAME:.metadata.name)"
 export BACKUP_NAME="<my-backup>"
  
-kubectl -n "${VELERO_NAMESPACE}" exec -it "${VELERO_POD}" -- /velero create backups "${BACKUP_NAME}" --include-namespaces "${STREAMS_NAMESPACE}"
+kubectl -n "${VELERO_NAMESPACE}" exec -it "${VELERO_POD}" -- /velero backup create "${BACKUP_NAME}" --include-namespaces "${STREAMS_NAMESPACE}"
 ```
 
 You can also schedule backups by the following command:
