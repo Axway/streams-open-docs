@@ -61,3 +61,17 @@ For example, to get the average incoming requests' processing time, you could pl
 ```sh
 rate(http_server_requests_seconds_sum[2m])/rate(http_server_requests_seconds_count[2m])
 ```
+
+## Monitoring
+
+Regardless of basic system metrics (as CPU usage or memory usage), Streams expose custom metrics that need to be monitored to prevent issues with your Streams installation:
+
+* number of active subscription:
+    * it must still under 1500 for each subscriber pods
+    * it's given by `streams_active_subscriptions`
+* rate of events in input in Streams topics:
+    * it must still under 500 events by seconds
+    * it's given by `rate(streams_input_events_total{streams_service="hub", data_type="snapshot"}[2m])`
+* JVM memory used:
+    * it must still lower than the total pod memory for each pods, or they will be OOM kill after a short time:
+    * it's respectively given by `jvm_memory_used_bytes` and `container_memory_working_set_bytes`
