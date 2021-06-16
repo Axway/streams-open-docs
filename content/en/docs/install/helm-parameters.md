@@ -56,6 +56,7 @@ description: Use the following parameters to edit your configuration.
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
+| acceptGeneralConditions                     | Accept General Conditions           | yes       | N/A         |
 | images.repository                     | Streams Images repository           | yes       | axway         |
 | imagePullSecrets[0].name              | Image registry keys                 | no        |               |
 | hub.replicaCount                      | Hub replica count                   | no        | 2             |
