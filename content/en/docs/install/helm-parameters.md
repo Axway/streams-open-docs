@@ -47,7 +47,7 @@ description: Use the following parameters to edit your configuration.
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
 | nginx-ingress-controller.enabled      | Enable/Disable NGINX                | no        | true          |
-| ingress.host | Domain name used for incoming HTTP requests if `nginx-ingress-controller.enabled` is set to true | yes | none |
+| ingress.host | Domain name used for incoming HTTP requests if `nginx-ingress-controller.enabled` is set to true | yes | N/A |
 | ingress.tlsenabled                    | Enable embedded ingress SSL/TLS     | no        | true          |
 | ingress.tlsSecretName                 | Embedded ingress SSL/TLS certificate secret name | no | streams-ingress-tls-secret |
 | nginx-ingress-controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
@@ -56,9 +56,9 @@ description: Use the following parameters to edit your configuration.
 
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| acceptGeneralConditions                     | Accept General Conditions           | yes       | N/A         |
+| acceptGeneralConditions               | Accept General Conditions           | yes       | N/A           |
 | images.repository                     | Streams Images repository           | yes       | axway         |
-| imagePullSecrets[0].name              | Image registry keys                 | no        |               |
+| imagePullSecrets[0].name              | Image registry keys                 | no        | N/A           |
 | hub.replicaCount                      | Hub replica count                   | no        | 2             |
 | hub.service.port                | Http port to reach the Streams Topics API | no        | 8080          |
 | subscriberSse.enabled             | Enable/Disable Subscriber SSE  | no        | true          |
