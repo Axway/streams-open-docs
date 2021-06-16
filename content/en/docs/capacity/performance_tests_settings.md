@@ -31,7 +31,7 @@ This section defines common terms used in the performance test results:
 
 | Metric                          | Definition                                                                     |
 |---------------------------------|--------------------------------------------------------------------------------|
-| Users                           | Number of concurrently subscribed client per topic.                            |
+| Users                           | Number of concurrently subscribed client.                            |
 | Topics                          | Number of topic created on Streams platform.                                   |
 | Payload size                    | Size of the message/events payloads being published in the Streams topic(s).   |
 | Polling period                  | Time period at which Streams polls the target URL (HTTP-Poller).               |
@@ -42,20 +42,22 @@ This section defines common terms used in the performance test results:
 ## Performance tests results
 
 | Users | Topics | Payload size | Polling period | 99 %ile latency (ms) | Max latency (ms) | Throughput (event/s) |
-| ----- | ------ | ------------ | -------------- | -------------------- | ---------------- | -------------------- |
-| 100   | 1      | 50 KB        | 500 ms         | 40                   | 299              | 181                  |
-| 3000  | 1      | 50 KB        | 500 ms         | 367                  | 1577             | 5,423                |
-| 100   | 100    | 50 KB        | 500 ms         | 11                   | 513              | 182                  |
-| 500   | 500    | 50 KB        | 500 ms         | 240                  | 810              | 893                  |
-| 100   | 1      | 50 KB        | 1 sec          | 34                   | 216              | 91                   |
-| 3000  | 1      | 50 KB        | 1 sec          | 487                  | 745              | 2,729                |
-| 100   | 100    | 50 KB        | 1 sec          | 36                   | 1016             | 91                   |
-| 500   | 500    | 50 KB        | 1 sec          | 89                   | 1072             | 454                  |
-| 100   | 1      | 10 KB        | 500 ms         | 11                   | 511              | 181                  |
-| 300   | 1      | 10 KB        | 500 ms         | 258                  | 761              | 5,423                |
-| 100   | 100    | 10 KB        | 500 ms         | 9                    | 510              | 180                  |
-| 500   | 500    | 10 KB        | 500 ms         | 15                   | 1012             | 900                  |
-| 100   | 1      | 10 KB        | 1 sec          | 10                   | 1010             | 91                   |
-| 3000  | 1      | 10 KB        | 1 sec          | 267                  | 1272             | 2,729                |
-| 100   | 100    | 10 KB        | 1 sec          | 36                   | 1010             | 91                   |
-| 100   | 500    | 10 KB        | 1 sec          | 9                    | 1012             | 456                  |
+|-------|--------|--------------|----------------|----------------------|------------------|----------------------|
+| 3000  | 100    | 50 KB        | 500 ms         | 21                   | 250              | 5455.5               |
+| 250   | 250    | 50 KB        | 500 ms         | 5                    | 34               | 455.3                |
+| 100   | 100    | 50 KB        | 500 ms         | 5                    | 23               | 182.1                |
+| 100   | 1      | 50 KB        | 500 ms         | 13                   | 46               | 182.4                |
+| 3000  | 100    | 10 KB        | 500 ms         | 6                    | 84               | 5455.4               |
+| 250   | 250    | 10 KB        | 500 ms         | 3                    | 23               | 455.3                |
+| 100   | 100    | 10 KB        | 500 ms         | 3                    | 19               | 182.1                |
+| 100   | 1      | 10 KB        | 500 ms         | 5                    | 45               | 182.4                |
+| 3000  | 100    | 50 KB        | 1 sec          | 26                   | 86               | 2736.6               |
+| 250   | 250    | 50 KB        | 1 sec          | 5                    | 19               | 228.0                |
+| 100   | 100    | 50 KB        | 1 sec          | 6                    | 24               | 91.2                 |
+| 100   | 1      | 50 KB        | 1 sec          | 23                   | 222              | 91.5                 |
+| 3000  | 100    | 10 KB        | 1 sec          | 6                    | 72               | 2736.8               |
+| 250   | 250    | 10 KB        | 1 sec          | 4                    | 25               | 228.0                |
+| 100   | 100    | 10 KB        | 1 sec          | 4                    | 19               | 91.2                 |
+| 100   | 1      | 10 KB        | 1 sec          | 8                    | 21               | 91.5                 |
+
+    
