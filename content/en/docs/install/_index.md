@@ -54,7 +54,7 @@ Once your choice is made, we recommend you stick to it so that the [helm chart u
 
 ## General Conditions for License and Subscription services
 
-Axway products and services are governed exclusively by Axway's [General Terms and Conditions](https://www.axway.com/en/legal/contract-documents). To accept them, set the helm value `acceptGeneralConditions` to `yes` and proceed with the installation.
+Axway products and services are governed exclusively by Axway's [General Terms and Conditions](https://www.axway.com/en/legal/contract-documents). To accept them, set the helm value `acceptGeneralConditions` to `"yes"` and proceed with the installation (use the double quotes around the `yes`).
 
 ## Kubernetes namespace
 
@@ -386,7 +386,7 @@ Disabling security is not recommended for production.
 
 Depending on your Cloud provider, deploying a load balancer may require additional parameters (refer to your own Cloud provider for further details).
 
-For instance, for AWS, you must define the load balancer type (see the [Reference Architecture](/docs/architecture#load-balancer) for further details with regards to this choice) by setting the [Helm parameters](/docs/install/helm-parameters/) `nginx-ingress-controller.service.annotations.service.beta.kubernetes.io/aws-load-balancer-type` to `nlb`:
+For instance, for AWS, you must define the load balancer type (see the [Reference Architecture](/docs/architecture#load-balancer) for further details with regards to this choice) by setting the [Helm parameters](/docs/install/helm-parameters/) `nginx-ingress-controller.service.annotations."service.beta.kubernetes.io/aws-load-balancer-type"` to `nlb` (the quoted part is a single key, do not transform the inner dots into colons and line breaks):
 
 * Add `--set "nginx-ingress-controller.service.annotations.service\.beta\.kubernetes\.io/aws-load-balancer-type"="nlb"` in the Helm Chart installation command.
 
@@ -425,13 +425,13 @@ To disable SSL/TLS (not recommended for production use), see [Helm parameters](/
 
 ### Ingress CORS
 
-Cross-Origin Resource Sharing (CORS) is disabled by default. You can enable it by setting the [Helm parameter](/docs/install/helm-parameters/) `ingress.annotations.nginx.ingress.kubernetes.io/enable-cors` to `"true"`:
+Cross-Origin Resource Sharing (CORS) is disabled by default. You can enable it by setting the [Helm parameter](/docs/install/helm-parameters/) `ingress.annotations."nginx.ingress.kubernetes.io/enable-cors"` to `"true"` (the quoted part is a single key, do not transform the inner dots into colons and line breaks):
 
 * Add `--set-string "ingress.annotations.nginx\.ingress\.kubernetes\.io/enable-cors"="true"` in the Helm Chart installation command (make sure you enter `--set-string`).
 
 Then, you can configure it by adding annotations to the `ingress` parameter (refer to [Nginx documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#enable-cors) for further details):
 
-For example, you can specify a value to the _cors allow origin_ configuration with the `ingress.annotations.nginx.ingress.kubernetes.io/cors-allow-origin` parameter. For instance, if you want to allow cross origin request from the domain name `https://origin-site.com`:
+For example, you can specify a value to the _cors allow origin_ configuration with the `ingress.annotations."nginx.ingress.kubernetes.io/cors-allow-origin"` parameter (the quoted part is a single key, do not transform the inner dots into colons and line breaks). For instance, if you want to allow cross origin request from the domain name `https://origin-site.com`:
 
 * Add `--set "ingress.annotations.nginx\.ingress\.kubernetes\.io/cors-allow-origin"="https://origin-site.com"` in the Helm Chart installation command.
 

@@ -50,7 +50,14 @@ description: Use the following parameters to edit your configuration.
 | ingress.host | Domain name used for incoming HTTP requests if `nginx-ingress-controller.enabled` is set to true | yes | none |
 | ingress.tlsenabled                    | Enable embedded ingress SSL/TLS     | no        | true          |
 | ingress.tlsSecretName                 | Embedded ingress SSL/TLS certificate secret name | no | streams-ingress-tls-secret |
+| ingress.annotations."nginx.ingress.kubernetes.io/enable-cors" | Enable cross origin requests | no | false |
+| ingress.annotations."nginx.ingress.kubernetes.io/cors-allow-origin" | Allow cross origin requests for the given domains | no | none |
+| ginx-ingress-controller.service.annotations."service.beta.kubernetes.io/aws-load-balancer-type" | Request a loadbalancer on AWS (e.g. with the "nlb" value) | no | none |
 | nginx-ingress-controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
+
+{{< alert title="Note" >}}
+The double quoted parts of the parameters in this section are single keys, do not transform their inner dots into colons and line breaks.
+{{< /alert >}}
 
 ## Streams parameters
 
