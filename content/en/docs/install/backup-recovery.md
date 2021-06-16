@@ -14,7 +14,7 @@ The procedures for the database will depend on your deployment infrastructure, m
 
 ### RDS AWS backup procedure
 
-By default, RDS instance have a daily backup planned during the backup window (if you don't specify it, a default window will be set according to your region (see [AWS documentation](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html#USER_WorkingWithAutomatedBackups.BackupWindow)).
+RDS instanced have backups planned daily during the backup window. A default backup windows is set according to your region (see [AWS documentation](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html#USER_WorkingWithAutomatedBackups.BackupWindow)).
 If automated backups are disable, you can enable them by setting the backup retention period to a positive value (see [AWS documentation](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html#USER_WorkingWithAutomatedBackups.Enabling)).
 
 You can also create a manual snapshot using the AWS CLI:
@@ -81,9 +81,9 @@ All Streams pods must be redeployed and running with the new configuration after
 
 ## Kafka
 
-The procedures for the Kafka cluster is environment agnostic, however SLA/OLA and RPO/RTO will depend on your Cloud Provider. As we recommend to manage Kafka outside kubernetes, the following procedures has been tested with MSK on AWS but can be used on any Kafka installation
+The procedures for the Kafka cluster is environment agnostic, however SLA/OLA and RPO/RTO will depend on your Cloud Provider. As we recommend to manage Kafka outside kubernetes, the following procedures has been tested with MSK on AWS but could be used on any Kafka installation
 
-It uses [MirrorMaker 2](https://cwiki.apache.org/confluence/display/KAFKA/KIP-382%3A+MirrorMaker+2.0) to mirror the cluster data & configuration to another Kafka cluster.
+It uses [MirrorMaker 2](https://cwiki.apache.org/confluence/display/KAFKA/KIP-382%3A+MirrorMaker+2.0) to mirror the cluster data and the configuration to another Kafka cluster.
 
 ### Backup procedure
 
@@ -213,7 +213,7 @@ Then, you will have to configure MirrorMaker 2 to mirror the data from your back
 * Stop MirrorMaker 2 which was configured in backup procedure
 * Start MirrorMaker 2 with backup cluster configured as source and new production cluster configured as target
 * When the mirroring is done, stop MirrorMaker 2
-* Reconfigure your Streams installation so that the microservices connect to the new production cluster, for instance: `helm -n ${NAMESPACE} get values ${HELM_RELEASE} /tmp/values.yaml && helm -n ${NAMESPACE} upgrade ${HELM_RELEASE} . -f /tmp/values.yaml --set externalizedKafka.bootstrapServers="<new-production-kafka-bootstrap-server>"`
+* Reconfigure your Streams installation so that the microservices connect to the new production cluster, for instance: `helm -n ${NAMESPACE} get values ${HELM_RELEASE} > /tmp/values.yaml && helm -n ${NAMESPACE} upgrade ${HELM_RELEASE} . -f /tmp/values.yaml --set externalizedKafka.bootstrapServers="<new-production-kafka-bootstrap-server>"`
 * At this step, your Streams installation should be back up and running. Once you have validated the new setup, you can proceed to next step
 * Start MirrorMaker 2 with new production cluster configured as source and backup cluster configured as target so that you get back to the normal backup procedure state
 
