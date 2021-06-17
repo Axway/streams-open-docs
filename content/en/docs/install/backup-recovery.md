@@ -12,7 +12,7 @@ We recommend you to back up your external MariaDB, Kafka cluster, and your Strea
 
 The procedure to back up a database depends on your deployment infrastructure, and the back up of SLA/OLA and RPO/RTO depends on the chosen cloud provider. As we recommend to manage database outside kubernetes, following we describe how to manage it with Amazon Web Services (AWS).
 
-### Back up a relational database service
+### Back up AWS RDS
 
 AWS Relational Database Service (RDS) instances have daily backups planned during the backup window. A default backup windows is set accordingly to your region. For more information, see [AWS documentation](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html#USER_WorkingWithAutomatedBackups.BackupWindow).
 
@@ -29,13 +29,13 @@ aws rds create-db-snapshot \
     --db-snapshot-identifier "${SNAPSHOT_ID}"
 ```
 
-You can automated the command to increase the frequency of the backups.
+You can automated this command, for example, by creating a cron job, to increase the frequency of the backups.
 
 {{< alert title="Note" >}}The RPO depends on the frequency of your backup. The default is 24H.{{< /alert >}}
 
-### Restore a relational database service
+### Restore AWS RDS
 
-You can restore a RDS backup to a new RDS instance using the AWS CLI.
+You can restore your RDS backup to a new RDS instance using the AWS CLI.
 
 1. Run the following command to export your data:
 
@@ -95,7 +95,7 @@ Before you start:
 * Set up a new Kafka cluster with the same configuration as your production cluster. Setting up a cluster with lower resources for cost optimization is possible, but you must ensure your Kafka cluster backup can handle all the messages that will be mirrored from the production Kafka cluster.
 * Set up a tooling instance using Kafka. You can use the same version as the [embedded Kafka in Streams installation](/docs/architecture/#kafka). This instance must be able to access the production Kafka bootstrap servers and the backup Kafka bootstrap servers.
 
-This is highly recommended to monitor all the instances deployed in the context of this disaster and recovery plan procedure.
+It is highly recommended to monitor all the instances deployed in the context of this disaster and recovery plan procedure.
 
 ### Enable the Kafka cluster back up
 
@@ -408,7 +408,7 @@ After a few seconds, all pods in you previous Streams namespace should be starti
 
 To restore a Velero backup on a new K8s cluster:
 
-1. Reinstall Velero on the new cluster following the installation guide.
+1. Follow [Install AWS Velero](#install-aws-velero) to reinstall Velero on the new cluster.
 2. Use the same AWS S3 bucket created during the Velero installation.
 3. Restore the backups using the commands from [Restore a Velero backup](#restore-a-velero-backup) section.
 
