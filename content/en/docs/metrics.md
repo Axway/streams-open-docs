@@ -69,7 +69,7 @@ Regardless of basic system metrics (as CPU usage or memory usage), Streams expos
 * Number of active subscriptions:
     * it must still under 1500 for each subscriber pods
     * it's given by `streams_active_subscriptions`
-* rate of events in input in Streams topics:
+* Rate of input events for Streams hub:
     * it must still under 500 events by seconds
     * it's given by `rate(streams_input_events_total{streams_service="hub", data_type="snapshot"}[2m])`
 * JVM memory used:
