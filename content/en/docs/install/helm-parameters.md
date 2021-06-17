@@ -51,12 +51,20 @@ description: Use the following parameters to edit your configuration.
 | ingress.tlsenabled                    | Enable embedded ingress SSL/TLS     | no        | true          |
 | ingress.tlsSecretName                 | Embedded ingress SSL/TLS certificate secret name | no | streams-ingress-tls-secret |
 | ingress.annotations."nginx.ingress.kubernetes.io/enable-cors" | Enable cross origin requests | no | false |
-| ingress.annotations."nginx.ingress.kubernetes.io/cors-allow-origin" | Allow cross origin requests for the given domains | no | none |
-| ginx-ingress-controller.service.annotations."service.beta.kubernetes.io/aws-load-balancer-type" | Request a loadbalancer on AWS (e.g. with the "nlb" value) | no | none |
+| ingress.annotations."nginx.ingress.kubernetes.io/cors-allow-origin" | Allow cross origin requests for the given domains | no | N/A |
+| nginx-ingress-controller.service.annotations."service.beta.kubernetes.io/aws-load-balancer-type" | Request a loadbalancer on AWS (e.g. with the "nlb" value) | no | N/A |
 | nginx-ingress-controller.metrics.enabled | Activate metrics endpoint for Ingress controller | no | false |
 
 {{< alert title="Note" >}}
-The double quoted parts of the parameters in this section are single keys, do not transform their inner dots into colons and line breaks.
+Take note of the double quotes for the annotations parameters. In practice, it means that in a Helm values file, `ingress.annotations."nginx.ingress.kubernetes.io/cors-allow-origin"` turns into:
+
+```yaml
+ingress:
+  annotations:
+    "nginx.ingress.kubernetes.io/cors-allow-origin": true
+```
+
+If you are setting those parameters through a `--set` on the command line, you will need to escape the dots between the double quotes.
 {{< /alert >}}
 
 ## Streams parameters
