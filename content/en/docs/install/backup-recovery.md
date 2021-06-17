@@ -101,7 +101,13 @@ It is highly recommended to monitor all the instances deployed in the context of
 
 To start the back up:
 
-1. Create a MirrorMaker 2 configuration file. The following is a MirrorMaker 2 sample configuration file, where you only need to fill in the source and target bootstrap servers and your authentication parameters:
+1. Create a MirrorMaker 2 configuration file. The following is a MirrorMaker 2 sample configuration file, where you only need to fill the parameters:
+    * `source.bootstrap.servers`
+    * `target.replication.factor`
+    * and the authentication parameters:
+        * `sasl`
+        * `ssl`
+        * `security`
 
     ```sh
     cat > mm2.config <<EOF
@@ -150,7 +156,7 @@ To start the back up:
     source.replication.factor = 1
     target.replication.factor = 1
     
-    #Setup your authentication parameters here
+    # Setup your authentication parameters here
     security.protocol=SASL_SSL
     sasl.mechanism=SCRAM-SHA-512
     sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="<username>" password="<password>";
@@ -371,7 +377,7 @@ kubectl -n "${VELERO_NAMESPACE}" exec -it "${VELERO_POD}" -- /velero backup crea
 
 ### Schedule a backup using Velero
 
-You can also schedule backups. The schedule template is in cron notation, using UTC time. The schedule can also be expressed using `@every \<duration\>` syntax. You can specify the duration using a combination of seconds(s), minutes(m), and hours(h). For example: `@every 2h30m`.
+You can also schedule backups. The schedule template is in cron notation, using UTC time. The schedule can also be expressed using `@every <duration>` syntax. You can specify the duration using a combination of seconds(s), minutes(m), and hours(h). For example: `@every 2h30m`.
 
 You can use the following example to schedule a backup using Velero:
 
