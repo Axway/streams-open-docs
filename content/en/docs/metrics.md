@@ -66,7 +66,7 @@ rate(http_server_requests_seconds_sum[2m])/rate(http_server_requests_seconds_cou
 
 Regardless of basic system metrics (as CPU usage or memory usage), Streams expose custom metrics that need to be monitored to prevent issues with your Streams installation:
 
-* number of active subscription:
+* Number of active subscriptions:
     * it must still under 1500 for each subscriber pods
     * it's given by `streams_active_subscriptions`
 * rate of events in input in Streams topics:
