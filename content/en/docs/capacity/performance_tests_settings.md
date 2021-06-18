@@ -3,7 +3,7 @@ title: Performance tests
 linkTitle: Performance tests
 weight: "10"
 date: 2020-09-20
-description: Presents performance tests achieved for different scenarios in HA mode.
+description: Presents performance tests achieved for different scenarios in high availability (HA) mode.
 ---
 
 ## Performance tests settings
@@ -18,14 +18,14 @@ Performance benchmarks are executed under different scenarios changing the follo
 * Size of published payload
 * Publication period
 
-We present those results for two different use cases of Streams:
+Folling are the results for two different use cases of Streams:
 
-* SSE subscriber paired with Http-Poller publisher
-* Webhook subscriber paired with Http-Post publisher
+* SSE subscriber paired with HTTP Poller publisher
+* Webhook subscriber paired with HTTP Post publisher
 
 ## Performance tests terminology
 
-This section defines common terms used in the performance test results:
+The folling table defines common terms used in the performance test results:
 
 | Metric                          | Definition                                                                     |
 |---------------------------------|--------------------------------------------------------------------------------|
@@ -41,12 +41,12 @@ This section defines common terms used in the performance test results:
 
 ### SSE and HTTP-Poller performance tests
 
-We use the following publisher and subscriber:
+Streams uses the following publisher and subscriber:
 
-* Http-Poller Publisher - over a Streams Managed Mock API (validated to have a low latency under load with a percentage of renewed data on each API call set to `20`%).
-* SSE Subscriber - fronted by NGINX as the ingress controller and queried by [Gatling](https://gatling.io) which has been customized to support SSE connections.
+* Http-Poller Publisher - over a Streams Managed Mock API (validated to have a low latency under load with a percentage of renewed data on each API call set to `20%`).
+* SSE Subscriber - front-end by NGINX as the ingress controller and queried by [Gatling](https://gatling.io) which has been customized to support SSE connections.
 
-Each run is configured for `5` minutes including a `30` seconds linear ramp
+Each run is configured for `5` minutes including a `30` seconds linear ramp.
 
 | Users | Topics | Payload size | Publication period | 99 %ile latency (ms) | Max latency (ms) | Throughput (event/s) |
 |-------|--------|--------------|----------------|----------------------|------------------|----------------------|
@@ -72,9 +72,9 @@ Each run is configured for `5` minutes including a `30` seconds linear ramp
 
 ### Webhook and HTTP-Post performance tests
 
-We use the following publisher and subscriber:
+Streams uses the following publisher and subscriber:
 
-* Http-Post Publisher - fronted by NGINX as the ingress controller.
+* Http-Post Publisher - front-end by NGINX as the ingress controller.
 * Webhook Subscriber - posting data to an internal webhook tooling.
 
 Each run is configured for around `5` minutes, the exact value may vary slightly because of the tooling used to post publication data.
