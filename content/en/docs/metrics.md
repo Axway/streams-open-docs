@@ -64,14 +64,14 @@ rate(http_server_requests_seconds_sum[2m])/rate(http_server_requests_seconds_cou
 
 ## Monitoring
 
-Regardless of basic system metrics (as CPU usage or memory usage), Streams expose custom metrics that need to be monitored to prevent issues with your Streams installation:
+Regardless of basic system metrics, such as CPU usage or memory usage, Streams expose custom metrics that need to be monitored to prevent issues with your Streams installation:
 
 * Number of active subscriptions:
-    * it must still under 1500 for each subscriber pods
-    * it's given by `streams_active_subscriptions`
+    * It must be under 1500 for each subscriber pods.
+    * It is set by `streams_active_subscriptions`.
 * Rate of input events for Streams hub:
-    * it must still under 500 events by seconds
-    * it's given by `rate(streams_input_events_total{streams_service="hub", data_type="snapshot"}[2m])`
+    * It must be under 500 events by seconds.
+    * It is set by `rate(streams_input_events_total{streams_service="hub", data_type="snapshot"}[2m])`.
 * JVM memory used:
-    * it must still lower than the total pod memory for each pods, otherwise they will be OOM kill after a short period of time
-    * it's respectively given by `jvm_memory_used_bytes` and `container_memory_working_set_bytes`
+    * It must be lower than the total pod memory for each pod, otherwise they will be `OOM kill` after a short period of time.
+    * It is respectively set by `jvm_memory_used_bytes` and `container_memory_working_set_bytes`.
