@@ -321,7 +321,6 @@ Configure an AWS bucket to start the Velero installation.
 5. Create an access key for the Velero user:
     ```sh
     export VELERO_USERNAME="<my-velero-username>"
-    export VELERO_BUCKET="<my-bucket-name>"
      
     aws iam create-access-key --user-name "${VELERO_USERNAME}" > velero-access-key.json
      ```
@@ -345,7 +344,6 @@ Install Velero using the Helm chart:
 export REGION="<my-aws-region>"
 export VELERO_BUCKET="<my-bucket-name>"
 export VELERO_NAMESPACE="<my-velero-namespace>"
-export STREAMS_NAMESPACE="<my-streams-namespace>"
  
 helm repo add vmware-tanzu https://vmware-tanzu.github.io/helm-charts && \
 helm install velero vmware-tanzu/velero \
@@ -370,6 +368,7 @@ To create a backup manually, you must connect to the Velero pod and run the back
 ```sh
 export VELERO_NAMESPACE="<my-velero-namespace>"
 export VELERO_POD="$(kubectl get pod -n "${VELERO_NAMESPACE}" --no-headers -o=custom-columns=NAME:.metadata.name)"
+export STREAMS_NAMESPACE="<my-streams-namespace>"
 export BACKUP_NAME="<my-backup>"
  
 kubectl -n "${VELERO_NAMESPACE}" exec -it "${VELERO_POD}" -- /velero backup create "${BACKUP_NAME}" --include-namespaces "${STREAMS_NAMESPACE}"
@@ -384,6 +383,7 @@ You can use the following example to schedule a backup using Velero:
 ```sh
 export VELERO_NAMESPACE="<my-velero-namespace>"
 export VELERO_POD="$(kubectl get pod -n "${VELERO_NAMESPACE}" --no-headers -o=custom-columns=NAME:.metadata.name)"
+export STREAMS_NAMESPACE="<my-streams-namespace>"
 export SCHEDULE_BACKUP_NAME="<my-backup>"
 export SCHEDULE_CRON="<my-scheduling>"
  
