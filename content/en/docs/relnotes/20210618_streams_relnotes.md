@@ -14,6 +14,14 @@ Streams is available as a set of Docker containers deployable in Kubernetes by u
 
 It is important, especially when upgrading from an earlier version, to be aware of the following changes in the behavior or operation of the product in this new version.
 
+### Kafka headers renamed
+
+The following kafka headers have been renamed:
+
+* *stream_pipelineId* renamed to *streams_pipelineId*
+* *stream_dataType* renamed to *streams_dataType*
+* *streams_sourceTimestamp* renamed to *stream_sourceTimestamp*
+
 ### Streams Helm chart enhancements
 
 The following Helm chart dependency images were upgraded:
