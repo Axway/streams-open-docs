@@ -304,6 +304,10 @@ You must define it for each of the 3rd party pods (NGINX, Kafka, Zookeeper and M
 ```
 nginx-ingress-controller:
   nodeSelector:
+    application: streams
+  [...]
+  defaultBackend:
+    nodeSelector:
       application: streams
 [...]
 embeddedKafka:
@@ -319,7 +323,7 @@ embeddedMariadb:
       application: streams
   slave:
     nodeSelector:
-    application: streams
+      application: streams
 [...]
 ```
 
