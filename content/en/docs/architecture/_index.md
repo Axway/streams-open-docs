@@ -6,42 +6,47 @@ date: 2020-09-18
 description: Install Streams and learn how to upgrade an existing installation.
 ---
 
-## Summary
+Streams is an event hub that facilitates exchange messages between devices, services, and applications, but it only supports container-based deployment.
 
-This document provides a reference architecture guide for deploying Streams. Deploying Streams using Docker containers orchestrated by Kubernetes brings tremendous benefits in installing, developing and operating the solution.
-This document describes all major areas in deploying and maintaining Streams, including:
+The purpose of this guide is to share Axway reference architecture for the container-based deployment of a Streams solution on Kubernetes. It covers the architectural, development, and operational aspects of the proposed architecture.  
+
+Because Docker and Kubernetes are portable across on-premise environments and many cloud providers, most of the information in this guide should apply to those environments. However, specific AWS recommendations are also provided, as it is one of the most common deployment targets.
+
+Deploying Streams using Docker containers orchestrated by Kubernetes brings tremendous benefits in installing, developing, and operating the solution. This guide describes all major areas in deploying and maintaining Streams, including:
 
 * Physical and deployment architectures.
 * Explanation and consideration for selecting underlying infrastructure components.
 * Kubernetes considerations.
-* Performance, logging and monitoring aspects.
+* Performance, logging, and monitoring aspects.
 * Backup and recovery, including disaster recovery.
 
-## Overview
+## Targe audience
 
-Streams is an event hub that makes it easy to exchange messages between devices, services and applications. It only supports container-based deployment. The purpose of this document is to share Axway reference architecture for the container-based deployment of a Streams solution on Kubernetes. It will address many architectural, development and operational aspects of the proposed architecture.  
-Because Docker and Kubernetes are portable across on-premise environments and many cloud providers, most of the information in this guide should apply to those environments. However, specific AWS recommendations are also provided, as it is one of the most common deployment targets.
-The target audience for the document is architects, developers, and operations personnel. To get the most value from this document, a reader should have a good knowledge of Docker, Kubernetes and API.
+The target audience for this guide is architects, developers, and operations personnel. To get the most value from this guide, the reader should have a good knowledge of Docker, Kubernetes, and APIs.
 
 ## General Architecture
 
-This chapter is focused on general architecture in support of a Streams deployment on a dedicated Kubernetes cluster. The chapter discusses architectural principles, as well as required and optional components. There are many ways to deploy software on a Kubernetes cluster, but this document shares Axway’s experience acquired from deploying Streams in an actual production environment. Most of the implementation details will be outlined in the following chapters.
-Make sure the constraints listed in the chapters are respected in case of deployment on an existing Kubernetes cluster.
+This section focus on general architecture in support of a Streams deployment on a dedicated Kubernetes cluster. It discusses architectural principles, as well as required and optional components.
+
+There are many ways to deploy software on a Kubernetes cluster, but this guide shares Axway’s experience acquired from deploying Streams in a production environment.
+
+When following these instructions, ensure to comply with the constraints described in each section.
 
 ### Principles
 
-Official testing is taking place in Kubernetes as the orchestration component. However, the Docker images are platform agnostic, so they can be deployed in other orchestration platforms, or even on docker-compose although it is not recommended to use beside testing purposes. Kubernetes manages many important aspects of runtime, security, and operations.
-Besides Docker and Kubernetes, we use Helm charts to describe the entire deployment configuration. Using Helm provides an efficient way to package all configuration parameters for Kubernetes and Streams containers to be deployed with a single command.
+Official tests took place in Kubernetes as the orchestration component. However, the Docker images are platform agnostic, so they can be deployed in other orchestration platforms, or even on docker-compose, although this is not recommended other than for testing purposes.
+
+Kubernetes manages many important aspects of runtime, security, and operations. Besides Docker and Kubernetes, we use Helm charts to describe the entire deployment configuration. Using Helm provides an efficient way to package all configuration parameters for Kubernetes and Streams containers to be deployed with a single command.
 
 Using Helm, you can:
 
-* Alter default resources configuration (CPU / memory)
-* Select which components to deploy
-* Set up container-based configuration
+* Alter default resources configuration (CPU / memory).
+* Select which components to deploy.
+* Set up container-based configuration.
 
-In this guide, we will show which configurations can be changed and how to change them.
+Following, we show which configurations can be changed and how to change them.
 
-In generic terms Streams is deployed as a stack of three layer with different responsibilities.
+In generic terms, Streams is deployed as a stack of three layer with different responsibilities.
 
 ![Layered Architecture](/Images/architecture/arch_layered_deployment.png)
 
@@ -56,13 +61,15 @@ To help customers with setting up a required environment, the following table de
 
 ### Target use case
 
-We review a single deployment option where all Streams components including their dependencies are running inside a single Kubernetes cluster.
+We reviewed a single deployment option where all Streams components, including their dependencies, are running inside a single Kubernetes cluster.
+
 In our scenario, we expose several entry points for the external clients inside the cluster (see implementation details).  
+
 A dedicated deployment environment requires:
 
-* A Kubernetes cluster
-* A Storage system  
-* An Access to Streams docker images in container registry
+* A Kubernetes cluster.
+* A Storage system  .
+* Access to Streams docker images in container registry.
 
 The following diagram shows a general architecture of a single cluster configuration:
 
@@ -74,12 +81,12 @@ In this section, we present the considerations for using additional components i
 
 #### Container proxy registry
 
-In order to avoid your Kubernetes cluster to directly access internet, we recommend to use self-managed docker registry proxy (e.g., Sonatype Nexus, JFrog Artifactory). This proxy can thus be configured to access Streams images repository managed by Axway.
+To avoid your Kubernetes cluster to directly access internet, we recommend you to use self-managed docker registry proxy, for example, Sonatype Nexus, JFrog Artifactory. Then, you can configure this proxy to access the Streams images repository managed by Axway.
 
 | Description                   | Type      |
 | ----------------------------- | --------- |
-| Docker images contain such sensitive data as certificate, and configuration. This data must be protected | Required |
-| The password is sensitive and must be encrypted in the system | Required |
+| Docker images contain sensitive data, such as certificate and configuration. This data must be protected. | Required |
+| The password is sensitive and must be encrypted in the system. | Required |
 
 #### Bastion host
 
@@ -94,32 +101,36 @@ The bastion must have high traceability with specific RBAC permissions to allow 
 
 #### Storage capabilities
 
-Platform infrastructure must support Kubernetes PersistentVolumes. See [Volumes](#volumes) section for details.
+Platform infrastructure must support Kubernetes PersistentVolumes. For more information, see [Volumes](#volumes).
 
 #### Encrypting secret data at rest
 
-To improve security, you should encrypt k8s secret data at rest. See [Encrypting Secret Data at Rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data) for more details.
+To improve security, you must encrypt K8s secret data at rest. See [Encrypting Secret Data at Rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data) for more details.
 
-{{< alert title="Warning" color="warning" >}}We strongly recommend you to use a KMS provider instead of storing the raw encryption key in the `EncryptionConfig` file. Encrypting secrets with a locally managed key protects against an `etcd` compromise, but it fails to protect against a host compromise. Since the encryption keys are stored on the host in the `EncryptionConfig` YAML file, a skilled attacker can access that file and extract the encryption keys.{{< /alert >}}
+{{< alert title="Warning" color="warning" >}}We strongly recommend you to use a KMS provider instead of storing the raw encryption key in the `EncryptionConfig` file. Encrypting secrets with a locally managed key protects against an `etcd` compromise, but it fails to protect against a host compromise. Since the encryption keys are stored in the host, in the `EncryptionConfig` YAML file, a skilled attacker can access that file and extract the encryption keys.{{< /alert >}}
 
 ### Performance goals
 
-An important factor for achieving your goals is to define a set of performance goals. These will be unique for a specific set of APIs, deployment platform and clients’ expectations. Later in the document, we show an example of the performance metrics that have been achieved in testing a reference architecture.
+An important factor for achieving your goals is to define a set of performance goals. These will be unique for a specific set of APIs, deployment platform and clients’ expectations. Later in this guide, we show an example of the performance metrics that have been achieved in testing a reference architecture.
 
 ## Implementation details
 
-This chapter details the configuration for each component.
+This section describes the configuration for each component.
 
 ### Diagram
 
-Diagram below shows the recommended reference architecture diagram. It is designed with High Availability (HA) in mind. An HA deployment requires redundancy and high throughput for all infrastructure components and networks. To reach this target, components must be deployed in multiple zones. If your K8s cluster is well-configured, the pods are spread across the zones in a best effort placement. In order to reduce the probability of unequal spreading across zones, it is recommended to use homogenous zone (same number and type of nodes) as designed in this architecture. In our configuration, we use three availability zones. This configuration is compliant with a minimal technical SLA of 99.99 percent. The implementation details of this diagram are explained in this chapter.
+The following diagram shows the recommended reference architecture diagram. It is designed with High Availability (HA) in mind.
+
+An HA deployment requires redundancy and high throughput for all infrastructure components and networks. To reach this target, components must be deployed in multiple zones. If your K8s cluster is well-configured, the pods are spread across the zones in a best effort placement. To reduce the probability of unequal spreading across zones, it is recommended to use homogenous zone (same number and type of nodes) as designed in this architecture. In our configuration, we have used three availability zones. This configuration is compliant with a minimal technical SLA of 99.99 percent.
 
 ![Technical diagram for HA deployment](/Images/architecture/arch_technical_deployment_ha.png)
 
 ### Choice of runtime infrastructure components
 
 This section provides recommendations for a typical implementation of the runtime infrastructure components.
-In this configuration, all assets of the Kubernetes cluster are deployed in the same data center or a region (in case of a cloud deployment), although components are spread out in various racks, rooms or availability zones.
+
+In this configuration, although the components are spread out in various racks, rooms, or available zones, all assets of the Kubernetes cluster are deployed in the same data center, or in a region (in case of a cloud deployment).
+
 The following table lists the number of runtime components in this configuration.
 
 | Assets                  | Spec                           |
@@ -130,11 +141,11 @@ The following table lists the number of runtime components in this configuration
 | External IP             | 1                              |
 | Load Balancer           | 1                              |
 
-These values are the minimum recommended starting point. Your actual values will depend on many factors such as the number of topics, payload size, etc. Use recommendations as the starting point for your own project. Then run through a series of functional and performance tests to adjust your settings.
+These values are the minimum recommended starting point. Your actual values will depend on many factors, such as the number of topics, payload size, etc. Use these recommendations as the starting point for your own project. Then, run through a series of functional and performance tests to adjust your settings.
 
-#### VM configurations
+#### Virtual machine configurations
 
-These are the recommended parameters for the VMs:
+The following are the recommended parameters for the VMs:
 
 | Assets       | CPU | RAM   |
 | ------------ | --- | ----- |
@@ -143,7 +154,9 @@ These are the recommended parameters for the VMs:
 
 #### Storage
 
-We recommend using SSD disks with low latency. The storage is used by the Kafka, Zookeeper and MariaDB pods. The following table summarizes the minimum recommended storage for each component, but your configuration will depend on your usage and other parameters.
+We recommend using SSD disks with low latency. The storage is used by the Kafka, Zookeeper, and MariaDB pods.
+
+The following table summarizes the minimum recommended storage for each component, but your configuration will depend on your usage and other parameters.
 
 | Component  | Size per pod |
 | ---------- | ------------ |
@@ -153,7 +166,7 @@ We recommend using SSD disks with low latency. The storage is used by the Kafka,
 
 ### Load balancer
 
-A load balancer is required in front of the cluster. We use the Kubernetes object called ingress controller that is responsible for fulfilling the ingress rules. A NGINX ingress controller is, by default, deployed with our Helm chart installation. For better performance, we recommend you to use a L4 Load balancer. See your Cloud provider documentation to configure it (e.g. [AWS Load Balancing](https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html)).
+A load balancer is required in front of the cluster. We use the Kubernetes object called `ingress controller`, which is responsible for fulfilling the ingress rules. A NGINX ingress controller is, by default, deployed with our Helm chart installation. For better performance, we recommend you to use an L4 Load balancer. For more information, see your Cloud provider documentation to configure the load balance, for example, [AWS Load Balancing](https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html).
 
 #### Network
 
@@ -169,8 +182,9 @@ The network deployment uses only one subnet per availability zone. Each subnet m
 
 ### Time synchronization
 
-For security and maintenance reason, it is strongly recommended to time synchronize your Kubernetes pods thanks to the Network Time Protocol (NTP). Pods use the clock of the node they are running on, so you need to time synchronize the nodes of your Kubernetes cluster.
-On AWS, it is recommended to use the chrony client to synchronize your Linux instances (for details refer to [AWS Set time guide](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/set-time.html)).
+For security and maintenance reasons, it is strongly recommended to time-synchronize your Kubernetes pods using the Network Time Protocol (NTP). Pods use the clock of the node they are running on, so you need to time-synchronize the nodes of your Kubernetes cluster.
+
+On AWS, it is recommended to use the Chrony client to synchronize your Linux instances. For more information, see [AWS Set time](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/set-time.html).
 
 ### Kubernetes considerations
 
@@ -178,27 +192,28 @@ This section focuses on additional Kubernetes objects and configuration inside t
 
 #### Deployment options
 
-Some parameters are available only at the creation of the Kubernetes cluster. The first is a network manager for communication between pods and the second is a set of strong permissions for Kubernetes.
+Some parameters are available only at the creation of the Kubernetes cluster. The first, is a network manager for communication between pods and the second, is a set of strong permissions for Kubernetes.
 
 ##### Network plugin
 
-Streams does not require any specific network CNI. Nevertheless, it quickly becomes more convenient (e.g. if you want to create ingress/egress network policies) or mandatory when deploying on cloud providers (e.g., deployment on internal network topology).
+Streams does not require any specific network CNI. Nevertheless, it quickly becomes more convenient, for example, if you wish to create ingress/egress network policies, or mandatory, when deploying on cloud providers, for example, deployment on internal network topology.
+
 We recommend the use of [CALICO](https://kubernetes.io/docs/concepts/cluster-administration/networking/#project-calico) with default configuration. The [AWS VPC CNI](https://kubernetes.io/docs/concepts/cluster-administration/networking/#aws-vpc-cni-for-kubernetes) has also been validated with our platform.
 
 ##### RBAC Permission
 
-Kubernetes' role-based access control ([RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)) is a method of regulating access to your Kubernetes cluster and resources based on the roles of individual users within an enterprise. Streams requires RBAC to be enabled for secrets management and third-party dependencies:
+Kubernetes' role-based access control ([RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)) is a method of regulating access to your Kubernetes cluster and resources based on the roles of individual users within an enterprise.
 
-* NGINX (fine tuning of ingress controller permissions)
+Streams requires RBAC to be enabled for secrets management and third-party dependencies, such as NGINX, to fine-tune ingress controller permissions.
 
 It is recommended to set people or application permissions to manage resources:
 
-* Allow Helm to manage resources
-* Allow worker nodes autoscaling
-* Allow specific users to view pods, to deploy pods, to access Kubernetes Dashboard
-* Allow Kubernetes to provide cloud resources, like storage or load balancer
+* Allow Helm to manage resources.
+* Allow worker nodes autoscaling.
+* Allow specific users to view pods, deploy pods, and access Kubernetes dashboard.
+* Allow Kubernetes to provide cloud resources, like storage or load balancer.
 
-This is a minimal configuration and you can define more specific permissions with cluster roles ([ClusterRoles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole)) and bindings ([ClusterRoleBindings](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole)) in the cluster.
+This configuration is minimal, and you can define more specific permissions with ([Cluster roles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole)) and ([bindings](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole)) in the cluster.
 
 | Description                              | Type      |
 | ---------------------------------------- | --------- |
@@ -207,29 +222,29 @@ This is a minimal configuration and you can define more specific permissions wit
 
 ##### Volumes
 
-Several third-party components of Streams (Kafka/Zookeeper and MariaDB) use Kubernetes [PersistentVolumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) and [PersistentVolumeClaims](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) to enable their persistent storage. The underlying infrastructure must support this feature so that the data is properly stored on disk. This allows Streams to maintain a consistent state and save published data in the event of a component failure.
+Several third-party components of Streams (Kafka/Zookeeper and MariaDB) use Kubernetes [persistent volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) and [persistent volume claims](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) to enable their persistent storage. The underlying infrastructure must support this feature so that the data is properly stored on disk. This allows Streams to maintain a consistent state and save published data in the event of a component failure.
 
 | Description                                                                 | Type     |
 | --------------------------------------------------------------------------- | -------- |
-| PersistentVolumes provisioner is supported by the underlying infrastructure | Required |
+| `PersistentVolumes` provisioner is supported by the underlying infrastructure | Required |
 
 ##### Namespaces
 
-A namespace allows splitting of a Kubernetes cluster into separated virtual zones. It is possible to configure multiple namespaces that will be logically isolated from each other. Pods from different namespaces can communicate with a full DNS pattern (\<service-name\>.\<namespace-name\>.svc.cluster.local). A name is unique within a namespace, but not across namespaces.
+A namespace allows splitting of a Kubernetes cluster into separated virtual zones. It is possible to configure multiple namespaces that will be logically isolated from each other. Pods from different namespaces can communicate with a full DNS pattern (`\<service-name\>.\<namespace-name\>.svc.cluster.local`). A name is unique within a namespace, but not across namespaces.
 
 As mentioned in the Kubernetes documentation, a typical usage of namespaces is separating projects and configured objects deployed by different teams.
 
-Axway recommends installing the Streams helm chart in a dedicated namespace. This is a good practice as:
+Axway recommends installing the Streams helm chart in a dedicated namespace. This is a good practice because:
 
 * It makes deployment easier when installing into an existing cluster.
 * Resources linked to Streams are isolated into a single logical entity.
 * You don’t have to specify full DNS to call other components, therefore, preventing errors. You just simply use a service name (\<service-name\>).
 
-After the namespace is created, the Streams helm chart can be installed within this namespace by simply adding option --namespace at the installation stage.
+After the namespace is created, the Streams helm chart can be installed within this namespace by simply adding option `--namespace` at the installation stage.
 
-There are two things to keep in mind though:
+However, be aware of the following:
 
-* Not all objects are linked to a namespace (e.g., PersistentVolumes).
+* Not all objects are linked to a namespace. For example, PersistentVolumes).
 * NGINX Ingress Controller can process Ingress resources from any namespace. Several annotations like [ingressClass](https://kubernetes.github.io/ingress-nginx/user-guide/multiple-ingress/) can be set in the helm chart to keep it under control.
 
 | Description                               | Type        |
@@ -239,8 +254,10 @@ There are two things to keep in mind though:
 ##### Pod resource limits
 
 As explained in [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/), when you specify a pod, you can optionally specify how much of each resource a container needs. The most common resources to specify are CPU and memory (RAM).
-Streams is provided with recommended resource requests and limits. This can be viewed and configured in the values.yaml and values-ha.yaml files under resources section for each component.
-In addition, each Java service defines heap memory management with the help of Java options (Xmx and Xms). This can be found in the values files under different names depending on service type: heapOpts, jvmMemoryOpts, javaOpts. This is important that Java memory heap is kept smaller than the memory resource limit as the java service also needs to allocate objects in “off heap” memory.
+
+Streams is provided with recommended resource requests and limits. This can be viewed and configured in the `values.yaml` and `values-ha.yaml` files under the resources section for each component.
+
+In addition, each Java service defines heap memory management with the help of Java options (Xmx and Xms). This can be found in the `values` files, under different names depending on service type: heapOpts, jvmMemoryOpts, javaOpts. It is important that Java memory heap is kept smaller than the memory resource limit as the java service also needs to allocate objects in “off heap” memory.
 
 | Description                                                           | Type     |
 | --------------------------------------------------------------------- | -------- |
@@ -252,7 +269,9 @@ In addition, each Java service defines heap memory management with the help of J
 ##### Components health check
 
 Kubernetes provides a very useful feature called probes. There is one probe to check if a pod is ready to be used at startup and another to periodically check if a container is still operational. These probes are respectively called “readiness probe” and “liveness probe.”
-Streams uses liveness and readiness probes. Liveness probes allow to know when to restart a (unhealthy) container, while readiness probes allow to know when a container is ready to start accepting traffic.
+
+Streams uses liveness and readiness probes. Liveness probes allow you to know when to restart a (unhealthy) container, while readiness probes allow you to know when a container is ready to start accepting traffic.
+
 As described in helm chart values files, both kind of probes are configured the same way on Streams microservices, that is:
 
 ```
@@ -265,8 +284,7 @@ As described in helm chart values files, both kind of probes are configured the 
 
 ##### Nodes labels
 
-The [Kubernetes scheduler](https://kubernetes.io/docs/reference/kubernetes-api/labels-annotations-taints/#topologykubernetesiozone
-) automatically takes care of the pod placement (e.g., spread your pods across nodes/availability zones, not place the pod on a node with insufficient free resources, etc.). Ensure that your nodes are configured with proper labels. If your cluster is deployed in a cloud provider (e.g. AWS, GCP, etc.), these labels are added automatically. Otherwise, you must add the following labels to each of your nodes depending on your K8s cluster version:
+The [Kubernetes scheduler](https://kubernetes.io/docs/reference/kubernetes-api/labels-annotations-taints/#topologykubernetesiozone) automatically takes care of the pod placement (for example, spread your pods across nodes or availability zones, do not place the pod on a node with insufficient free resources, etc.). Ensure that your nodes are configured with proper labels. If your cluster is deployed in a cloud provider (for example, AWS, GCP, etc.), these labels are added automatically. Otherwise, you must add the following labels to each of your nodes depending on your K8s cluster version:
 
 ###### For K8s v1.17 or higher
 
@@ -282,24 +300,22 @@ Examples for AWS (update the values according to your cluster):
 * `failure-domain.beta.kubernetes.io/region=us-east-1`
 * `failure-domain.beta.kubernetes.io/zone=us-east-1c`
 
-Moreover, if you want to force the Streams pods to run only on specific nodes, you can use nodeSelector:
+Moreover, if you want to force the Streams pods to run only on specific nodes, you can use `nodeSelector`.
 
-* In the first place, add labels of your choice to the selected nodes (e.g. label "application: streams"):
+To configure lables, first add labels of your choice to the selected nodes, for example, label "application: streams":
 
 ```
 kubectl label nodes <node-name> application=streams
 ```
 
-* Then update the values.yaml file (using the previous example):
-
-For the Streams pods:
+Then update the `values.yaml` file (using the previous example, for the Streams pods):
 
 ```
 nodeSelector:
   application: streams
 ```
 
-You must define it for each of the 3rd party pods (NGINX, Kafka, Zookeeper and MariaDB):
+You must define it for each of the third-party pods (NGINX, Kafka, Zookeeper, and MariaDB):
 
 ```
 nginx-ingress-controller:
@@ -329,7 +345,7 @@ embeddedMariadb:
 
 ##### Affinity and anti-affinity mode
 
-You can optionally use the Kubernetes podAntiAffinity feature to instruct Kubernetes to avoid the scheduling of the same replicas on the same node. Axway does not provide a default affinity configuration but this can be defined in the helm chart values file thanks to the `field affinity: {}`. You can also refer to the examples provided in Kubernetes documentation for more details.
+You can optionally use the Kubernetes `podAntiAffinity` feature to instruct Kubernetes to avoid the scheduling of the same replicas on the same node. Axway does not provide a default affinity configuration but this can be defined in the helm chart values file thanks to the `field affinity: {}`.
 
 | Description                                       | Type     |
 | ------------------------------------------------- | -------- |
@@ -344,7 +360,7 @@ To properly increase or decrease the number of runtime components to accommodate
 
 ###### Node scaling
 
-If the allocated number of nodes/VMs is not enough for increasing traffic, there are different ways to scale them. We recommend using a platform-provided mechanism to control this. AWS offers the [Auto Scaling Groups](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html) feature. There are many ways to design autoscaling. We recommend the [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler) tool which add a new node when the Kubernetes scheduler cannot schedule a new pod on the any existing nodes.
+If the allocated number of nodes/VMs is not enough for increasing traffic, there are different ways to scale them. We recommend using a platform-provided mechanism to control this. AWS offers the [Auto Scaling Groups](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html) feature. There are many ways to design autoscaling. We recommend the [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler) tool, which add a new node when the Kubernetes scheduler cannot schedule a new pod on the any existing nodes.
 
 ###### Horizontal Pod Autoscaler
 

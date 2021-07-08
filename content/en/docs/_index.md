@@ -14,17 +14,6 @@ description: Learn how to augment your existing infrastructure with an event hub
 
 {{< youtube BsT74y3pPCA >}}
 
-## Try Streams for free
-
-Get involved in Streams (v2) Early Adopter Program to:
-
-* Understand and contribute to how Axway wants to transform how organizations create, manage and consume APIs.
-* Understand the value of upcoming releases, provide feedback, concrete requirements & use cases.
-* Implement pilots to get proof points on expected value and hands-on experience on upcoming releases.
-* Contribute to Streams Roadmap with new ideas, and influence the direction.
-
-Contact your sales representative to join the community today!
-
 ## Contribute to Axway Streams documentation
 
 The Open Beta enables you to suggest edits and create issues for any page of the documentation using a GitHub account. To learn more, see the [contribution guidelines](/docs/contribution_guidelines/).
