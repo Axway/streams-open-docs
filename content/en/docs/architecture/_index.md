@@ -213,7 +213,7 @@ It is recommended to set people or application permissions to manage resources:
 * Allow specific users to view pods, deploy pods, and access Kubernetes dashboard.
 * Allow Kubernetes to provide cloud resources, like storage or load balancer.
 
-This configuration is minimal, and you can define more specific permissions with ([Cluster roles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole)) and ([bindings](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole)) in the cluster.
+This configuration is minimal, and you can define more specific permissions with ([ClusterRoles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole)) and ([ClusterRoleBindings](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole)) in the cluster.
 
 | Description                              | Type      |
 | ---------------------------------------- | --------- |
@@ -222,7 +222,7 @@ This configuration is minimal, and you can define more specific permissions with
 
 ##### Volumes
 
-Several third-party components of Streams (Kafka/Zookeeper and MariaDB) use Kubernetes [persistent volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) and [persistent volume claims](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) to enable their persistent storage. The underlying infrastructure must support this feature so that the data is properly stored on disk. This allows Streams to maintain a consistent state and save published data in the event of a component failure.
+Several third-party components of Streams (Kafka/Zookeeper and MariaDB) use Kubernetes [PersistentVolumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) and [PersistentVolumeClaims](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) to enable their persistent storage. The underlying infrastructure must support this feature so that the data is properly stored on disk. This allows Streams to maintain a consistent state and save published data in the event of a component failure.
 
 | Description                                                                 | Type     |
 | --------------------------------------------------------------------------- | -------- |
