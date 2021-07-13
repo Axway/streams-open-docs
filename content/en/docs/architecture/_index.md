@@ -673,7 +673,7 @@ MariaDB is our persistence layer.
 Source Docker image:
 
 * Repository: bitnami/mariadb
-* Tag: 10.4.19-debian-10-r32
+* Tag: 10.4.19-debian-10-r39
 
 Pod names:
 
