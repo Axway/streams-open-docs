@@ -1,7 +1,7 @@
 ---
 title: Streams June 2021 Release Notes
 linkTitle: Streams June 2021 Release Notes
-weight: 149
+weight: 147
 date: 2021-06-14
 ---
 

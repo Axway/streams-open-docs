@@ -1,8 +1,8 @@
 ---
 title: Streams August 2021 Release Notes
 linkTitle: Streams August 2021 Release Notes
-weight: 149
-date: 2021-08-20
+weight: 146
+date: 2021-07-13
 ---
 
 ## Summary
