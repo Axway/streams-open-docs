@@ -19,6 +19,8 @@ It is important, especially when upgrading from an earlier version, to be aware 
 The following Helm chart dependency image was upgraded:
 
 * MariaDB new docker image tag: `10.4.19-debian-10-r39`
+* Kafka new docker image tag: `2.8.0-debian-10-r55`
+* Zookeeper new docker image tag: `3.7.0-debian-10-r95`
 
 ## Deprecated features
 <!-- As part of our software development life cycle, we constantly review our Streams offering. -->

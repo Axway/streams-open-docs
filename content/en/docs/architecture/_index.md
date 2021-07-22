@@ -639,7 +639,7 @@ Apache Kafka is used as stream-processing layer.
 Source Docker image:
 
 * Repository: bitnami/kafka
-* Tag: 2.8.0-debian-10-r35
+* Tag: 2.8.0-debian-10-r55
 
 Pod name: `streams-kafka`.
 
@@ -656,7 +656,7 @@ Apache ZooKeeper is used by our microservices and by Kafka (when embedded in ins
 Source Docker image:
 
 * Repository: bitnami/zookeeper
-* Tag: 3.7.0-debian-10-r62
+* Tag: 3.7.0-debian-10-r95
 
 Pod name: `streams-zookeeper`
 
