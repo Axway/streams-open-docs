@@ -14,13 +14,15 @@ Streams is available as a set of Docker containers deployable in Kubernetes by u
 
 It is important, especially when upgrading from an earlier version, to be aware of the following changes in the behavior or operation of the product in this new version.
 
-### Streams Helm chart enhancements
+### Kubernetes requirements
 
-The following Helm chart dependency image was upgraded:
+Kubernetes supported version is now from 1.19 to 1.21.
 
-* MariaDB new docker image tag: `10.4.19-debian-10-r39`
-* Kafka new docker image tag: `2.8.0-debian-10-r55`
-* Zookeeper new docker image tag: `3.7.0-debian-10-r95`
+### Streams third parties
+
+The following third parties has been upgraded:
+
+* Nginx Ingress Controller: `0.48.1`
 
 ## Deprecated features
 <!-- As part of our software development life cycle, we constantly review our Streams offering. -->

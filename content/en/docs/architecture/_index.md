@@ -286,19 +286,10 @@ As described in helm chart values files, both kind of probes are configured the 
 
 The [Kubernetes scheduler](https://kubernetes.io/docs/reference/kubernetes-api/labels-annotations-taints/#topologykubernetesiozone) automatically takes care of the pod placement (for example, spread your pods across nodes or availability zones, do not place the pod on a node with insufficient free resources, etc.). Ensure that your nodes are configured with proper labels. If your cluster is deployed in a cloud provider (for example, AWS, GCP, etc.), these labels are added automatically. Otherwise, you must add the following labels to each of your nodes depending on your K8s cluster version:
 
-###### For K8s v1.17 or higher
-
 Examples for AWS (update the values according to your cluster):
 
 * `topology.kubernetes.io/region=us-east-1`
 * `topology.kubernetes.io/zone=us-east-1c`
-
-###### For K8s lower than v1.17
-
-Examples for AWS (update the values according to your cluster):
-
-* `failure-domain.beta.kubernetes.io/region=us-east-1`
-* `failure-domain.beta.kubernetes.io/zone=us-east-1c`
 
 Moreover, if you want to force the Streams pods to run only on specific nodes, you can use `nodeSelector`.
 
