@@ -16,7 +16,7 @@ It is important, especially when upgrading from an earlier version, to be aware 
 
 ### Streams Helm chart enhancements
 
-The following Helm chart dependency image was upgraded:
+The following Helm chart dependency images were upgraded:
 
 * MariaDB new docker image tag: `10.4.19-debian-10-r39`
 * Kafka new docker image tag: `2.8.0-debian-10-r55`
