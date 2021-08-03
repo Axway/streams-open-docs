@@ -8,9 +8,10 @@ description: Learn how to use the different types of Subscribers supported by St
 
 Streams supports different subscriber types. In order for a subscriber to receive events associated to a topic, it must subscribe either via:
 
+* **Kafka** which enables Streams to publish data to a Kafka topic/partition.
 * **Server-Sent Events** which enables Streams to push data to subscribers (e.g., client applications) through a persistent HTTP connection.
 * **Webhook** which enables Streams to notify the subscribers via a HTTP Post request performed against the registered endpoint (webhook receiver).
-* **Kafka** which enables Streams to publish data to a Kafka topic/partition.
+* **WebSocket** which enables Streams to notify the subscribers via persistent WebSocket connection.
 
 Each topic created on the platform must be associated with at least one type of subscribers.
 When creating your topic, you can set it via subscribers config in the topic's configuration.
@@ -19,11 +20,14 @@ When creating your topic, you can set it via subscribers config in the topic's c
 {
   "name": "myTopic",
   ...
-  "subscribers": {
-    "sse|webhook|kafka":  {
-      ...
+  "subscribers": [
+    {
+      "type": "kafka|sse|webhook|websocket",
+      "config": {
+        ...
+      }
     }
-    ...
+  ]
   }
   ...
 }
@@ -35,7 +39,7 @@ If no subscribers is defined, the [SSE subscriber](../subscribers/subscriber-sse
 
 Streams has strong requirements in terms of both quality of service and performance. To provide the best trade-off between these two conflicting aspects, Streams supports **at-least-once** delivery semantic.
 
-We ensure this quality of service by keeping the last event id delivered for each subscription, in order to resume from it in case of failure (e.g., network failure, component failure). The mechanism is internally managed by Streams for persistent subscribers, such as Webhook or Kafka subscribers, but depends on a client side mechanism for SSE. Refer to [Last-Event-Id](../subscribers/subscriber-sse#last-event-id) section for details.
+We ensure this quality of service by keeping the last event id delivered for each subscription, in order to resume from it in case of failure (e.g., network failure, component failure). The mechanism is internally managed by Streams for persistent subscribers, such as Webhook or Kafka subscribers, but depends on a client side mechanism for SSE. Refer to [Reconnect automatically after an interruption](../subscribers/subscriber-sse#reconnect-automatically-after-an-interruption) section for details.
 
 ## Subscription modes
 
@@ -56,16 +60,18 @@ For each subscriber's config, the `allowedSubscriptionModes` and `defaultSubscri
 {
   "name": "myTopic",
   ...
-  "subscribers": {
-    "sse": {
-        "allowedSubscriptionMode": ["snapshot-only","snapshot-patch"],
-        "defaultSubscriptionMode": "snapshot-patch"
+  "subscribers": [
+    {
+      "type": "sse",
+      "allowedSubscriptionMode": ["snapshot-only","snapshot-patch"],
+      "defaultSubscriptionMode": "snapshot-patch"
     },
-    "webhook": {
-        "allowedSubscriptionMode": ["snapshot-only","snapshot-patch"],
-        "defaultSubscriptionMode": "snapshot-only"
+    {
+      "type": "webhook",
+      "allowedSubscriptionMode": ["snapshot-only","snapshot-patch"],
+      "defaultSubscriptionMode": "snapshot-only"
     }
-  }
+  ]
   ...
 }
 ```

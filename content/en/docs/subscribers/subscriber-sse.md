@@ -1,7 +1,7 @@
 ---
 title: SSE Subscriber
 linkTitle: SSE Subscriber
-weight: 3
+weight: 2
 date: 2019-04-02
 description: Learn how to configure and use the Streams Server-Sent Events Subscriber.
 ---
@@ -9,28 +9,6 @@ description: Learn how to configure and use the Streams Server-Sent Events Subsc
 ## Overview
 
 Server-Sent Events (SSE) is part of the HTML5 standard. SSEs are sent over traditional HTTP, so they do not require a special protocol to work. SSE includes important features, such as `Last-Event-Id` header support, automatic client reconnection, and heterogeneous event handling.
-
-## Enable SSE subscription on a topic
-
-To enable SSE clients to subscribe to a topic:
-
-* Configure a `sse` subscriber in the configuration of the topic
-* (Optional) Configure your desired [Subscription modes](/docs/subscribers/#subscription-modes).
-
-```json
-{
-  "name": "myTopic",
-  ...
-  "subscribers": [
-    {
-      "type": "sse"
-    }
-  ]
-    ...
-  }
-  ...
-}
-```
 
 ## Subscribe to the topic via SSE
 
@@ -105,7 +83,7 @@ When no change is detected by Streams, the subscribers gets those heartbeats rep
 
 ### Type of SSE events
 
-When using `snapshot-patch` subscription mode, the `snapshot` event is only emitted once, after the connection is successfully established. Subsequent event will be named `patch`.
+When using `snapshot-patch` subscription mode, the `snapshot` event is only emitted once, after the connection is successfully established. Subsequent events will be named `patch`.
 
 When using `snapshot-only` subscription mode, only `snapshot` events are emitted when a change is detected in the content published in the topic.
 

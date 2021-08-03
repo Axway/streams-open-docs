@@ -1,7 +1,7 @@
 ---
 title: Kafka Subscriber
 linkTitle: Kafka Subscriber
-weight: 2
+weight: 1
 date: 2020-07-10T00:00:00.000Z
 description: Learn how to configure and use the Streams Kafka Subscriber.
 ---
