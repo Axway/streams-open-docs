@@ -6,6 +6,8 @@ date: 2019-04-02
 description: Learn how to configure and use the Streams Server-Sent Events Subscriber.
 ---
 
+## Overview
+
 Server-Sent Events (SSE) is part of the HTML5 standard. SSEs are sent over traditional HTTP, so they do not require a special protocol to work. SSE includes important features, such as `Last-Event-Id` header support, automatic client reconnection, and heterogeneous event handling.
 
 ## Enable SSE subscription on a topic
@@ -19,10 +21,11 @@ To enable SSE clients to subscribe to a topic:
 {
   "name": "myTopic",
   ...
-  "subscribers": {
-    "sse":  {
-      ...
+  "subscribers": [
+    {
+      "type": "sse"
     }
+  ]
     ...
   }
   ...
