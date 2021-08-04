@@ -16,11 +16,11 @@ It is important, especially when upgrading from an earlier version, to be aware 
 
 ### Kubernetes requirements
 
-Kubernetes supported version is now from 1.19 to 1.21.
+Kubernetes supported versions are now from 1.19 to 1.21.
 
-### Streams third parties
+### Streams third-parties
 
-The following third parties has been upgraded:
+The following third-parties has been upgraded:
 
 * Nginx Ingress Controller: `0.48.1`
 

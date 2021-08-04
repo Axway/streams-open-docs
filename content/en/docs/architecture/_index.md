@@ -230,22 +230,24 @@ Several third-party components of Streams (Kafka/Zookeeper and MariaDB) use Kube
 
 ##### Namespaces
 
-A namespace allows splitting of a Kubernetes cluster into separated virtual zones. It is possible to configure multiple namespaces that will be logically isolated from each other. Pods from different namespaces can communicate with a full DNS pattern (`\<service-name\>.\<namespace-name\>.svc.cluster.local`). A name is unique within a namespace, but not across namespaces.
+A namespace allows splitting of a Kubernetes cluster into separated virtual zones.
 
-As mentioned in the Kubernetes documentation, a typical usage of namespaces is separating projects and configured objects deployed by different teams.
+You can configure multiple namespaces that will be logically isolated from each other.
+
+Pods from different namespaces can communicate with a full DNS pattern (`\<service-name\>.\<namespace-name\>.svc.cluster.local`). A name is unique within a namespace, but not across namespaces.
+
+A typical usage of namespaces is separating projects and configured objects deployed by different teams.
 
 Axway recommends installing the Streams helm chart in a dedicated namespace. This is a good practice because:
 
 * It makes deployment easier when installing into an existing cluster.
 * Resources linked to Streams are isolated into a single logical entity.
-* You don’t have to specify full DNS to call other components, therefore, preventing errors. You just simply use a service name (\<service-name\>).
+* You don’t have to specify the full DNS to call other components, therefore, preventing errors. You can just use a service name (`\<service-name\>`).
 
-After the namespace is created, the Streams helm chart can be installed within this namespace by simply adding option `--namespace` at the installation stage.
+After the namespace is created, the Streams helm chart can be installed within this namespace by adding option `--namespace` at the installation stage. However, be aware of the following:
 
-However, be aware of the following:
-
-* Not all objects are linked to a namespace. For example, PersistentVolumes).
-* NGINX Ingress Controller can process Ingress resources from any namespace. Several annotations like [ingressClass](https://kubernetes.github.io/ingress-nginx/user-guide/multiple-ingress/) can be set in the helm chart to keep it under control.
+* Not all objects are linked to a namespace. For example, PersistentVolumes.
+* NGINX Ingress Controller can process Ingress resources from any namespace. Several annotations, like [ingressClass](https://kubernetes.github.io/ingress-nginx/user-guide/multiple-ingress/), can be set in the helm chart to keep it under control.
 
 | Description                               | Type        |
 | ----------------------------------------- | ----------- |
@@ -284,7 +286,7 @@ As described in helm chart values files, both kind of probes are configured the 
 
 ##### Nodes labels
 
-The [Kubernetes scheduler](https://kubernetes.io/docs/reference/kubernetes-api/labels-annotations-taints/#topologykubernetesiozone) automatically takes care of the pod placement (for example, spread your pods across nodes or availability zones, do not place the pod on a node with insufficient free resources, etc.). Ensure that your nodes are configured with proper labels. If your cluster is deployed in a cloud provider (for example, AWS, GCP, etc.), these labels are added automatically. Otherwise, you must add the following labels to each of your nodes depending on your K8s cluster version:
+The [Kubernetes scheduler](https://kubernetes.io/docs/reference/kubernetes-api/labels-annotations-taints/#topologykubernetesiozone) automatically handles the pod placement, for example, spread your pods across nodes or availability zones, do not place the pod on a node with insufficient free resources, and so on. Ensure that your nodes are configured with proper labels. If your cluster is deployed in a cloud provider, for example, AWS or GCP, these labels are added automatically. Otherwise, you must add the following labels to each of your nodes depending on your K8s cluster version:
 
 Examples for AWS (update the values according to your cluster):
 
@@ -293,7 +295,7 @@ Examples for AWS (update the values according to your cluster):
 
 Moreover, if you want to force the Streams pods to run only on specific nodes, you can use `nodeSelector`.
 
-To configure lables, first add labels of your choice to the selected nodes, for example, label "application: streams":
+To configure labels, you must first add the labels of your choice to the selected nodes. For example, you can use the label `application=streams`:
 
 ```
 kubectl label nodes <node-name> application=streams
@@ -306,7 +308,7 @@ nodeSelector:
   application: streams
 ```
 
-You must define it for each of the third-party pods (NGINX, Kafka, Zookeeper, and MariaDB):
+You must define the labels for each of the third-party pods (NGINX, Kafka, Zookeeper, and MariaDB):
 
 ```
 nginx-ingress-controller:
@@ -622,6 +624,8 @@ Pod characteristics of the publisher SFDC for HA deployment mode:
 | Salesforce Publisher  | No          | none         | 2 CPUs 3 GB      | 2 GB      | MariaDB, Kafka, Zookeeper | No              | Yes             |
 
 ### Third parties
+
+The third-party tools in this section, work integrated with Streams architecture.
 
 #### Kafka
 
