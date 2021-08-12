@@ -23,7 +23,7 @@ Once your websocket client is connected, a subscription request must be sent:
 ```json
 {
     "topicIdOrName": "0387d8ff-b20a-43c9-b088-463f0e16fcdc",
-    "subscriptionMode": "SNAPSHOT_ONLY"
+    "subscriptionMode": "snapshot_only"
 }
 ```
 
@@ -31,7 +31,7 @@ Once your websocket client is connected, a subscription request must be sent:
 |---------------------|-----------|---------------|-------------|
 | topicIdOrName | yes | n/a | The unique identifier or the name of the topic you want to subscribe to |
 | subscriptionMode | no | Default subscription mode defined in the topic's configuration | Refer to [subscription modes](/docs/subscribers/#subscription-modes) section |
-| dataFormat | no | BINARY | The format of the data requested. Refer to [data format](#data-format) section |
+| dataFormat | no | binary | The format of the data requested. Refer to [data format](#data-format) section |
 | lastEventId | no | n/a | Refer to [Reconnect after an interruption](#reconnect-after-an-interruption) section |
 
 Once the websocket subscription is successfully created, Streams will publish events into websocket channel. The events published will look like :
@@ -54,9 +54,9 @@ Once the websocket subscription is successfully created, Streams will publish ev
 
 You can define the format of the `data` attribute from websocket response.
 
-By default, the data format is `BINARY` so the `data` attribute will contain a binary form with base64 encoded of the data published into the subscribed topic.
+By default, the data format is `binary` so the `data` attribute will contain a binary form with base64 encoded of the data published into the subscribed topic.
 
-If you choose to use `TEXT` format, the `data` attribute will contain a readable string form of the data published into the subscribed topic.
+If you choose to use `text` format, the `data` attribute will contain a readable string form of the data published into the subscribed topic.
 
 ### Reconnect after an interruption
 
