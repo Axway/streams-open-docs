@@ -634,7 +634,7 @@ Apache Kafka is used as stream-processing layer.
 Source Docker image:
 
 * Repository: bitnami/kafka
-* Tag: 2.8.0-debian-10-r55
+* Tag: 2.8.0-debian-10-r71
 
 Pod name: `streams-kafka`.
 
