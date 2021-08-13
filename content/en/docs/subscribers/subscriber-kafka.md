@@ -16,11 +16,11 @@ You can create a kafka subscription by making an HTTP Post request on the follow
 
 `POST /streams/subscribers/kafka/api/v1/topics/{topicID}/subscriptions`
 
-The body must contain a JSON kafka subscription configuration as follow:
+The body must contain a JSON kafka subscription configuration as the following example:
 
 ```json
 {
-    "subscriptionMode": "snapshot-only|snapshot-patch",
+    "subscriptionMode": "snapshot-only",
     "bootstrapServers": "my-kafka-cluster:9092",
     "topic": "kafka-topic-to-publish-to",
     "partition": 0,

@@ -16,7 +16,7 @@ You can create a webhook subscription by making an HTTP Post request on the foll
 
 `POST /streams/subscribers/webhook/api/v1/topics/{topicID}/subscriptions`
 
-The body must contain a JSON webhook subscription configuration as follow:
+The body must contain a JSON webhook subscription configuration as the following example:
 
 ```json
 {
@@ -24,7 +24,7 @@ The body must contain a JSON webhook subscription configuration as follow:
     "webhookHeaders": {
       "Authorization"   : "Bearer AbCdEf123456"
     },
-    "subscriptionMode": "snapshot-only|snapshot-patch"
+    "subscriptionMode": "snapshot-only"
 }
 ```
 

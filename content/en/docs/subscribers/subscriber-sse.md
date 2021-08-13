@@ -81,22 +81,17 @@ In certain cases, some legacy network infrastructure may drop HTTP connections a
 
 When no change is detected by Streams, the subscribers gets those heartbeats repeatedly until an event is finally sent.
 
-### Type of SSE events
-
-When using `snapshot-patch` subscription mode, the `snapshot` event is only emitted once, after the connection is successfully established. Subsequent events will be named `patch`.
-
-When using `snapshot-only` subscription mode, only `snapshot` events are emitted when a change is detected in the content published in the topic.
-
-An `error` event can also be emitted whenever a error occurs. For more information, see [Errors during subscription](/docs/subscribers/subscribers-errors/#errors-during-subscription).
-
 ### Select a subscription mode
 
 The client can select the subscription mode by setting the `Accept` header in its subscription request:
 
 | Subscription Mode | Accept Header Value |
 |-------------------|---------------------|
-|snapshot-only | `application/vnd.axway.streams+snapshot-only` |
-|snapshot-patch | `application/vnd.axway.streams+snapshot-patch` |
-|default | `""` or  `*/*` or `text/event-stream` |
+| snapshot-only | `application/vnd.axway.streams+snapshot-only` |
+| snapshot-patch | `application/vnd.axway.streams+snapshot-patch` |
+| event | `application/vnd.axway.streams+event` |
+| default | `""` or  `*/*` or `text/event-stream` |
 
 If the client requests a subscription mode not allowed by the configuration of the topic, a `406 Not Acceptable` is be returned.
+
+Refer to [subscription modes](/docs/subscribers/#subscription-modes) section for more details.
