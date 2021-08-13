@@ -14,7 +14,11 @@ Streams is available as a set of Docker containers deployable in Kubernetes by u
 
 It is important, especially when upgrading from an earlier version, to be aware of the following changes in the behavior or operation of the product in this new version.
 
-### Kubernetes requirements
+### Subscriber WebSocket
+
+A new subscriber has been added to support WebSocket subscription. You can refer to the dedicated section for more details: [Subscriber WebSocket](/docs/subscribers/subscriber-websocket)
+
+### Streams Helm chart enhancements
 
 Kubernetes supported versions are now from 1.19 to 1.21.
 
