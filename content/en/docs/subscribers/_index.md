@@ -33,13 +33,13 @@ When creating your topic, you can set it via subscribers config in the topic's c
 }
 ```
 
-If no subscribers is defined, the [SSE subscriber](../subscribers/subscriber-sse) will be added by default.
+If no subscribers is defined, the [SSE subscriber](/docs/subscribers/subscriber-sse) will be added by default.
 
 ## Quality Of Service (QoS)
 
 Streams has strong requirements in terms of both quality of service and performance. To provide the best trade-off between these two conflicting aspects, Streams supports **at-least-once** delivery semantic.
 
-We ensure this quality of service by keeping the last event id delivered for each subscription, in order to resume from it in case of failure (e.g., network failure, component failure). The mechanism is internally managed by Streams for persistent subscribers, such as Webhook or Kafka subscribers, but depends on a client side mechanism for SSE. Refer to [Reconnect automatically after an interruption](../subscribers/subscriber-sse#reconnect-automatically-after-an-interruption) section for details.
+We ensure this quality of service by keeping the last event id delivered for each subscription, in order to resume from it in case of failure (e.g., network failure, component failure). The mechanism is internally managed by Streams for persistent subscribers, such as Webhook or Kafka subscribers, but depends on a client side mechanism for SSE. Refer to [Reconnect automatically after an interruption](/docs/subscribers/subscriber-sse#reconnect-automatically-after-an-interruption) section for details.
 
 ## Subscription modes
 
@@ -52,7 +52,7 @@ Each subscriber can choose between different modes that determine how the data w
 | `snapshot`   | `snapshot-patch`  | Streams sends an initial event containing the entire content (snapshot), subsequent events will contain only the changed fields in the form of an array of JSON Patch operations. Refer to [Understanding snapshot-patch mode](#understanding-snapshot-patch-mode) section for details. |
 | `event`      | `event`           | Streams sends the published events, as is, over time. |
 
-{{< alert title="Note" >}}The subscription modes depend on the [publisher payload type](../publishers/#selecting-your-type-of-publisher) defined for the topic.{{< /alert >}}
+{{< alert title="Note" >}}The subscription modes depend on the [publisher payload type](/docs/publishers/#selecting-your-type-of-publisher) defined for the topic.{{< /alert >}}
 
 For each subscriber's config, the `allowedSubscriptionModes` and `defaultSubscriptionMode` attributes must be specified:
 
@@ -84,9 +84,7 @@ Subscribers receives event as published by the publisher.
 For example:
 
 ```
-id: 37740aa3-3629-41c4-9a7f-24a1347383eb
-event: event
-data: {
+{
   "Status":"Working - Contacted",
   "LastModifiedDate":"2021-02-26T14:14:44.000Z",
   "ChangeEventHeader":{
@@ -119,9 +117,7 @@ For example, given a first snapshot published in a topic:
 The subscriber will receive an initial event of type `snapshot` containing the complete data set as follow:
 
 ```
-id: 37740aa3-3629-41c4-9a7f-24a1347383eb
-event: snapshot
-data: { 
+{ 
   "baz": "qux",
   "foo": "bar"
 }
@@ -139,9 +135,7 @@ If the publisher publishes a second snapshot:
 The subscriber will now receive an event of type `patch` containing the list of patch operations to apply on the initial snapshot:
 
 ```
-id: 37740aa3-3629-41c4-9a7f-24a1347383eb
-event: patch
-data: [ 
+[ 
   { "op": "replace", "path": "/baz", "value": "boo" },
   { "op": "add", "path": "/hello", "value": ["world"] },
   { "op": "remove", "path": "/foo" }
@@ -211,9 +205,7 @@ If the publisher publishes a payload containing changes compare to previously pu
 The subscriber will receive a event of type `snapshot` containing the full data set:
 
 ```
-id: 37740aa3-3629-41c4-9a7f-24a1347383eb
-event: snapshot
-data: { 
+{ 
   "baz": "boo", 
   "hello": ["world"] 
 }

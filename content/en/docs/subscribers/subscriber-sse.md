@@ -25,16 +25,16 @@ curl -v "${BASE_URL}/streams/subscribers/sse/api/v1/topics/${TOPIC_ID}
 
 If the connection is successfully established, Streams shows with a `200 OK` and a _Content-Type: text/event-stream_ responses.
 
-### How SSE is used
+## How SSE connection works
 
 When you connect to an SSE server, you receive an HTTP `200 OK`. However, the connection remains alive and everything continues to happen afterwards, including errors (for example, authentication errors, bad requests, and son on). As long as the client, or the server, does not end the connection, it remains alive.
 
-SSE is a text-based protocol. The following is an example of the response of the server after the connection is successfully established (the metadata, headers, status codes are omitted intentionally):
+SSE is a text-based protocol. The following is an example of the response of the server after the connection is successfully established, and a first message has been published:
 
-{{< highlight go "linenos=inline" >}}
-id: 00ae73f5-5349-40c4-91b6-2e58a36b5365#1  // identifies the message.
-event: snapshot // The name of the event. Possible options: snapshot, patch, or error
-data : [{ // The body of the message. Only accepts JSON. In this case, a JSON array.
+```
+id: 00ae73f5-5349-40c4-91b6-2e58a36b5365#1
+event: snapshot 
+data : [{
   "id": "acb07740-6b39-4e8b-a81a-0b678516088c",
   "title": "94% of Banking Firms Can’t Deliver on ‘Personalization Promise’",
   "date": "2018-09-10-T10:13:32",
@@ -45,11 +45,17 @@ data : [{ // The body of the message. Only accepts JSON. In this case, a JSON ar
   "date": "2018-09-10-T09:59:32",
   "abstract": "We take a closer look at how safe..."
 }]
-{{< / highlight >}}
+```
 
-`id`, `event`and `data` fields are always present and represent a single message, also called an event.
+| Configuration Entry | Description |
+|---------------------|-------------|
+| id | The unique identifier of the event |
+| event | Definie the type of the event. Refer to [type of events](#type-of-events) section
+| data | Refer to [subscription modes](/docs/subscribers/#subscription-modes) section |
 
-### Compress an SSE
+{{< alert title="Note" >}}`id`, `event`and `data` fields are always present and represent a single message, also called an event.{{< /alert >}}
+
+## Compress an SSE
 
 You can compress SSE on demand by using Gzip or deflate methods. The following is an example of how to use the `Accept-Encoding` header:
 
@@ -62,7 +68,7 @@ curl -v "${BASE_URL}/streams/subscribers/sse/api/v1/topics/${TOPIC_ID}" -H "Acce
 
 If this header is not provided, the default behavior is not to compress the data.
 
-### Reconnect automatically after an interruption
+## Reconnect automatically after an interruption
 
 SSE has the ability for clients to automatically reconnect if the connection is interrupted. Furthermore, the data stream continues from the point it disconnected, so no events are lost.
 
@@ -75,13 +81,13 @@ export TOPIC_ID="topic-id"
 curl -v "${BASE_URL}/streams/subscribers/sse/api/v1/topics/${TOPIC_ID}" -H "Last-Event-Id: 00ae73f5-5349-40c4-91b6-2e58a36b5365#1"
 ```
 
-### Connection heartbeat
+## Connection heartbeat
 
 In certain cases, some legacy network infrastructure may drop HTTP connections after a short timeout. To protect against such behaviors, Streams sends the client a comment line (starting with a ':' character) every 5 seconds. This comment line is ignored by the SSE client and has no effect other than a very limited network consumption.
 
 When no change is detected by Streams, the subscribers gets those heartbeats repeatedly until an event is finally sent.
 
-### Select a subscription mode
+## Select a subscription mode
 
 The client can select the subscription mode by setting the `Accept` header in its subscription request:
 
@@ -94,4 +100,4 @@ The client can select the subscription mode by setting the `Accept` header in it
 
 If the client requests a subscription mode not allowed by the configuration of the topic, a `406 Not Acceptable` is be returned.
 
-Refer to [subscription modes](/docs/subscribers/#subscription-modes) section for more details.
+Refer to [subscription modes](/docs/subscribers/#subscription-modes) and [subscription error](/docs/subscribers/subscribers-errors/) section for more details.

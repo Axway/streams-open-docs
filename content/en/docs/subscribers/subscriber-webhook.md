@@ -175,7 +175,7 @@ As soon as the publisher starts to publish data, the webhook subscribers will st
 
 The webhook call is an HTTP POST request that contains two types of data: headers and a payload.
 
-### Webhook Event Headers
+### Headers
 
 | Header name | Description |
 |-------------|-------------|
@@ -185,42 +185,6 @@ The webhook call is an HTTP POST request that contains two types of data: header
 | X-Axway-Streams-Event-Type | Type of the payload (snapshot, patch or error). |
 | Webhook Event Payload | See [Webhook payload samples](#webhook-payload-samples). |
 
-#### Webhook payload samples
+#### Payload
 
-Below some examples of webhook payloads according to the type of event:
-
-##### Snapshot payload sample
-
-```json
-[{
-  "id": "acb07740-6b39-4e8b-a81a-0b678516088c",
-  "title": "94% of Banking Firms Can’t Deliver on ‘Personalization Promise’",
-  "date": "2018-09-10-T10:13:32",
-  "abstract": "One of the strongest differentiators ..."
-},{
-  "id": "0c5b5894-a211-47de-87a8-c7fa3ce3dfa2",
-  "title": "Would you trust your salary to start-up",
-  "date": "2018-09-10-T09:59:32",
-  "abstract": "We take a closer look at how safe..."
-}]
-```
-
-##### Patch payload sample
-
-```json
-{
-    "op":"remove",
-    "path":"/1"
-}
-```
-
-#### Error payload sample
-
-```json
-{
-    "datetime": "2018-09-03T13:16:02.120Z",
-    "code": 40000,
-    "category": "subscription",
-    "message": "Subscriber error"
-}
-```
+Refer to [subscription modes](/docs/subscribers/#subscription-modes) and [subscription error](/docs/subscribers/subscribers-errors/) section for more details.

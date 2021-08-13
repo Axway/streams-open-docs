@@ -117,7 +117,7 @@ The field names allowed for sorting are :
 As soon as the publisher starts to publish data, the kafka subscribers will start to receive the message.
 The subscribers will send a record with custom headers and a payload.
 
-### Kafka Record Headers
+### Record headers
 
 | Header name | Description |
 |-------------|-------------|
@@ -126,42 +126,6 @@ The subscribers will send a record with custom headers and a payload.
 | X-Axway-Streams-Event-Id | Identifier of the event. |
 | X-Axway-Streams-Event-Type | Type of the payload (snapshot, patch or error). |
 
-#### Kafka payload samples
+#### Record Payload
 
-Below some examples of kafka payloads according to the type of event:
-
-##### Snapshot payload sample
-
-```json
-[{
-  "id": "acb07740-6b39-4e8b-a81a-0b678516088c",
-  "title": "94% of Banking Firms Can’t Deliver on ‘Personalization Promise’",
-  "date": "2018-09-10-T10:13:32",
-  "abstract": "One of the strongest differentiators ..."
-},{
-  "id": "0c5b5894-a211-47de-87a8-c7fa3ce3dfa2",
-  "title": "Would you trust your salary to start-up",
-  "date": "2018-09-10-T09:59:32",
-  "abstract": "We take a closer look at how safe..."
-}]
-```
-
-##### Patch payload sample
-
-```json
-{
-    "op":"remove",
-    "path":"/1"
-}
-```
-
-#### Error payload sample
-
-```json
-{
-    "datetime": "2018-09-03T13:16:02.120Z",
-    "code": 40000,
-    "category": "subscription",
-    "message": "Subscriber error"
-}
-```
+Refer to [subscription modes](/docs/subscribers/#subscription-modes) and [subscription error](/docs/subscribers/subscribers-errors/) section for more details.
