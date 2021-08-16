@@ -6,8 +6,6 @@ date: 2019-04-02
 description: Learn how to configure and use the Streams Server-Sent Events Subscriber.
 ---
 
-## Overview
-
 Server-Sent Events (SSE) is part of the HTML5 standard. SSEs are sent over traditional HTTP, so they do not require a special protocol to work. SSE includes important features, such as `Last-Event-Id` header support, automatic client reconnection, and heterogeneous event handling.
 
 ## Subscribe to the topic via SSE
@@ -27,9 +25,9 @@ If the connection is successfully established, Streams shows with a `200 OK` and
 
 ## How SSE connection works
 
-When you connect to an SSE server, you receive an HTTP `200 OK`. However, the connection remains alive and everything continues to happen afterwards, including errors (for example, authentication errors, bad requests, and son on). As long as the client, or the server, does not end the connection, it remains alive.
+When you connect to an SSE server, you receive an HTTP `200 OK`. However, the connection remains alive - as long as the client, or the server, does not end it, and everything continues to happen afterwards, including errors (for example, authentication errors, bad requests, and son on).
 
-SSE is a text-based protocol. The following is an example of the response of the server after the connection is successfully established, and a first message has been published:
+SSE is a text-based protocol. The following is an example of the response of the server after the connection is successfully established and a first message has been published:
 
 ```
 id: 00ae73f5-5349-40c4-91b6-2e58a36b5365#1
@@ -53,7 +51,7 @@ data : [{
 | event | Definie the type of the event. Refer to [type of events](#type-of-events) section
 | data | Refer to [subscription modes](/docs/subscribers/#subscription-modes) section |
 
-{{< alert title="Note" >}}`id`, `event`and `data` fields are always present and represent a single message, also called an event.{{< /alert >}}
+{{< alert title="Note" >}}`id`, `event`and `data` fields are always present and represent a single message, also called `event`.{{< /alert >}}
 
 ## Compress an SSE
 
@@ -98,6 +96,4 @@ The client can select the subscription mode by setting the `Accept` header in it
 | event | `application/vnd.axway.streams+event` |
 | default | `""` or  `*/*` or `text/event-stream` |
 
-If the client requests a subscription mode not allowed by the configuration of the topic, a `406 Not Acceptable` is be returned.
-
-Refer to [subscription modes](/docs/subscribers/#subscription-modes) and [subscription error](/docs/subscribers/subscribers-errors/) section for more details.
+If the client requests a subscription mode not allowed by the configuration of the topic, a `406 Not Acceptable` is be returned. For more information, see [subscription modes](/docs/subscribers/#subscription-modes) and [subscription errors](/docs/subscribers/subscribers-errors/).

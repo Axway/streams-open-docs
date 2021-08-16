@@ -6,15 +6,15 @@ date: 2019-04-02T00:00:00.000Z
 description: Learn how to configure and use the Streams Webhook Subscriber.
 ---
 
-## Overview
-
 Streams Webhook subscriber allows clients to be notified via HTTP Post requests made by Streams to the endpoint provided during their subscription.
 
-## Creating a Webhook subscription
+## Create a Webhook subscription
 
 You can create a webhook subscription by making an HTTP Post request on the following endpoint:
 
-`POST /streams/subscribers/webhook/api/v1/topics/{topicID}/subscriptions`
+```
+POST /streams/subscribers/webhook/api/v1/topics/{topicID}/subscriptions
+```
 
 The body must contain a JSON webhook subscription configuration as the following example:
 
@@ -46,11 +46,13 @@ Below the list of HTTP status codes that can be returned when trying to create a
 | 400 Bad Request | Indicates that the provided data are invalid. |
 | 404 Not found | Indicates that the requested URL does not exist. |
 
-## Stopping a webhook subscription
+## Stop a webhook subscription
 
 To stop the sending of webhook notifications, simply delete the corresponding webhook subscription with following request:
 
-`DELETE /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}`
+```
+DELETE /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}
+```
 
 ### Delete status codes
 
@@ -61,11 +63,13 @@ Below the list of HTTP status codes that can be returned when deleting the webho
 | 204 No Content | Indicates that the subscription has been successfully deleted.
 | 404 Not found | Indicates that the provided identifier does not correspond to an existing webhook subscription.
 
-## Getting a webhook subscription
+## Get a webhook subscription
 
 To get an existing subscription, use the following GET request:
 
-`GET /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}`
+```
+GET /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}
+```
 
 ### Get status codes
 
@@ -76,11 +80,13 @@ Below the list of HTTP status codes that can be returned when trying to get a ka
 | 200 Ok | Indicates that the subscription requested is valid and has been retrieved. |
 | 404 Not found | Indicates that the requested URL or subscription requested does not exist. |
 
-## Testing a webhook subscription
+## Test a webhook subscription
 
 You can test a webhook subscription by making an HTTP Post request on the following endpoint:
 
-`POST /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}/test`
+```
+POST /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}/test
+```
 
 The request body can contain any JSON object and will be sent as is to the identified subscription.
 
@@ -94,15 +100,19 @@ The following HTTP status codes can be returned while testing a webhook subscrip
 | 400 Bad Request | Indicates that the provided data are invalid. |
 | 404 Not found | Indicates that the requested URL does not exist. |
 
-## Getting the webhook notification history for a subscription
+## Get the webhook notification history for a subscription
 
 Use the following `GET` request to retrieve the history of webhook exchanges (requests and responses) that have occurred for a subscription in the last 5 minutes:
 
-`GET /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}/exchanges`
+```
+GET /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}/exchanges
+```
 
 You can change the default time window of the retrieved history with `start` and `end` query params (date-time in ISO 8601 format, eg: 2021-01-10T10:13:32Z):
 
-`GET /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}/exchanges?start=2021-01-10T10:13:30Z&end=2021-01-10T10:13:32Z`
+```
+GET /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}/exchanges?start=2021-01-10T10:13:30Z&end=2021-01-10T10:13:32Z
+```
 
 ### Webhook exchanges status codes
 
@@ -156,22 +166,24 @@ The following HTTP status codes can be returned when interacting with the exchan
 }]
 ```
 
-## Getting webhook subscriptions for a topic
+## Get webhook subscriptions for a topic
 
 To get existing subscriptions, use the following GET request on your topic:
 
-`GET /streams/subscribers/webhook/api/v1/topics/{topicId}/subscriptions`
+```
+GET /streams/subscribers/webhook/api/v1/topics/{topicId}/subscriptions
+```
 
-See [pagination](/docs/topics-api/#pagination) for more information on how pagination and sorting works.
+For more information on how pagination and sorting work, see [Pagination](/docs/topics-api/#pagination).
 
 The field names allowed for sorting are :
 
 * subscriptionMode
 * webhookUrl
 
-## Webhook Event
+## Webhook event
 
-As soon as the publisher starts to publish data, the webhook subscribers will start to receive the events via webhook callbacks.
+As soon as the publisher starts to publish data, the webhook subscribers start to receive the events via webhook callbacks.
 
 The webhook call is an HTTP POST request that contains two types of data: headers and a payload.
 
@@ -187,4 +199,4 @@ The webhook call is an HTTP POST request that contains two types of data: header
 
 #### Payload
 
-Refer to [subscription modes](/docs/subscribers/#subscription-modes) and [subscription error](/docs/subscribers/subscribers-errors/) section for more details.
+Fore more information, see [Subscription modes](/docs/subscribers/#subscription-modes) and [Subscription error](/docs/subscribers/subscribers-errors/).

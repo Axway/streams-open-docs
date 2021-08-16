@@ -6,15 +6,16 @@ date: 2019-04-02
 description: Learn how to use the different types of Subscribers supported by Streams.
 ---
 
-Streams supports different subscriber types. In order for a subscriber to receive events associated to a topic, it must subscribe either via:
+Streams support different subscriber types. In order for a subscriber to receive events associated to a topic, it must subscribe using one of the following options:
 
-* **Kafka** which enables Streams to publish data to a Kafka topic/partition.
-* **Server-Sent Events** which enables Streams to push data to subscribers (e.g., client applications) through a persistent HTTP connection.
-* **Webhook** which enables Streams to notify the subscribers via a HTTP Post request performed against the registered endpoint (webhook receiver).
-* **WebSocket** which enables Streams to notify the subscribers via persistent WebSocket connection.
+* **Kafka**, which enables Streams to publish data to a Kafka topic or partition.
+* **Server-Sent Events**, which enables Streams to push data to subscribers, for example, client applications, via a persistent HTTP connection.
+* **Webhook**, which enables Streams to notify the subscribers via a HTTP post request performed against the registered endpoint (webhook receiver).
+* **WebSocket**, which enables Streams to notify the subscribers via persistent WebSocket connection.
 
 Each topic created on the platform must be associated with at least one type of subscribers.
-When creating your topic, you can set it via subscribers config in the topic's configuration.
+
+When creating your topic, you can set it via the subscribers `config` parameter, in the topic's configuration.
 
 ```json
 {
@@ -33,13 +34,13 @@ When creating your topic, you can set it via subscribers config in the topic's c
 }
 ```
 
-If no subscribers is defined, the [SSE subscriber](/docs/subscribers/subscriber-sse) will be added by default.
+If no subscriber is defined, the [SSE subscriber](/docs/subscribers/subscriber-sse) is added by default.
 
 ## Quality Of Service (QoS)
 
 Streams has strong requirements in terms of both quality of service and performance. To provide the best trade-off between these two conflicting aspects, Streams supports **at-least-once** delivery semantic.
 
-We ensure this quality of service by keeping the last event id delivered for each subscription, in order to resume from it in case of failure (e.g., network failure, component failure). The mechanism is internally managed by Streams for persistent subscribers, such as Webhook or Kafka subscribers, but depends on a client side mechanism for SSE. Refer to [Reconnect automatically after an interruption](/docs/subscribers/subscriber-sse#reconnect-automatically-after-an-interruption) section for details.
+We ensure this quality of service by keeping the last event ID delivered for each subscription to resume from it in case of failure (for example, network failure, component failure). The mechanism is internally managed by Streams for persistent subscribers, such as Webhook or Kafka subscribers, but depends on a client side mechanism for SSE. For more information, see [Reconnect automatically after an interruption](/docs/subscribers/subscriber-sse#reconnect-automatically-after-an-interruption).
 
 ## Subscription modes
 
@@ -48,13 +49,13 @@ Each subscriber can choose between different modes that determine how the data w
 
 | Publisher Payload type | Subscription mode | Description |
 |------------------------|-------------------|-------------|
-| `snapshot`   | `snapshot-only`   | Streams sends to the subscriber the entire content (snapshot) each time a change is detected. Note: Use this mode for content which is infrequently and fully updated. |
-| `snapshot`   | `snapshot-patch`  | Streams sends an initial event containing the entire content (snapshot), subsequent events will contain only the changed fields in the form of an array of JSON Patch operations. Refer to [Understanding snapshot-patch mode](#understanding-snapshot-patch-mode) section for details. |
-| `event`      | `event`           | Streams sends the published events, as is, over time. |
+| `snapshot`   | `snapshot-only`   | Streams sends the entire content (snapshot) to the subscriber each time a change is detected. We recommend you to use this mode for content, which doesn't occur frequently and is fully updated. |
+| `snapshot`   | `snapshot-patch`  | Streams sends an initial event containing the entire content (snapshot). The subsequent events contain only the changed fields in the form of an array of JSON patch operations. For more information, see [Understanding snapshot-patch mode](#understanding-snapshot-patch-mode). |
+| `event`      | `event`           | Streams sends the published events, as-is, over time. |
 
-{{< alert title="Note" >}}The subscription modes depend on the [publisher payload type](/docs/publishers/#selecting-your-type-of-publisher) defined for the topic.{{< /alert >}}
+{{< alert title="Note" >}}Subscription modes depend on the [publisher payload type](/docs/publishers/#selecting-your-type-of-publisher) defined for the topic.{{< /alert >}}
 
-For each subscriber's config, the `allowedSubscriptionModes` and `defaultSubscriptionMode` attributes must be specified:
+The `allowedSubscriptionModes` and `defaultSubscriptionMode` attributes must be specified for each subscriber's configuration:
 
 ```json
 {
@@ -76,10 +77,9 @@ For each subscriber's config, the `allowedSubscriptionModes` and `defaultSubscri
 }
 ```
 
-### Understanding `event` subscription mode
+### Understanding the event subscription mode
 
-This mode is the only available mode when the topic is configured with a data source publishing payloads of type `event`.
-Subscribers receives event as published by the publisher.
+The `event` subscription mode is the only available mode where the topic is configured with a data source publishing payloads of type `event`. Subscribers receive event as published by the publisher.
 
 For example:
 
@@ -98,10 +98,9 @@ For example:
 }
 ```
 
-### Understanding `snapshot-patch` subscription mode
+### Understanding snapshot-patch subscription mode
 
-The subscribers will only receive **incremental updates** computed by Streams between the last two payloads published in the topic.
-For example, in the context of a brokerage app, if a user subscribes to 10 different symbols, each symbol contains different fields such as identifier, last, bid, ask. But only a few of them really change at every market tick. When using `snapshot-patch` mode, Streams automatically computes the differential data and sends the corresponding JSON patch operations to the subscribers, avoiding the resending of fields that have not changed.
+In the `snapshot-patch` subscription mode, subscribers only receive **incremental updates** computed by Streams between the last two payloads published in the topic. For example, in the context of a brokerage app, if a user subscribes to 10 different symbols, each symbol contains different fields such as identifier, last, bid, ask. But only a few of them change at every market tick. When using `snapshot-patch` mode, Streams automatically computes the differential data and sends the corresponding JSON patch operations to the subscribers, avoiding resending the fields that have not changed.
 
 Once an initial `snapshot` event has been emitted, it will be followed by `patch` events when Streams detects a change in the published content.
 
@@ -114,7 +113,7 @@ For example, given a first snapshot published in a topic:
 }
 ```
 
-The subscriber will receive an initial event of type `snapshot` containing the complete data set as follow:
+The subscriber receives an initial event of type `snapshot` containing the complete data set as follow:
 
 ```
 { 
@@ -132,7 +131,7 @@ If the publisher publishes a second snapshot:
 }
 ```
 
-The subscriber will now receive an event of type `patch` containing the list of patch operations to apply on the initial snapshot:
+The subscriber now receives an event of type `patch` containing the list of patch operations to apply on the initial snapshot:
 
 ```
 [ 
@@ -144,33 +143,35 @@ The subscriber will now receive an event of type `patch` containing the list of 
 
 A `patch` is a JSON document that provides the difference between two JSON documents. It is represented by an array of operations to apply to the previous version of the document.
 
-A patch operation is made of the following fields:
+A patch operation takes the following fields:
 
-* `op`: defines the type of operation (e.g. add, remove, replace)
-* `path`: defines where the operation applies in the document (JSON Pointer)
-* `value`: (optional) defines the value to apply: a raw JSON literal, object or array
+* `op`: defines the type of operation. For example, add, remove, replace.
+* `path`: defines where the operation applies in the document (JSON Pointer).
+* `value`: (optional) defines the value to apply: a raw JSON literal, object, or array.
 
-A patch can be applied to an existing document to alter it (several open-source libraries are available). The use of [JSON patch](http://jsonpatch.com/) format enables Streams to save bandwidth by pushing only the differences between two versions of a published content.
+You can use a patch to modify an existing document. The use of [JSON patch](http://jsonpatch.com/) format enables Streams to save bandwidth by pushing only the differences between two versions of a published content.
 
-#### Supported JSON Patch Operation
+#### Supported JSON patch operations
 
-##### Add Operation
+The following are supported JSON patch operations in Streams.
+
+##### Add
+
+Adds a value to an object or inserts it into an array. In the case of an array, the value is inserted before the given index. The `-` character can be used instead of an index to insert values at the end of an array.
 
 ```json
   { "op": "add", "path": "/hello", "value": ["world"] },
 ```
 
-Adds a value to an object or inserts it into an array. In the case of an array, the value is inserted before the given index. The - character can be used instead of an index to insert at the end of an array.
+##### Replace
 
-##### Replace Operation
+Replaces a value. Equivalent to `remove` followed by `add`.
 
 ```json
   { "op": "replace", "path": "/baz", "value": "boo" }
 ```
 
-Replaces a value. Equivalent to a `remove` followed by an `add`.
-
-##### Remove Operation
+##### Remove
 
 Removes a value from an object or array.
 
@@ -178,9 +179,9 @@ Removes a value from an object or array.
   { "op": "remove", "path": "/foo" }
 ```
 
-### Understanding `snapshot-only` subscription mode
+### Understanding snapshot-only subscription mode
 
-In this mode the subscriber will only receive events of type `snapshot` **only** when a change is detected by Streams.
+In this mode, the subscriber receives events of type `snapshot` **only** when a change is detected by Streams.
 
 If the publisher publishes twice the same payload:
 
@@ -191,9 +192,9 @@ If the publisher publishes twice the same payload:
 }
 ```
 
-The subscribers will not receive any event.
+the subscribers does not receive any event.
 
-If the publisher publishes a payload containing changes compare to previously published payload:
+If the publisher publishes a payload containing changes compared to previously published payload:
 
 ```json
 { 
@@ -202,7 +203,7 @@ If the publisher publishes a payload containing changes compare to previously pu
 }
 ```
 
-The subscriber will receive a event of type `snapshot` containing the full data set:
+the subscriber receives an event of type `snapshot` containing the full data set:
 
 ```
 { 
@@ -235,13 +236,12 @@ You can restrict the list of subscription modes in which subscribers can subscri
 
 ## Defining default subscription mode
 
-You can define the default subscription mode with the  `defaultSubscriptionMode` attribute in the associated subscriber's configuration.
-In case you don't define a default subscription mode, one is defined either by using the first item of `allowedSubscriptionModes` or depending on the publisher payload type.
+You can define the default subscription mode with the  `defaultSubscriptionMode` attribute in the associated subscriber's configuration. If you don't define a default subscription mode, one is defined either by using the first item of `allowedSubscriptionModes` or depending on the publisher payload type.
 
 | Publisher Payload type | defaultSubscriptionMode |
 |------------------------|-------------------------|
 | snapshot               | snapshot-patch          |
 | event                  | event                   |
 
-* The default subscription mode will be used when the client does not define a subscription mode in the subscription request.
-* If the subscriber subscribes to a topic with a subscription mode not allowed, its subscription request will be rejected.
+* The default subscription mode is used when the client does not define a subscription mode in the subscription request.
+* If the subscriber subscribes to a topic with a subscription mode not allowed, its subscription request is rejected.
