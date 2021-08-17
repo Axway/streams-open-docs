@@ -11,16 +11,14 @@ Streams is available as a set of Docker containers deployable in Kubernetes by u
 
 ## New features and enhancements
 
-There are no new features in this update.
+### WebSocket Subscriber
+
+A new subscriber has been added to support WebSocket subscription. For more information, see [WebSocket Subscriber](/docs/subscribers/subscriber-websocket).
 
 ## Important changes
 <!-- Use this section to describe any changes in the behavior of the product (as a result of features or fixes), for example, new Java system properties in the jvm.xml file. This section could also be used for any important information that doesn't fit elsewhere. -->
 
 It is important, especially when upgrading from an earlier version, to be aware of the following changes in the behavior or operation of the product in this new version.
-
-### Subscriber WebSocket
-
-A new subscriber has been added to support WebSocket subscription. For more information, see [Subscriber WebSocket](/docs/subscribers/subscriber-websocket).
 
 ### Streams Helm chart enhancements
 

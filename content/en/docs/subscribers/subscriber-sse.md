@@ -48,7 +48,7 @@ data : [{
 | Configuration Entry | Description |
 |---------------------|-------------|
 | id | The unique identifier of the event |
-| event | Definie the type of the event. Refer to [type of events](#type-of-events) section
+| event | Define the type of the event. Refer to [type of events](#type-of-events) section
 | data | Refer to [subscription modes](/docs/subscribers/#subscription-modes) section |
 
 {{< alert title="Note" >}}`id`, `event`and `data` fields are always present and represent a single message, also called `event`.{{< /alert >}}
@@ -96,4 +96,4 @@ The client can select the subscription mode by setting the `Accept` header in it
 | event | `application/vnd.axway.streams+event` |
 | default | `""` or  `*/*` or `text/event-stream` |
 
-If the client requests a subscription mode not allowed by the configuration of the topic, a `406 Not Acceptable` is be returned. For more information, see [subscription modes](/docs/subscribers/#subscription-modes) and [subscription errors](/docs/subscribers/subscribers-errors/).
+If the client requests a subscription mode not allowed by the configuration of the topic, a `406 Not Acceptable` is returned. For more information, see [subscription modes](/docs/subscribers/#subscription-modes) and [subscription errors](/docs/subscribers/subscribers-errors/).

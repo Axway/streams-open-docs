@@ -8,9 +8,9 @@ description: Learn how to use the different types of Subscribers supported by St
 
 Streams support different subscriber types. In order for a subscriber to receive events associated to a topic, it must subscribe using one of the following options:
 
-* **Kafka**, which enables Streams to publish data to a Kafka topic or partition.
+* **Kafka**, which enables Streams to publish data to a Kafka topic partition.
 * **Server-Sent Events**, which enables Streams to push data to subscribers, for example, client applications, via a persistent HTTP connection.
-* **Webhook**, which enables Streams to notify the subscribers via a HTTP post request performed against the registered endpoint (webhook receiver).
+* **Webhook**, which enables Streams to notify the subscribers via a HTTP POST request performed against the registered endpoint (webhook receiver).
 * **WebSocket**, which enables Streams to notify the subscribers via persistent WebSocket connection.
 
 Each topic created on the platform must be associated with at least one type of subscribers.
@@ -50,7 +50,7 @@ Each subscriber can choose between different modes that determine how the data w
 | Publisher Payload type | Subscription mode | Description |
 |------------------------|-------------------|-------------|
 | `snapshot`   | `snapshot-only`   | Streams sends the entire content (snapshot) to the subscriber each time a change is detected. We recommend you to use this mode for content, which doesn't occur frequently and is fully updated. |
-| `snapshot`   | `snapshot-patch`  | Streams sends an initial event containing the entire content (snapshot). The subsequent events contain only the changed fields in the form of an array of JSON patch operations. For more information, see [Understanding snapshot-patch mode](#understanding-snapshot-patch-mode). |
+| `snapshot`   | `snapshot-patch`  | Streams sends an initial event containing the entire content (snapshot). The subsequent events contain only the changed fields in the form of an array of JSON Patch operations. For more information, see [Understanding snapshot-patch mode](#understanding-snapshot-patch-mode). |
 | `event`      | `event`           | Streams sends the published events, as-is, over time. |
 
 {{< alert title="Note" >}}Subscription modes depend on the [publisher payload type](/docs/publishers/#selecting-your-type-of-publisher) defined for the topic.{{< /alert >}}
@@ -77,9 +77,9 @@ The `allowedSubscriptionModes` and `defaultSubscriptionMode` attributes must be 
 }
 ```
 
-### Understanding the event subscription mode
+### Understanding `event` subscription mode
 
-The `event` subscription mode is the only available mode where the topic is configured with a data source publishing payloads of type `event`. Subscribers receive event as published by the publisher.
+The `event` subscription mode is the only available mode when the topic is configured with a data source publishing payloads of type `event`. Subscribers receive event as published by the publisher.
 
 For example:
 
@@ -98,9 +98,9 @@ For example:
 }
 ```
 
-### Understanding snapshot-patch subscription mode
+### Understanding `snapshot-patch` subscription mode
 
-In the `snapshot-patch` subscription mode, subscribers only receive **incremental updates** computed by Streams between the last two payloads published in the topic. For example, in the context of a brokerage app, if a user subscribes to 10 different symbols, each symbol contains different fields such as identifier, last, bid, ask. But only a few of them change at every market tick. When using `snapshot-patch` mode, Streams automatically computes the differential data and sends the corresponding JSON patch operations to the subscribers, avoiding resending the fields that have not changed.
+In the `snapshot-patch` subscription mode, subscribers only receive **incremental updates** computed by Streams between the last two payloads published in the topic. For example, in the context of a brokerage app, if a user subscribes to 10 different symbols, each symbol contains different fields such as identifier, last, bid, ask. But only a few of them change at every market tick. When using `snapshot-patch` mode, Streams automatically computes the differential data and sends the corresponding JSON Patch operations to the subscribers, avoiding resending the fields that have not changed.
 
 Once an initial `snapshot` event has been emitted, it will be followed by `patch` events when Streams detects a change in the published content.
 
@@ -149,9 +149,9 @@ A patch operation takes the following fields:
 * `path`: defines where the operation applies in the document (JSON Pointer).
 * `value`: (optional) defines the value to apply: a raw JSON literal, object, or array.
 
-You can use a patch to modify an existing document. The use of [JSON patch](http://jsonpatch.com/) format enables Streams to save bandwidth by pushing only the differences between two versions of a published content.
+You can use a patch to modify an existing document. The use of [JSON Patch](http://jsonpatch.com/) format enables Streams to save bandwidth by pushing only the differences between two versions of a published content.
 
-#### Supported JSON patch operations
+#### Supported JSON Patch operations
 
 The following are supported JSON patch operations in Streams.
 
@@ -179,7 +179,7 @@ Removes a value from an object or array.
   { "op": "remove", "path": "/foo" }
 ```
 
-### Understanding snapshot-only subscription mode
+### Understanding `snapshot-only` subscription mode
 
 In this mode, the subscriber receives events of type `snapshot` **only** when a change is detected by Streams.
 

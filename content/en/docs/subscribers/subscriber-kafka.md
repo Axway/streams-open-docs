@@ -10,7 +10,7 @@ Streams Kafka subscriber allows clients to route events published in a Streams t
 
 ## Creating a Kafka subscription
 
-You can create a kafka subscription by making an HTTP post request on the following endpoint:
+You can create a kafka subscription by making an HTTP Post request on the following endpoint:
 
 ```
 POST /streams/subscribers/kafka/api/v1/topics/{topicID}/subscriptions
@@ -84,7 +84,7 @@ List of HTTP status codes that can be returned when trying to get a kafka subscr
 
 ## Testing a Kafka subscription
 
-You can test a Kafka subscription by making an HTTP post request on the following endpoint:
+You can test a Kafka subscription by making an HTTP Post request on the following endpoint:
 
 ```
 POST /streams/subscribers/kafka/api/v1/subscriptions/{subscriptionId}/test
@@ -104,7 +104,7 @@ The following HTTP status codes can be returned while testing a Kafka subscripti
 
 ## Get kafka subscriptions for a topic
 
-Use the following get request on your topic to get existing subscriptions:
+Use the following HTTP Get request on your topic to get existing subscriptions:
 
 ```
 GET /streams/subscribers/kafka/api/v1/topics/{topicId}/subscriptions
