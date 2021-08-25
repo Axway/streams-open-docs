@@ -103,6 +103,14 @@ The bastion must have high traceability with specific RBAC permissions to allow 
 
 Platform infrastructure must support Kubernetes PersistentVolumes. For more information, see [Volumes](#volumes).
 
+#### Encrypting volume data at rest
+
+If you are using the embedded Kafka (which we advised against) instead of an externalized Kafka manged by a cloud provider,
+you should ensure that the [volumes](#volumes) used are encrypted. The exact process depends on your cloud provider and Kubernetes setup.
+
+For example, if you are provisioning GP3 volumes on AWS, you are using an AWS-specific driver: [the aws-ebs-csi-driver](https://github.com/kubernetes-sigs/aws-ebs-csi-driver).
+In that case, you simply need to set a [boolean](https://github.com/kubernetes-sigs/aws-ebs-csi-driver#createvolume-parameters) to true to activate the encryption, and the AWS console will show you that your volumes are encrypted.
+
 #### Encrypting secret data at rest
 
 To improve security, you must encrypt K8s secret data at rest. See [Encrypting Secret Data at Rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data) for more details.
