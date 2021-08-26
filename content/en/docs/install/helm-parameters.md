@@ -82,6 +82,9 @@ If you are setting those parameters through `--set` on the command line, you mus
 | `subscriberWebhook.enabled`             | Enable/Disable Subscriber Webhook  | no        | true          |
 | `subscriberWebhook.replicaCount`        | Subscriber Webhook replica count    | no        | 2             |
 | `subscriberWebhook.service.port` | Http port to subscribe to a topic          | no        | 8080          |
+| `subscriberWebSocket.enabled`             | Enable/Disable Subscriber WebSocket  | no        | false          |
+| `subscriberWebSocket.replicaCount`        | Subscriber WebSocket replica count    | no        | 2             |
+| `subscriberWebSocket.service.port` | Http port to subscribe to a topic          | no        | 8080          |
 | `subscriberKafka.enabled`             | Enable/Disable Subscriber Kafka  | no        | true          |
 | `subscriberKafka.replicaCount`        | Subscriber Kafka replica count    | no        | 2             |
 | `subscriberKafka.service.port` | Http port to subscribe to a topic          | no        | 8080          |
