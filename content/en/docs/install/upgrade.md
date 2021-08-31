@@ -6,7 +6,7 @@ date: 2021-02-18
 description: Learn how to upgrade your Streams installation with a new minor version or update your configuration.
 ---
 
-{{< alert title="Caution" color="warning">}}Before any upgrade, back up your setup and especially your database (see [Backup](/docs/install/backup-recovery/) section).
+{{< alert title="Caution" color="warning">}}Before any upgrade, you must back up your setup and especially your database. For more information, see [Backup](/docs/install/backup-recovery/) section.
 {{< /alert >}}
 
 ## Upgrade
