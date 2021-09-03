@@ -640,7 +640,7 @@ Apache Kafka is used as stream-processing layer.
 Source Docker image:
 
 * Repository: bitnami/kafka
-* Tag: 2.8.0-debian-10-r71
+* Tag: 2.8.0-debian-10-r92
 
 Pod name: `streams-kafka`.
 
@@ -674,7 +674,7 @@ MariaDB is our persistence layer.
 Source Docker image:
 
 * Repository: bitnami/mariadb
-* Tag: 10.4.19-debian-10-r39
+* Tag: 10.4.21-debian-10-r27
 
 Pod names:
 
