@@ -26,7 +26,7 @@ Kubernetes supported versions are now from 1.19 to 1.21.
 
 ### Streams third-parties
 
-The following third-parties has been upgraded:
+The following third-party library has been upgraded:
 
 * Nginx Ingress Controller: `0.48.1`
 
@@ -45,10 +45,6 @@ As part of this review, no features have been deprecated.
 There are no fixed issues in this version.
 
 ## Documentation
-
-There are no major changes in this update.
-
-### Related documentation
 
 To find all available documents for this product version:
 

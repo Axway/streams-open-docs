@@ -16,7 +16,7 @@ It is important, especially when upgrading from an earlier version, to be aware 
 
 ### Streams third-parties
 
-The following third-parties have been upgraded:
+The following third-party library has been upgraded:
 
 * MariaDB : `1.4.21`
 
