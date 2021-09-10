@@ -16,7 +16,7 @@ It is important, especially when upgrading from an earlier version, to be aware 
 
 ### Streams third-parties
 
-The following third-parties has been upgraded:
+The following third-parties have been upgraded:
 
 * MariaDB : `1.4.21`
 
@@ -35,10 +35,6 @@ As part of this review, no features have been deprecated.
 There are no fixed issues in this version.
 
 ## Documentation
-
-There are no major changes in this update.
-
-### Related documentation
 
 To find all available documents for this product version:
 
