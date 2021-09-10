@@ -640,7 +640,7 @@ Apache Kafka is used as stream-processing layer.
 Source Docker image:
 
 * Repository: bitnami/kafka
-* Tag: 2.8.0-debian-10-r92
+* Tag: 2.8.0-debian-10-r96
 
 Pod name: `streams-kafka`.
 
@@ -657,7 +657,7 @@ Apache ZooKeeper is used by our microservices and by Kafka (when embedded in ins
 Source Docker image:
 
 * Repository: bitnami/zookeeper
-* Tag: 3.7.0-debian-10-r98
+* Tag: 3.7.0-debian-10-r141
 
 Pod name: `streams-zookeeper`
 
@@ -674,7 +674,7 @@ MariaDB is our persistence layer.
 Source Docker image:
 
 * Repository: bitnami/mariadb
-* Tag: 10.4.21-debian-10-r27
+* Tag: 10.4.21-debian-10-r32
 
 Pod names:
 
@@ -697,7 +697,7 @@ NGINX is the ingress controller in front of Streams APIs.
 Source Docker image:
 
 * Repository: bitnami/nginx-ingress-controller
-* Tag: 0.48.1-debian-10-r10
+* Tag: 0.48.1-debian-10-r46
 
 Pod name: `streams-nginx-ingress-controller`
 
