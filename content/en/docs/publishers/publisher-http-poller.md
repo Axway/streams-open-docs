@@ -22,6 +22,7 @@ The http-poller publisher requires some specific configuration.
 | url                           | yes       | none           | Target URL to request  |
 | pollingPeriod                 | no        | PT5S (5 sec)   | Period at witch the target URL will be requested. Min: PT0.5S Max: PT1H. Visit [ISO-8601 format](https://en.wikipedia.org/wiki/ISO_8601#Durations) for details. |
 | headers                       | no        | none           | Map of key/value pairs that will be injected as HTTP headers when requesting the target URL |
+| authorization                 | no        | none           | Authorization configuration for the http poller publisher. For more informations, refer to [Authorization section](/docs/publishers/publisher-http-poller#authorization-configuration))
 | retryOnHttpCodes              | no        | 500,503,504    | A list of http codes which will trigger the retry. Others codes generate on error without any retry |
 | retryMaxAttempts              | no        | 3              | The max number of retries in case of errors |
 | retryBackOffInitialDuration   | no        | PT1S           | Period after which the first retry is attempt (ISO-8601 format).  Min = PT0S (0s) ; Max = PT10S (10s) |
@@ -50,6 +51,10 @@ The http-poller publisher requires some specific configuration.
   }
 }
 ```
+
+### Authorization configuration
+
+Streams currently supports [OAuth2](https://datatracker.ietf.org/doc/html/rfc6749) authorization protocol. It allows to publish data from an API secured with OAUth2 protocol.
 
 ### Removing http headers from configuration
 
