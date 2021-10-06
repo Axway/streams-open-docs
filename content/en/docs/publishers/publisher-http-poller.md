@@ -64,10 +64,10 @@ The http-poller publisher requires some specific configuration.
 
 The HTTP Poller Publisher is able to fetch data from an API that is secured with [OAuth2 protocol](https://datatracker.ietf.org/doc/html/rfc6749).
 As the HTTP Poller publisher will authenticate to the authorization server without any end-user interaction, the only OAuth2 authorization grant type supported is [client credentials](https://datatracker.ietf.org/doc/html/rfc6749#section-4.4).
-The HTTP Poller publisher is able to initiate an OAuth2 authorization workflow with the following capabilities:
+The OAuth2 authorization workflow is implemented with the following limitations:
 
 * The OAuth2 authorization workflow is initiated on the authorization server url on every polling. Refresh token mechanism is not implemented.
-* The HTTP Poller publisher is able to manage access token of type [Bearer](https://datatracker.ietf.org/doc/html/rfc6749#section-7.1)
+* Only access token of type [Bearer](https://datatracker.ietf.org/doc/html/rfc6749#section-7.1) is supported
 * The authorization request is made via a `POST` method on the authorization server and the client credentials are sent either via `header` or `body`.
 
 Here is the OAuth2 authorization configuration :
@@ -78,7 +78,7 @@ Here is the OAuth2 authorization configuration :
 | clientId                      | yes       | none           | The client identifier issued during the registration process  |
 | clientSecret                  | yes       | none           | The client secret issued during the registration process  |
 | provider                      | yes       | none           | Target URL of the authorization server |
-| mode                          | yes       | header         | Whether to send [client password](https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1) via `body` or basic authorization `header` |
+| mode                          | yes       | header         | Whether to send [client authentification](https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1) via `body` or basic authorization `header` |
 | scope                         | no        | none           | [scope](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3) request parameter |
 
 ```json
