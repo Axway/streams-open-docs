@@ -66,7 +66,7 @@ The HTTP Poller Publisher is able to fetch data from an API that is secured with
 As the HTTP Poller publisher will authenticate to the authorization server without any end-user interaction, the only OAuth2 authorization grant type supported is [client credentials](https://datatracker.ietf.org/doc/html/rfc6749#section-4.4).
 The HTTP Poller publisher is able to initiate an OAuth2 authorization workflow with the following capabilities:
 
-* The HTTP Poller publisher initiates an OAuth2 authorization workflow on the authorization server url on every polling. Refresh token mechanism is not implemented.
+* The OAuth2 authorization workflow is initiated on the authorization server url on every polling. Refresh token mechanism is not implemented.
 * The HTTP Poller publisher is able to manage access token of type [Bearer](https://datatracker.ietf.org/doc/html/rfc6749#section-7.1)
 * The HTTP Poller publisher makes his authorization request via a `POST` method on the authorization server. Client password are sent either via `header` or `body`
 
