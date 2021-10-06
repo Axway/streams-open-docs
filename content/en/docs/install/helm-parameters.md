@@ -72,7 +72,7 @@ If you are setting those parameters through `--set` on the command line, you mus
 | Parameter                             | Description                         | Mandatory | Default value |
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
 | `acceptGeneralConditions`               | Accept General Conditions           | yes       | N/A           |
-| `images.repository`                     | Streams Images repository           | yes       | axway         |
+| `images.repository`                     | Streams Images repository           | yes       | docker.repository.axway.com/axwaystreams-docker-prod-ptx/2.0         |
 | `imagePullSecrets[0].name`              | Image registry keys                 | no        | N/A           |
 | `hub.replicaCount`                      | Hub replica count                   | no        | 2             |
 | `hub.service.port`                | Http port to reach the Streams Topics API | no        | 8080          |

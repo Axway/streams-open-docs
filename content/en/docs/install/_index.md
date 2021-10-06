@@ -80,15 +80,18 @@ export REGISTRY_PASSWORD="my-registry-password"
 kubectl create secret docker-registry "${REGISTRY_SECRET_NAME}" --docker-server="${REGISTRY_SERVER}"  --docker-username="${REGISTRY_USERNAME}" --docker-password="${REGISTRY_PASSWORD}" -n "${NAMESPACE}"
 ```
 
-To use Axway [DockerHub](https://hub.docker.com/) as your container registry:
+To use the Amplify Plateform as your container registry:
 
-* Set `REGISTRY_SERVER` to `https://index.docker.io/v1/`.
-* Set `REGISTRY_USERNAME` with your DockerHub account username.
-* Set `REGISTRY_PASSWORD` with your DockerHub account password or an [access token](https://hub.docker.com/settings/security) for more security.
+* Make sure you can see our images with your *organisation* on the [Amplify Repository search page](https://repository.axway.com/catalog?q=streams&artifactType=DockerImage).
+* Go to [your organisation on the Amplify platform](https://platform.axway.com/#/org) and create a service account of with the method `Client Secret`, then use the following values.
 
-Finally, to use the secret you just created, set the secret name in the `imagePullSecrets` array. For instance:
+    * Set `REGISTRY_SERVER` to `repository.axway.com`.
+    * Set `REGISTRY_USERNAME` with your service account Client ID.
+    * Set `REGISTRY_PASSWORD` with your service account Client Secret.
 
-* Add `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` in the Helm Chart installation command.
+* Finally, to use the secret you just created, set the secret name in the `imagePullSecrets` array. For instance:
+
+    * Add `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` in the Helm Chart installation command.
 
 To use a custom Docker registry, set `images.repository` accordingly to your custom registry (see [Streams parameters](/docs/install/helm-parameters#streams-parameters)).
 
