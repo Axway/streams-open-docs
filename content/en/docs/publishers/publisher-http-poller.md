@@ -165,6 +165,8 @@ The following are the types of pagination supported by the HTTP poller publisher
 
 * [Page](#page)
 * [Offset](#offset)
+* [Keyset](#keyset)
+* [Cursor](#cursor)
 
 ### Page
 
@@ -223,9 +225,9 @@ The offset mode is a similar approach to the page mode, but it uses different pa
 | offset.initial                | no        | 1              | Initial value of the first page. Must be equals to or higher than 0                         |
 | limit.parameterName           | no        | limit          | Parameter used for the number of elements per page                                      |
 | limit.value                   | no        | 100            | Define the number of items per page. Must be higher than 0                              |
-| nextReference.location           | yes       | N/A            | Either `body` or `header`. For more information, see section [Next reference](#next-reference)  |
-| nextReference.type               | yes       | N/A            | Only if location is `body`. Defines the type of the next reference                           |
-| nextReference.pointer            | yes       | N/A            | Only if location is `body`. JSON pointer to the attribute containing the next reference. For more information, see [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901). |
+| nextReference.location        | yes       | N/A            | Either `body` or `header`. For more information, see section [Next reference](#next-reference)  |
+| nextReference.type            | yes       | N/A            | Only if location is `body`. Defines the type of the next reference                           |
+| nextReference.pointer         | yes       | N/A            | Only if location is `body`. JSON pointer to the attribute containing the next reference. For more information, see [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901). |
 
 The following is an example of an HTTP poller publisher configuration with offset pagination mode:
 
@@ -257,6 +259,94 @@ The following is an example of an HTTP poller publisher configuration with offse
 }
 ```
 
+### Keyset
+
+The endpoint provides a `key` parameter that acts as a delimiter of the page. This key parameter should be the same key of the set sort order. For example, if the set is sorted by id, then the key param should be sinceId. The first request doesn’t contain the delimiter param. The response of this request will contain the value of the key for the last element of the set. The endpoint accepts a `key` parameter indicating the next elements to start the next page, and a `pageSize` parameter (integer) indicating the number of items per page, for example `/items?since_key=next_key&pageSize=10`.
+
+| Attribute                     | Mandatory | Default Value  | Description                                                                             |
+| ----------------------------- | --------- | -------------- | ----------------------                                                                  |
+| mode                          | yes       | keyset         | Define the page mode to use                                                             |
+| key.parameterName             | no        | since_key      | Parameter used for the key                                                              |
+| pageSize.parameterName        | no        | pageSize       | Parameter used for the number of elements per page                                      |
+| pageSize.value                | no        | 100            | Define the number of items per page. Must be higher than 0                              |
+| nextReference.location        | yes       | N/A            | Either `body` or `header`. For more information, see section [Next reference](#next-reference).                                                            |
+| nextReference.type            | yes       | N/A            | Only if location is `body`. Defines the type of the next reference                           |
+| nextReference.pointer         | yes       | N/A            | Only if location is `body`. JSON pointer to the attribute containing the next reference. For more information, see [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901). |
+
+The following is an example of an HTTP poller publisher configuration with keyset pagination mode:
+
+```json
+{
+  "name": "topic-with-page-mode",
+  "publisher": {
+    "type": "http-poller",
+    "config": {
+      "url": "http://my-host/api",
+      "pagination" : {
+        "mode": "keyset",
+        "key" : {
+            "parameterName": "sinceKey"
+        },
+        "pageSize" : {
+            "parameterName": "pageSize",
+            "value": 100
+        },
+        "nextReference" : {
+            "location": "body",
+            "type" : "uri",
+            "pointer" : "/links/next"
+        }
+      }
+    }
+  }
+}
+
+```
+
+### Cursor
+
+Given a set ot items, a cursor will be a piece of data that contains a pointer to an element and the info to get the next elements. The server must return the cursor pointing to the next page in each request. The endpoint accepts a `cursor` parameter indicating the next elements to start the next page, and a `pageSize` parameter (integer) indicating the number of items per page, for example `/items?cursor=next_items_cursor&pageSize=10`.
+
+| Attribute                     | Mandatory | Default Value  | Description                                                                             |
+| ----------------------------- | --------- | -------------- | ----------------------                                                                  |
+| mode                          | yes       | cursor         | Define the page mode to use                                                             |
+| cursor.parameterName          | no        | cursor         | Parameter used for the cursor                                                           |
+| pageSize.parameterName        | no        | pageSize       | Parameter used for the number of elements per page                                      |
+| pageSize.value                | no        | 100            | Define the number of items per page. Must be higher than 0                              |
+| nextReference.location        | yes       | N/A            | Either `body` or `header`. For more information, see section [Next reference](#next-reference).                                                            |
+| nextReference.type            | yes       | N/A            | Only if location is `body`. Defines the type of the next reference                           |
+| nextReference.pointer         | yes       | N/A            | Only if location is `body`. JSON pointer to the attribute containing the next reference. For more information, see [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901). |
+
+The following is an example of an HTTP poller publisher configuration with cursor pagination mode:
+
+```json
+{
+  "name": "topic-with-page-mode",
+  "publisher": {
+    "type": "http-poller",
+    "config": {
+      "url": "http://my-host/api",
+      "pagination" : {
+        "mode": "cursor",
+        "cursor" : {
+            "parameterName": "cursor"
+        },
+        "pageSize" : {
+            "parameterName": "pageSize",
+            "value": 100
+        },
+        "nextReference" : {
+            "location": "body",
+            "type" : "uri",
+            "pointer" : "/links/next"
+        }
+      }
+    }
+  }
+}
+
+```
+
 ### Next reference
 
 You can define two ways to retrieve the next reference location, independently on the pagination mode chosen. The next reference must be either in the `body` of the first response, or in the header `Link`.
@@ -265,7 +355,7 @@ You can define two ways to retrieve the next reference location, independently o
 
 If the next reference is part of the first response payload, you must use `body` as next location. While setting `body`, you must define the type of the reference and a JSON pointer to retrieve this reference.
 
-The type defines whether the reference is a full URI or only an index to the next reference.
+The type defines whether the reference is an `uri` or only a `value` to the next reference.
 
 The JSON pointer must point to the attribute in the body containing the next reference.
 
