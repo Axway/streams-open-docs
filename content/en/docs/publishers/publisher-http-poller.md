@@ -181,6 +181,8 @@ The set of items is divided into pages. The endpoint accepts a _page_ param that
 | nextReference.type                 | yes       | N/A            | Only if location is *body*. Define the type of next reference                           |
 | nextReference.pointer              | yes       | N/A            | Only if location is *body*. Json pointer to the attribute containing the next reference. See [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901). |
 
+The following is an example of an HTTP poller publisher configuration with page pagination mode:
+
 ```json
 {
   "name": "topic-with-page-mode",
@@ -224,6 +226,8 @@ Offset mode is very similar approach to page mode but uses different parameters 
 | nextReference.location           | yes       | N/A            | Either *body* or *header*. See section [Next reference](#next-reference).                                                           |
 | nextReference.type               | yes       | N/A            | Only if location is *body*. Define the type of next reference                           |
 | nextReference.pointer            | yes       | N/A            | Only if location is *body*. Json pointer to the attribute containing the next reference. See [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901). |
+
+The following is an example of an HTTP poller publisher configuration with offset pagination mode:
 
 ```json
 {
