@@ -80,7 +80,7 @@ export REGISTRY_PASSWORD="my-registry-password"
 kubectl create secret docker-registry "${REGISTRY_SECRET_NAME}" --docker-server="${REGISTRY_SERVER}"  --docker-username="${REGISTRY_USERNAME}" --docker-password="${REGISTRY_PASSWORD}" -n "${NAMESPACE}"
 ```
 
-To use the Amplify Plateform as your container registry:
+To use the Amplify Platform as your container registry:
 
 * Make sure you can see our images with your *organisation* on the [Amplify Repository search page](https://repository.axway.com/catalog?q=streams&artifactType=DockerImage).
 * Go to [your organisation on the Amplify platform](https://platform.axway.com/#/org) and create a service account of with the method `Client Secret`, then use the following values.
