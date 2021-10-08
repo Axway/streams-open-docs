@@ -98,16 +98,22 @@ Here is the OAuth2 authorization configuration :
 
 ```json
 {
-  ...  
-        "authorization": {
-          "type": "oauth2",
-          "clientId": "myclientId",
-          "clientSecret": "myclientSecret",
-          "provider": "http://authorization.com/oauth/token",
-          "scope": "READ",
-          "mode": "header"
-        }
-  ...
+  "name": "myHttpPollerTopic",
+  "publisher": {
+    "type": "http-poller",
+    "config": {
+      "url": "https://myserver/my-api",
+      "authorization": {
+        "type": "oauth2",
+        "clientId": "myclientId",
+        "clientSecret": "myclientSecret",
+        "provider": "http://authorization.com/oauth/token",
+        "scope": "READ",
+        "mode": "header"
+      }
+    }
+  }
+}
 ```
 
 ## Computed query parameters
