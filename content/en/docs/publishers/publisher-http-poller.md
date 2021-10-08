@@ -1,19 +1,20 @@
 ---
-title: HTTP Poller Publisher
-linkTitle: HTTP Poller Publisher
+title: HTTP poller publisher
+linkTitle: HTTP poller publisher
 weight: 1
 date: 2019-04-02
-description: Learn how to configure a topic associated to a HTTP Poller publisher.
+description: Learn how to configure a topic associated to a HTTP poller publisher.
 ---
 
-## HTTP Poller Publisher
+Polling describes the mechanism used to retrieve data from an API - the client first needs to send a request to a server and the server responds by sending the requested data.
 
-Polling describes the mechanism used to retrieve data from an API: the client first needs to send a request to a server and the server responds by sending the requested data.
-Since it is not possible for the client to know when the data is updated, it usually sends requests as often as possible to try to stick to reality and ends up using a lot of bandwidth and resources to receive the same data several times.
-Streams provides the ability to instantly turns any request/response API into a real-time event-driven data feed: The HTTP poller publisher will poll the target URL at the given period and publish the content in the associated topic.
+Because it is not possible for the client to know when the data is updated, it usually sends requests as often as possible to try to stick to reality and ends up using a lot of bandwidth and resources to receive the same data several times.
+
+Streams provides the ability to instantly turns any request/response API into a real-time event-driven data feed, the HTTP poller publisher will poll the target URL at the given period and publish the content in the associated topic.
+
 Streams will then fan out the content (snapshot, computed patches) to all subscribed client as soon as a change is detected in the response of the target URL.
 
-### http-poller publisher configuration
+## Understand HTTP poller publisher configuration
 
 The http-poller publisher requires some specific configuration.
 
@@ -28,7 +29,10 @@ The http-poller publisher requires some specific configuration.
 | retryBackOffInitialDuration   | no        | PT1S           | Period after which the first retry is attempt (ISO-8601 format).  Min = PT0S (0s) ; Max = PT10S (10s) |
 | retryBackOffMaxDuration       | no        | PT10S          | Period max between two attempt (ISO-8601 format). Min = PT0S (0s) ; Max = PT60S (60s) |
 | retryBackOffFactor            | no        | 0.5            | The factor used to determine the next retry duration |
+| computedQueryParameters       | no        | none           | Map of [ComputedQueryParameters](/docs/publishers/publisher-http-poller/#computed-query-parameters) that will be injected as query parameters. The key, *query parameter name*, must use URL-safe characters. For more information, see [Unreserved Characters](https://datatracker.ietf.org/doc/html/rfc2396#section-2.3). |
 | pagination                    | no        | N/A            | Pagination mechanism configuration, see section [Pagination](#pagination) |
+
+The following is an example of an HTTP poller publisher:
 
 ```json
 {
@@ -40,14 +44,26 @@ The http-poller publisher requires some specific configuration.
         "pollingPeriod": "PT5S",
         "payloadPointer": "/items",
         "headers": {
-          "CustomHeader": "value",
-          "CustomHeader2": "value1,value2"
+            "CustomHeader": "value",
+            "CustomHeader2": "value1,value2"
         },
         "retryOnHttpCodes": [500,503,504],
         "retryMaxAttempts": 3,
         "retryBackOffInitialDuration": "PT1S",
         "retryBackOffMaxDuration": "PT10S",
         "retryBackOffFactor": 0.5,
+        "computedQueryParameters": {
+            "computedQueryParam1": {
+              "type": "date-time",
+              "reference": "last-success",
+              "pattern": "yyyy-MM-dd'T'HH:mm:ss"
+            },
+            "computedQueryParam2": {
+              "type": "timestamp",
+              "reference": "last-success",
+              "useMilliseconds": true
+            }
+        },
         "pagination" : {
           "mode": "page",
           "page" : {
@@ -64,12 +80,84 @@ The http-poller publisher requires some specific configuration.
               "pointer" : "/links/next"
           }
         }
+```
+
+## Computed query parameters
+
+Computed query parameters are query parameters injected to the target URL at each polling. They are based on a given *reference*.
+
+| Attribute  | Mandatory | Default Value  | Description            |
+| ---------- | --------- | ------       | ---------------------- |
+| reference  | yes       | last-success | Defines the reference of the computed query parameter. |
+
+The available references are:
+
+* **last-success** : Instant corresponding to the last successful request execution.
+
+### DateTime format
+
+Format the reference value as DateTime. This must follow the [Java DateTimeFormatter](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html#patterns) pattern.
+
+| Attribute  | Mandatory | Default Value      | Description  |
+| ------------ | --------------------         | --------------- | --------- |
+| type         | yes | date-time              | The reference is formatted in a DateTime format. |
+| pattern      | no  | yyyy-MM-dd'T'HH:mm:ssXXX | Pattern used to format the reference.   |
+
+The following is an example of how to dynamically add a `from` query parameter to the target URL based on the **last-success** reference with the following format `yyyy-MM-dd'T'HH:mm:ss`, by using the `computedQueryParameters` attribute:
+
+```json
+{
+  "name": "myHttpPollerTopic",
+  "publisher": {
+    "type": "http-poller",
+    "config": {
+        "url": "https://myserver/my-api",
+        "computedQueryParameters": {
+            "from": {
+              "type": "date-time",
+              "reference": "last-success",
+              "pattern": "yyyy-MM-dd'T'HH:mm:ss"
+            }
+        }
     }
   }
 }
 ```
 
-### Pagination
+The resulting target URL polled will look like this: `https://myserver/my-api?from=2021-09-22T09:56:09`
+
+#### Timestamp format
+
+Format the reference value as a timestamp.
+
+| Attribute       | Mandatory | Default Value  | Description  |
+| ------------    | -------------------- | --------------- | --------- |
+| type            | yes | timestamp     | The reference is formatted as a Timestamp. |
+| useMilliseconds | no  | false | If true, the time stamp is measured in milliseconds, otherwise in seconds.   |
+
+The following is an example of how to add a `from` query parameter to the target URL based on the **last-success** reference as a Timestamp, by using the `computedQueryParameters` attribute:
+
+```json
+{
+  "name": "myHttpPollerTopic",
+  "publisher": {
+    "type": "http-poller",
+    "config": {
+        "url": "https://myserver/my-api",
+        "computedQueryParameters": {
+            "from": {
+              "type": "timestamp",
+              "reference": "last-success"
+            }
+        }
+    }
+  }
+}
+```
+
+The resulting target URL will look like this: `https://myserver/my-api?from=1632304569`
+
+## Pagination
 
 Pagination section allows to define how to paginate through your url when it is using pagination mechanism.
 
@@ -78,7 +166,7 @@ Different kind of pagination are supported:
 * [Page](#page)
 * [Offset](#offset)
 
-#### Page
+### Page
 
 The set of items is divided into pages. The endpoint accepts a _page_ param that is an integer indicating the page within the list to be returned, and _pageSize_ param that is an integer indicating the number of items per page, for example _/items?page=2&pageSize=10_.
 
@@ -122,7 +210,7 @@ The set of items is divided into pages. The endpoint accepts a _page_ param that
 
 ```
 
-#### Offset
+### Offset
 
 Offset mode is very similar approach to page mode but uses different parameters _offset_ and _limit_. _offset_ tells the server the number of items that should be skipped, while _limit_ indicates the number of items to be returned, for example _/items?offset=10&limit=10_.
 
@@ -165,11 +253,11 @@ Offset mode is very similar approach to page mode but uses different parameters 
 }
 ```
 
-#### Next reference
+### Next reference
 
 You can define two way to retrieve next reference location, independently on the pagination mode choosen. Either the next reference is in the _body_ of the first response, or in the header _Link_.
 
-##### Body location
+#### Body location
 
 If the next reference is part of the first response payload, you must use _body_ as next location.
 While setting _body_, you must define the type of the reference and a json pointer to retrieve this reference.
@@ -211,7 +299,7 @@ The configuration of the pagination section will look like:
   }
 ```
 
-##### Header location
+#### Header location
 
 If the next reference is part of the _Link_ header, you must use _header_ location. See [RFC5988](https://datatracker.ietf.org/doc/html/rfc5988) for more information.
 
@@ -233,7 +321,7 @@ The configuration of the pagination section will look like :
 
 ### Removing http headers from configuration
 
-To remove a header from publisher's configuration, set its value to `null` when calling `PATCH /streams/hub/api/v1/topics/{{topicId}}` endpoint:
+To remove a header from the configuration of the  publisher, set the header value to `null` when calling the `PATCH /streams/hub/api/v1/topics/{{topicId}}` endpoint. For example:
 
 ```json
 {
