@@ -16,7 +16,7 @@ Streams will then fan out the content (snapshot, computed patches) to all subscr
 
 ## Understand HTTP poller publisher configuration
 
-The http-poller publisher requires some specific configuration.
+The HTTP poller publisher requires the following specific configuration.
 
 | Attribute                     | Mandatory | Default Value  | Description            |
 | ----------------------------- | --------- | -------------- | ---------------------- |
@@ -24,7 +24,7 @@ The http-poller publisher requires some specific configuration.
 | pollingPeriod                 | no        | PT5S (5 sec)   | Period at witch the target URL will be requested. Min: PT0.5S Max: PT1H. Visit [ISO-8601 format](https://en.wikipedia.org/wiki/ISO_8601#Durations) for details. |
 | payloadPointer                | no        | N/A            | Define a json pointer to an attribute. See [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901). |
 | headers                       | no        | N/A            | Map of key/value pairs that will be injected as HTTP headers when requesting the target URL |
-| authorization                 | no        | none           | Authorization configuration, refer to [Authorization section](/docs/publishers/publisher-http-poller/#authorization-with-oauth-2-0) |
+| authorization                 | no        | none           | Authorization configuration. For more information, see section [Authorization](/docs/publishers/publisher-http-poller/#authorization-with-oauth-2-0). |
 | retryOnHttpCodes              | no        | 500,503,504    | A list of http codes which will trigger the retry. Others codes generate on error without any retry |
 | retryMaxAttempts              | no        | 3              | The max number of retries in case of errors |
 | retryBackOffInitialDuration   | no        | PT1S           | Period after which the first retry is attempt (ISO-8601 format).  Min = PT0S (0s) ; Max = PT10S (10s) |
@@ -93,24 +93,26 @@ The following is an example of an HTTP poller publisher:
 
 ## Authorization with OAuth 2.0
 
-The HTTP Poller Publisher is able to fetch data from an API that is secured with [OAuth2 protocol](https://datatracker.ietf.org/doc/html/rfc6749).
-As the HTTP Poller publisher will authenticate to the authorization server without any end-user interaction, the only OAuth2 authorization grant type supported is [client credentials](https://datatracker.ietf.org/doc/html/rfc6749#section-4.4).
+The HTTP poller publisher can fetch data from an API that is secured with [OAuth2](https://datatracker.ietf.org/doc/html/rfc6749) protocol. Because the HTTP poller publisher authenticates to the authorization server without any end-user interaction, the only OAuth2 authorization grant type supported is the [client credentials](https://datatracker.ietf.org/doc/html/rfc6749#section-4.4).
+
 The OAuth2 authorization workflow is implemented with the following limitations:
 
-* The OAuth2 authorization workflow is initiated on the authorization server url on every polling. Refresh token mechanism is not implemented.
-* Only access token of type [Bearer](https://datatracker.ietf.org/doc/html/rfc6749#section-7.1) is supported
-* The authorization request is made via a `POST` method on the authorization server and the client credentials are sent either via `header` or `body`.
+* The OAuth2 authorization workflow is initiated on the authorization server URL on every polling. Refresh token mechanism is not implemented.
+* Only access token of type [Bearer](https://datatracker.ietf.org/doc/html/rfc6749#section-7.1) is supported.
+* The authorization request is made via a `POST` method on the authorization server, and the client credentials are sent either via `header` or `body`.
 
-Here is the OAuth2 authorization configuration :
+The following table lists the OAuth2 authorization configuration:
 
-| Attribute                     | Mandatory | Default Value  | Description            |
+| Attribute                     | Mandatory | Default value  | Description            |
 | ----------------------------- | --------- | -------------- | ---------------------- |
-| type                          | yes       | none           | Type of authorization protocol configured on the API. Currently only `oauth2` is supported |
-| clientId                      | yes       | none           | The client identifier issued during the registration process  |
-| clientSecret                  | yes       | none           | The client secret issued during the registration process  |
-| provider                      | yes       | none           | Target URL of the authorization server |
-| mode                          | yes       | header         | Whether to send [client authentification](https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1) via `body` or basic authorization `header` |
-| scope                         | no        | none           | [scope](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3) request parameter |
+| type                          | yes       | none           | Type of authorization protocol configured on the API. Currently, only `oauth2` is supported. |
+| clientId                      | yes       | none           | The client identifier issued during the registration process.  |
+| clientSecret                  | yes       | none           | The client secret issued during the registration process.  |
+| provider                      | yes       | none           | Target URL of the authorization server. |
+| mode                          | yes       | header         | Whether to send [client authentication](https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1) via `body` or a basic authorization `header`. |
+| scope                         | no        | none           | A [scope](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3) request parameter. |
+
+The following is an example of how to implement OAuth authorization:
 
 ```json
 {
