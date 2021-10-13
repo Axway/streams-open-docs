@@ -16,7 +16,7 @@ Streams will then distribute the content (snapshot, computed patches) to all sub
 
 ## Understand HTTP poller publisher configuration
 
-The http-poller publisher requires some specific configuration.
+The HTTP poller publisher requires the following specific configuration.
 
 | Attribute                     | Mandatory | Default Value  | Description            |
 | ----------------------------- | --------- | -------------- | ---------------------- |
@@ -46,6 +46,14 @@ The following is an example of an HTTP poller publisher:
         "headers": {
             "CustomHeader": "value",
             "CustomHeader2": "value1,value2"
+        },
+        "authorization": {
+          "type": "oauth2",
+          "clientId": "myclientId",
+          "clientSecret": "myclientSecret",
+          "provider": "http://authorization.com/oauth/token",
+          "scope": "READ,WRITE",
+          "mode": "body"
         },
         "retryOnHttpCodes": [500,503,504],
         "retryMaxAttempts": 3,
@@ -80,6 +88,49 @@ The following is an example of an HTTP poller publisher:
               "pointer" : "/links/next"
           }
         }
+```
+
+## Authorization with OAuth 2.0
+
+The HTTP poller publisher can fetch data from an API that is secured with [OAuth2](https://datatracker.ietf.org/doc/html/rfc6749) protocol. Because the HTTP poller publisher authenticates to the authorization server without any end-user interaction, the only OAuth2 authorization grant type supported is the [client credentials](https://datatracker.ietf.org/doc/html/rfc6749#section-4.4).
+
+The OAuth2 authorization workflow is implemented with the following limitations:
+
+* The OAuth2 authorization workflow is initiated on the authorization server URL on every polling. Refresh token mechanism is not implemented.
+* Only access token of type [Bearer](https://datatracker.ietf.org/doc/html/rfc6749#section-7.1) is supported.
+* The authorization request is made via a `POST` method on the authorization server, and the client credentials are sent either via `header` or `body`.
+
+The following table lists the OAuth2 authorization configuration:
+
+| Attribute                     | Mandatory | Default value  | Description            |
+| ----------------------------- | --------- | -------------- | ---------------------- |
+| type                          | yes       | none           | Type of authorization protocol configured on the API. Currently, only `oauth2` is supported. |
+| clientId                      | yes       | none           | The client identifier issued during the registration process.  |
+| clientSecret                  | yes       | none           | The client secret issued during the registration process.  |
+| provider                      | yes       | none           | Target URL of the authorization server. |
+| mode                          | yes       | header         | Whether to send [client authentication](https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1) via `body` or a basic authorization `header`. |
+| scope                         | no        | none           | A [scope](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3) request parameter. |
+
+The following is an example of how to implement OAuth authorization:
+
+```json
+{
+  "name": "myHttpPollerTopic",
+  "publisher": {
+    "type": "http-poller",
+    "config": {
+      "url": "https://myserver/my-api",
+      "authorization": {
+        "type": "oauth2",
+        "clientId": "myclientId",
+        "clientSecret": "myclientSecret",
+        "provider": "http://authorization.com/oauth/token",
+        "scope": "READ",
+        "mode": "header"
+      }
+    }
+  }
+}
 ```
 
 ## Computed query parameters
@@ -427,7 +478,7 @@ To remove a header from the configuration of the publisher, set the header value
   "publisher": {
     "config": {
         "headers": {
-            "CustomHeader": null,
+            "CustomHeader": null
         }
     }
   }
