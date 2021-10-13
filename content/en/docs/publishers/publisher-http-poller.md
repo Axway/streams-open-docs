@@ -10,9 +10,9 @@ Polling describes the mechanism used to retrieve data from an API - the client f
 
 Because it is not possible for the client to know when the data is updated, it usually sends requests as often as possible to try to stick to reality and ends up using a lot of bandwidth and resources to receive the same data several times.
 
-Streams provides the ability to instantly turns any request/response API into a real-time event-driven data feed, the HTTP poller publisher will poll the target URL at the given period and publish the content in the associated topic.
+Streams provides the ability to instantly turns any request/response API into a real-time event-driven data feed. The HTTP poller publisher polls the target URL at the given period and publish the content in the associated topic.
 
-Streams will then fan out the content (snapshot, computed patches) to all subscribed client as soon as a change is detected in the response of the target URL.
+Streams will then distribute the content (snapshot, computed patches) to all subscribed clients as soon as a change is detected in the response of the target URL.
 
 ## Understand HTTP poller publisher configuration
 
@@ -20,16 +20,16 @@ The http-poller publisher requires some specific configuration.
 
 | Attribute                     | Mandatory | Default Value  | Description            |
 | ----------------------------- | --------- | -------------- | ---------------------- |
-| url                           | yes       | N/A            | Target URL to request  |
-| pollingPeriod                 | no        | PT5S (5 sec)   | Period at witch the target URL will be requested. Min: PT0.5S Max: PT1H. Visit [ISO-8601 format](https://en.wikipedia.org/wiki/ISO_8601#Durations) for details. |
-| payloadPointer                | no        | N/A            | Define a json pointer to an attribute. See [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901). |
-| headers                       | no        | N/A            | Map of key/value pairs that will be injected as HTTP headers when requesting the target URL |
-| retryOnHttpCodes              | no        | 500,503,504    | A list of http codes which will trigger the retry. Others codes generate on error without any retry |
-| retryMaxAttempts              | no        | 3              | The max number of retries in case of errors |
-| retryBackOffInitialDuration   | no        | PT1S           | Period after which the first retry is attempt (ISO-8601 format).  Min = PT0S (0s) ; Max = PT10S (10s) |
-| retryBackOffMaxDuration       | no        | PT10S          | Period max between two attempt (ISO-8601 format). Min = PT0S (0s) ; Max = PT60S (60s) |
-| retryBackOffFactor            | no        | 0.5            | The factor used to determine the next retry duration |
-| computedQueryParameters       | no        | none           | Map of [ComputedQueryParameters](/docs/publishers/publisher-http-poller/#computed-query-parameters) that will be injected as query parameters. The key, *query parameter name*, must use URL-safe characters. For more information, see [Unreserved Characters](https://datatracker.ietf.org/doc/html/rfc2396#section-2.3). |
+| url                           | yes       | N/A            | Target URL to request.  |
+| pollingPeriod                 | no        | PT5S (5 sec)   | Period at witch the target URL will be requested. Min: PT0.5S Max: PT1H. parameter [ISO-8601 format](https://en.wikipedia.org/wiki/ISO_8601#Durations). |
+| payloadPointer                | no        | N/A            | Defines a JSON pointer to an attribute parameter [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901). |
+| headers                       | no        | N/A            | Map of key/value pairs that will be injected as HTTP headers when requesting the target URL. |
+| retryOnHttpCodes              | no        | 500,503,504    | A list of HTTP codes which will trigger the retry. Other codes generate an error without any retry. |
+| retryMaxAttempts              | no        | 3              | The maximum number of retries in case of errors. |
+| retryBackOffInitialDuration   | no        | PT1S           | Period of time after which the first retry is attempted (ISO-8601 format). Min = PT0S (0s); Max = PT10S (10s). |
+| retryBackOffMaxDuration       | no        | PT10S          | Maximum period of time between two attempts (ISO-8601 format). Min = PT0S (0s); Max = PT60S (60s). |
+| retryBackOffFactor            | no        | 0.5            | The factor used to determine the next retry duration. |
+| computedQueryParameters       | no        | none           | Map of [ComputedQueryParameters](/docs/publishers/publisher-http-poller/#computed-query-parameters) that will be injected as query parameters. The key, query parameter name, must use URL-safe characters. For more information, see [Unreserved Characters](https://datatracker.ietf.org/doc/html/rfc2396#section-2.3). |
 | pagination                    | no        | N/A            | Pagination mechanism configuration. For more information, see section [Pagination](#pagination) |
 
 The following is an example of an HTTP poller publisher:
@@ -124,7 +124,7 @@ The following is an example of how to dynamically add a `from` query parameter t
 }
 ```
 
-The resulting target URL polled will look like this: `https://myserver/my-api?from=2021-09-22T09:56:09`
+The resulting target URL polled looks like this: `https://myserver/my-api?from=2021-09-22T09:56:09`
 
 #### Timestamp format
 
@@ -155,7 +155,7 @@ The following is an example of how to add a `from` query parameter to the target
 }
 ```
 
-The resulting target URL will look like this: `https://myserver/my-api?from=1632304569`
+The resulting target URL looks like this: `https://myserver/my-api?from=1632304569`
 
 ## Pagination
 
@@ -170,18 +170,18 @@ The following are the types of pagination supported by the HTTP poller publisher
 
 ### Page
 
-In the page of pagination type, the set of items is divided into pages. The endpoint accepts a `page` parameter (integer) indicating the page within the list to be returned, and a `pageSize` parameter (integer) indicating the number of items per page, for example `/items?page=2&pageSize=10`.
+In this type of pagination, the set of items is divided into pages. The endpoint accepts a `page` parameter (integer) indicating the page within the list to be returned, and a `pageSize` parameter (integer) indicating the number of items per page, for example `/items?page=2&pageSize=10`.
 
 | Attribute                     | Mandatory | Default Value  | Description                                                                             |
 | ----------------------------- | --------- | -------------- | ----------------------                                                                  |
-| mode                          | yes       | page           | Define the page mode to use                                                             |
-| page.parameterName            | no        | page           | Parameter used for the page index                                                       |
-| page.initial                  | no        | 1              | Initial value of the first page. Must be equals to or higher than 0                         |
-| pageSize.parameterName        | no        | pageSize       | Parameter used for the number of elements per page                                      |
-| pageSize.value                | no        | 100            | Define the number of items per page. Must be higher than 0                              |
-| nextReference.location             | yes       | N/A            | Either `body` or `header`. For more information, see section [Next reference](#next-reference).                                                            |
-| nextReference.type                 | yes       | N/A            | Only if location is `body`. Defines the type of the next reference                           |
-| nextReference.pointer              | yes       | N/A            | Only if location is `body`. JSON pointer to the attribute containing the next reference. For more information, see [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901). |
+| mode                          | yes       | page           | Defines the page mode to use.                                                             |
+| page.parameterName            | no        | page           | Parameter used for the page index.                                                       |
+| page.initial                  | no        | 1              | Initial value of the first page. Must be equals to or higher than 0.                         |
+| pageSize.parameterName        | no        | pageSize       | Parameter used for the number of elements per page.                                      |
+| pageSize.value                | no        | 100            | Defines the number of items per page. Must be higher than 0.                              |
+| nextReference.location             | yes       | N/A       | Either `body` or `header`. For more information, see section [Next reference](#next-reference).   |
+| nextReference.type                 | yes       | N/A       | Only if location is `body`. Defines the type of the next reference.                           |
+| nextReference.pointer              | yes       | N/A       | Only if location is `body`. JSON pointer to the attribute containing the next reference. For more information, see [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901). |
 
 The following is an example of an HTTP poller publisher configuration with page pagination mode:
 
@@ -216,17 +216,19 @@ The following is an example of an HTTP poller publisher configuration with page 
 
 ### Offset
 
-The offset mode is a similar approach to the page mode, but it uses different parameters, `offset` and `limit`. The `offset` parameter tells the server the number of items to be skipped, while the `limit` parameter indicates the number of items to be returned, for example, `/items?offset=10&limit=10`.
+The offset mode is a similar approach to the page mode, but it uses different parameters, `offset` and `limit`.
+
+The `offset` parameter tells the server the number of items to be skipped, while the `limit` parameter indicates the number of items to be returned, for example, `/items?offset=10&limit=10`.
 
 | Attribute                     | Mandatory | Default Value  | Description                                                                             |
 | ----------------------------- | --------- | -------------- | ----------------------                                                                  |
-| mode                          | yes       | offset         | Define the page mode to use                                                             |
-| offset.parameterName          | no        | offset         | Parameter used for the page index                                                       |
-| offset.initial                | no        | 1              | Initial value of the first page. Must be equals to or higher than 0                         |
-| limit.parameterName           | no        | limit          | Parameter used for the number of elements per page                                      |
-| limit.value                   | no        | 100            | Define the number of items per page. Must be higher than 0                              |
-| nextReference.location        | yes       | N/A            | Either `body` or `header`. For more information, see section [Next reference](#next-reference)  |
-| nextReference.type            | yes       | N/A            | Only if location is `body`. Defines the type of the next reference                           |
+| mode                          | yes       | offset         | Defines the page mode to use.                                                             |
+| offset.parameterName          | no        | offset         | Parameter used for the page index.                                                       |
+| offset.initial                | no        | 1              | Initial value of the first page. Must be equals to or higher than 0.                         |
+| limit.parameterName           | no        | limit          | Parameter used for the number of elements per page.                                      |
+| limit.value                   | no        | 100            | Defines the number of items per page. Must be higher than 0.                              |
+| nextReference.location        | yes       | N/A            | Either `body` or `header`. For more information, see section [Next reference](#next-reference).  |
+| nextReference.type            | yes       | N/A            | Only if location is `body`. Defines the type of the next reference.                           |
 | nextReference.pointer         | yes       | N/A            | Only if location is `body`. JSON pointer to the attribute containing the next reference. For more information, see [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901). |
 
 The following is an example of an HTTP poller publisher configuration with offset pagination mode:
@@ -261,16 +263,16 @@ The following is an example of an HTTP poller publisher configuration with offse
 
 ### Keyset
 
-The endpoint provides a `key` parameter that acts as a delimiter of the page. This key parameter should be the same key of the set sort order. For example, if the set is sorted by id, then the key param should be sinceId. The first request doesn’t contain the delimiter param. The response of this request will contain the value of the key for the last element of the set. The endpoint accepts a `key` parameter indicating the next elements to start the next page, and a `pageSize` parameter (integer) indicating the number of items per page, for example `/items?since_key=next_key&pageSize=10`.
+In this pagination type, the endpoint provides a `key` parameter that acts as a delimiter of the page. This key parameter must be the same key of the set sort order. For example, if the set is sorted by ID, then the key parameter should be `sinceId`. The first request doe not contain the delimiter parameter. The response of this request contains the value of the key for the last element of the set. The endpoint accepts a `key` parameter indicating the next elements to start the next page, and a `pageSize` parameter (integer) indicating the number of items per page, for example `/items?since_key=next_key&pageSize=10`.
 
 | Attribute                     | Mandatory | Default Value  | Description                                                                             |
 | ----------------------------- | --------- | -------------- | ----------------------                                                                  |
-| mode                          | yes       | keyset         | Define the page mode to use                                                             |
-| key.parameterName             | no        | since_key      | Parameter used for the key                                                              |
-| pageSize.parameterName        | no        | pageSize       | Parameter used for the number of elements per page                                      |
-| pageSize.value                | no        | 100            | Define the number of items per page. Must be higher than 0                              |
-| nextReference.location        | yes       | N/A            | Either `body` or `header`. For more information, see section [Next reference](#next-reference).                                                            |
-| nextReference.type            | yes       | N/A            | Only if location is `body`. Defines the type of the next reference                           |
+| mode                          | yes       | keyset         | Defines the page mode to use .                                                            |
+| key.parameterName             | no        | since_key      | Parameter used for the key.                                                              |
+| pageSize.parameterName        | no        | pageSize       | Parameter used for the number of elements per page .                                     |
+| pageSize.value                | no        | 100            | Defines the number of items per page. Must be higher than 0.                              |
+| nextReference.location        | yes       | N/A            | Either `body` or `header`. For more information, see section [Next reference](#next-reference).    |
+| nextReference.type            | yes       | N/A            | Only if location is `body`. Defines the type of the next reference.                           |
 | nextReference.pointer         | yes       | N/A            | Only if location is `body`. JSON pointer to the attribute containing the next reference. For more information, see [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901). |
 
 The following is an example of an HTTP poller publisher configuration with keyset pagination mode:
@@ -305,7 +307,7 @@ The following is an example of an HTTP poller publisher configuration with keyse
 
 ### Cursor
 
-Given a set ot items, a cursor will be a piece of data that contains a pointer to an element and the info to get the next elements. The server must return the cursor pointing to the next page in each request. The endpoint accepts a `cursor` parameter indicating the next elements to start the next page, and a `pageSize` parameter (integer) indicating the number of items per page, for example `/items?cursor=next_items_cursor&pageSize=10`.
+Given a set ot items, a cursor will be a piece of data that contains a pointer to an element and the information to get the next elements. The server must return the cursor pointing to the next page in each request. The endpoint accepts a `cursor` parameter indicating the next element to start the next page, and a `pageSize` parameter (integer) indicating the number of items per page, for example `/items?cursor=next_items_cursor&pageSize=10`.
 
 | Attribute                     | Mandatory | Default Value  | Description                                                                             |
 | ----------------------------- | --------- | -------------- | ----------------------                                                                  |
@@ -313,7 +315,7 @@ Given a set ot items, a cursor will be a piece of data that contains a pointer t
 | cursor.parameterName          | no        | cursor         | Parameter used for the cursor                                                           |
 | pageSize.parameterName        | no        | pageSize       | Parameter used for the number of elements per page                                      |
 | pageSize.value                | no        | 100            | Define the number of items per page. Must be higher than 0                              |
-| nextReference.location        | yes       | N/A            | Either `body` or `header`. For more information, see section [Next reference](#next-reference).                                                            |
+| nextReference.location        | yes       | N/A            | Either `body` or `header`. For more information, see section [Next reference](#next-reference)|
 | nextReference.type            | yes       | N/A            | Only if location is `body`. Defines the type of the next reference                           |
 | nextReference.pointer         | yes       | N/A            | Only if location is `body`. JSON pointer to the attribute containing the next reference. For more information, see [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901). |
 
