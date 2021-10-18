@@ -7,4 +7,4 @@ description: Security features of Streams
 ---
 
 The Streams Security guide is available at the following link: [Streams Security guide](https://docs.axway.com/bundle/Streams_20_SecurityGuide_allOS_en_HTML5/).
-Please note that the Streams Security guide is in restricted availibility.
+Please note that the Streams Security guide is in restricted availability.

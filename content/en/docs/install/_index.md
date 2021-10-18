@@ -370,6 +370,8 @@ You can choose one of the following options:
         * `embeddedKafka.auth.saslInterBrokerMechanism` to `plain`
         * `embeddedKafka.auth.jaas.existingSecret` to `null`
         * `embeddedKafka.extraEnvVars` to `null`
+        * `embeddedKafka.extraVolumes` to `null`
+        * `embeddedKafka.extraVolumeMounts` to `null`
 
 {{< alert title="Note" >}}
 Disabling security is not recommended for production environments.
