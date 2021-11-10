@@ -22,9 +22,17 @@ The body must contain a JSON webhook subscription configuration as the following
 {
     "webhookUrl": "https://valid.url/of/webhook",
     "webhookHeaders": {
-      "Authorization"   : "Bearer AbCdEf123456"
+      "additionalHeader": "value"
     },
-    "subscriptionMode": "snapshot-only"
+    "subscriptionMode": "snapshot-only",
+    "authorization": {
+        "type": "oauth2",
+        "clientId": "myclientId",
+        "clientSecret": "myclientSecret",
+        "provider": "http://authorization.com/oauth/token",
+        "scope": "READ,WRITE",
+        "mode": "body"
+    }
 }
 ```
 
@@ -32,9 +40,48 @@ The body must contain a JSON webhook subscription configuration as the following
 |---------------------|-----------|---------------|-------------|
 | webhookUrl | yes | n/a | URL which will be called by Streams in order to inform the subscriber that a new event/message has been published in the topic identified by {topicId}. |
 | webhookHeaders | no | n/a | Map of key/value which will send by Streams to the subscriber |
-| subscriptionMode | no | Default subscription mode defined in the topic's configuration | Refer to [subscription modes](/docs/subscribers/#subscription-modes) section |
+| subscriptionMode | no | Default subscription mode defined in the topic's configuration | For more information, see section [subscription modes](/docs/subscribers/#subscription-modes) |
+| authorization | no | n/a | OAuth2 Authorization configuration. For more information, see section [OAuth2 Authorization](/#authorization_with_oauth_2_0) |
 
 Once the webhook subscription is successfully created, Streams will start notifying the subscriber at the specified `webhookUrl`.
+
+## Authorization with OAuth 2.0
+
+The Webhook subscriber can post data to an API that is secured with [OAuth2](https://datatracker.ietf.org/doc/html/rfc6749) protocol. Because the Webhook subscriber authenticates to the authorization server without any end-user interaction, the only OAuth2 authorization grant type supported is the [client credentials](https://datatracker.ietf.org/doc/html/rfc6749#section-4.4).
+
+The OAuth2 authorization workflow is implemented with the following limitations:
+
+* The OAuth2 authorization workflow is initiated on the authorization server URL each time a data is posted. Refresh token mechanism is not implemented.
+* Only access token of type [Bearer](https://datatracker.ietf.org/doc/html/rfc6749#section-7.1) is supported.
+* The authorization request is made via a `POST` method on the authorization server, and the client credentials are sent either via `header` or `body`.
+
+The following table lists the OAuth2 authorization configuration:
+
+| Attribute                     | Mandatory | Default value  | Description            |
+| ----------------------------- | --------- | -------------- | ---------------------- |
+| type                          | yes       | none           | Type of authorization protocol configured on the API. Currently, only `oauth2` is supported. |
+| clientId                      | yes       | none           | The client identifier issued during the registration process.  |
+| clientSecret                  | yes       | none           | The client secret issued during the registration process.  |
+| provider                      | yes       | none           | Target URL of the authorization server. |
+| mode                          | yes       | header         | Whether to send [client authentication](https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1) via `body` or a basic authorization `header`. |
+| scope                         | no        | none           | A [scope](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3) request parameter. |
+
+The following is an example of how to implement OAuth authorization:
+
+```json
+{
+  "webhookUrl": "https://valid.url/of/webhook",
+  "subscriptionMode": "snapshot-only",
+  "authorization": {
+    "type": "oauth2",
+    "clientId": "myclientId",
+    "clientSecret": "myclientSecret",
+    "provider": "http://authorization.com/oauth/token",
+    "scope": "READ,WRITE",
+    "mode": "body"
+  }
+}
+```
 
 ### Create status codes
 
