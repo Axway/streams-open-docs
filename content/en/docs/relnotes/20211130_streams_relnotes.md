@@ -23,7 +23,7 @@ The following third-party library has been upgraded:
 
 ### Kafka upgrade
 
-Due to security vulnerabilities, we had to upgrade Apache Kafka to 2.8.1. This update introduces breaking changes in the configuration of embedded kafka.
+Due to security vulnerabilities, Apache Kafka has been upgraded to version 2.8.1. This upgrade introduces breaking changes in the configuration of embedded kafka.
 SASL configuration are now under `embeddedKafka.auth.sasl`. For more information, see [Helm parameters](/docs/install/helm-parameters/#mariaDB-parameters).
 
 ## Deprecated features
