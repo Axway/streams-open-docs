@@ -38,12 +38,12 @@ The body must contain a JSON webhook subscription configuration as the following
 
 | Configuration Entry | Mandatory | Default value | Description |
 |---------------------|-----------|---------------|-------------|
-| webhookUrl | yes | n/a | URL which will be called by Streams in order to inform the subscriber that a new event/message has been published in the topic identified by {topicId}. |
-| webhookHeaders | no | n/a | Map of key/value which will send by Streams to the subscriber |
-| subscriptionMode | no | Default subscription mode defined in the topic's configuration | For more information, see section [subscription modes](/docs/subscribers/#subscription-modes) |
-| authorization | no | n/a | OAuth2 Authorization configuration. For more information, see section [OAuth2 Authorization](/#authorization_with_oauth_2_0) |
+| webhookUrl | yes | n/a | URL which will be called by Streams in order to inform the subscriber that a new event/message has been published in the topic identified by `{topicId}`. |
+| webhookHeaders | no | n/a | Map of key/value which will send by Streams to the subscriber. |
+| subscriptionMode | no | Default subscription mode defined in the topic's configuration | For more information, see section [subscription modes](/docs/subscribers/#subscription-modes). |
+| authorization | no | n/a | OAuth2 Authorization configuration. For more information, see section [OAuth2 Authorization](/#authorization-with-oauth-2-0). |
 
-Once the webhook subscription is successfully created, Streams will start notifying the subscriber at the specified `webhookUrl`.
+After the webhook subscription is successfully created, Streams starts notifying the subscriber at the specified `webhookUrl`.
 
 ## Authorization with OAuth 2.0
 
@@ -51,7 +51,7 @@ The Webhook subscriber can post data to an API that is secured with [OAuth2](htt
 
 The OAuth2 authorization workflow is implemented with the following limitations:
 
-* The OAuth2 authorization workflow is initiated on the authorization server URL each time a data is posted. Refresh token mechanism is not implemented.
+* The OAuth2 authorization workflow is initiated on the authorization server URL each time data is posted. Refresh token mechanism is not implemented.
 * Only access token of type [Bearer](https://datatracker.ietf.org/doc/html/rfc6749#section-7.1) is supported.
 * The authorization request is made via a `POST` method on the authorization server, and the client credentials are sent either via `header` or `body`.
 
