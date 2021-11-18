@@ -41,7 +41,7 @@ The body must contain a JSON webhook subscription configuration as the following
 | webhookUrl | yes | n/a | URL which will be called by Streams in order to inform the subscriber that a new event/message has been published in the topic identified by `{topicId}`. |
 | webhookHeaders | no | n/a | Map of key/value which will send by Streams to the subscriber. |
 | subscriptionMode | no | Default subscription mode defined in the topic's configuration | For more information, see section [subscription modes](/docs/subscribers/#subscription-modes). |
-| authorization | no | n/a | OAuth2 Authorization configuration. For more information, see section [OAuth2 Authorization](/#authorization-with-oauth-2-0). |
+| authorization | no | n/a | OAuth2 Authorization configuration. For more information, see section [OAuth2 Authorization](#authorization-with-oauth-2-0). |
 
 After the webhook subscription is successfully created, Streams starts notifying the subscriber at the specified `webhookUrl`.
 
