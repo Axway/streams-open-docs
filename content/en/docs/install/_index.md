@@ -369,7 +369,7 @@ You can choose one of the following options:
         * `embeddedKafka.auth.interBrokerProtocol` to `plaintext`
         * `embeddedKafka.auth.sasl.mechanisms` to `plain`
         * `embeddedKafka.auth.sasl.interBrokerMechanism` to `plain`
-        * `embeddedKafka.auth.sasl.jaas.existingSecret` to `null`
+        * `embeddedKafka.auth.sasl.jaas.clientPasswordSecret` to `null`
         * `embeddedKafka.extraEnvVars` to `null`
         * `embeddedKafka.extraVolumes` to `null`
         * `embeddedKafka.extraVolumeMounts` to `null`
