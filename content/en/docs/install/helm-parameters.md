@@ -74,29 +74,29 @@ If you are setting those parameters through `--set` on the command line, you mus
 | `acceptGeneralConditions`               | Accept General Conditions           | yes       | N/A           |
 | `images.repository`                     | Streams Images repository           | yes       | docker.repository.axway.com/axwaystreams-docker-prod-ptx/2.0         |
 | `imagePullSecrets[0].name`              | Image registry keys                 | no        | N/A           |
-| `hub.replicaCount`                      | Hub replica count                   | no        | 2             |
+| `hub.replicaCount`                      | Hub replica count                   | no        | 1 (2 HA)             |
 | `hub.service.port`                | Http port to reach the Streams Topics API | no        | 8080          |
 | `subscriberSse.enabled`             | Enable/Disable Subscriber SSE  | no        | true          |
-| `subscriberSse.replicaCount`        | Subscriber SSE replica count    | no        | 2             |
+| `subscriberSse.replicaCount`        | Subscriber SSE replica count    | no        | 1 (2 HA)             |
 | `subscriberSse.service.port` | Http port to subscribe to a topic          | no        | 8080          |
 | `subscriberWebhook.enabled`             | Enable/Disable Subscriber Webhook  | no        | true          |
-| `subscriberWebhook.replicaCount`        | Subscriber Webhook replica count    | no        | 2             |
+| `subscriberWebhook.replicaCount`        | Subscriber Webhook replica count    | no        | 1 (2 HA)             |
 | `subscriberWebhook.service.port` | Http port to subscribe to a topic          | no        | 8080          |
 | `subscriberWebSocket.enabled`             | Enable/Disable Subscriber WebSocket  | no        | false          |
-| `subscriberWebSocket.replicaCount`        | Subscriber WebSocket replica count    | no        | 2             |
+| `subscriberWebSocket.replicaCount`        | Subscriber WebSocket replica count    | no        | 1 (2 HA)             |
 | `subscriberWebSocket.service.port` | Http port to subscribe to a topic          | no        | 8080          |
-| `subscriberKafka.enabled`             | Enable/Disable Subscriber Kafka  | no        | true          |
-| `subscriberKafka.replicaCount`        | Subscriber Kafka replica count    | no        | 2             |
+| `subscriberKafka.enabled`             | Enable/Disable Subscriber Kafka  | no        | false          |
+| `subscriberKafka.replicaCount`        | Subscriber Kafka replica count    | no        | 1 (2 HA)             |
 | `subscriberKafka.service.port` | Http port to subscribe to a topic          | no        | 8080          |
 | `publisherHttpPoller.enabled`             | Enable/Disable Publisher HTTP Poller  | no        | true          |
-| `publisherHttpPoller.replicaCount`      | Publisher HTTP Poller replica count | no        | 2             |
+| `publisherHttpPoller.replicaCount`      | Publisher HTTP Poller replica count | no        | 1 (2 HA)            |
 | `publisherHttpPost.enabled`             | Enable/Disable Publisher HTTP Post  | no        | true          |
-| `publisherHttpPost.replicaCount`        | Publisher HTTP Post replica count   | no        | 2             |
+| `publisherHttpPost.replicaCount`        | Publisher HTTP Post replica count   | no        | 1 (2 HA)             |
 | `publisherHttpPost.service.port` | Http port to publish to a topic     | no        | 8080          |
-| `publisherKafka.enabled`                | Enable/Disable Publisher Kafka      | no        | true          |
-| `publisherKafka.replicaCount`           | Publisher Kafka replica count       | no        | 2             |
+| `publisherKafka.enabled`                | Enable/Disable Publisher Kafka      | no        | false          |
+| `publisherKafka.replicaCount`           | Publisher Kafka replica count       | no        | 1 (2 HA)             |
 | `publisherSfdc.enabled`                 | Enable/Disable Publisher SFDC       | no        | false         |
-| `publisherSfdc.replicaCount`            | Publisher SFDC replica count        | no        | 2             |
+| `publisherSfdc.replicaCount`            | Publisher SFDC replica count        | no        | 1 (2 HA)             |
 | `streams.extraCertificatesSecrets`      | List of secrets containing TLS certs to add as trusted by Streams | no | [] |
 | `actuator.prometheus.enabled`           | Activate metrics endpoints for Streams services | no | false    |
 | `streams.serviceArgs.spring.datasource.hikari.maxLifetime` | Maximum lifetime in milliseconds for a Streams database connection | no | 280000 |
