@@ -21,10 +21,14 @@ The following third-party library has been upgraded:
 * MariaDB : `10.4.21`
 * Apache Kafka : `2.8.1`
 
-### Kafka upgrade
+### Embedded Kafka configuration
 
 Due to security vulnerabilities, Apache Kafka has been upgraded to version 2.8.1. This upgrade introduces breaking changes in the configuration of embedded kafka.
 SASL configuration are now under `embeddedKafka.auth.sasl`. For more information, see [Helm parameters](/docs/install/helm-parameters/#kafka-parameters).
+
+We have also changed some internal workings of the Kafka containers to improve security. There is no visible change unless you have disabled or customized some security of embedded kafka as
+described in [the installation](/docs/install/#embedded-kafka-configuration). In that case, be aware
+that `embeddedKafka.auth.sasl.jaas.clientPasswordSecret` has replaced `embeddedKafka.auth.jaas.existingSecret`.
 
 ## Deprecated features
 <!-- As part of our software development life cycle, we constantly review our Streams offering. -->
