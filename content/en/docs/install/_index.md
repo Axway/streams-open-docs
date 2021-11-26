@@ -76,13 +76,21 @@ kubectl create secret docker-registry "${REGISTRY_SECRET_NAME}" --docker-server=
 To use the Amplify Platform as your container registry:
 
 1. Ensure you can see our images with your organization on the [Amplify Repository search page](https://repository.axway.com/catalog?q=streams&artifactType=DockerImage).
-2. Access your organization on the [Amplify platform](https://platform.axway.com/#/org) and create a service account with the method `Client Secret`, then use the following values.
+2. Ensure you have administrative access to create a service account in your organization
+3. Access your organization on the [Amplify platform](https://platform.axway.com/#/org):
+   1. click on the `Service Accounts` in left panel. You should see all service accounts already created.
+   2. click on the `+ Service Account` button at the top right and fill the mandatory fields:
+      1. enter a name for the service account
+      2. choose the method `Client Secret`
+      3. choose for credentials `Platform-generated secret`
+   3. then press `Save` button. Be sure to securely store the generated client secret. It will be required in the next step.
+4. Create the docker-registry secret. Override the following values from the command above with:
+    * `export REGISTRY_SERVER=repository.axway.com`
+    * `export REGISTRY_USERNAME=` with your service account Client ID.
+    * `export REGISTRY_PASSWORD=` with your service account Client Secret.
+    * then run the command just above this note to create the secret `kubectl create secret docker-registry ...`
 
-    * Set `REGISTRY_SERVER` to `repository.axway.com`.
-    * Set `REGISTRY_USERNAME` with your service account Client ID.
-    * Set `REGISTRY_PASSWORD` with your service account Client Secret.
-
-3. To use the secret you have just created, set the secret's name in the `imagePullSecrets` array. For example, add `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` to the Helm Chart installation command.
+5. To use the secret you have just created, set the secret's name in the `imagePullSecrets` array. For example, add `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` to the Helm Chart installation command.
 
 To use a custom Docker registry, set `images.repository` accordingly to your custom registry. For more information, see [Streams parameters](/docs/install/helm-parameters#streams-parameters).
 
