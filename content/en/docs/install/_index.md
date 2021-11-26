@@ -21,13 +21,17 @@ For more information, see [Reference Architecture](/docs/architecture).
 
 ## Pre-installation
 
-Download Steams helm chart corresponding to the `release-version` you wish to install.
+Once you have been on-boarded on [Amplify Platfrom](https://platform.axway.com) by your Axway contact. You will be able to download our last Helm Chart from `Downloads` section of [Axway Support Portal](https://support.axway.com/en/search/index/type/Downloads/sort/created%7Cdesc/ipp/10/product/596/version/3074).
+
+Please download Steams helm chart corresponding to the `release-version` you wish to install.
 
 ```sh
 export INSTALL_DIR="MyInstallDirectory"
 
 cd ${INSTALL_DIR}/helm/streams
 ```
+
+{{< alert title="Note" >}}On Axway Support Portal, you will also find others resources such as Postman Collection, OpenApi or docker-compose files.{{< /alert >}}
 
 ## Secrets management
 
