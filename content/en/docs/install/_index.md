@@ -22,19 +22,16 @@ For more information, see [Reference Architecture](/docs/architecture).
 
 ## Prepare your environment
 
-Once you have been on-boarded on [Amplify Platform](https://platform.axway.com) by your Axway contact. You will be able to download our last Helm Chart from `Downloads` section of [Axway Support Portal](https://support.axway.com/en/search/index/type/Downloads/sort/created%7Cdesc/ipp/10/product/596/version/3074).
+After you have been on-boarded on [Amplify Platform](https://platform.axway.com) by your Axway contact, you will be able to download our latest Helm chart from the **Downloads** section of [Axway Support Portal](https://support.axway.com/en/search/index/type/Downloads/sort/created%7Cdesc/ipp/10/product/596/version/3074). Ensure to download the correct version of the Streams Helm chart corresponding to the release you wish to install.
 
-Please download Steams helm chart corresponding to the `release-version` you wish to install.
-
-After you have extracted the helm chart, setup and go to the installation directory :
+To prepare your environment, extract the Helm chart and change directory to the installation directory, for example:
 
 ```sh
 export INSTALL_DIR="MyInstallDirectory"
-
 cd ${INSTALL_DIR}/helm/streams
 ```
 
-{{< alert title="Note" >}}On Axway Support Portal, you will also find others resources such as Postman Collection, OpenApi or docker-compose files.{{< /alert >}}
+{{< alert title="Note" >}}You can find others resources in [Axway Support Portal](https://support.axway.com/en), for example, Postman collections, OpenAPI, and Docker-compose files, which can help you to configure your environment.{{< /alert >}}
 
 ## Helm parameters management
 
