@@ -63,23 +63,11 @@ export NAMESPACE="my-namespace"
 kubectl create namespace "${NAMESPACE}"
 ```
 
-## Use Amplify Platform as your container registry
-
-To use the Amplify Platform as your container registry you must first ensure you can see our images with your organization on the Amplify Repository search page, and that you have administrative access to create a service account in your organization.
-
-To create your service account, in the Amplify Platform, perform the following steps:
-
-1. Log in to the Amplify platform, and click the Service Accounts in left panel (You should see all service accounts already created)
-2. Click **+ Service Account**, and fill in the mandatory fields:
-    * Enter a name for the service account.
-    * Choose the method `Client Secret`.
-    * Choose for credentials `Platform-generated secret`.
-3. Click **Save**
-4. Ensure to securely store the generated client secret because it will be required in the next steps.
-
 ## Docker registry settings
 
-Docker images must be hosted in a docker registry accessible from your Kubernetes cluster. To securely store registry login credentials, we recommend using Kubernetes [secrets](https://kubernetes.io/docs/concepts/configuration/secret/):
+Docker images must be hosted in a docker registry accessible from your Kubernetes cluster.
+
+### Docker registry secret
 
 The following code is an example of how to create a Kubernetes registry:
 
@@ -93,21 +81,34 @@ export REGISTRY_PASSWORD="my-registry-password"
 kubectl create secret docker-registry "${REGISTRY_SECRET_NAME}" --docker-server="${REGISTRY_SERVER}"  --docker-username="${REGISTRY_USERNAME}" --docker-password="${REGISTRY_PASSWORD}" -n "${NAMESPACE}"
 ```
 
-To create your docker-registry secret, override all the values with your service account information.
+To use the secret you have just created, set the secret's name in the `imagePullSecrets` array. For example, add `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` to the Helm Chart installation command.
 
-The value for `export REGISTRY_SERVER=` must always be `repository.axway.com`. For example,:
+To use a custom Docker registry, set `images.repository` accordingly to your custom registry. For more information, see [Streams parameters](/docs/install/helm-parameters#streams-parameters).
+
+### Use Amplify Platform as your container registry
+
+To use the Amplify Platform as your container registry you must first ensure you can see our images with your organization on the Amplify Repository search page, and that you have administrative access to create a service account in your organization.
+
+To create your service account, in the Amplify Platform, perform the following steps:
+
+1. Log in to the Amplify platform
+2. Go to your organization and click the Service Accounts in left panel (You should see all service accounts already created)
+3. Click **+ Service Account**, and fill in the mandatory fields:
+    * Enter a name for the service account.
+    * Choose the method `Client Secret`.
+    * Choose for credentials `Platform-generated secret`.
+4. Click **Save**
+5. Ensure to securely store the generated client secret because it will be required in the next steps.
+
+Then to create your docker-registry secret, override all the values with your service account information.
+
+The value for `export REGISTRY_SERVER=` must be `repository.axway.com`. Such as:
 
 ```sh
 export REGISTRY_SERVER="repository.axway.com"
 ```
 
-Then, run the command to create the secret `kubectl create secret docker-registry ...`
-
-## Use Secret in your service account
-
-To use the secret you have just created, set the secret's name in the `imagePullSecrets` array. For example, add `--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"` to the Helm Chart installation command.
-
-To use a custom Docker registry, set `images.repository` accordingly to your custom registry. For more information, see [Streams parameters](/docs/install/helm-parameters#streams-parameters).
+Then, run the command to create the secret as explained above `kubectl create secret docker-registry "${REGISTRY_SECRET_NAME}" --docker-server="${REGISTRY_SERVER}"  --docker-username="${REGISTRY_USERNAME}" --docker-password="${REGISTRY_PASSWORD}" -n "${NAMESPACE}"`
 
 ## MariaDB settings
 
