@@ -82,12 +82,19 @@ To use a custom Docker registry, set `images.repository` accordingly to your cus
 
 ### Use Amplify Platform as your container registry
 
-To use the Amplify Platform as your container registry you must first ensure you can see our images with your organization on the Amplify Repository search page, and that you have administrator access to create a service account in your organization.
+To use the Amplify Platform as your container registry you must first ensure the following:
 
-To create your service account, in the Amplify Platform, perform the following steps:
+* You can see our images with your organization on the Amplify repository search page.
+* You have administrator access to create a service account in your organization.
 
-1. Log in to the Amplify platform.
-2. Select to your organization and click **Service Accounts** in the left panel (You should see all service accounts already created).
+After you have verified that, you must create a service account, then create docker-registry secret with the information from your service account.
+
+#### Create a service account
+
+To create your service account perform the following steps:
+
+1. Log in to the [Amplify Platform](https://platform.axway.com).
+2. Select to your organization and from the left menu, click **Service Accounts** (You should see all service accounts already created).
 3. Click **+ Service Account**, and fill in the mandatory fields:
     * Enter a name for the service account.
     * Choose `Client Secret` for the method.
@@ -95,9 +102,9 @@ To create your service account, in the Amplify Platform, perform the following s
 4. Click **Save**
 5. Ensure to securely store the generated client secret because it will be required in further steps.
 
-### Create a secret to use with your Docker registry
+#### Create a secret to use with your Docker registry
 
-To create your docker-registry secret, override all values from the previous example with your service account information. The value for `export REGISTRY_SERVER=` must be `repository.axway.com`. Such as:
+To create your secret to use with the Amplify platform docker-registry, override all values from the previous Kubernetes registry example with your service account information. The value for `export REGISTRY_SERVER=` must be `repository.axway.com`. Such as:
 
 ```sh
 export REGISTRY_SERVER="repository.axway.com"
