@@ -20,11 +20,13 @@ description: Learn how to install Streams on-premise or deploy it in your privat
 
 For more information, see [Reference Architecture](/docs/architecture).
 
-## Pre-installation
+## Prepare your environment
 
 Once you have been on-boarded on [Amplify Platform](https://platform.axway.com) by your Axway contact. You will be able to download our last Helm Chart from `Downloads` section of [Axway Support Portal](https://support.axway.com/en/search/index/type/Downloads/sort/created%7Cdesc/ipp/10/product/596/version/3074).
 
 Please download Steams helm chart corresponding to the `release-version` you wish to install.
+
+After you have extracted the helm chart, setup and go to the installation directory :
 
 ```sh
 export INSTALL_DIR="MyInstallDirectory"
