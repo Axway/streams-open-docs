@@ -10,6 +10,7 @@ description: Learn how to install Streams on-premise or deploy it in your privat
 ## Prerequisites
 
 * Kubernetes 1.18+
+* [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/)
 * Helm 3.2.0+
 * RBAC enabled
 * PersistentVolumes and LoadBalancer provisioner supported by the underlying infrastructure
@@ -32,10 +33,6 @@ cd ${INSTALL_DIR}/helm/streams
 ```
 
 {{< alert title="Note" >}}On Axway Support Portal, you will also find others resources such as Postman Collection, OpenApi or docker-compose files.{{< /alert >}}
-
-## Secrets management
-
-Refer to Kubernetes documentation to create [secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
 
 ## Helm parameters management
 
