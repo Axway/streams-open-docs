@@ -9,7 +9,7 @@ description: Understand the metrics provided by Streams
 ## Introduction
 
 Streams provides metrics in a Prometheus format when the
-[monitoring parameters](/docs/install/helm-parameters/#monitoring-parameters) are enabled.
+[monitoring parameters](/docs/install/helm-parameters-reference/#monitoring-parameters) are enabled.
 These are meant to be scraped by a Prometheus server and visualized through Grafana on our custom dashboards.
 
 ## Metrics types

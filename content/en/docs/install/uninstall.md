@@ -1,7 +1,7 @@
 ---
 title: Uninstalling
 linkTitle: Uninstall
-weight: 3
+weight: 40
 date: 2021-02-18
 description: Learn how to uninstall Streams.
 ---
