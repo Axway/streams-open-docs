@@ -3,26 +3,40 @@ title: Customize installation settings
 linkTitle: Customize installation settings
 weight: 10
 date: 2021-11-30
-description: Learn how to customize your installation according to your needs.
+description: Learn how to customize your Streams installation.
 ---
 
-## Alternate methods to manage Helm parameters
+You must use Helm parameters to customize Streams during its installation. Any customization must be done before you install Helm.
 
-There are different ways to manage your custom [Helm parameters](/docs/install/helm-parameters-reference/). The best way depends on your use case.
+There are different ways to manage your custom [Helm parameters](/docs/install/helm-parameters-reference/), and the best way depends on your use case. The following are some options that you can use to customize your installation:
 
-For example, you could:
+* By way of a custom values file (recommended).
+* By setting a key value when running the installation or upgrade commands.
+* By editing any value in the values.yaml files.
 
-* Use `--set key=value` when running the `helm install` or `helm upgrade` command.
-    * Example: `helm install <name> <chart> --set key=value`.
-* Edit `values.yaml` or `values-ha.yaml` files and change any values you need.
-* (recommanded) Create a custom values file (for example, `my-values.yaml`) where you can overwrite parameters and pass on the file to `helm install` or `helm upgrade` command.
-    * Example: `helm install -f values.yaml -f values-ha.yaml -f my-values.yaml <name> <chart>`. (The last `values` file in this command overwrites any conflicting parameter.)
+Our recommendation is that you create a custom values file, for example, `my-values.yaml`, where you can overwrite parameters and pass on the file to the installation or upgrade commands. For example:
 
-After you choose one of the options, we recommend you always use it to avoid issues when you [upgrade the helm chart](/docs/install/upgrade/).
+```
+helm install -f values.yaml -f values-ha.yaml -f my-values.yaml <name> <chart>
+```
+
+* The last `values` file in this command overwrites any conflicting parameter.
+
+Another option is to use `--set key=value` when running the installation or upgrade commands. For example:
+
+```
+helm install <name> <chart> --set key=value
+```
+
+Finally, you can edit the `values.yaml` or `values-ha.yaml` files and change any values you need.
+
+{{< alert title="Note" >}}
+After you choose one of the options to customize your installation, we recommend you always use it to avoid issues when you [upgrade the helm chart](/docs/install/upgrade/).
+{{< /alert >}}
 
 ## Use a custom Docker registry
 
-In some cases, you may want to use your own docker registry to retrieve Streams docker images. For example, when you k8s cluster has limited access to internet.
+In some cases, you may want to use your own docker registry to retrieve Streams docker images. For example, when you K8s cluster has limited access to internet.
 
 The following code is an example of how to set up a custom registry:
 
@@ -36,35 +50,39 @@ export REGISTRY_PASSWORD="my-registry-password"
 kubectl create secret docker-registry "${REGISTRY_SECRET_NAME}" --docker-server="${REGISTRY_SERVER}"  --docker-username="${REGISTRY_USERNAME}" --docker-password="${REGISTRY_PASSWORD}" -n "${NAMESPACE}"
 ```
 
-Then you must set the helm parameters `imagePullSecrets[0].name`, and `images.repository` accordingly to your custom registry. For more information, see [Streams parameters](/docs/install/helm-parameters-reference#streams-parameters).
+Then you must set the helm parameters `imagePullSecrets[0].name` and `images.repository` accordingly to your custom registry. For more information, see [Streams parameters](/docs/install/helm-parameters-reference#streams-parameters).
 
 ## Custom embedded Mariadb security settings
 
 By default, both TLS and TDE encrypt modes are enabled for the embedded MariaDB server. This section shows how you can disable one or the other, or both.
 
-### To enable TLS only
+### Enable TLS only
 
-To **only** enable TLS, you need to create a secret containing the [TLS](#tls) certificates, for example:
+Follow these steps to enable TSL **only**:
 
-```sh
-export NAMESPACE="my-namespace"
-kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem -n ${NAMESPACE}
-```
+1. Create a secret containing the [TLS](#tls) certificates, for example:
 
-You must also set the [Helm parameters](/docs/install/helm-parameters-reference/#mariadb-parameters) `embeddedMariadb.encryption.enabled` to `false`.
+    ```sh
+    export NAMESPACE="my-namespace"
+    kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem -n ${NAMESPACE}
+    ```
 
-### To enable TDE only
+2. Set the [Helm parameter](/docs/install/helm-parameters-reference/#mariadb-parameters) `embeddedMariadb.encryption.enabled` to `false`.
 
-To **only** enable TDE, you need to create a secret containing the [TDE](#transparent-data-encryption-tde) keyfile, for example:
+### Enable TDE only
 
-```sh
-export NAMESPACE="my-namespace"
-kubectl create secret generic streams-database-secret --from-file=KEYFILE=keyfile -n ${NAMESPACE}
-```
+Follow these steps to enable TDE **only**:
 
-You must also set the [Helm parameters](/docs/install/helm-parameters-reference/#mariadb-parameters) `embeddedMariadb.tls.enabled` to `false`.
+1. Create a secret containing the [TDE](#transparent-data-encryption-tde) keyfile, for example:
 
-### For disabling all security features
+    ```sh
+    export NAMESPACE="my-namespace"
+    kubectl create secret generic streams-database-secret --from-file=KEYFILE=keyfile -n ${NAMESPACE}
+    ```
+
+2. Set the [Helm parameter](/docs/install/helm-parameters-reference/#mariadb-parameters) `embeddedMariadb.tls.enabled` to `false`.
+
+### Disable all security features
 
 To disable MariaDB encryption **and** TLS, you must set the following [Helm parameters](/docs/install/helm-parameters-reference/#mariadb-parameters):
 
@@ -77,7 +95,7 @@ Disabling security is not recommended for production environments.
 
 ## Custom embedded kafka security settings
 
-Streams requires you to enable both SASL/SCRAM authentication (using the SHA-512 hash functions) and TLS, or neither of the two
+Streams requires you to enable both SASL/SCRAM authentication (using the SHA-512 hash functions) and TLS, or neither of the two.
 
 To disable all security features provided by kafka, you must set the following [Helm parameters](/docs/install/helm-parameters-reference/#kafka-parameters):
 
@@ -96,26 +114,28 @@ Disabling security is not recommended for production environments.
 
 ## Custom externalized Mariadb security settings
 
-Depending on your MariaDB specification, you can enable either [One-Way TLS](https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-one-way-tls-for-mariadb-clients) or [Two-Way TLS](https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-two-way-tls-for-mariadb-clients) or you can disabled all security features.
+Depending on your MariaDB specification, you can enable either [One-Way TLS](https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-one-way-tls-for-mariadb-clients) or [Two-Way TLS](https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-two-way-tls-for-mariadb-clients), or you can disabled all security features.
 
 {{< alert title="Note" >}}Note that some MariaDB providers do not offer the Two-Way method. For example, AWS RDS only supports One-Way TLS.{{< /alert >}}
 
 After ensuring the compatibility with your MariaDB server, choose one of the following options to enable or disable the security features.
 
-### One-Way TLS
+### Enable One-Way TLS
 
-To enable One-Way TLS, you must provide the CA certificate by creating a secret:
+Follow these steps to enable One-Way TLS:
 
-```sh
-export NAMESPACE="my-namespace"
-kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem -n ${NAMESPACE}
-```
+1. Provide the CA certificate by creating a secret:
 
-Then you must set the [Helm parameters](/docs/install/helm-parameters-reference/#mariadb-parameters) `externalizedMariadb.tls.twoWay` to `false`.
+    ```sh
+    export NAMESPACE="my-namespace"
+    kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem -n ${NAMESPACE}
+    ```
 
-### Two-way TLS
+2. Set the [Helm parameter](/docs/install/helm-parameters-reference/#mariadb-parameters) `externalizedMariadb.tls.twoWay` to `false`.
 
-To enable Two-Way TLS, your must provide the CA certificate, the server certificate, and the server key by creating a secret:
+### Enable Two-way TLS
+
+To enable Two-Way TLS, you must provide the CA certificate, the server certificate, and the server key by creating a secret:
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -124,7 +144,7 @@ kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem 
 
 ### Disable TLS
 
-To disable TLS, you must set the [Helm parameters](/docs/install/helm-parameters-reference/#mariadb-parameters) `externalizedMariadb.tls.enabled` to `false`.
+To disable TLS, you must set the [Helm parameter](/docs/install/helm-parameters-reference/#mariadb-parameters) `externalizedMariadb.tls.enabled` to `false`.
 
 {{< alert title="Note" >}}
 Disabling security is not recommended for production environments.
@@ -132,7 +152,7 @@ Disabling security is not recommended for production environments.
 
 ## Disable externalized Kafka security settings
 
-Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) **and** TLS enabled or neither of the two.
+Currently, Streams works only with SASL/SCRAM authentication (using the SHA-512 hash functions) and TLS enabled, or neither of the two.
 
 To disable all security features provided by kafka, you must set the following [Helm parameters](/docs/install/helm-parameters-reference/#kafka-parameters) `externalizedKafka.auth.clientProtocol` to `plaintext`.
 
@@ -142,12 +162,13 @@ Disabling security is not recommended for production environments.
 
 ## Custom ingress controller settings
 
-This section describes some customization available for the embedded ingress controller.
+This section describes the customizations available for the embedded ingress controller.
 
 ### Custom ingress controller security settings
 
 If you don't provide a certificate, SSL will be enabled with a NGINX embedded fake SSL certificate.
-To provide a SSL/TLS certificate for the domain name you are using (either CN or SAN fields should match the `ingress.host` [Helm parameter](/docs/install/helm-parameters-reference/)):
+
+To provide a SSL/TLS certificate for the domain name you are using (either CN or SAN fields should match the `ingress.host` [Helm parameter](/docs/install/helm-parameters-reference/)), run the following command:
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -157,7 +178,7 @@ export INGRESS_TLS_CHAIN_PATH="my-chain-path"
 kubectl create secret tls streams-ingress-tls-secret --key=${INGRESS_TLS_KEY_PATH} --cert="${INGRESS_TLS_CHAIN_PATH}" -n "${NAMESPACE}"
 ```
 
-To disable SSL/TLS, you must set the [Helm parameters](/docs/install/helm-parameters-reference/) `ingress.tlsenabled` to `false`.
+To disable SSL/TLS, you must set the [Helm parameter](/docs/install/helm-parameters-reference/) `ingress.tlsenabled` to `false`.
 
 {{< alert title="Note" >}}
 Disabling security is not recommended for production environments.
@@ -172,9 +193,11 @@ To enable CORS, you must set the [Helm parameter](/docs/install/helm-parameters-
 ```
 
 * Ensure to enter `--set-string`
-* Ensure to use double quotation around the annotations parameter. For more information, see [Ingress Helm parameters](/docs/install/helm-parameters-reference/#ingress-parameters).
+* Ensure to use double quotation marks around the annotations parameter. For more information, see [Ingress Helm parameters](/docs/install/helm-parameters-reference/#ingress-parameters).
 
-Then, you can configure the CORS by adding annotations to the `ingress` parameter. For example, you can specify a value to the `cors allow origin` configuration with the `ingress.annotations."nginx.ingress.kubernetes.io/cors-allow-origin"` parameter. For example, to allow cross origin request from the domain name `https://origin-site.com`, add the following line to the Helm Chart installation command:
+Then, you can configure CORS by adding annotations to the `ingress` parameter. For example, you can specify a value to the `cors allow origin` configuration with the `ingress.annotations."nginx.ingress.kubernetes.io/cors-allow-origin"` parameter.
+
+For example, to allow cross origin request from the domain name `https://origin-site.com`, add the following line to the Helm Chart installation command:
 
 ```
 --set "ingress.annotations.nginx\.ingress\.kubernetes\.io/cors-allow-origin"="https://origin-site.com"
