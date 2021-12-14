@@ -6,9 +6,11 @@ date: 2021-11-30
 description: Learn how to customize your Streams installation.
 ---
 
-You must use Helm parameters to customize Streams during its installation. Any customization must be done before you install Helm.
+You must use [Helm parameters](/docs/install/helm-parameters-reference/) to customize Streams during its installation. Any customization must be done before you install Helm.
 
-There are different ways to manage your custom [Helm parameters](/docs/install/helm-parameters-reference/), and the best way depends on your use case. The following are some options that you can use to customize your installation:
+## Options to manage Helm parameters
+
+You can manage your custom [Helm parameters](/docs/install/helm-parameters-reference/) in different ways, and the best way depends on your use case. The following are some options that you can use to customize your installation:
 
 * By way of a custom values file (recommended).
 * By setting a key value when running the installation or upgrade commands.
