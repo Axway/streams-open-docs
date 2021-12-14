@@ -1,7 +1,7 @@
 ---
 title: Upgrade Streams
 linkTitle: Upgrade
-weight: 2
+weight: 30
 date: 2021-02-18
 description: Learn how to upgrade your Streams installation with a new minor version or update your configuration.
 ---

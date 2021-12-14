@@ -1,10 +1,12 @@
 ---
-title: Helm parameters
-linkTitle: Helm parameters
-weight: 1
+title: Helm parameters reference
+linkTitle: Helm parameters reference
+weight: 20
 date: 2021-02-18
 description: Use the following parameters to edit your configuration.
 ---
+
+This page describe the Helm parameters that you can change to customize your configuration.
 
 ## MariaDB parameters
 
