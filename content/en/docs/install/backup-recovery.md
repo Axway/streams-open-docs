@@ -1,7 +1,7 @@
 ---
 title: Backup and disaster recovery
 linkTitle: Backup and disaster recovery
-weight: 4
+weight: 50
 date: 2021-02-18
 description: Learn how to back up Streams data and configurations that you can use to recover from a disaster.
 ---
