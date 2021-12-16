@@ -449,12 +449,14 @@ my-release-subscriber-webhook-84469bd68f-lqxgk                 1/1     Running  
 [...]
 ```
 
-To verify Streams is properly configured, launch the automated smoke tests provided by the Helm Chart. They will perform the following tests:
+### Run smoke tests to verify Streams configuration
+
+To verify Streams is properly configured, launch the automated smoke tests provided by the Helm Chart. The tests perform the following:
 
 * Test the `Hub` API by creating a topic named `smoke-test-topic` using our public test API `https://stockmarket.streamdata.io/prices` and the `http-poller` publisher.
 * Test the `SSE` subscription API by starting a subscription to the topic previously created.
 
-Run the following command:
+Run the following command to start the smoke tests:
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -462,7 +464,7 @@ export HELM_RELEASE_NAME="my-release"
 helm test "${HELM_RELEASE_NAME}" -n "${NAMESPACE}"
 ```
 
-The output in case of success is:
+The following shows the output in case of success:
 
 ```sh
 NAME: my-namespace
@@ -478,7 +480,7 @@ NOTES:
 Validate your installation following the documentation (https://streams-open-docs.netlify.app/docs/install/#validate-the-installation).
 ```
 
-In case of failure (`Phase : Failed`), check the logs of the `smoke-tests` pod with this command:
+In case of failure (`Phase : Failed`), check the logs of the `smoke-tests` pod as follows:
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -486,7 +488,7 @@ export HELM_RELEASE_NAME="my-release"
 kubectl logs "pod/${HELM_RELEASE_NAME}-smoke-tests" -n "${NAMESPACE}"
 ```
 
-Finally, verify the `SSE` subscription API is accessible through the Load Balancer provided during installation. Run the following commands to start the subscription:
+Finally, verify the `SSE` subscription API is accessible through the Load Balancer provided during installation. Run the following command to start the subscription:
 
 ```sh
 export NAMESPACE="my-namespace"
