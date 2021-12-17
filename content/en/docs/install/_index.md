@@ -94,11 +94,7 @@ export REGISTRY_SERVER="repository.axway.com"
 kubectl create secret docker-registry "${REGISTRY_SECRET_NAME}" --docker-server="${REGISTRY_SERVER}"  --docker-username="${REGISTRY_USERNAME}" --docker-password="${REGISTRY_PASSWORD}" -n "${NAMESPACE}"
 ```
 
-To use your Kubernetes Secret in the registry, add the Secret's name in the `imagePullSecrets` array. For example, add the following entry to the Helm chart installation command:
-
-```
-`--set imagePullSecrets[0].name="${REGISTRY_SECRET_NAME}"`
-```
+To use your Kubernetes Secret in the registry, add the Secret's name in the `imagePullSecrets` array.
 
 ## Configuration for development environment
 
@@ -453,16 +449,52 @@ my-release-subscriber-webhook-84469bd68f-lqxgk                 1/1     Running  
 [...]
 ```
 
-To check that Streams is running:
+### Run smoke tests to verify Streams configuration
 
-1. Import the provided Postman collections and environments.
-2. Select the environment designed for Kubernetes, instead of localhost (It has a variable named `loadBalancerBaseUrl` with the value `<SET_YOUR_HOSTNAME>`), and change this to your hostname. For example, `https://k8s.yourdomain.tld`.
-3. Create a topic with default settings.
-4. Try to subscribe with SSE to your topic:
+To verify Streams is properly configured, launch the automated smoke tests provided by the Helm Chart. The tests perform the following:
 
-    ```sh
-    curl "https://k8s.yourdomain.tld/streams/subscribers/sse/api/v1/topics/{TOPIC_ID}"
-    ```
+* Test the `Hub` API by creating a topic named `smoke-test-topic` using our public test API `https://stockmarket.streamdata.io/prices` and the `http-poller` publisher.
+* Test the `SSE` subscription API by starting a subscription to the topic previously created.
+
+Run the following command to start the smoke tests:
+
+```sh
+export NAMESPACE="my-namespace"
+export HELM_RELEASE_NAME="my-release"
+helm test "${HELM_RELEASE_NAME}" -n "${NAMESPACE}"
+```
+
+The following shows the output in case of success:
+
+```sh
+NAME: my-namespace
+LAST DEPLOYED: Fri Dec  3 12:30:58 2021
+NAMESPACE: test
+STATUS: deployed
+REVISION: 1
+TEST SUITE:     my-release-smoke-tests
+Last Started:   Fri Dec  3 12:32:32 2021
+Last Completed: Fri Dec  3 12:34:04 2021
+Phase:          Succeeded
+NOTES:
+Validate your installation following the documentation (https://streams-open-docs.netlify.app/docs/install/#validate-the-installation).
+```
+
+In case of failure (`Phase : Failed`), check the logs of the `smoke-tests` pod as follows:
+
+```sh
+export NAMESPACE="my-namespace"
+export HELM_RELEASE_NAME="my-release"
+kubectl logs "pod/${HELM_RELEASE_NAME}-smoke-tests" -n "${NAMESPACE}"
+```
+
+Finally, verify the `SSE` subscription API is accessible through the Load Balancer provided during installation. Run the following command to start the subscription:
+
+```sh
+export NAMESPACE="my-namespace"
+INGRESS_ADDRESS=$(kubectl get ingress -o=jsonpath='{.items[?(@.metadata.name=="streams-subscriber-sse")].status.loadBalancer.ingress[0].hostname}' -n ${NAMESPACE}) | echo ${INGRESS_ADDRESS}
+curl -v "https://${INGRESS_ADDRESS}/streams/subscribers/sse/api/v1/topics/smoke-test-topic"
+```
 
 {{< alert title="Note" >}}
 The default configuration only accepts incoming HTTP/HTTPS requests to `k8s.yourdomain.tld`. For more information, see [Helm parameters](/docs/install/helm-parameters-reference/).
