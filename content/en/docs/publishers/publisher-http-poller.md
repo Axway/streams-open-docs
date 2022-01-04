@@ -71,7 +71,7 @@ The following is an example of an HTTP poller publisher:
               "type": "timestamp",
               "reference": "last-success",
               "useMilliseconds": true,
-              "initialValue": "1641224429000" 
+              "initialValue": 1641224429000
             }
         },
         "pagination" : {
@@ -151,13 +151,13 @@ The available references are:
 
 Format the reference value as DateTime. This must follow the [Java DateTimeFormatter](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html#patterns) pattern.
 
-| Attribute    | Mandatory | Default Value         | Description                                                                                   |
-|--------------| --------------------         |-----------------------|-----------------------------------------------------------------------------------------------|
-| type         | yes | date-time             | The reference is formatted in a DateTime format.                                              |
-| pattern      | no  | yyyy-MM-dd'T'HH:mm:ssXXX | Pattern used to format the reference.                                                         |
-| initialValue | no  |                       | DateTime of the first request made by the publisher http poller. Must follow `pattern` format |
+| Attribute    | Mandatory | Default Value         | Description                                                                                         |
+|--------------| --------------------         |-----------------------|-----------------------------------------------------------------------------------------------------|
+| type         | yes | date-time             | The reference is formatted in a DateTime format.                                                    |
+| pattern      | no  | yyyy-MM-dd'T'HH:mm:ssXXX | Pattern used to format the reference.                                                               |
+| initialValue | no  |                       | DateTime used for the first request made by the HTTP poller publisher. Must follow `pattern` format |
 
-The following is an example of how to dynamically add a `from` query parameter to the target URL based on the **last-success** reference with the following format `yyyy-MM-dd'T'HH:mm:ss`, by using the `computedQueryParameters` attribute:
+The following is an example of how to dynamically add a `from` query parameter to the target URL based on the **last-success** reference with the following format `yyyy-MM-dd'T'HH:mm:ss`, by using the `computedQueryParameters` attribute with `initialValue` :
 
 ```json
 {
@@ -170,7 +170,8 @@ The following is an example of how to dynamically add a `from` query parameter t
             "from": {
               "type": "date-time",
               "reference": "last-success",
-              "pattern": "yyyy-MM-dd'T'HH:mm:ss"
+              "pattern": "yyyy-MM-dd'T'HH:mm:ss",
+              "initialValue": "2021-09-22T09:56:09"
             }
         }
     }
@@ -178,17 +179,23 @@ The following is an example of how to dynamically add a `from` query parameter t
 }
 ```
 
-The resulting target URL polled looks like this: `https://myserver/my-api?from=2021-09-22T09:56:09`
+Due to the configured `initialValue`, the first resulting target URL will be : `https://myserver/my-api?from=2021-31-10'T'12:00:00`.
+The subsequent resulting target URL looks like this: `https://myserver/my-api?from=2021-09-22T09:56:09`.
+
+{{< alert color="info" >}}
+If no `initialValue` is configured, the first request made by the HTTP poller publisher will be done with the default dateTime : `currentRequestDateTime` - `pollingPeriod`.
+Subsequents requests are not impacted.
+{{< /alert >}}
 
 #### Timestamp format
 
 Format the reference value as a timestamp.
 
-| Attribute       | Mandatory | Default Value  | Description                                                                                                                            |
-|-----------------| -------------------- | --------------- |----------------------------------------------------------------------------------------------------------------------------------------|
-| type            | yes | timestamp     | The reference is formatted as a Timestamp.                                                                                             |
-| useMilliseconds | no  | false | If true, the time stamp is measured in milliseconds, otherwise in seconds.                                                             |
-| initialValue    | no  |  | Timestamp of the first request made by the http poller publisher. In milliseconds or seconds, depending on `useMilliseconds` attribute |
+| Attribute       | Mandatory | Default Value  | Description                                                                                                                                 |
+|-----------------| -------------------- | --------------- |---------------------------------------------------------------------------------------------------------------------------------------------|
+| type            | yes | timestamp     | The reference is formatted as a Timestamp.                                                                                                  |
+| useMilliseconds | no  | false | If true, the time stamp is measured in milliseconds, otherwise in seconds.                                                                  |
+| initialValue    | no  |  | Timestamp used for the first request made by the HTTP poller publisher. In milliseconds or seconds, depending on `useMilliseconds` attribute |
 
 The following is an example of how to add a `from` query parameter to the target URL based on the **last-success** reference as a Timestamp, by using the `computedQueryParameters` attributes with `initialValue` :
 
@@ -203,7 +210,7 @@ The following is an example of how to add a `from` query parameter to the target
             "from": {
               "type": "timestamp",
               "reference": "last-success",
-              "initialValue": "1641290851"
+              "initialValue": 1641290851
             }
         }
     }
@@ -211,8 +218,13 @@ The following is an example of how to add a `from` query parameter to the target
 }
 ```
 
-Due to the configured `initialValue`, the first resulting target URL will be : `https://myserver/my-api?from=1641290851`
-The subsequent resulting target URL looks like this: `https://myserver/my-api?from=1641377251`
+Due to the configured `initialValue`, the first resulting target URL will be : `https://myserver/my-api?from=1641290851`.
+The subsequent resulting target URL looks like this: `https://myserver/my-api?from=1641377251`.
+
+{{< alert color="info" >}}
+If no `initialValue` is configured, the first request made by the HTTP poller publisher will be done with the default timestamp : `currentRequestTimestamp` - `pollingPeriod`.
+Subsequents requests are not impacted.
+{{< /alert >}}
 
 ## Pagination
 
