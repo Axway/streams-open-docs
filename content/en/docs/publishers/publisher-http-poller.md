@@ -18,20 +18,20 @@ Streams will then distribute the content (snapshot, computed patches) to all sub
 
 The HTTP poller publisher requires the following specific configuration.
 
-| Attribute                     | Mandatory | Default Value  | Description            |
-| ----------------------------- | --------- | -------------- | ---------------------- |
-| url                           | yes       | N/A            | Target URL to request.  |
-| pollingPeriod                 | no        | PT5S (5 sec)   | Period at witch the target URL will be requested. Min: PT0.5S Max: PT1H. parameter [ISO-8601 format](https://en.wikipedia.org/wiki/ISO_8601#Durations). |
-| payloadPointer                | no        | N/A            | Defines a JSON pointer to an attribute parameter [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901). |
-| headers                       | no        | N/A            | Map of key/value pairs that will be injected as HTTP headers when requesting the target URL. |
-| retryOnHttpCodes              | no        | 500,503,504    | A list of HTTP codes which will trigger the retry. Other codes generate an error without any retry. |
-| retryMaxAttempts              | no        | 3              | The maximum number of retries in case of errors. |
-| retryBackOffInitialDuration   | no        | PT1S           | Period of time after which the first retry is attempted (ISO-8601 format). Min = PT0S (0s); Max = PT10S (10s). |
-| retryBackOffMaxDuration       | no        | PT10S          | Maximum period of time between two attempts (ISO-8601 format). Min = PT0S (0s); Max = PT60S (60s). |
-| retryBackOffFactor            | no        | 0.5            | The factor used to determine the next retry duration. |
+| Attribute                     | Mandatory | Default Value  | Description                                                                                                                                                                                                                                                                                                               |
+| ----------------------------- | --------- | -------------- |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| url                           | yes       | N/A            | Target URL to request.                                                                                                                                                                                                                                                                                                    |
+| pollingPeriod                 | no        | PT5S (5 sec)   | Period at witch the target URL will be requested. Min: PT0.5S Max: PT1H. This parameter must follow the [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Durations) format.                                                                                                                                               |
+| payloadPointer                | no        | N/A            | Defines a JSON pointer to an attribute parameter [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901).                                                                                                                                                                                                                |
+| headers                       | no        | N/A            | Map of key/value pairs that will be injected as HTTP headers when requesting the target URL.                                                                                                                                                                                                                              |
+| retryOnHttpCodes              | no        | 500,503,504    | A list of HTTP codes which will trigger the retry. Other codes generate an error without any retry.                                                                                                                                                                                                                       |
+| retryMaxAttempts              | no        | 3              | The maximum number of retries in case of errors.                                                                                                                                                                                                                                                                          |
+| retryBackOffInitialDuration   | no        | PT1S           | Period of time after which the first retry is attempted (ISO-8601 format). Min = PT0S (0s); Max = PT10S (10s).                                                                                                                                                                                                            |
+| retryBackOffMaxDuration       | no        | PT10S          | Maximum period of time between two attempts (ISO-8601 format). Min = PT0S (0s); Max = PT60S (60s).                                                                                                                                                                                                                        |
+| retryBackOffFactor            | no        | 0.5            | The factor used to determine the next retry duration.                                                                                                                                                                                                                                                                     |
 | computedQueryParameters       | no        | none           | Map of [ComputedQueryParameters](/docs/publishers/publisher-http-poller/#computed-query-parameters) that will be injected as query parameters. The key, query parameter name, must use URL-safe characters. For more information, see [Unreserved Characters](https://datatracker.ietf.org/doc/html/rfc2396#section-2.3). |
-| authorization                 | no        | N/A            | OAuth2 Authorization configuration. For more information, see section [OAuth2 Authorization](#authorization-with-oauth-2-0) |
-| pagination                    | no        | N/A            | Pagination mechanism configuration. For more information, see section [Pagination](#pagination) |
+| authorization                 | no        | N/A            | OAuth2 Authorization configuration. For more information, see section [OAuth2 Authorization](#authorization-with-oauth-2-0)                                                                                                                                                                                               |
+| pagination                    | no        | N/A            | Pagination mechanism configuration. For more information, see section [Pagination](#pagination)                                                                                                                                                                                                                           |
 
 The following is an example of an HTTP poller publisher:
 
@@ -137,15 +137,11 @@ The following is an example of how to implement OAuth authorization:
 
 ## Computed query parameters
 
-Computed query parameters are query parameters injected to the target URL at each polling. They are based on a given *reference*.
+Computed query parameters are query parameters injected to the target URL at each polling. They are based on the `last-success` *reference*, which is the instant corresponding to the last successful request execution.
 
 | Attribute  | Mandatory | Default Value  | Description            |
 | ---------- | --------- | ------       | ---------------------- |
 | reference  | yes       | last-success | Defines the reference of the computed query parameter. |
-
-The available references are:
-
-* **last-success** : Instant corresponding to the last successful request execution.
 
 ### DateTime format
 
