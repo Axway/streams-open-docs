@@ -3,7 +3,7 @@ title: HTTP Post Publisher
 linkTitle: HTTP Post Publisher
 weight: 2
 date: 2019-04-02
-description: Learn how to configure a topic associated to a HTTP Post publisher.
+description: Learn how to configure a topic associated to an HTTP Post publisher.
 ---
 
 ## HTTP Post Publisher
