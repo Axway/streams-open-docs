@@ -97,7 +97,7 @@ The HTTP poller publisher can fetch data from an API that is secured with [OAuth
 
 The OAuth2 authorization workflow is implemented with the following limitations:
 
-* The OAuth2 authorization workflow is initiated on the authorization server URL on every polling. Refresh token mechanism is not implemented.
+* The OAuth2 authorization workflow is initiated on the authorization server URL for the first polling and the retrieved access token is reused for following requests until it expires. Refresh token mechanism is not implemented.
 * Only access token of type [Bearer](https://datatracker.ietf.org/doc/html/rfc6749#section-7.1) is supported.
 * The authorization request is made via a `POST` method on the authorization server, and the client credentials are sent either via `header` or `body`.
 
