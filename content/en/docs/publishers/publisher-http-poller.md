@@ -104,14 +104,14 @@ The OAuth2 authorization workflow is implemented with the following limitations:
 
 The following table lists the OAuth2 authorization configuration:
 
-| Attribute                     | Mandatory | Default value  | Description            |
-| ----------------------------- | --------- | -------------- | ---------------------- |
-| type                          | yes       | none           | Type of authorization protocol configured on the API. Currently, only `oauth2` is supported. |
-| clientId                      | yes       | none           | The client identifier issued during the registration process.  |
-| clientSecret                  | yes       | none           | The client secret issued during the registration process.  |
-| provider                      | yes       | none           | Target URL of the authorization server. |
-| mode                          | yes       | header         | Whether to send [client authentication](https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1) via `body` or a basic authorization `header`. |
-| scope                         | no        | none           | A [scope](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3) request parameter. |
+| Attribute                     | Mandatory | Default value | Description            |
+| ----------------------------- | --------- |---------------| ---------------------- |
+| type                          | yes       | N/A           | Type of authorization protocol configured on the API. Currently, only `oauth2` is supported. |
+| clientId                      | yes       | N/A          | The client identifier issued during the registration process.  |
+| clientSecret                  | yes       | N/A          | The client secret issued during the registration process.  |
+| provider                      | yes       | N/A          | Target URL of the authorization server. |
+| mode                          | yes       | header        | Whether to send [client authentication](https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1) via `body` or a basic authorization `header`. |
+| scope                         | no        | N/A          | A [scope](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3) request parameter. |
 
 The following is an example of how to implement OAuth authorization:
 
@@ -147,11 +147,11 @@ Computed query parameters are query parameters injected to the target URL at eac
 
 You can format the reference value as DateTime. This must follow the [Java DateTimeFormatter](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html#patterns) pattern.
 
-| Attribute    | Mandatory | Default Value         | Description                                                                                         |
-|--------------| --------------------         |-----------------------|-----------------------------------------------------------------------------------------------------|
-| type         | yes | date-time             | The reference is formatted in a DateTime format.                                                    |
-| pattern      | no  | yyyy-MM-dd'T'HH:mm:ssXXX | Pattern used to format the reference.                                                               |
-| initialValue | no  |                       | DateTime used for the first request made by the HTTP poller publisher. Must follow `pattern` format |
+| Attribute    | Mandatory | Default Value         | Description                                                                                                                   |
+|--------------| --------------------         |-----------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| type         | yes | date-time             | The reference is formatted in a DateTime format.                                                                              |
+| pattern      | no  | yyyy-MM-dd'T'HH:mm:ssXXX | Pattern used to format the reference.                                                                                         |
+| initialValue | no  | N/A                      | DateTime used for the first polling made by the HTTP poller publisher on the first subscription. Must follow `pattern` format |
 
 The following is an example of how to dynamically add a `from` query parameter to the target URL based on the `last-success` reference with the following format `yyyy-MM-dd'T'HH:mm:ss`, by using the `computedQueryParameters` attribute with `initialValue` :
 
@@ -178,6 +178,10 @@ The following is an example of how to dynamically add a `from` query parameter t
 Based on the configured `initialValue`, the first resulting URL polled target will be `https://myserver/my-api?from=2021-09-22T09:56:09`, and the subsequent resulting polled targets will look like `https://myserver/my-api?from=2021-09-23T10:57:09`.
 
 {{< alert title="Note" >}}
+`initialValue` is not used by the HTTP poller publisher if there were some subscriptions beforehand that has been closed. It is used by the HTTP poller publisher for the first subscription and if no subscription has been closed before.
+{{< /alert >}}
+
+{{< alert title="Note" >}}
 If no `initialValue` is configured, the first request made by the HTTP poller publisher will be done with the default dateTime : `currentRequestDateTime` - `pollingPeriod`.
 Subsequents requests are not impacted.
 {{< /alert >}}
@@ -186,11 +190,11 @@ Subsequents requests are not impacted.
 
 You can format the reference value as a timestamp.
 
-| Attribute       | Mandatory | Default Value  | Description                                                                                                                                                           |
-|-----------------| -------------------- | --------------- |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| type            | yes | timestamp     | The reference is formatted as a Timestamp.                                                                                                                            |
-| useMilliseconds | no  | false | If true, the timestamp is measured in milliseconds, otherwise in seconds.                                                                                             |
-| initialValue    | no  |  | Timestamp used for the first request made by the HTTP poller publisher, in milliseconds or seconds, depending on what is configured in the `useMilliseconds` attribute |
+| Attribute       | Mandatory | Default Value | Description                                                                                                                                                                                      |
+|-----------------| -------------------- |---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| type            | yes | timestamp     | The reference is formatted as a Timestamp.                                                                                                                                                       |
+| useMilliseconds | no  | false         | If true, the timestamp is measured in milliseconds, otherwise in seconds.                                                                                                                        |
+| initialValue    | no  | N/A           | Timestamp used for the first polling made by the HTTP poller publisher on the first subscription, in milliseconds or seconds, depending on what is configured in the `useMilliseconds` attribute |
 
 The following is an example of how to add a `from` query parameter to the target URL based on the `last-success` reference as a Timestamp, by using the `computedQueryParameters` attribute with `initialValue` :
 
@@ -214,6 +218,10 @@ The following is an example of how to add a `from` query parameter to the target
 ```
 
 Based on the configured `initialValue`, the first resulting URL polled target will be `https://myserver/my-api?from=1641290851`, and the subsequent resulting polled targets will look like `https://myserver/my-api?from=1641377251`.
+
+{{< alert title="Note" >}}
+`initialValue` is not used by the HTTP poller publisher if there were some subscriptions beforehand that has been closed. It is used by the HTTP poller publisher for the first subscription and if no subscription has been closed before.
+{{< /alert >}}
 
 {{< alert title="Note" >}}
 If no `initialValue` is configured, the first request made by the HTTP poller publisher will be done with the default timestamp : `currentRequestTimestamp` - `pollingPeriod`.
