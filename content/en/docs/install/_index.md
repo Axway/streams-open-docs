@@ -45,7 +45,9 @@ For alternate methods to customize your installation, see [Customize installatio
 
 ## General conditions for license and subscription services
 
-Axway products and services are governed exclusively by Axway's [General Terms and Conditions](https://www.axway.com/en/legal/contract-documents). To accept them, set the helm value `acceptGeneralConditions` to `"yes"` and proceed with the installation. Ensure to add the double quotation around the `yes` flag.
+To proceed with the installation, you must accept Axway General Terms and Conditions - "You hereby accept that the Axway Products and/or Services shall be governed exclusively by the Axway General Terms and Conditions located at Axway General Conditions, unless an agreement has been signed with Axway in which case such agreement shall apply."
+
+To accept the conditions you must set the helm value `acceptGeneralConditions` to `"yes"`. Ensure to add the double quotation around the `yes` flag.
 
 ## Kubernetes namespace
 

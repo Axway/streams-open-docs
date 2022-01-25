@@ -61,9 +61,9 @@ docker login repository.axway.com -u ${AXWAY_CLIENT_ID} -p ${AXWAY_CLIENT_SECRET
 
 ## General conditions for license and subscription services
 
-You hereby accept that the Axway Products and/or Services shall be governed exclusively by the Axway General Terms and Conditions located at [Axway General Conditions](https://cdn.axway.com/u/Axway_General_Conditions_version_april_2014_eng%20(France).pdf), unless an agreement has been signed with Axway in which case such agreement shall apply.
+To proceed with the installation, you must accept Axway General Terms and Conditions - "You hereby accept that the Axway Products and/or Services shall be governed exclusively by the Axway General Terms and Conditions located at Axway General Conditions, unless an agreement has been signed with Axway in which case such agreement shall apply."
 
-To accept them, you have to put the variable `STREAMS_ACCEPT_GENERAL_CONDITIONS=yes` in the `.env` file and proceed with the installation.
+To accept the conditions you must add the `STREAMS_ACCEPT_GENERAL_CONDITIONS=yes` variable to your .env file.
 
 ## Execute Docker compose to start Streams
 
