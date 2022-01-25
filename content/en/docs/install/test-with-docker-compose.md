@@ -48,9 +48,9 @@ To create your service account, perform the following steps:
 4. Click **Save**
 5. Ensure to securely store the generated client secret because it will be required in further steps.
 
-### Docker login
+### Log in to your Axway Repository
 
-After creating your service account, run the following command to login with docker:
+After creating your service account, run the following command to log in to axway repository:
 
 ```bash
 export AXWAY_CLIENT_ID="<Client ID>"
@@ -65,7 +65,7 @@ You hereby accept that the Axway Products and/or Services shall be governed excl
 
 To accept them, you have to put the variable `STREAMS_ACCEPT_GENERAL_CONDITIONS=yes` in the `.env` file and proceed with the installation.
 
-## Execute docker-compose
+## Execute Docker compose to start Streams
 
 To start Streams, run the following command:
 
@@ -92,15 +92,19 @@ streams-zookeeper               /opt/bitnami/scripts/zooke ...   Up             
 
 ## Automated Smoke test
 
-In order to check that Streams is running as expected, you can use the build-in smoke test. The smoke-test creates a topic with an `http-poller` publisher configured to poll the following API `https://stockmarket.streamdata.io/prices`, and with a SSE subscriber. Then the smoke-test subscribes to this newly created topic and expects snapshot and patches. If everything works fine, the container will exit with code 0 otherwise an error will be displayed.
+To verify Streams is properly configured, launch the build-in smoke tests. The tests perform the following:
 
-To run the smoke test, execute the following command:
+* Test the `Hub` API by creating a topic named `smoke-test-topic` using our public test API `https://stockmarket.streamdata.io/prices` and the `http-poller` publisher.
+* Test the `SSE` subscription API by starting a subscription to the topic previously created.
+* If everything works fine, the container will exit with code 0 otherwise an error will be displayed.
+
+Run the following command to start the smoke tests:
 
 ```bash
 docker-compose -f docker-compose.test.yml up
 ```
 
-You should have the following output:
+The following shows the output in case of success:
 
 ```bash
 sut_1  | PUBLISHER_HTTP_POLLER_URL=http://streams-publisher-http-poller:8080
