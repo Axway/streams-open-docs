@@ -1,14 +1,14 @@
 ---
-title: Test Streams with docker-compose
-linkTitle: Test Streams with docker-compose
+title: Test Streams with Docker Compose
+linkTitle: Test Streams with Docker Compose
 weight: 60
-date: 2022-01-5
-description: Learn how to test Streams using docker-compose.
+date: 2022-01-05
+description: Docker Compose allows you to easily run the Streams platform on your local environment, without major infrastructure prerequisites. Learn how to test Streams using Docker Compose.
 ---
 
-Docker-compose allows to easily run Streams platform. It will allow you to test Streams locally without huge infrastructure prerequisites.
-
-Docker-compose env is not aimed for production but only for tests.
+{{< alert title="Note" >}}
+Installing Streams in Docker Compose is not aimed for production environments, but only for tests purposes.
+{{< /alert >}}
 
 ## Prerequisites
 
@@ -18,9 +18,9 @@ Docker-compose env is not aimed for production but only for tests.
 
 ## Prepare your environment
 
-After you have been onboarded on [Amplify Platform](https://platform.axway.com), you will be able to download our latest docker-compose archive from the **Downloads** section of the [Axway Support](https://support.axway.com/en/search/index/type/Downloads/sort/created%7Cdesc/ipp/10/product/596/version/3074) portal. Ensure to download the correct version of the Streams docker compose archive corresponding to the release you wish to test.
+After you have been onboarded on [Amplify Platform](https://platform.axway.com), you will be able to download our latest Docker Compose archive from the **Downloads** section of the [Axway Support](https://support.axway.com/en/search/index/type/Downloads/sort/created%7Cdesc/ipp/10/product/596/version/3074) portal. Ensure to download the correct version of the Streams docker compose archive corresponding to the release you wish to test.
 
-To prepare your environment, extract the docker compose archive and open a terminal from the extracted directory.
+To prepare your environment, extract the Docker Compose archive and open a terminal from the extracted directory.
 
 {{< alert title="Note" >}}You can find others resources in the [Axway Support](https://support.axway.com/en) portal, for example, Postman collections, OpenAPI, Docker-compose files and Helm chart, which can help you to configure your environment or test Streams.{{< /alert >}}
 
@@ -48,9 +48,9 @@ To create your service account, perform the following steps:
 4. Click **Save**
 5. Ensure to securely store the generated client secret because it will be required in further steps.
 
-### Log in to your Axway Repository
+### Log in to your Axway repository
 
-After creating your service account, run the following command to log in to axway repository:
+After creating your service account, run the following command to log in to your Axway repository:
 
 ```bash
 export AXWAY_CLIENT_ID="<Client ID>"
@@ -61,11 +61,13 @@ docker login repository.axway.com -u ${AXWAY_CLIENT_ID} -p ${AXWAY_CLIENT_SECRET
 
 ## General conditions for license and subscription services
 
-To proceed with the installation, you must accept Axway General Terms and Conditions - "You hereby accept that the Axway Products and/or Services shall be governed exclusively by the Axway General Terms and Conditions located at Axway General Conditions, unless an agreement has been signed with Axway in which case such agreement shall apply."
+To proceed with the installation, you must accept Axway General Terms and Conditions:
 
-To accept the conditions you must add the `STREAMS_ACCEPT_GENERAL_CONDITIONS=yes` variable to your .env file.
+*"You hereby accept that the Axway Products and/or Services shall be governed exclusively by the [Axway General Terms and Conditions](https://cdn.axway.com/u/Axway_General_Conditions_version_april_2014_eng%20(France).pdf), unless an agreement has been signed with Axway in which case such agreement shall apply."*
 
-## Execute Docker compose to start Streams
+To accept the conditions you must add the `STREAMS_ACCEPT_GENERAL_CONDITIONS=yes` variable to your `.env` file.
+
+## Execute Docker Compose to start Streams
 
 To start Streams, run the following command:
 
@@ -73,7 +75,15 @@ To start Streams, run the following command:
 docker-compose up -d
 ```
 
-To ensure all the services are up and running, you can use `docker-compose ps` to check containers status.
+### Ensure all the services are up and running
+
+You can run the _process status_ command to check the status of the containers:
+
+```bash
+docker-compose ps
+```
+
+Result:
 
 ```bash
 Name                            Command                          State          Ports                                         
@@ -90,13 +100,13 @@ streams-subscriber-webhook      bash scripts/wait-for-it.s ...   Up (healthy)   
 streams-zookeeper               /opt/bitnami/scripts/zooke ...   Up             0.0.0.0:2181->2181/tcp,:::2181->2181/tcp, 2888/tcp, 3888/tcp, 8080/tcp    
 ```
 
-## Automated Smoke test
+## Run smoke tests to verify Streams configuration
 
-To verify Streams is properly configured, launch the build-in smoke tests. The tests perform the following:
+To verify Streams is properly configured, launch the built-in smoke tests. The tests perform the following:
 
 * Test the `Hub` API by creating a topic named `smoke-test-topic` using our public test API `https://stockmarket.streamdata.io/prices` and the `http-poller` publisher.
 * Test the `SSE` subscription API by starting a subscription to the topic previously created.
-* If everything works fine, the container will exit with code 0 otherwise an error will be displayed.
+* If the test is successful, the container exits with code `0`, otherwise an error is displayed.
 
 Run the following command to start the smoke tests:
 
