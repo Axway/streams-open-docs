@@ -12,7 +12,7 @@ This section covers recommended steps to install Streams either on development e
 
 ## Prerequisites
 
-* Kubernetes 1.18+
+* Kubernetes 1.19+
 * [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/)
 * Helm 3.2.0+
 * RBAC enabled
