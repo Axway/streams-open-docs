@@ -22,7 +22,7 @@ The following third-party library has been upgraded:
 
 ### Kubernetes version
 
-Due to the migration to nginx in version `1.1.1`, the minimum version of kubernetes supported is `1.1.19`.
+As a result of the Nginx library update to version `1.1.1`, the minimum supported version of Kubernetes is now `1.1.19`.
 
 ## Deprecated features
 <!-- As part of our software development life cycle, we constantly review our Streams offering. -->
