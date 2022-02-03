@@ -98,7 +98,7 @@ The HTTP poller publisher can fetch data from an API that is secured with [OAuth
 
 The OAuth2 authorization workflow is implemented with the following limitations:
 
-* The OAuth2 authorization workflow is initiated on the authorization server URL on every polling. Refresh token mechanism is not implemented.
+* The workflow is initiated on the authorization server URL on every polling. Refresh token mechanism is not implemented.
 * Only access token of type [Bearer](https://datatracker.ietf.org/doc/html/rfc6749#section-7.1) is supported.
 * The authorization request is made via a `POST` method on the authorization server, and the client credentials are sent either via `header` or `body`.
 
@@ -151,7 +151,7 @@ You can format the reference value as DateTime. This must follow the [Java DateT
 |--------------| --------------------         |-----------------------|------------------------------------------------------------------------------------------------------------------------------|
 | type         | yes | date-time             | The reference is formatted in a DateTime format.                                                                             |
 | pattern      | no  | yyyy-MM-dd'T'HH:mm:ssXXX | Pattern used to format the reference.                                                                                        |
-| initialValue | no  | N/A                      | DateTime used for the first polling made by the HTTP poller publisher. Must follow `pattern` format |
+| initialValue | no  | N/A                      | DateTime used when the HTTP Poller Publisher starts publishing data to a topic for the first time. It must follow `pattern` format. If no value is configured, the HTTP poller publisher will use the default dateTime : `currentRequestDateTime` - `pollingPeriod` to make the first request. Subsequent requests are not impacted.|
 
 The following is an example of how to dynamically add a `from` query parameter to the target URL based on the `last-success` reference with the following format `yyyy-MM-dd'T'HH:mm:ss`, by using the `computedQueryParameters` attribute with `initialValue` :
 
@@ -176,14 +176,7 @@ The following is an example of how to dynamically add a `from` query parameter t
 }
 ```
 
-Based on the configured `initialValue`, the first call to the target URL will be `https://myserver/my-api?from=2021-09-22T09:56:09`, and the subsequent calls, according to the configured polling period will be : `https://myserver/my-api?from=2021-09-23T10:57:09`, `https://myserver/my-api?from=2021-09-23T10:58:09`, `https://myserver/my-api?from=2021-09-23T10:59:09`, etc
-
-{{< alert title="Note" >}}
-
-* `initialValue` is used when the HTTP Poller Publisher starts publishing data to a topic for the first time.
-* If no `initialValue` is configured, the first request made by the HTTP poller publisher will be done with the default dateTime : `currentRequestDateTime` - `pollingPeriod`. Subsequents requests are not impacted.
-
-{{< /alert >}}
+Based on the configured `initialValue`, the first call to the target URL will be `https://myserver/my-api?from=2021-09-22T09:56:09`, and the subsequent calls, according to the configured polling period will be: `https://myserver/my-api?from=2021-09-23T10:57:09`, `https://myserver/my-api?from=2021-09-23T10:58:09`, `https://myserver/my-api?from=2021-09-23T10:59:09`, and so on.
 
 ### Timestamp format
 
@@ -193,7 +186,7 @@ You can format the reference value as a timestamp.
 |-----------------| -------------------- |---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | type            | yes | timestamp     | The reference is formatted as a Timestamp.                                                                                                                                                       |
 | useMilliseconds | no  | false         | If true, the timestamp is measured in milliseconds, otherwise in seconds.                                                                                                                        |
-| initialValue    | no  | N/A           | Timestamp used for the first polling made by the HTTP poller publisher, in milliseconds or seconds, depending on what is configured in the `useMilliseconds` attribute |
+| initialValue    | no  | N/A           | Timestamp used when the HTTP Poller Publisher starts publishing data to a topic for the first time, specified in milliseconds or seconds, depending on what is configured in the `useMilliseconds` attribute. If no value is configured, the HTTP poller publisher will use the default dateTime : `currentRequestDateTime` - `pollingPeriod` to make the first request. Subsequent requests are not impacted |
 
 The following is an example of how to add a `from` query parameter to the target URL based on the `last-success` reference as a Timestamp, by using the `computedQueryParameters` attribute with `initialValue` :
 
@@ -218,13 +211,6 @@ The following is an example of how to add a `from` query parameter to the target
 ```
 
 Based on the configured `initialValue`, the first call to the target URL will be `https://myserver/my-api?from=1641290851`, and the subsequent calls, according to the configured polling period will be : `https://myserver/my-api?from=1641377251`, `https://myserver/my-api?from=1641377311`, `https://myserver/my-api?from=1641377371`, etc
-
-{{< alert title="Note" >}}
-
-* `initialValue` is used when the HTTP Poller Publisher starts publishing data to a topic for the first time.
-* If no `initialValue` is configured, the first request made by the HTTP poller publisher will be done with the default dateTime : `currentRequestDateTime` - `pollingPeriod`. Subsequents requests are not impacted.
-
-  {{< /alert >}}
 
 ## Pagination
 
@@ -332,7 +318,7 @@ The following is an example of an HTTP poller publisher configuration with offse
 
 ### Keyset
 
-In this pagination type, the endpoint provides a `key` parameter that acts as a delimiter of the page. This key parameter must be the same key of the set sort order. For example, if the set is sorted by ID, then the key parameter should be `sinceId`. The first request doe not contain the delimiter parameter. The response of this request contains the value of the key for the last element of the set. The endpoint accepts a `key` parameter indicating the next elements to start the next page, and a `pageSize` parameter (integer) indicating the number of items per page, for example `/items?since_key=next_key&pageSize=10`.
+In this pagination type, the endpoint provides a `key` parameter that acts as a delimiter of the page. This key parameter must be the same key of the set sort order. For example, if the set is sorted by ID, then the key parameter should be `sinceId`. The first request does not contain the delimiter parameter. The response of this request contains the value of the key for the last element of the set. The endpoint accepts a `key` parameter indicating the next elements to start the next page, and a `pageSize` parameter (integer) indicating the number of items per page, for example `/items?since_key=next_key&pageSize=10`.
 
 | Attribute                     | Mandatory | Default Value  | Description                                                                             |
 | ----------------------------- | --------- | -------------- | ----------------------                                                                  |
@@ -420,15 +406,11 @@ The following is an example of an HTTP poller publisher configuration with curso
 
 ### Next reference
 
-You can define two ways to retrieve the next reference location, regardless the pagination mode chosen. The next reference must be either in the `body` of the first response, or in the header `Link`.
+You can define two ways to retrieve the next reference location, regardless the pagination mode chosen. The next reference must be either in the `body` of the first response or in the header `Link`.
 
 #### Body location
 
-If the next reference is part of the first response payload, you must use `body` as next location. While setting `body`, you must define the type of the reference and a JSON pointer to retrieve this reference.
-
-The type defines whether the reference is an `uri` or only a `value` to the next reference.
-
-The JSON pointer must point to the attribute in the body containing the next reference.
+If the next reference is part of the first response payload, you must use `body` as next location. While setting `body`, you must define the `type` of the reference and a JSON pointer to retrieve this reference. The `type` defines whether the reference is an `uri` or only a `value` to the next reference. The JSON pointer must point to the attribute in the body containing the next reference.
 
 For example, with a first response:
 
@@ -473,7 +455,7 @@ The `Link` header must be designed to support pagination and must be formatted a
 <http://my-host/api?per_page=2&page=2>; rel="next", <http://my-host/api?per_page=2&page=36>; rel="last"
 ```
 
-Streams retrieves the next reference by finding the _next_ relation in the _Link_ header.
+Streams retrieves the next reference by finding the `next` relation in the `Link` header.
 
 The configuration of the pagination section will look like:
 
