@@ -25,18 +25,18 @@ To setup your Salesforce _Connected App_ properly, follow these steps:
   1. Create and configure [_Connected App_ basic settings](https://help.salesforce.com/articleView?id=connected_app_create.htm).
   
   2. Enable [Oauth settings for API integration](https://help.salesforce.com/articleView?id=connected_app_create_api_integration.htm):
-     * Make sure to configure your Oauth settings for *JWT OAuth flow* by selecting `Use Digital Signatures`.
+     * Make sure to configure your Oauth settings for _JWT OAuth flow_ by selecting `Use Digital Signatures`.
      * You must upload the public key of your digital certificate.
      * You can create a Private Key and Self-Signed Digital Certificate by following this [guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth_key_and_cert.htm).
-     * Note that when using *JWT OAuth flow* the `Callback URL` is not used. However it is mandatory in Salesforce's UI, so you can enter any value such as `http://localhost`.
+     * Note that when using _JWT OAuth flow_ the `Callback URL` is not used. However it is mandatory in Salesforce's UI, so you can enter any value such as `http://localhost`.
      * Select the OAuth scopes to apply to the connected app:
        * `Access and manage your data (api)`
        * `Perform requests on your behalf at any time (refresh_token, offline_access)`
 
   3. After a connected app is installed in your org, you can [manage access](https://help.salesforce.com/articleView?id=connected_app_manage.htm) to it. Configure permissions and policies for the app, explicitly defining who can use the connected app and where they can access the app from.
      * Manage [Oauth Access Policies](https://help.salesforce.com/articleView?id=connected_app_manage_oauth.htm):
-       * Under OAuth Policies, click the *Permitted Users* dropdown menu and select `Admin approved users are pre-authorized`.
-       * Set *Refresh Token Policy* to `Refresh token is valid until revoked`.
+       * Under OAuth Policies, click the _Permitted Users_ dropdown menu and select `Admin approved users are pre-authorized`.
+       * Set _Refresh Token Policy_ to `Refresh token is valid until revoked`.
      * Make sure the [IP Relaxation and Continuous IP Enforcement](https://help.salesforce.com/articleView?id=connected_app_continuous_ip.htm) settings of the _Connected App_ settings are compatible with the settings of your Salesforce Org.
      * Give users access to the _Connected App_ by configuring the [profiles or permission sets](https://help.salesforce.com/articleView?id=connected_app_manage_additional_settings.htm).
 
