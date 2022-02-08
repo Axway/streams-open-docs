@@ -29,7 +29,7 @@ After you have been onboarded on [Amplify Platform](https://platform.axway.com),
 
 To prepare your environment, extract the Helm chart and open a terminal from the extracted directory.
 
-{{< alert title="Note" >}}You can find others resources in the [Axway Support](https://support.axway.com/en) portal, for example, Postman collections, OpenAPI, and Docker-compose files, which can help you to configure your environment or test Streams.{{< /alert >}}
+{{< alert title="Note" >}}You can find others resources in the [Axway Support](https://support.axway.com/en) portal, for example, Postman collections, OpenAPI, and Docker Compose files, which can help you to configure your environment or test Streams.{{< /alert >}}
 
 ## Prepare customizations
 
@@ -45,7 +45,11 @@ For alternate methods to customize your installation, see [Customize installatio
 
 ## General conditions for license and subscription services
 
-Axway products and services are governed exclusively by Axway's [General Terms and Conditions](https://www.axway.com/en/legal/contract-documents). To accept them, set the helm value `acceptGeneralConditions` to `"yes"` and proceed with the installation. Ensure to add the double quotation around the `yes` flag.
+To proceed with the installation, you must accept Axway General Terms and Conditions:
+
+*"You hereby accept that the Axway Products and/or Services shall be governed exclusively by the [Axway General Terms and Conditions](https://cdn.axway.com/u/Axway_General_Conditions_version_april_2014_eng%20(France).pdf), unless an agreement has been signed with Axway in which case such agreement shall apply."*
+
+To accept the conditions you must set the helm value `acceptGeneralConditions` to `"yes"`. Ensure to add the double quotation around the `yes` flag.
 
 ## Kubernetes namespace
 
