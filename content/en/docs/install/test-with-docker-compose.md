@@ -77,7 +77,7 @@ docker-compose up -d
 
 ### Ensure all the services are up and running
 
-You can run the _process status_ command to check the status of the containers:
+You can run the *process status* command to check the status of the containers:
 
 ```bash
 docker-compose ps
