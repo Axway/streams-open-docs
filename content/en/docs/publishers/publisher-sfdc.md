@@ -6,11 +6,9 @@ date: 2020-07-02
 description: The Salesforce Publisher provides the capability to capture changes from Salesforce.com via Salesforce Streaming API PushTopics or Salesforce Platform Events. Learn how to configure a topic associated to a Salesforce Publisher.
 ---
 
-{{< alert title="Beta feature" color="warning" >}}
-Salesforce Publisher is a beta feature.
-{{< /alert >}}
+{{< alert title="Beta feature" color="warning" >}}This feature is released in beta.{{< /alert >}}
 
-PushTopics provide the ability to subscribe to events (changes in a record), for example, create a record, delete a record, and so on, whereas Platform Events allow Salesforce users to define their own publish/subscribe events. After integrated with Streams, Salesforce events can then be broadcast by any of Streams [subscribers](/docs/subscribers).
+PushTopics provide the ability to subscribe to changes related to Salesforce Objects (SObjects) whereas Platform Events allow Salesforce users to define their own publish/subscribe events. After integrated with Streams, Salesforce events can then be broadcast by any of Streams [subscribers](/docs/subscribers).
 
 ## Setup a new connected App in Salesforce
 
