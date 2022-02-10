@@ -43,13 +43,13 @@ helm install -f my-values.yaml
 
 For alternate methods to customize your installation, see [Customize installation](/docs/install/customize-install).
 
-## General conditions for license and subscription services
+## Accept general conditions for license and subscription services
 
 To proceed with the installation, you must accept Axway General Terms and Conditions:
 
 *"You hereby accept that the Axway Products and/or Services shall be governed exclusively by the [Axway General Terms and Conditions](https://cdn.axway.com/u/Axway_General_Conditions_version_april_2014_eng%20(France).pdf), unless an agreement has been signed with Axway in which case such agreement shall apply."*
 
-To accept the conditions you must set the helm value `acceptGeneralConditions` to `"yes"`. Ensure to add the double quotation around the `yes` flag.
+To accept the conditions. you must set the helm value `acceptGeneralConditions` to `"yes"`. Ensure to add the double quotation around the `yes` flag.
 
 ## Kubernetes namespace
 
