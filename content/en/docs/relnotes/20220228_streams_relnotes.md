@@ -18,7 +18,7 @@ It is important, especially when upgrading from an earlier version, to be aware 
 
 The following third-party library has been upgraded:
 
-* Nginx Ingress Controller : `1.1.1`
+* Nginx Ingress Controller : `1.1.1`.
 
 ### Kubernetes version
 
