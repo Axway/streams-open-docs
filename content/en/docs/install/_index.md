@@ -12,7 +12,7 @@ This section covers recommended steps to install Streams either on development e
 
 ## Prerequisites
 
-* Kubernetes 1.18+
+* Kubernetes 1.19+
 * [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/)
 * Helm 3.2.0+
 * RBAC enabled
@@ -98,7 +98,7 @@ export REGISTRY_SERVER="repository.axway.com"
 kubectl create secret docker-registry "${REGISTRY_SECRET_NAME}" --docker-server="${REGISTRY_SERVER}"  --docker-username="${REGISTRY_USERNAME}" --docker-password="${REGISTRY_PASSWORD}" -n "${NAMESPACE}"
 ```
 
-To use your Kubernetes Secret in the registry, add the Secret's name in the `imagePullSecrets` array.
+To use your Kubernetes Secret in the registry, set the helm parameter `imagePullSecrets[0].name` to the secret name.
 
 ## Configuration for development environment
 
@@ -342,12 +342,12 @@ To update the ingress host, run the following command:
 
 ```sh
 export NAMESPACE="my-namespace"
-kubectl get ingress -o=jsonpath='{.items[?(@.metadata.name=="streams-hub")].status.loadBalancer.ingress[0].hostname}' -n ${NAMESPACE}
+kubectl get svc -o=jsonpath='{.items[?(streams-*)].status.loadBalancer.ingress[0].hostname}' -n "${NAMESPACE}"
 ```
 
 Then upgrade your Streams installation with the [Helm parameter](/docs/install/helm-parameters-reference/#ingress-parameters) `ingress.host` set with the DNS name retrieved previously. For more information, see [Helm upgrade](/docs/install/upgrade/).
 
-{{< alert title="Note" >}} *k8s.yourdomain.tld* is used throughout this documentation as an example hostname value.{{< /alert >}}
+{{< alert title="Note" >}} `k8s.yourdomain.tld` is used throughout this documentation as an example hostname value.{{< /alert >}}
 
 ### Ingress TLS
 

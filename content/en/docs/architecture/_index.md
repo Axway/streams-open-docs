@@ -697,7 +697,7 @@ NGINX is the ingress controller in front of Streams APIs.
 Source Docker image:
 
 * Repository: bitnami/nginx-ingress-controller
-* Tag: 0.48.1-debian-10-r46
+* Tag: 1.1.1-debian-10-r12
 
 Pod name: `streams-nginx-ingress-controller`
 
