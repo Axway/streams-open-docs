@@ -56,7 +56,7 @@ After creating your service account, run the following command to log in to your
 export AXWAY_CLIENT_ID="<Client ID>"
 export AXWAY_CLIENT_SECRET="<Client Secret>"
 
-docker login repository.axway.com -u ${AXWAY_CLIENT_ID} -p ${AXWAY_CLIENT_SECRET}
+docker login docker.repository.axway.com -u ${AXWAY_CLIENT_ID} -p ${AXWAY_CLIENT_SECRET}
 ```
 
 ## General conditions for license and subscription services

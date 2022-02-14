@@ -92,11 +92,10 @@ To create a secret to use with the Amplify platform docker-registry, run the fol
 export NAMESPACE="my-namespace"
 export REGISTRY_USERNAME="my-service-account-client-id"
 export REGISTRY_PASSWORD="my-service-account-client-secret"
-export REGISTRY_SERVER="repository.axway.com"
+export REGISTRY_SERVER="docker.repository.axway.com"
 
 kubectl create secret docker-registry streams-docker-registry-secret --docker-server="${REGISTRY_SERVER}"  --docker-username="${REGISTRY_USERNAME}" --docker-password="${REGISTRY_PASSWORD}" -n "${NAMESPACE}"
 ```
-
 
 ## Configuration for development environment
 
