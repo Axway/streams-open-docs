@@ -343,7 +343,7 @@ kubectl get svc -o=jsonpath='{.items[?(streams-*)].status.loadBalancer.ingress[0
 
 Then upgrade your Streams installation with the [Helm parameter](/docs/install/helm-parameters-reference/#ingress-parameters) `ingress.host` set with the DNS name retrieved previously. For more information, see [Helm upgrade](/docs/install/upgrade/).
 
-{{< alert title="Note" >}} _k8s.yourdomain.tld_ is used throughout this documentation as an example hostname value.{{< /alert >}}
+{{< alert title="Note" >}} `k8s.yourdomain.tld` is used throughout this documentation as an example hostname value.{{< /alert >}}
 
 ### Ingress TLS
 
