@@ -24,6 +24,10 @@ The following third-party library has been upgraded:
 
 As a result of the Nginx library update to version `1.1.1`, the minimum supported version of Kubernetes is now `1.1.19`.
 
+## Upgrading
+
+Ensure your Kubernetes cluster is at minimum in version `1.1.19`. If not, upgrade it before upgrading Streams, or it will reject the `networking.k8s.io/v1` ingress APIs that come with our Nginx upgrade.
+
 ## Deprecated features
 <!-- As part of our software development life cycle, we constantly review our Streams offering. -->
 
