@@ -90,15 +90,12 @@ To create a secret to use with the Amplify platform docker-registry, run the fol
 
 ```sh
 export NAMESPACE="my-namespace"
-export REGISTRY_SECRET_NAME="my-registry-secret-name"
 export REGISTRY_USERNAME="my-service-account-client-id"
 export REGISTRY_PASSWORD="my-service-account-client-secret"
-export REGISTRY_SERVER="repository.axway.com"
+export REGISTRY_SERVER="docker.repository.axway.com"
 
-kubectl create secret docker-registry "${REGISTRY_SECRET_NAME}" --docker-server="${REGISTRY_SERVER}"  --docker-username="${REGISTRY_USERNAME}" --docker-password="${REGISTRY_PASSWORD}" -n "${NAMESPACE}"
+kubectl create secret docker-registry streams-docker-registry-secret --docker-server="${REGISTRY_SERVER}"  --docker-username="${REGISTRY_USERNAME}" --docker-password="${REGISTRY_PASSWORD}" -n "${NAMESPACE}"
 ```
-
-To use your Kubernetes Secret in the registry, set the helm parameter `imagePullSecrets[0].name` to the secret name.
 
 ## Configuration for development environment
 
