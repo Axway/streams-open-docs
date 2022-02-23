@@ -14,19 +14,11 @@ Streams is available as a set of Docker containers deployable in Kubernetes by u
 
 It is important, especially when upgrading from an earlier version, to be aware of the following changes in the behavior or operation of the product in this new version.
 
-### Streams third-parties
+### Streams third-parties upgrade
 
-The following third-party library has been upgraded:
+The Nginx Ingress Controller third-party library has been upgraded to version `1.1.1`. As a result of the Nginx library upgrade, the minimum supported version of Kubernetes is now `1.1.19`. For more information, see [Prerequisites to installing Streams](/docs/install/).
 
-* Nginx Ingress Controller : `1.1.1`.
-
-### Kubernetes version
-
-As a result of the Nginx library update to version `1.1.1`, the minimum supported version of Kubernetes is now `1.1.19`.
-
-## Upgrading
-
-Ensure your Kubernetes cluster is at minimum in version `1.1.19`. If not, upgrade it before upgrading Streams, or it will reject the `networking.k8s.io/v1` ingress APIs that come with our Nginx upgrade.
+{{< alert title="Note" >}}You must ensure that your Kubernetes cluster is at minimum in version `1.1.19`. If not, upgrade it before upgrading Streams, or Kubernetes will reject the `networking.k8s.io/v1` ingress APIs that come along with the Nginx upgrade.{{< /alert >}}
 
 ## Deprecated features
 <!-- As part of our software development life cycle, we constantly review our Streams offering. -->
