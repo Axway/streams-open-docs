@@ -64,12 +64,12 @@ The `allowedSubscriptionModes` and `defaultSubscriptionMode` attributes must be 
   "subscribers": [
     {
       "type": "sse",
-      "allowedSubscriptionMode": ["snapshot-only","snapshot-patch"],
+      "allowedSubscriptionModes": ["snapshot-only","snapshot-patch"],
       "defaultSubscriptionMode": "snapshot-patch"
     },
     {
       "type": "webhook",
-      "allowedSubscriptionMode": ["snapshot-only","snapshot-patch"],
+      "allowedSubscriptionModes": ["snapshot-only","snapshot-patch"],
       "defaultSubscriptionMode": "snapshot-only"
     }
   ]
