@@ -3,7 +3,7 @@ title: HTTP poller publisher
 linkTitle: HTTP poller publisher
 weight: 1
 date: 2019-04-02
-description: Learn how to configure a topic associated to a HTTP poller publisher.
+description: Learn how to configure a topic associated to an HTTP poller publisher.
 ---
 
 Polling describes the mechanism used to retrieve data from an API - the client first needs to send a request to a server and the server responds by sending the requested data.
@@ -18,20 +18,20 @@ Streams will then distribute the content (snapshot, computed patches) to all sub
 
 The HTTP poller publisher requires the following specific configuration.
 
-| Attribute                     | Mandatory | Default Value  | Description            |
-| ----------------------------- | --------- | -------------- | ---------------------- |
-| url                           | yes       | N/A            | Target URL to request.  |
-| pollingPeriod                 | no        | PT5S (5 sec)   | Period at witch the target URL will be requested. Min: PT0.5S Max: PT1H. parameter [ISO-8601 format](https://en.wikipedia.org/wiki/ISO_8601#Durations). |
-| payloadPointer                | no        | N/A            | Defines a JSON pointer to an attribute parameter [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901). |
-| headers                       | no        | N/A            | Map of key/value pairs that will be injected as HTTP headers when requesting the target URL. |
-| retryOnHttpCodes              | no        | 500,503,504    | A list of HTTP codes which will trigger the retry. Other codes generate an error without any retry. |
-| retryMaxAttempts              | no        | 3              | The maximum number of retries in case of errors. |
-| retryBackOffInitialDuration   | no        | PT1S           | Period of time after which the first retry is attempted (ISO-8601 format). Min = PT0S (0s); Max = PT10S (10s). |
-| retryBackOffMaxDuration       | no        | PT10S          | Maximum period of time between two attempts (ISO-8601 format). Min = PT0S (0s); Max = PT60S (60s). |
-| retryBackOffFactor            | no        | 0.5            | The factor used to determine the next retry duration. |
+| Attribute                     | Mandatory | Default Value  | Description                                                                                                                                                                                                                                                                                                               |
+| ----------------------------- | --------- | -------------- |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| url                           | yes       | N/A            | Target URL to request.                                                                                                                                                                                                                                                                                                    |
+| pollingPeriod                 | no        | PT5S (5 sec)   | Period at witch the target URL will be requested. Min: PT0.5S Max: PT1H. This parameter must follow the [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Durations) format.                                                                                                                                               |
+| payloadPointer                | no        | N/A            | Defines a JSON pointer to an attribute parameter [RFC6901](https://datatracker.ietf.org/doc/html/rfc6901).                                                                                                                                                                                                                |
+| headers                       | no        | N/A            | Map of key/value pairs that will be injected as HTTP headers when requesting the target URL.                                                                                                                                                                                                                              |
+| retryOnHttpCodes              | no        | 500,503,504    | A list of HTTP codes which will trigger the retry. Other codes generate an error without any retry.                                                                                                                                                                                                                       |
+| retryMaxAttempts              | no        | 3              | The maximum number of retries in case of errors.                                                                                                                                                                                                                                                                          |
+| retryBackOffInitialDuration   | no        | PT1S           | Period of time after which the first retry is attempted (ISO-8601 format). Min = PT0S (0s); Max = PT10S (10s).                                                                                                                                                                                                            |
+| retryBackOffMaxDuration       | no        | PT10S          | Maximum period of time between two attempts (ISO-8601 format). Min = PT0S (0s); Max = PT60S (60s).                                                                                                                                                                                                                        |
+| retryBackOffFactor            | no        | 0.5            | The factor used to determine the next retry duration.                                                                                                                                                                                                                                                                     |
 | computedQueryParameters       | no        | none           | Map of [ComputedQueryParameters](/docs/publishers/publisher-http-poller/#computed-query-parameters) that will be injected as query parameters. The key, query parameter name, must use URL-safe characters. For more information, see [Unreserved Characters](https://datatracker.ietf.org/doc/html/rfc2396#section-2.3). |
-| authorization                 | no        | N/A            | OAuth2 Authorization configuration. For more information, see section [OAuth2 Authorization](#authorization-with-oauth-2-0) |
-| pagination                    | no        | N/A            | Pagination mechanism configuration. For more information, see section [Pagination](#pagination) |
+| authorization                 | no        | N/A            | OAuth2 Authorization configuration. For more information, see section [OAuth2 Authorization](#authorization-with-oauth-2-0)                                                                                                                                                                                               |
+| pagination                    | no        | N/A            | Pagination mechanism configuration. For more information, see section [Pagination](#pagination)                                                                                                                                                                                                                           |
 
 The following is an example of an HTTP poller publisher:
 
@@ -70,7 +70,8 @@ The following is an example of an HTTP poller publisher:
             "computedQueryParam2": {
               "type": "timestamp",
               "reference": "last-success",
-              "useMilliseconds": true
+              "useMilliseconds": true,
+              "initialValue": 1641224429000
             }
         },
         "pagination" : {
@@ -97,20 +98,21 @@ The HTTP poller publisher can fetch data from an API that is secured with [OAuth
 
 The OAuth2 authorization workflow is implemented with the following limitations:
 
-* The OAuth2 authorization workflow is initiated on the authorization server URL on every polling. Refresh token mechanism is not implemented.
+* The OAuth2 authorization workflow is initiated on the authorization server URL for the first polling, and the retrieved access token is reused for following requests until it expires.
+* Refresh token mechanism is not implemented.
 * Only access token of type [Bearer](https://datatracker.ietf.org/doc/html/rfc6749#section-7.1) is supported.
 * The authorization request is made via a `POST` method on the authorization server, and the client credentials are sent either via `header` or `body`.
 
 The following table lists the OAuth2 authorization configuration:
 
-| Attribute                     | Mandatory | Default value  | Description            |
-| ----------------------------- | --------- | -------------- | ---------------------- |
-| type                          | yes       | none           | Type of authorization protocol configured on the API. Currently, only `oauth2` is supported. |
-| clientId                      | yes       | none           | The client identifier issued during the registration process.  |
-| clientSecret                  | yes       | none           | The client secret issued during the registration process.  |
-| provider                      | yes       | none           | Target URL of the authorization server. |
-| mode                          | yes       | header         | Whether to send [client authentication](https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1) via `body` or a basic authorization `header`. |
-| scope                         | no        | none           | A [scope](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3) request parameter. |
+| Attribute                     | Mandatory | Default value | Description            |
+| ----------------------------- | --------- |---------------| ---------------------- |
+| type                          | yes       | N/A           | Type of authorization protocol configured on the API. Currently, only `oauth2` is supported. |
+| clientId                      | yes       | N/A          | The client identifier issued during the registration process.  |
+| clientSecret                  | yes       | N/A          | The client secret issued during the registration process.  |
+| provider                      | yes       | N/A          | Target URL of the authorization server. |
+| mode                          | yes       | header        | Whether to send [client authentication](https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1) via `body` or a basic authorization `header`. |
+| scope                         | no        | N/A          | A [scope](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3) request parameter. |
 
 The following is an example of how to implement OAuth authorization:
 
@@ -136,26 +138,23 @@ The following is an example of how to implement OAuth authorization:
 
 ## Computed query parameters
 
-Computed query parameters are query parameters injected to the target URL at each polling. They are based on a given *reference*.
+Computed query parameters are query parameters injected to the target URL at each polling. They are based on the `last-success` *reference*, which is the instant corresponding to the last successful request execution.
 
 | Attribute  | Mandatory | Default Value  | Description            |
 | ---------- | --------- | ------       | ---------------------- |
 | reference  | yes       | last-success | Defines the reference of the computed query parameter. |
 
-The available references are:
-
-* **last-success** : Instant corresponding to the last successful request execution.
-
 ### DateTime format
 
-Format the reference value as DateTime. This must follow the [Java DateTimeFormatter](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html#patterns) pattern.
+You can format the reference value as DateTime. This must follow the [Java DateTimeFormatter](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html#patterns) pattern.
 
-| Attribute  | Mandatory | Default Value      | Description  |
-| ------------ | --------------------         | --------------- | --------- |
-| type         | yes | date-time              | The reference is formatted in a DateTime format. |
-| pattern      | no  | yyyy-MM-dd'T'HH:mm:ssXXX | Pattern used to format the reference.   |
+| Attribute    | Mandatory | Default Value         | Description                                                                                                                  |
+|--------------| --------------------         |-----------------------|------------------------------------------------------------------------------------------------------------------------------|
+| type         | yes | date-time             | The reference is formatted in a DateTime format.                                                                             |
+| pattern      | no  | yyyy-MM-dd'T'HH:mm:ssXXX | Pattern used to format the reference.                                                                                        |
+| initialValue | no  | N/A                      | DateTime used when the HTTP Poller Publisher starts publishing data to a topic for the first time. It must follow `pattern` format. If no value is configured, the HTTP poller publisher will use the default dateTime : `currentRequestDateTime` - `pollingPeriod` to make the first request. Subsequent requests are not impacted.|
 
-The following is an example of how to dynamically add a `from` query parameter to the target URL based on the **last-success** reference with the following format `yyyy-MM-dd'T'HH:mm:ss`, by using the `computedQueryParameters` attribute:
+The following is an example of how to dynamically add a `from` query parameter to the target URL based on the `last-success` reference with the following format `yyyy-MM-dd'T'HH:mm:ss`, by using the `computedQueryParameters` attribute with `initialValue` :
 
 ```json
 {
@@ -164,11 +163,13 @@ The following is an example of how to dynamically add a `from` query parameter t
     "type": "http-poller",
     "config": {
         "url": "https://myserver/my-api",
+        "pollingPeriod": "PT1M",
         "computedQueryParameters": {
             "from": {
               "type": "date-time",
               "reference": "last-success",
-              "pattern": "yyyy-MM-dd'T'HH:mm:ss"
+              "pattern": "yyyy-MM-dd'T'HH:mm:ss",
+              "initialValue": "2021-09-22T09:56:09"
             }
         }
     }
@@ -176,18 +177,19 @@ The following is an example of how to dynamically add a `from` query parameter t
 }
 ```
 
-The resulting target URL polled looks like this: `https://myserver/my-api?from=2021-09-22T09:56:09`
+Based on the configured `initialValue`, the first call to the target URL will be `https://myserver/my-api?from=2021-09-22T09:56:09`, and the subsequent calls, according to the configured polling period will be: `https://myserver/my-api?from=2021-09-23T10:57:09`, `https://myserver/my-api?from=2021-09-23T10:58:09`, `https://myserver/my-api?from=2021-09-23T10:59:09`, and so on.
 
-#### Timestamp format
+### Timestamp format
 
-Format the reference value as a timestamp.
+You can format the reference value as a timestamp.
 
-| Attribute       | Mandatory | Default Value  | Description  |
-| ------------    | -------------------- | --------------- | --------- |
-| type            | yes | timestamp     | The reference is formatted as a Timestamp. |
-| useMilliseconds | no  | false | If true, the time stamp is measured in milliseconds, otherwise in seconds.   |
+| Attribute       | Mandatory | Default Value | Description                                                                                                                                                                                      |
+|-----------------| -------------------- |---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| type            | yes | timestamp     | The reference is formatted as a Timestamp.                                                                                                                                                       |
+| useMilliseconds | no  | false         | If true, the timestamp is measured in milliseconds, otherwise in seconds.                                                                                                                        |
+| initialValue    | no  | N/A           | Timestamp used when the HTTP Poller Publisher starts publishing data to a topic for the first time, specified in milliseconds or seconds, depending on what is configured in the `useMilliseconds` attribute. If no value is configured, the HTTP poller publisher will use the default dateTime : `currentRequestDateTime` - `pollingPeriod` to make the first request. Subsequent requests are not impacted |
 
-The following is an example of how to add a `from` query parameter to the target URL based on the **last-success** reference as a Timestamp, by using the `computedQueryParameters` attribute:
+The following is an example of how to add a `from` query parameter to the target URL based on the `last-success` reference as a Timestamp, by using the `computedQueryParameters` attribute with `initialValue` :
 
 ```json
 {
@@ -196,10 +198,12 @@ The following is an example of how to add a `from` query parameter to the target
     "type": "http-poller",
     "config": {
         "url": "https://myserver/my-api",
+        "pollingPeriod": "PT60S",
         "computedQueryParameters": {
             "from": {
               "type": "timestamp",
-              "reference": "last-success"
+              "reference": "last-success",
+              "initialValue": 1641290851
             }
         }
     }
@@ -207,7 +211,7 @@ The following is an example of how to add a `from` query parameter to the target
 }
 ```
 
-The resulting target URL looks like this: `https://myserver/my-api?from=1632304569`
+Based on the configured `initialValue`, the first call to the target URL will be `https://myserver/my-api?from=1641290851`, and the subsequent calls, according to the configured polling period will be : `https://myserver/my-api?from=1641377251`, `https://myserver/my-api?from=1641377311`, `https://myserver/my-api?from=1641377371`, etc
 
 ## Pagination
 
@@ -315,7 +319,7 @@ The following is an example of an HTTP poller publisher configuration with offse
 
 ### Keyset
 
-In this pagination type, the endpoint provides a `key` parameter that acts as a delimiter of the page. This key parameter must be the same key of the set sort order. For example, if the set is sorted by ID, then the key parameter should be `sinceId`. The first request doe not contain the delimiter parameter. The response of this request contains the value of the key for the last element of the set. The endpoint accepts a `key` parameter indicating the next elements to start the next page, and a `pageSize` parameter (integer) indicating the number of items per page, for example `/items?since_key=next_key&pageSize=10`.
+In this pagination type, the endpoint provides a `key` parameter that acts as a delimiter of the page. This key parameter must be the same key of the set sort order. For example, if the set is sorted by ID, then the key parameter should be `sinceId`. The first request does not contain the delimiter parameter. The response of this request contains the value of the key for the last element of the set. The endpoint accepts a `key` parameter indicating the next elements to start the next page, and a `pageSize` parameter (integer) indicating the number of items per page, for example `/items?since_key=next_key&pageSize=10`.
 
 | Attribute                     | Mandatory | Default Value  | Description                                                                             |
 | ----------------------------- | --------- | -------------- | ----------------------                                                                  |
@@ -403,15 +407,11 @@ The following is an example of an HTTP poller publisher configuration with curso
 
 ### Next reference
 
-You can define two ways to retrieve the next reference location, independently on the pagination mode chosen. The next reference must be either in the `body` of the first response, or in the header `Link`.
+You can define two ways to retrieve the next reference location, regardless the pagination mode chosen. The next reference must be either in the `body` of the first response or in the header `Link`.
 
 #### Body location
 
-If the next reference is part of the first response payload, you must use `body` as next location. While setting `body`, you must define the type of the reference and a JSON pointer to retrieve this reference.
-
-The type defines whether the reference is an `uri` or only a `value` to the next reference.
-
-The JSON pointer must point to the attribute in the body containing the next reference.
+If the next reference is part of the first response payload, you must use `body` as next location. While setting `body`, you must define the `type` of the reference and a JSON pointer to retrieve this reference. The `type` defines whether the reference is an `uri` or only a `value` to the next reference. The JSON pointer must point to the attribute in the body containing the next reference.
 
 For example, with a first response:
 
@@ -450,13 +450,13 @@ The configuration of the pagination section will look like:
 
 If the next reference is part of the `Link` header, you must use `header` location. For more information, see [RFC5988](https://datatracker.ietf.org/doc/html/rfc5988).
 
-The `Link` header must be designed to support pagination and must be formatted such as follows:
+The `Link` header must be designed to support pagination and must be formatted as follows:
 
 ```
 <http://my-host/api?per_page=2&page=2>; rel="next", <http://my-host/api?per_page=2&page=36>; rel="last"
 ```
 
-Streams retrieves the next reference by finding the _next_ relation in the _Link_ header.
+Streams retrieves the next reference by finding the `next` relation in the `Link` header.
 
 The configuration of the pagination section will look like:
 
@@ -470,7 +470,7 @@ The configuration of the pagination section will look like:
   }
 ```
 
-### Remove HTTP headers from configuration
+## Remove HTTP headers from configuration
 
 To remove a header from the configuration of the publisher, set the header value to `null` when calling the `PATCH /streams/hub/api/v1/topics/{{topicId}}` endpoint. For example:
 

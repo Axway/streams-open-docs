@@ -1,10 +1,12 @@
 ---
-title: Helm parameters
-linkTitle: Helm parameters
-weight: 1
+title: Helm parameters reference
+linkTitle: Helm parameters reference
+weight: 20
 date: 2021-02-18
 description: Use the following parameters to edit your configuration.
 ---
+
+This page describe the Helm parameters that you can change to customize your configuration.
 
 ## MariaDB parameters
 
@@ -73,7 +75,7 @@ If you are setting those parameters through `--set` on the command line, you mus
 | ------------------------------------- | ----------------------------------- | --------- | ------------- |
 | `acceptGeneralConditions`               | Accept General Conditions           | yes       | N/A           |
 | `images.repository`                     | Streams Images repository           | yes       | docker.repository.axway.com/axwaystreams-docker-prod-ptx/2.0         |
-| `imagePullSecrets[0].name`              | Image registry keys                 | no        | N/A           |
+| `imagePullSecrets[0].name`              | Image registry keys                 | no        | streams-docker-registry-secret           |
 | `hub.replicaCount`                      | Hub replica count                   | no        | 1 (2 HA)             |
 | `hub.service.port`                | Http port to reach the Streams Topics API | no        | 8080          |
 | `subscriberSse.enabled`             | Enable/Disable Subscriber SSE  | no        | true          |

@@ -1,8 +1,8 @@
 ---
-title: Streams November 2021 Release Notes
-linkTitle: Streams November 2021 Release Notes
-weight: 145
-date: 2021-09-03
+title: Streams February 2022 Release Notes
+linkTitle: Streams February 2022 Release Notes
+weight: 144
+date: 2021-01-27
 ---
 
 ## Summary
@@ -14,21 +14,11 @@ Streams is available as a set of Docker containers deployable in Kubernetes by u
 
 It is important, especially when upgrading from an earlier version, to be aware of the following changes in the behavior or operation of the product in this new version.
 
-### Streams third-parties
+### Streams third-parties upgrade
 
-The following third-party library has been upgraded:
+The Nginx Ingress Controller third-party library has been upgraded to version `1.1.1`. As a result of the Nginx library upgrade, the minimum supported version of Kubernetes is now `1.1.19`. For more information, see [Prerequisites to installing Streams](/docs/install/).
 
-* MariaDB : `10.4.21`
-* Apache Kafka : `2.8.1`
-
-### Embedded Kafka configuration
-
-To address security vulnerabilities, Apache Kafka has been upgraded to version 2.8.1. This upgrade introduces breaking changes in the configuration of embedded kafka - the SASL
-configuration is now in the `embeddedKafka.auth.sasl` block of the Helm values.  For more information, see [Helm parameters](/docs/install/helm-parameters-reference/#kafka-parameters).
-
-We have also changed some internal configuration of the Kafka containers to improve security. There is no visible change unless you have disabled or customized some security of embedded kafka as
-described in [the installation](/docs/install/#embedded-kafka-configuration). In that case, be aware
-that `embeddedKafka.auth.sasl.jaas.clientPasswordSecret` has replaced `embeddedKafka.auth.jaas.existingSecret`.
+{{< alert title="Note" >}}You must ensure that your Kubernetes cluster is at minimum in version `1.1.19`. If not, upgrade it before upgrading Streams, or Kubernetes will reject the `networking.k8s.io/v1` ingress APIs that come along with the Nginx upgrade.{{< /alert >}}
 
 ## Deprecated features
 <!-- As part of our software development life cycle, we constantly review our Streams offering. -->
