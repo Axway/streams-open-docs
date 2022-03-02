@@ -8,7 +8,7 @@
 #*       @global-owner1 @global-owner2
 
 # Global reviewers for this project
-* @guillaumelamirand @andreamussap
+* @epiasentin-axway @andreamussap
 
 # Order is important; the last matching pattern takes the most
 # precedence. When someone opens a pull request that only
@@ -17,11 +17,11 @@
 #*.js @js-owner
 
 # Config files
-*.html @guillaumelamirand @andreamussap
-*.js   @guillaumelamirand @andreamussap
-*.toml @guillaumelamirand @andreamussap
-*.yml  @guillaumelamirand @andreamussap
-*.json @guillaumelamirand @andreamussap
+*.html @epiasentin-axway @andreamussap
+*.js   @epiasentin-axway @andreamussap
+*.toml @epiasentin-axway @andreamussap
+*.yml  @epiasentin-axway @andreamussap
+*.json @epiasentin-axway @andreamussap
 
 # You can also use email addresses if you prefer. They'll be
 # used to look up users just like we do for commit author
@@ -34,11 +34,11 @@
 #/build/logs/ @doctocat
 
 # Theme and CMS config files
-/layouts/ @guillaumelamirand @andreamussap
-/static/admin/ @guillaumelamirand @andreamussap
+/layouts/ @epiasentin-axway @andreamussap
+/static/admin/ @epiasentin-axway @andreamussap
 
 # Documentation files
-/content/en/docs/ @guillaumelamirand @andreamussap
+/content/en/docs/ @epiasentin-axway @andreamussap @jjayet-axway
 
 # The `docs/*` pattern will match files like
 # `docs/getting-started.md` but not further nested files like
