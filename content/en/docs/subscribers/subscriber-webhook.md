@@ -121,7 +121,7 @@ GET /streams/subscribers/webhook/api/v1/subscriptions/{subscriptionId}
 
 ### Get status codes
 
-Below the list of HTTP status codes that can be returned when trying to get a kafka subscription:
+Below the list of HTTP status codes that can be returned when trying to get a webhook subscription:
 
 | Code | Comment |
 |------|---------|
