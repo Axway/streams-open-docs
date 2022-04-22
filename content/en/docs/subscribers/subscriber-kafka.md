@@ -64,8 +64,7 @@ Here is the description of the security configuration that could be setup when c
 
 #### SSL configuration
 
-As `SSL` is required for encryption of traffic. The root certificate authority, used when configuring the kafka broker, must be added into the list of trusted certificate authorities of the subscriber kafka component, to make sure it can connect to the external kakfa broker.
-In case you need to add a root certificate authority for connection with the external kafka broker:
+With `SSL` enabled, Streams needs to trust the root certificate authority that signed your kafka broker certificates. If you are not using one of the generic `SSL` certificates providers (e.g. Digicert, Let's Encrypt...), but a custom root certificate authority instead, you must add it to Streams:
 
 * Make sure that the root certificate authority you've got is in PEM format. You can list and extract the root CA from a truststore with the following command.
 
