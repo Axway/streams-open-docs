@@ -84,12 +84,6 @@ keytool -exportcert -rfc -keystore <KAFKA TRUSTORE IN JKS> -alias <ALIAS NAME OF
 In the example above, the alias name of the root CA is `caroot`.
 
 * Follow the dedicated section [Add self-signed TLS certificates](/docs/install/#add-self-signed-tls-certificates) to add the custom certificate, or ask your operator to do it if you are not operating streams yourself
-
-Please note that:
-
-* this procedure must be done at the installation phase of Streams.
-* If the root certificate authority has been signed by a genuine and trusted authority, the above procedure is not required.
-
 ### Create status codes
 
 The following are HTTP status codes that can be returned when trying to create a kafka subscription:
