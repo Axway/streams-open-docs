@@ -102,6 +102,12 @@ If you are setting those parameters through `--set` on the command line, you mus
 | `streams.extraCertificatesSecrets`      | List of secrets containing TLS certs to add as trusted by Streams | no | [] |
 | `actuator.prometheus.enabled`           | Activate metrics endpoints for Streams services | no | false    |
 | `streams.serviceArgs.spring.datasource.hikari.maxLifetime` | Maximum lifetime in milliseconds for a Streams database connection | no | 280000 |
+| `discoveryAgent.enabled` | Activate integration with Amplify Central                      | yes | false                        |
+| `central.organizationID` | Your Amplify Central organisation ID                           | no  | N/A                          |
+| `central.environment`    | Your Amplify Central environment, as seen in topology          | no  | N/A                          |
+| `central.url`            | Amplify Central url                                            | no  | [https://apicentral.axway.com](https://apicentral.axway.com) |
+| `central.auth.clientID`  | Client ID in the service account associated with your key pair | no  | N/A                          |
+| `central.auth.url`       | Amplify Central authentication url                             | no  | [https://login.axway.com/auth](https://login.axway.com/auth) |
 
 ## Monitoring parameters
 

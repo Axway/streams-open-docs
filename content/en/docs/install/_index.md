@@ -317,6 +317,11 @@ To configure SASL authentication, follow these steps:
 
 To disable security settings, see [Disable externalized kafka security settings](/docs/install/customize-install#disable-externalized-kafka-security-settings).
 
+## Amplify Central integration
+
+Streams can connect to Amplify Central and expose assets in order to leverage tools like the Amplify Marketplace.
+This is disabled by default, enable it now or after the installation by following the additional steps: [Amplify Central Integration](/docs/install/amplify-central-integration).
+
 ## Ingress settings
 
 An ingress controller is installed on your K8s cluster next to Streams.
@@ -398,7 +403,6 @@ export NAMESPACE="my-namespace"
 export HELM_RELEASE_NAME="my-release"
 
 helm install "${HELM_RELEASE_NAME}" . \
-  -f values.yaml \
   -n "${NAMESPACE}"
 ```
 
@@ -413,7 +417,6 @@ export NAMESPACE="my-namespace"
 export HELM_RELEASE_NAME="my-release"
 
 helm install "${HELM_RELEASE_NAME}" . \
-  -f values.yaml \
   -f values-ha.yaml \
   -n "${NAMESPACE}"
 ```

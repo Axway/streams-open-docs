@@ -9,6 +9,10 @@ date: 2022-04-05
 
 Streams is available as a set of Docker containers deployable in Kubernetes by using a Helm chart. For a summary of the system requirements, see [Install Streams](/docs/install/).
 
+## New features and enhancements
+<!-- Add the new features here -->
+Streams is now able to integrate with Amplify Central to leverage the Amplify Marketplace. See [Amplify Central Integration](/docs/install/amplify-central-integration) to setup the connexion.
+
 ## Important changes
 <!-- Use this section to describe any changes in the behavior of the product (as a result of features or fixes), for example, new Java system properties in the jvm.xml file. This section could also be used for any important information that doesn't fit elsewhere. -->
 
