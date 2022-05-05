@@ -8,7 +8,9 @@ description: Learn how to configure and use the Streams Server-Sent Events Subsc
 
 Server-Sent Events (SSE) is part of the HTML5 standard. SSEs are sent over traditional HTTP, so they do not require a special protocol to work. SSE includes important features, such as `Last-Event-Id` header support, automatic client reconnection, and heterogeneous event handling.
 
-## Subscribe to a topic via SSE
+## Subscribe to a topic via SSE with provisioning
+
+This mode is used when someone wants to control how a Streams topic is consumed.
 
 ### Provision a SSE subscription
 
@@ -48,6 +50,8 @@ curl -v "${BASE_URL}/streams/subscribers/sse/api/v1/subscriptions/${SUBSCRIPTION
 If the connection is successfully established, Streams shows with a `200 OK` and a _Content-Type: text/event-stream_ responses.
 
 ## Subscribe to a topic via SSE without provisioning
+
+This mode is used when the end-user needs to specify the subscription mode. An automatic provision will be done with a disposable SSE subscription (deleted after the SSE channel disconnection) configured with the desired subscription mode.
 
 To subscribe to a topic, open a terminal and run the following cURL command:
 
@@ -214,7 +218,7 @@ Below the list of HTTP status codes that can be returned when trying to get a SS
 
 ## Get SSE subscriptions for a topic
 
-To get existing subscriptions, use the following GET request on your topic:
+To get existing subscriptions (disposable subscriptions included), use the following GET request on your topic:
 
 ```
 GET /streams/subscribers/sse/api/v1/topics/{topicId}/subscriptions
