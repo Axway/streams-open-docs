@@ -45,9 +45,9 @@ The body must contain a JSON webhook subscription configuration as the following
 
 After the webhook subscription is successfully created, Streams starts notifying the subscriber at the specified `webhookUrl`.
 
-### Authorization with OAuth 2.0
+### Connect to a webhook protected by Oauth 2.0
 
-The Webhook subscriber can post data to an API that is secured with [OAuth2](https://datatracker.ietf.org/doc/html/rfc6749) protocol. Because the Webhook subscriber authenticates to the authorization server without any end-user interaction, the only OAuth2 authorization grant type supported is the [client credentials](https://datatracker.ietf.org/doc/html/rfc6749#section-4.4).
+The webhook subscriber can post data to an API that is secured with [OAuth2](https://datatracker.ietf.org/doc/html/rfc6749) protocol. Because the Webhook subscriber authenticates to the authorization server without any end-user interaction, the only OAuth2 authorization grant type supported is the [client credentials](https://datatracker.ietf.org/doc/html/rfc6749#section-4.4).
 
 The OAuth2 authorization workflow is implemented with the following limitations:
 

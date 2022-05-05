@@ -8,15 +8,15 @@ description: Learn how to configure and use the Streams Kafka Subscriber.
 
 Streams Kafka subscriber allows clients to route events published in a Streams topic to an external Kafka topic.
 
-## Creating a Kafka subscription
+## Create a Kafka subscription
 
-You can create a kafka subscription by making an HTTP Post request on the following endpoint:
+You can create a kafka subscription by making an HTTP post request on the following endpoint:
 
 ```
 POST /streams/subscribers/kafka/api/v1/topics/{topicID}/subscriptions
 ```
 
-The body must contain a JSON kafka subscription configuration as the following example:
+The body parameter must contain a JSON kafka subscription configuration. For example:
 
 ```json
 {
@@ -37,36 +37,36 @@ The body must contain a JSON kafka subscription configuration as the following e
 ```
 
 | Configuration Entry | Mandatory | Default value | Description                                                                                                                                                                                  |
-|---------------------|-----------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|---------------------|-----------|---------------|---------------------------------------------------------------------|
 | subscriptionMode | no | Default subscription mode defined in the topic's configuration | For more information, see [subscription modes](/docs/subscribers/#subscription-modes).                                                                                                       |
 | bootstrapServers | yes | n/a | List of Kafka servers used to bootstrap connections to Kafka.                                                                                                                                |
 | topic | yes | n/a | Kafka topic in which a record must be sent.                                                                                                                                                  |
 | partition | no | n/a | Kafka partition to use.                                                                                                                                                                      |
 | recordKey | no | topic id | Record key to use for each sent record. If not set, the `topicId` is used.                                                                                                                   |
-| authorization | no | n/a | Security configuration for connection to the external kafka broker. For more information, see section [Security configuration with Sasl and SSL](#security-configuration-with-sasl-and-ssl). |
+| authorization | no | n/a | Security configuration for connection to the external kafka broker. For more information, see section [Security configuration with SASL and SSL](#security-configuration-with-sasl-and-ssl). |
 
 After the kafka subscription is successfully created, Streams start sending records to your kafka cluster.
 
-### Security configuration with Sasl and SSL
+### Security configuration with SASL and SSL
 
-The Kafka subscriber supports connection with external kafka broker configured with `SSL` and `Sasl`.
+The Kafka subscriber supports connection with external kafka broker configured with Secure sockets layer (SSL) and Simple authentication and security layer (SASL).
 
-{{< alert title="Note" >}}`SSL` and `Sasl` must be activated simultaneously on the kafka broker. The Kafka subscriber does not support `Sasl` configured without `SSL` for transport layer{{< /alert >}}
+{{< alert title="Note" >}}SSL and SASL must be activated simultaneously on the kafka broker. The Kafka subscriber does not support SASL configured without SSL for transport layer{{< /alert >}}
 
-Here is the description of the security configuration that could be setup when creating a kafka subscription:
+The following table describes the security configuration that could be setup when creating a kafka subscription:
 
 | Configuration Entry | Mandatory | Default value | Description                                                                                                                          |
 |---------------------|-----------|---------------|--------------------------------------------------------------------------------------------------------------------------------------|
-| type                | yes       | n/a           | Type of security protocol configured for the kafka subscription. Currently only `sasl_ssl` is supported                              |
-| sasl.mechanism      | yes       | n/a           | Sasl mechanism used by the subscriber kafka to connect with the external kafka broker. Currently only `plain` mechanism is supported |
-| sasl.username       | yes       | n/a           | Username used by the Kafka subscriber to connect with the external kafka broker                                                      |
-| sasl.password       | yes       | n/a           | Password used by the Kafka subscriber to connect with the external kafka broker                                                      |
+| type                | yes       | n/a           | Type of security protocol configured for the kafka subscription. Currently only `sasl_ssl` is supported.                              |
+| sasl.mechanism      | yes       | n/a           | SASL mechanism used by the subscriber kafka to connect with the external kafka broker. Currently only `plain` mechanism is supported. |
+| sasl.username       | yes       | n/a           | Username used by the Kafka subscriber to connect with the external kafka broker.                                                      |
+| sasl.password       | yes       | n/a           | Password used by the Kafka subscriber to connect with the external kafka broker.                                                      |
 
-#### SSL configuration
+#### Configure a custom SSL root certificate authority
 
-With `SSL` enabled, Streams needs to trust the root certificate authority that signed your kafka broker certificates. If you are not using one of the generic `SSL` certificates providers (e.g. Digicert, Let's Encrypt...), but a custom root certificate authority instead, you must add it to Streams:
+With SSL enabled, Streams needs to trust the root certificate authority that signed your kafka broker certificates. If you are not using one of the generic SSL certificates providers (for example, Digicert, Let's Encrypt, and so on), but a custom root certificate authority instead, you must add it to Streams:
 
-* Make sure that the root certificate authority you've got is in PEM format. You can list and extract the root CA from a truststore with the following command.
+Ensure that the root certificate authority you have is in PEM format. You can list and extract the root CA from a truststore with the following command:
 
 ```bash
 keytool -list -v -keystore <KAFKA TRUSTORE IN JKS>
@@ -81,9 +81,9 @@ Entry type: trustedCertEntry
 keytool -exportcert -rfc -keystore <KAFKA TRUSTORE IN JKS> -alias <ALIAS NAME OF ROOT CA> -file kafka.truststore.pem
 ```
 
-In the example above, the alias name of the root CA is `caroot`.
+In this example, the alias name of the root CA is `caroot`.
 
-* Follow the dedicated section [Add self-signed TLS certificates](/docs/install/#add-self-signed-tls-certificates) to add the custom certificate, or ask your operator to do it if you are not operating streams yourself
+For more information on how to add the custom certificate, see [Add self-signed TLS certificates](/docs/install/#add-self-signed-tls-certificates), or ask your operator to perform this task if you are not operating Streams yourself.
 
 ### Create status codes
 

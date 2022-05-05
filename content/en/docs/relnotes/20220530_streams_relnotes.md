@@ -11,7 +11,11 @@ Streams is available as a set of Docker containers deployable in Kubernetes by u
 
 ## New features and enhancements
 
-* [Kafka subscription configured with Sasl and SSL](/docs/subscribers/subscriber-kafka/#authorization-with-sasl-and-ssl): add security capability for kafka subscription
+The following new features and enhancements are available in this update:
+
+### Kafka subscription configured with SASL and SSL
+
+The Streams Kafka subscriber can now authenticate and use traffic encryption when you setup a connection with a downstreams Kafka cluster. for more information on how to use this new capability, see [Kafka Subscriber documentation](/docs/subscribers/subscriber-kafka/#security-configuration-with-sasl-and-ssl).
 
 ## Important changes
 <!-- Use this section to describe any changes in the behavior of the product (as a result of features or fixes), for example, new Java system properties in the jvm.xml file. This section could also be used for any important information that doesn't fit elsewhere. -->
