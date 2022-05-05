@@ -45,6 +45,6 @@ central:
     clientID: ""
 ```
 
-You can then proceed with the installation.
+You can then [proceed with the installation](/docs/install/#amplify-central-integration).
 
 If you have already installed Streams without enabling this integration, you can perform a Helm upgrade instead (don't forget to provide again your other custom values).

@@ -305,11 +305,6 @@ To configure SASL authentication, follow these steps:
 
 To disable security settings, see [Disable externalized kafka security settings](/docs/install/customize-install#disable-externalized-kafka-security-settings).
 
-## Amplify Central integration
-
-Streams can connect to [Amplify Central](https://docs.axway.com/bundle/amplify-central/page/docs/index.html) and expose assets in order to leverage tools like the [Amplify Marketplace](https://docs.axway.com/bundle/amplify-central/page/docs/manage_marketplace/index.html).
-This is disabled by default. Enable through the following additional steps: [Amplify Central Integration](/docs/install/amplify-central-integration).
-
 ## Ingress settings
 
 An ingress controller is installed on your K8s cluster next to Streams.
@@ -369,6 +364,11 @@ TLS endpoints which Streams services connect to must have a valid TLS certificat
     ```
 
 3. Set the [Helm parameter](/docs/install/helm-parameters-reference/) `streams.extraCertificatesSecrets` to your `$SECRET_NAME`. If you have more than one secrets, they must be separated by a comma.
+
+## Amplify Central integration
+
+Streams can connect to [Amplify Central](https://docs.axway.com/bundle/amplify-central/page/docs/index.html) and expose assets in order to leverage tools like the [Amplify Marketplace](https://docs.axway.com/bundle/amplify-central/page/docs/manage_marketplace/index.html).
+This is disabled by default. Enable through the following additional steps: [Amplify Central Integration](/docs/install/amplify-central-integration).
 
 ## Customize your installation
 
