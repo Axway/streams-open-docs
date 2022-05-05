@@ -16,7 +16,7 @@ You can create a webhook subscription by making an HTTP Post request on the foll
 POST /streams/subscribers/webhook/api/v1/topics/{topicID}/subscriptions
 ```
 
-The body must contain a JSON webhook subscription configuration as the following example:
+The request body must contain a JSON webhook subscription configuration as the following example:
 
 ```json
 {
