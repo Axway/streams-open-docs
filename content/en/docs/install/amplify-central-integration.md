@@ -1,55 +1,39 @@
 ---
-title: Amplify Central integration
-linkTitle: Amplify Central integration
+title: Integrate with Amplify Central Marketplace
+linkTitle: Integrate with Amplify Central Marketplace
 weight: 15
 date: 2022-04-26
-description: Connect Streams to Amplify Central
+description: Connect Streams to Amplify Central and integrate with the Amplify Marketplace
 ---
 
-Streams can connect to Amplify Central and integrate with the Amplify Marketplace. To enable this features, a few extra steps are needed.
+Follow this section to integrate Streams with [Amplify Central](https://docs.axway.com/bundle/amplify-central/page/docs/index.html).
 
-## Setup Amplify Central
+## Prerequisites
 
-### Create a service account with a certificate
+* You must know your Amplify Central organization ID.
+* You must have an environment in which you wish to publish the Streams assets. To create a new one, go to Amplify Central [topology](https://apicentral.axway.com/topology/environments).
+* You must have [a service account in Amplify Central](https://docs.axway.com/bundle/platform-management/page/docs/management_guide/organizations/managing_organizations/index.html#managing-service-accounts) with the following properties:
+    * "Central Admin" in `Org Roles`
+    * "Client Certificate" in `authentication`
 
-1. Log in to the [Amplify Platform](https://platform.axway.com).
-2. Select your organization, and from the left menu, click **Service Accounts** (You should see all service accounts already created).
-3. Click **+ Service Account**, and fill in the mandatory fields:
-    * Enter a name for the service account.
-    * Choose `Client Certificate` for the method.
-    * Choose `Platform-generated key pair` for the credentials.
-    * Choose `Central Admin` in Roles
-4. Click **Save**
-5. Download the generated private key: `private_key.pem`
-6. You can now see the info of your service account displayed:
-    * Save the `Client ID`
-    * Copy/paste the public key into a `public_key.pem` file
+## Create Kubernetes secret
 
-### Gather your information
-
-You will also want to know the following elements:
-
-* Your organisation ID
-* The environment in which you want to publish the Streams assets (see [topology](https://apicentral.axway.com/topology/environments))
-
-## Setup Streams
-
-## Kubernetes secret
-
-Create a secret containing your certificates. If you have not renamed them, you can use the following snippet:
+Streams needs the certificates associated with your service account to authenticate to Amplify Central.
+Create a secret containing those certificates:
 
 ```sh
 export NAMESPACE="my-namespace"
-export CENTRAL_CERTIFICATES_PATH=<path-to-your-keys>
+export PRIVATE_KEY_PATH=""
+export PUBLIC_KEY_PATH=""
 
 kubectl -n "${NAMESPACE}" create secret generic central-auth-credentials \
-    --from-file=private_key.pem="${CENTRAL_CERTIFICATES_PATH}/private_key.pem" \
-    --from-file=public_key.pem="${CENTRAL_CERTIFICATES_PATH}/public_key.pem"
+    --from-file=private_key.pem="${PRIVATE_KEY_PATH}" \
+    --from-file=public_key.pem="${PUBLIC_KEY_PATH}"
 ```
 
-## Helm values
+## Update your custom Helm values
 
-Add the values from the previous sections to your custom Helm values for the installation:
+Add your organization ID, your environment name, and the clientID associated to your service account to your custom Helm values for the installation:
 
 ```yml
 discoveryAgent:
@@ -61,4 +45,6 @@ central:
     clientID: ""
 ```
 
-If you are already running Streams in a compatible version, you can simply perform a Helm upgrade instead of a Helm install (don't forget to specify again all of your previous parameters and values).
+You can then proceed with the installation.
+
+If you have already installed Streams without enabling this integration, you can perform a Helm upgrade instead (don't forget to provide again your other custom values).

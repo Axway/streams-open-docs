@@ -62,36 +62,24 @@ kubectl create namespace "${NAMESPACE}"
 
 ## Use Amplify Platform as your Docker registry
 
-Docker images must be hosted in a docker registry accessible from your Kubernetes (K8s) cluster. We recommend you to use the Amplify Platform repository for a custom docker registry. Alternatively, you can use [your own custom Docker registry](/docs/install/customize-install#use-a-custom-docker-registry).
+Docker images must be hosted in a docker registry accessible from your Kubernetes (K8s) cluster.
+We recommend that you use the Amplify Platform repository for a custom docker registry. Alternatively, you can use [your own custom Docker registry](/docs/install/customize-install#use-a-custom-docker-registry).
 
-To use the Amplify Platform as your container registry you must first ensure the following:
+### Get your service account
 
-* You can see our images with your organization on the Amplify repository search page.
-* You have administrator access to create a service account in your organization.
+* You must be entitled to Streams in your Amplify Central organisation: you should find the Streams artifacts listed on the [repository](https://repository.axway.com/home)
+* You must have [a service account in Amplify Central](https://docs.axway.com/bundle/platform-management/page/docs/management_guide/organizations/managing_organizations/index.html#managing-service-accounts) with the following property:
+    * "Client Secret" in `authentication`
 
-After you have verified that your images are loaded and that you have the correct level of access, you must create a service account, then create docker-registry secret with the information from your service account.
+### Create Kubernetes secret
 
-### Create a service account
-
-To create your service account, perform the following steps:
-
-1. Log in to the [Amplify Platform](https://platform.axway.com).
-2. Select your organization, and from the left menu, click **Service Accounts** (You should see all service accounts already created).
-3. Click **+ Service Account**, and fill in the mandatory fields:
-    * Enter a name for the service account.
-    * Choose `Client Secret` for the method.
-    * Choose `Platform-generated secret` for the credentials.
-4. Click **Save**
-5. Ensure to securely store the generated client secret because it will be required in further steps.
-
-### Create a secret
-
-To create a secret to use with the Amplify platform docker-registry, run the following command with the service account information:
+Streams needs the credentials of your service account to pull images from the repository.
+Create a secret containing these credentials:
 
 ```sh
 export NAMESPACE="my-namespace"
-export REGISTRY_USERNAME="my-service-account-client-id"
-export REGISTRY_PASSWORD="my-service-account-client-secret"
+export REGISTRY_USERNAME="<my-service-account-client-id>"
+export REGISTRY_PASSWORD="<my-service-account-client-secret>"
 export REGISTRY_SERVER="docker.repository.axway.com"
 
 kubectl create secret docker-registry streams-docker-registry-secret --docker-server="${REGISTRY_SERVER}"  --docker-username="${REGISTRY_USERNAME}" --docker-password="${REGISTRY_PASSWORD}" -n "${NAMESPACE}"
@@ -319,8 +307,8 @@ To disable security settings, see [Disable externalized kafka security settings]
 
 ## Amplify Central integration
 
-Streams can connect to Amplify Central and expose assets in order to leverage tools like the Amplify Marketplace.
-This is disabled by default, enable it now or after the installation by following the additional steps: [Amplify Central Integration](/docs/install/amplify-central-integration).
+Streams can connect to [Amplify Central](https://docs.axway.com/bundle/amplify-central/page/docs/index.html) and expose assets in order to leverage tools like the [Amplify Marketplace](https://docs.axway.com/bundle/amplify-central/page/docs/manage_marketplace/index.html).
+This is disabled by default. Enable through the following additional steps: [Amplify Central Integration](/docs/install/amplify-central-integration).
 
 ## Ingress settings
 
