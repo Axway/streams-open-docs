@@ -3,7 +3,7 @@ title: Integrate with Amplify Central Marketplace
 linkTitle: Integrate with Amplify Central Marketplace
 weight: 15
 date: 2022-04-26
-description: Connect Streams to Amplify Central and integrate with the Amplify Marketplace
+description: Connect Streams to Amplify Central to leverage tools like the Amplify Marketplace, where you can expose your Streams assets.
 ---
 
 Follow this section to integrate Streams with [Amplify Central](https://docs.axway.com/bundle/amplify-central/page/docs/index.html).
@@ -11,15 +11,14 @@ Follow this section to integrate Streams with [Amplify Central](https://docs.axw
 ## Prerequisites
 
 * You must know your Amplify Central organization ID.
-* You must have an environment in which you wish to publish the Streams assets. To create a new one, go to Amplify Central [topology](https://apicentral.axway.com/topology/environments).
+* You must have an environment in which you wish to publish the Streams assets. For more information on how to create a new environment, see [Connect and manage your environment](https://docs.axway.com/bundle/amplify-central/page/docs/connect_manage_environ/index.html).
 * You must have [a service account in Amplify Central](https://docs.axway.com/bundle/platform-management/page/docs/management_guide/organizations/managing_organizations/index.html#managing-service-accounts) with the following properties:
     * "Central Admin" in `Org Roles`
     * "Client Certificate" in `authentication`
 
 ## Create Kubernetes secret
 
-Streams needs the certificates associated with your service account to authenticate to Amplify Central.
-Create a secret containing those certificates:
+Streams requires the certificates associated with your service account to authenticate to Amplify Central. The following is an example of how to create a secret containing those certificates:
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -33,7 +32,7 @@ kubectl -n "${NAMESPACE}" create secret generic central-auth-credentials \
 
 ## Update your custom Helm values
 
-Add your organization ID, your environment name, and the clientID associated to your service account to your custom Helm values for the installation:
+Add your organization ID, your environment name, and the clientID associated to your service account to your custom Helm values for the installation. For example:
 
 ```yml
 discoveryAgent:
@@ -45,6 +44,4 @@ central:
     clientID: ""
 ```
 
-You can then [proceed with the installation](/docs/install/#amplify-central-integration).
-
-If you have already installed Streams without enabling this integration, you can perform a Helm upgrade instead (don't forget to provide again your other custom values).
+You Streams installation is now connected to Amplify Central. You can [proceed with your Streams installation](/docs/install/#amplify-central-integration), or if you have already installed Streams without enabling this integration, you can perform a Helm upgrade instead. In this case, ensure to provide the same custom values you used for your original installation.
