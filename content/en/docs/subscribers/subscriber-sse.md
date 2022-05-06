@@ -83,7 +83,7 @@ If the client requests a subscription mode not allowed by the configuration of t
 
 ## How SSE connection works
 
-After you connect to an SSE server, you receive an HTTP `200 OK` response and the connection remains alive - as long as the client, or the server, does not end it, and everything continues to happen afterwards, including errors (for example, authentication errors, bad requests, and son on).
+After you connect to an SSE server, you receive an HTTP `200 OK` response and the connection remains alive - as long as the client, or the server, does not end it, and all events related to the subscription continue to be processed afterwards, including errors (for example, authentication errors, bad requests, and son on).
 
 SSE is a text-based protocol. The following is an example of the response of the server after the connection is successfully established and a first message has been published:
 
