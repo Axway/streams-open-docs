@@ -3,24 +3,24 @@ title: SSE Subscriber
 linkTitle: SSE Subscriber
 weight: 2
 date: 2019-04-02
-description: Learn how to configure and use the Streams Server-Sent Events Subscriber.
+description: Learn how to configure and use the Streams server-sent events subscriber.
 ---
 
-Server-Sent Events (SSE) is part of the HTML5 standard. SSEs are sent over traditional HTTP, so they do not require a special protocol to work. SSE includes important features, such as `Last-Event-Id` header support, automatic client reconnection, and heterogeneous event handling.
+Server-sent events (SSE) is part of the HTML5 standard. SSEs are sent over traditional HTTP, so they do not require a special protocol to work. SSE includes important features, such as `Last-Event-Id` header support, automatic client reconnection, and heterogeneous event handling.
 
 ## Subscribe to a topic via SSE with provisioning
 
-This mode is used when someone wants to control how a Streams topic is consumed.
+Use this mode when you want to control how a Streams topic is consumed.
 
 ### Provision a SSE subscription
 
-You can create a SSE subscription by making an HTTP Post request on the following endpoint:
+You can create a SSE subscription by making an HTTP post request on the following endpoint:
 
 ```
 POST /streams/subscribers/sse/api/v1/topics/{topicID}/subscriptions
 ```
 
-The body must contain a JSON SSE subscription configuration as the following example:
+The request body must contain a JSON SSE subscription configuration as following:
 
 ```json
 {
@@ -28,7 +28,7 @@ The body must contain a JSON SSE subscription configuration as the following exa
 }
 ```
 
-| Configuration Entry | Mandatory | Default value | Description |
+| Configuration entry | Mandatory | Default value | Description |
 |---------------------|-----------|---------------|-------------|
 | subscriptionMode | no | Default subscription mode defined in the topic's configuration | For more information, see section [subscription modes](/docs/subscribers/#subscription-modes). |
 
@@ -47,11 +47,11 @@ curl -v "${BASE_URL}/streams/subscribers/sse/api/v1/subscriptions/${SUBSCRIPTION
 
 `subscription-id` is the unique identifier of the provisioned subscription you wish to use.
 
-If the connection is successfully established, Streams shows with a `200 OK` and a _Content-Type: text/event-stream_ responses.
+If the connection is successfully established, Streams returns `200 OK` and _Content-Type: text/event-stream_ responses.
 
 ## Subscribe to a topic via SSE without provisioning
 
-This mode is used when the end-user needs to specify the subscription mode. An automatic provision will be done with a disposable SSE subscription (deleted after the SSE channel disconnection) configured with the desired subscription mode.
+Use this mode when you need to specify the subscription mode. An automatic provision will be done with a disposable SSE subscription (deleted after the SSE channel disconnection) configured with the desired subscription mode.
 
 To subscribe to a topic, open a terminal and run the following cURL command:
 
@@ -64,13 +64,13 @@ curl -v "${BASE_URL}/streams/subscribers/sse/api/v1/topics/${TOPIC_ID}"
 
 `topic-id` is the unique identifier of the topic you want to subscribe to.
 
-If the connection is successfully established, Streams shows with a `200 OK` and a _Content-Type: text/event-stream_ responses.
+If the connection is successfully established, Streams returns `200 OK` and _Content-Type: text/event-stream_ responses.
 
-When the SSE channel is stopped by the user, the subscription configuration will be automatically deleted.
+When the SSE channel is stopped by the user, the subscription configuration is automatically deleted.
 
 ### Select a subscription mode
 
-The client can select the subscription mode by setting the `Accept` header in its subscription request:
+You can select the subscription mode by setting the `Accept` header in its subscription request:
 
 | Subscription Mode | Accept Header Value |
 |-------------------|---------------------|
@@ -79,11 +79,11 @@ The client can select the subscription mode by setting the `Accept` header in it
 | event | `application/vnd.axway.streams+event` |
 | default | `""` or  `*/*` or `text/event-stream` |
 
-If the client requests a subscription mode not allowed by the configuration of the topic, a `406 Not Acceptable` is returned. For more information, see [subscription modes](/docs/subscribers/#subscription-modes) and [subscription errors](/docs/subscribers/subscribers-errors/).
+If the client requests a subscription mode not allowed by the configuration of the topic, a `406 Not Acceptable` error is returned. For more information, see [subscription modes](/docs/subscribers/#subscription-modes) and [subscription errors](/docs/subscribers/subscribers-errors/).
 
 ## How SSE connection works
 
-When you connect to an SSE server, you receive an HTTP `200 OK`. However, the connection remains alive - as long as the client, or the server, does not end it, and everything continues to happen afterwards, including errors (for example, authentication errors, bad requests, and son on).
+After you connect to an SSE server, you receive an HTTP `200 OK` response and the connection remains alive - as long as the client, or the server, does not end it, and everything continues to happen afterwards, including errors (for example, authentication errors, bad requests, and son on).
 
 SSE is a text-based protocol. The following is an example of the response of the server after the connection is successfully established and a first message has been published:
 
@@ -151,7 +151,7 @@ curl -v "${BASE_URL}/streams/subscribers/sse/api/v1/topics/${TOPIC_ID}" -H "Last
 
 In certain cases, some legacy network infrastructure may drop HTTP connections after a short timeout. To protect against such behaviors, Streams sends the client a comment line (starting with a ':' character) every 5 seconds. This comment line is ignored by the SSE client and has no effect other than a very limited network consumption.
 
-When no change is detected by Streams, the subscribers gets those heartbeats repeatedly until an event is finally sent.
+When no change is detected by Streams, the subscribers get those heartbeats repeatedly until an event is finally sent.
 
 ## Deactivate a SSE subscription
 
@@ -171,20 +171,18 @@ The body must contain a JSON with the suspended status as the following example:
 
 ### Deactivation status codes
 
-Below the list of HTTP status codes that can be returned when deleting the webhook subscription
+The following table shows HTTP status codes that can be returned when deleting the webhook subscription:
 
 | Code          | Comment |
 |---------------|---------|
 | 200 Ok        | Indicates that the subscription has been successfully suspended.
 | 404 Not found | Indicates that the provided identifier does not correspond to an existing SSE subscription.
 
-When the subscription has `suspended` status, it can no longer be used to open an SSE channel and if an SSE channel was already open it will be closed.
-
-To reactivate it, follow the same procedure with `active` value (instead of `suspended`).
+When the subscription has `suspended` status, it can no longer be used to open an SSE channel and if an SSE channel was already open it will be closed. To reactivate it, follow the same procedure with `active` value, instead of `suspended`.
 
 ## Delete a SSE subscription
 
-To delete an existing SSE subscription, simply delete the corresponding SSE subscription with following request:
+To delete an existing SSE subscription, simply delete the corresponding SSE subscription using the following request:
 
 ```
 DELETE /streams/subscribers/sse/api/v1/subscriptions/{subscriptionId}
@@ -192,7 +190,7 @@ DELETE /streams/subscribers/sse/api/v1/subscriptions/{subscriptionId}
 
 ### Delete status codes
 
-Below the list of HTTP status codes that can be returned when deleting the SSE subscription
+The following table shows HTTP status codes that can be returned when deleting the SSE subscription:
 
 | Code | Comment |
 |------|---------|
@@ -209,7 +207,7 @@ GET /streams/subscribers/sse/api/v1/subscriptions/{subscriptionId}
 
 ### Get status codes
 
-Below the list of HTTP status codes that can be returned when trying to get a SSE subscription:
+The following table shows HTTP status codes that can be returned when trying to get a SSE subscription:
 
 | Code | Comment |
 |------|---------|
@@ -224,8 +222,6 @@ To get existing subscriptions (disposable subscriptions included), use the follo
 GET /streams/subscribers/sse/api/v1/topics/{topicId}/subscriptions
 ```
 
+The only field name allowed for sorting is **subscriptionMode**.
+
 For more information on how pagination and sorting work, see [Pagination](/docs/topics-api/#pagination).
-
-The field names allowed for sorting are :
-
-* subscriptionMode
