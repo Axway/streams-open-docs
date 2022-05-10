@@ -53,7 +53,7 @@ The Kafka subscriber supports connection with external kafka broker configured w
 
 {{< alert title="Note" >}}SSL and SASL must be activated simultaneously on the kafka broker. The Kafka subscriber does not support SASL configured without SSL for transport layer{{< /alert >}}
 
-The following table describes the security configuration that could be setup when creating a kafka subscription:
+The following table describes the security configuration that you can setup when creating a kafka subscription:
 
 | Configuration Entry | Mandatory | Default value | Description                                                                                                                          |
 |---------------------|-----------|---------------|--------------------------------------------------------------------------------------------------------------------------------------|
@@ -169,9 +169,11 @@ The field names allowed for sorting are:
 
 ## Kafka record
 
-As soon as the publisher starts to publish data, the kafka subscribers start to receive the message, and they send a record with custom headers and a payload.
+As soon as the publisher starts to publish data, the kafka subscribers start to receive the messages, and they send a record with custom headers and a payload.
 
 ### Record headers
+
+The following table describes the custom headers, which are added to the messages.
 
 | Header name | Description |
 |-------------|-------------|
@@ -180,6 +182,6 @@ As soon as the publisher starts to publish data, the kafka subscribers start to 
 | X-Axway-Streams-Event-Id | Identifier of the event. |
 | X-Axway-Streams-Event-Type | Type of the payload (snapshot, patch or error). |
 
-#### Record Payload
+### Record payload
 
-Refer to [subscription modes](/docs/subscribers/#subscription-modes) and [subscription error](/docs/subscribers/subscribers-errors/) section for more details.
+The payload of the record contains your actual data, for example, [events and snapshots](/docs/subscribers/#subscription-modes), and [subscription errors](/docs/subscribers/subscribers-errors/).
