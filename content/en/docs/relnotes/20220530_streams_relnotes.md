@@ -9,6 +9,14 @@ date: 2022-04-05
 
 Streams is available as a set of Docker containers deployable in Kubernetes by using a Helm chart. For a summary of the system requirements, see [Install Streams](/docs/install/).
 
+## New features and enhancements
+
+The following new features and enhancements are available in this update:
+
+### Kafka subscription configured with SASL and SSL
+
+The Streams Kafka subscriber can now authenticate and use traffic encryption when you setup a connection with a downstreams Kafka cluster. For more information on how to use this new capability, see [Kafka Subscriber documentation](/docs/subscribers/subscriber-kafka/#security-configuration-with-sasl-and-ssl).
+
 ## Important changes
 <!-- Use this section to describe any changes in the behavior of the product (as a result of features or fixes), for example, new Java system properties in the jvm.xml file. This section could also be used for any important information that doesn't fit elsewhere. -->
 
