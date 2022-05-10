@@ -12,9 +12,9 @@ Follow this section to integrate Streams with [Amplify Central](https://docs.axw
 
 * You must know your Amplify Central organization ID.
 * You must have an environment in which you wish to publish the Streams assets. For more information on how to create a new environment, see [Connect and manage your environment](https://docs.axway.com/bundle/amplify-central/page/docs/connect_manage_environ/index.html).
-* You must have [a service account in Amplify Central](https://docs.axway.com/bundle/platform-management/page/docs/management_guide/organizations/managing_organizations/index.html#managing-service-accounts) with the following properties:
-    * "Central Admin" in `Org Roles`
-    * "Client Certificate" in `authentication`
+* You must have [a service account in Amplify Central](https://docs.axway.com/bundle/platform-management/page/docs/management_guide/organizations/managing_organizations/index.html#managing-service-accounts) with the following configuration:
+    * **Org Roles**: Central Admin
+    * **Authentication method**: Client Certificate
 
 ## Create Kubernetes secret
 
@@ -44,4 +44,6 @@ central:
     clientID: ""
 ```
 
-You Streams installation is now connected to Amplify Central. You can [proceed with your Streams installation](/docs/install/#amplify-central-integration), or if you have already installed Streams without enabling this integration, you can perform a Helm upgrade instead. In this case, ensure to provide the same custom values you used for your original installation.
+You Streams installation is now connected to Amplify Central.
+
+You can [proceed with your Streams installation](/docs/install/#amplify-central-integration), or if you have already installed Streams without enabling this integration, you can perform a Helm upgrade instead. In this case, ensure to provide the same custom values you used for your original installation.

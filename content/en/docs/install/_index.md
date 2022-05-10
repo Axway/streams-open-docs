@@ -8,7 +8,7 @@ no_list: true
 description: Learn how to install Streams on-premise or deploy it in your private cloud, configure a helm chart, and validate the installation.
 ---
 
-This section covers recommended steps to install Streams either on development environment or production environment.
+This section covers recommended steps to install Streams both on development environment and production environment.
 
 ## Prerequisites
 
@@ -68,8 +68,7 @@ We recommend that you use the Amplify Platform repository for a custom docker re
 ### Get your service account
 
 * You must be entitled to Streams in your Amplify Central organisation: you should find the Streams artifacts listed on the [repository](https://repository.axway.com/home)
-* You must have [a service account in Amplify Central](https://docs.axway.com/bundle/platform-management/page/docs/management_guide/organizations/managing_organizations/index.html#managing-service-accounts) with the following property:
-    * "Client Secret" in `authentication`
+* You must have [a service account in Amplify Central](https://docs.axway.com/bundle/platform-management/page/docs/management_guide/organizations/managing_organizations/index.html#managing-service-accounts) with the **Authentication method** set to **Client Secret**.
 
 ### Create Kubernetes secret
 
@@ -367,8 +366,7 @@ TLS endpoints which Streams services connect to must have a valid TLS certificat
 
 ## Amplify Central integration
 
-Streams can connect to [Amplify Central](https://docs.axway.com/bundle/amplify-central/page/docs/index.html) and expose assets in order to leverage tools like the [Amplify Marketplace](https://docs.axway.com/bundle/amplify-central/page/docs/manage_marketplace/index.html).
-This is disabled by default. Enable through the following additional steps: [Amplify Central Integration](/docs/install/amplify-central-integration).
+Streams can connect to [Amplify Central](https://docs.axway.com/bundle/amplify-central/page/docs/index.html) and expose assets to leverage tools like the [Amplify Marketplace](https://docs.axway.com/bundle/amplify-central/page/docs/manage_marketplace/index.html). This integration is disabled by default. For more information on how to enable this feature, see [Amplify Central Integration](/docs/install/amplify-central-integration).
 
 ## Customize your installation
 
