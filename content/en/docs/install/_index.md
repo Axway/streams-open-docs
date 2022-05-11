@@ -65,8 +65,9 @@ kubectl create namespace "${NAMESPACE}"
 Docker images must be hosted in a docker registry accessible from your Kubernetes (K8s) cluster.
 We recommend that you use the Amplify Platform repository for a custom docker registry. Alternatively, you can use [your own custom Docker registry](/docs/install/customize-install#use-a-custom-docker-registry).
 
-### Get your service account
+Before you start using Amplify Platform as your Docker registry, ensure the following:
 
+* Your Streams artifacts are listed on the
 * You must be entitled to Streams in your Amplify Central organisation: you should find the Streams artifacts listed on the [repository](https://repository.axway.com/home)
 * You must have [a service account in Amplify Central](https://docs.axway.com/bundle/platform-management/page/docs/management_guide/organizations/managing_organizations/index.html#managing-service-accounts) with the **Authentication method** set to **Client Secret**.
 
@@ -364,9 +365,9 @@ TLS endpoints which Streams services connect to must have a valid TLS certificat
 
 3. Set the [Helm parameter](/docs/install/helm-parameters-reference/) `streams.extraCertificatesSecrets` to your `$SECRET_NAME`. If you have more than one secrets, they must be separated by a comma.
 
-## Amplify Central integration
+## Integrate with Amplify Central
 
-Streams can connect to [Amplify Central](https://docs.axway.com/bundle/amplify-central/page/docs/index.html) and expose assets to leverage tools like the [Amplify Marketplace](https://docs.axway.com/bundle/amplify-central/page/docs/manage_marketplace/index.html). This integration is disabled by default. For more information on how to enable this feature, see [Amplify Central Integration](/docs/install/amplify-central-integration).
+Streams can connect to [Amplify Central](https://docs.axway.com/bundle/amplify-central/page/docs/index.html) and expose assets to leverage tools like the [Amplify Marketplace](https://docs.axway.com/bundle/amplify-central/page/docs/manage_marketplace/index.html). This integration is disabled by default. For more information on how to enable it, see [Amplify Central Integration](/docs/install/amplify-central-integration).
 
 ## Customize your installation
 
@@ -392,11 +393,11 @@ helm install "${HELM_RELEASE_NAME}" . \
   -n "${NAMESPACE}"
 ```
 
-### High availability configuration (recommend for production)
+### High availability configuration
 
-The following command deploys Streams on the Kubernetes cluster in High availability. This might take a few minutes.
+The following command deploys Streams on the Kubernetes cluster in high availability. The deploy might take a few minutes.
 
-{{< alert title="Note" >}}This is recommended for production environments.{{< /alert >}}
+{{< alert title="Note" >}}This configuration is recommended for production environments.{{< /alert >}}
 
 ```sh
 export NAMESPACE="my-namespace"

@@ -46,4 +46,4 @@ central:
 
 You Streams installation is now connected to Amplify Central.
 
-You can [proceed with your Streams installation](/docs/install/#amplify-central-integration), or if you have already installed Streams without enabling this integration, you can perform a Helm upgrade instead. In this case, ensure to provide the same custom values you used for your original installation.
+You can [proceed with your Streams installation](/docs/install/#amplify-central-integration), or if you have already installed Streams without enabling this integration, you can perform a Helm upgrade instead. If upgrading the Helm chart, ensure to provide the same custom values you used for your original installation and that your Streams Helm chart contains the ``discoveryAgent`` section in its `values.yaml` file.
