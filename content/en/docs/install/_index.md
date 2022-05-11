@@ -62,19 +62,16 @@ kubectl create namespace "${NAMESPACE}"
 
 ## Use Amplify Platform as your Docker registry
 
-Docker images must be hosted in a docker registry accessible from your Kubernetes (K8s) cluster.
-We recommend that you use the Amplify Platform repository for a custom docker registry. Alternatively, you can use [your own custom Docker registry](/docs/install/customize-install#use-a-custom-docker-registry).
+Docker images must be hosted in a docker registry accessible from your Kubernetes (K8s) cluster. We recommend that you use the Amplify Platform repository for a custom docker registry.  Alternatively, you can use [your own custom Docker registry](/docs/install/customize-install#use-a-custom-docker-registry).
 
 Before you start using Amplify Platform as your Docker registry, ensure the following:
 
-* Your Streams artifacts are listed on the
-* You must be entitled to Streams in your Amplify Central organisation: you should find the Streams artifacts listed on the [repository](https://repository.axway.com/home)
+* Your Streams artifacts are listed on the Amplify [repository](https://repository.axway.com/home) under your Amplify Central organization.
 * You must have [a service account in Amplify Central](https://docs.axway.com/bundle/platform-management/page/docs/management_guide/organizations/managing_organizations/index.html#managing-service-accounts) with the **Authentication method** set to **Client Secret**.
 
 ### Create Kubernetes secret
 
-Streams needs the credentials of your service account to pull images from the repository.
-Create a secret containing these credentials:
+Streams needs the credentials of your service account to pull images from the repository. The following is an example of how to create a secret containing these credentials:
 
 ```sh
 export NAMESPACE="my-namespace"
@@ -87,7 +84,7 @@ kubectl create secret docker-registry streams-docker-registry-secret --docker-se
 
 ## Configuration for development environment
 
-For a quick installation of Streams, the default settings target a development environment. For production environment settings, see [Configuration for production environment](#configuration-for-production-environment) section further down.
+For a quick installation of Streams, the default settings target a development environment. For production environment settings, see [Configuration for production environment](#configuration-for-production-environment) section.
 
 ### Embedded MariaDB settings
 
