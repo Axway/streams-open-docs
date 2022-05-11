@@ -11,7 +11,13 @@ Streams is available as a set of Docker containers deployable in Kubernetes by u
 
 ## New features and enhancements
 
-The following new features and enhancements are available in this update:
+The following new features and enhancements are available in this update.
+
+### Connect to Amplify Central to use Amplify Marketplace
+
+Now you can connect Streams to [Amplify Central](https://docs.axway.com/bundle/amplify-central/page/docs/index.html) to leverage tools like the [Amplify Marketplace](https://docs.axway.com/bundle/amplify-central/page/docs/manage_marketplace/index.html), where you can expose your Streams assets.
+
+For more information on how to set up this integration, see [Integrate with Amplify Central Marketplace](/docs/install/amplify-central-integration).
 
 ### Kafka subscription configured with SASL and SSL
 

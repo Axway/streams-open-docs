@@ -8,7 +8,7 @@ no_list: true
 description: Learn how to install Streams on-premise or deploy it in your private cloud, configure a helm chart, and validate the installation.
 ---
 
-This section covers recommended steps to install Streams either on development environment or production environment.
+This section covers recommended steps to install Streams both on development environment and production environment.
 
 ## Prerequisites
 
@@ -62,36 +62,24 @@ kubectl create namespace "${NAMESPACE}"
 
 ## Use Amplify Platform as your Docker registry
 
-Docker images must be hosted in a docker registry accessible from your Kubernetes (K8s) cluster. We recommend you to use the Amplify Platform repository for a custom docker registry. Alternatively, you can use [your own custom Docker registry](/docs/install/customize-install#use-a-custom-docker-registry).
+Docker images must be hosted in a docker registry accessible from your Kubernetes (K8s) cluster.
+We recommend that you use the Amplify Platform repository for a custom docker registry. Alternatively, you can use [your own custom Docker registry](/docs/install/customize-install#use-a-custom-docker-registry).
 
-To use the Amplify Platform as your container registry you must first ensure the following:
+Before you start using Amplify Platform as your Docker registry, ensure the following:
 
-* You can see our images with your organization on the Amplify repository search page.
-* You have administrator access to create a service account in your organization.
+* Your Streams artifacts are listed on the
+* You must be entitled to Streams in your Amplify Central organisation: you should find the Streams artifacts listed on the [repository](https://repository.axway.com/home)
+* You must have [a service account in Amplify Central](https://docs.axway.com/bundle/platform-management/page/docs/management_guide/organizations/managing_organizations/index.html#managing-service-accounts) with the **Authentication method** set to **Client Secret**.
 
-After you have verified that your images are loaded and that you have the correct level of access, you must create a service account, then create docker-registry secret with the information from your service account.
+### Create Kubernetes secret
 
-### Create a service account
-
-To create your service account, perform the following steps:
-
-1. Log in to the [Amplify Platform](https://platform.axway.com).
-2. Select your organization, and from the left menu, click **Service Accounts** (You should see all service accounts already created).
-3. Click **+ Service Account**, and fill in the mandatory fields:
-    * Enter a name for the service account.
-    * Choose `Client Secret` for the method.
-    * Choose `Platform-generated secret` for the credentials.
-4. Click **Save**
-5. Ensure to securely store the generated client secret because it will be required in further steps.
-
-### Create a secret
-
-To create a secret to use with the Amplify platform docker-registry, run the following command with the service account information:
+Streams needs the credentials of your service account to pull images from the repository.
+Create a secret containing these credentials:
 
 ```sh
 export NAMESPACE="my-namespace"
-export REGISTRY_USERNAME="my-service-account-client-id"
-export REGISTRY_PASSWORD="my-service-account-client-secret"
+export REGISTRY_USERNAME="<my-service-account-client-id>"
+export REGISTRY_PASSWORD="<my-service-account-client-secret>"
 export REGISTRY_SERVER="docker.repository.axway.com"
 
 kubectl create secret docker-registry streams-docker-registry-secret --docker-server="${REGISTRY_SERVER}"  --docker-username="${REGISTRY_USERNAME}" --docker-password="${REGISTRY_PASSWORD}" -n "${NAMESPACE}"
@@ -377,6 +365,10 @@ TLS endpoints which Streams services connect to must have a valid TLS certificat
 
 3. Set the [Helm parameter](/docs/install/helm-parameters-reference/) `streams.extraCertificatesSecrets` to your `$SECRET_NAME`. If you have more than one secrets, they must be separated by a comma.
 
+## Integrate with Amplify Central
+
+Streams can connect to [Amplify Central](https://docs.axway.com/bundle/amplify-central/page/docs/index.html) and expose assets to leverage tools like the [Amplify Marketplace](https://docs.axway.com/bundle/amplify-central/page/docs/manage_marketplace/index.html). This integration is disabled by default. For more information on how to enable it, see [Amplify Central Integration](/docs/install/amplify-central-integration).
+
 ## Customize your installation
 
 You can specify optional [Helm parameters](/docs/install/helm-parameters-reference/) to customize your installation.
@@ -398,22 +390,20 @@ export NAMESPACE="my-namespace"
 export HELM_RELEASE_NAME="my-release"
 
 helm install "${HELM_RELEASE_NAME}" . \
-  -f values.yaml \
   -n "${NAMESPACE}"
 ```
 
-### High availability configuration (recommend for production)
+### High availability configuration
 
-The following command deploys Streams on the Kubernetes cluster in High availability. This might take a few minutes.
+The following command deploys Streams on the Kubernetes cluster in high availability. The deploy might take a few minutes.
 
-{{< alert title="Note" >}}This is recommended for production environments.{{< /alert >}}
+{{< alert title="Note" >}}This configuration is recommended for production environments.{{< /alert >}}
 
 ```sh
 export NAMESPACE="my-namespace"
 export HELM_RELEASE_NAME="my-release"
 
 helm install "${HELM_RELEASE_NAME}" . \
-  -f values.yaml \
   -f values-ha.yaml \
   -n "${NAMESPACE}"
 ```
