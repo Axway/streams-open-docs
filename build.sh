@@ -168,3 +168,4 @@ function fRunHugo() {
 fCheckoutSubmodule
 fMergeContent
 fRunHugo
+echo "[INFO] Done."
