@@ -657,7 +657,7 @@ Apache ZooKeeper is used by our microservices and by Kafka (when embedded in ins
 Source Docker image:
 
 * Repository: bitnami/zookeeper
-* Tag: 3.7.0-debian-10-r338
+* Tag: 3.7.1-debian-10-r18
 
 Pod name: `streams-zookeeper`
 
