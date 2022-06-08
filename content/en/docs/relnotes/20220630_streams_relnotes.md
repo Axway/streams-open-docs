@@ -32,7 +32,7 @@ It is important, especially when upgrading from an earlier version, to be aware 
 
 The following Helm chart dependency images were upgraded:
 
-* Kafka new docker image tag: `2.8.1-debian-10-r43`
+* Kafka new docker image tag: `2.8.1-debian-10-r179`
 * Zookeeper new docker image tag: `3.7.1-debian-10-r18`
 * MariaDB new docker image tag: `10.4.24-debian-10-r47`
 * Nginx-ingress-controller new docker image tag: `1.1.2-debian-10-r27`
