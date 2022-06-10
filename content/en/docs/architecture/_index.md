@@ -20,7 +20,7 @@ Deploying Streams using Docker containers orchestrated by Kubernetes brings trem
 * Performance, logging, and monitoring aspects.
 * Backup and recovery, including disaster recovery.
 
-## Targe audience
+## Target audience
 
 The target audience for this guide is architects, developers, and operations personnel. To get the most value from this guide, the reader should have a good knowledge of Docker, Kubernetes, and APIs.
 
@@ -657,7 +657,7 @@ Apache ZooKeeper is used by our microservices and by Kafka (when embedded in ins
 Source Docker image:
 
 * Repository: bitnami/zookeeper
-* Tag: 3.7.0-debian-10-r338
+* Tag: 3.7.1-debian-10-r18
 
 Pod name: `streams-zookeeper`
 
