@@ -206,3 +206,46 @@ For example, to allow cross origin request from the domain name `https://origin-
 ```
 
 For more information, see [Nginx documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#enable-cors).
+
+## Activate Subscriber SSE security
+
+To secure SSE subscriptions, you must perform the following steps:
+
+* Provide an existing RSA public/private key pair or create a new one as following
+
+   ```bash
+   openssl genrsa -out key.pem 2048
+   openssl rsa -in key.pem -outform PEM -pubout -out cert.pem
+   ```
+
+* Create a kubernetes secret to store the RSA key pair
+
+   ```bash
+   kubectl create secret generic streams-subscriber-sse-jwt-secret --from-file=key=key.pem --from-file=cert=cert.pem -n ${NAMESPACE}
+   ```
+
+* Activate SSE subscriber Access Token generation/validation in the **values.yaml**
+
+   To secure SSE subscriptions (disabled by default) add the following lines under `subscriberSse` section:
+
+   ```yaml
+   subscriberSse:
+   
+   ...
+     # add the following lines to secure SSE Subscriber with JWT token
+     jwt:
+       secretName: streams-subscriber-sse-jwt-secret # secret name containing the JWT certificate
+       privateKeyName: key # secret key name for the JWT private key
+       publicKeyName: cert # secret key name for the JWT public key
+     serviceArgs:
+       streams:
+         subscriber:
+           sse:
+             jwt:
+               generator:
+                 enabled: true # set to true to activate the JWT token generation API
+                 issuer: https://streams.axway.com/streams/subscribers/sse/api/v1/auth 
+                 tokenLifetime: PT15M # JWT token expiration time: 15 minutes by default
+               validator:
+                 enabled: true # set to true to secure SSE connections using JWT Tokens
+   ```
