@@ -15,8 +15,12 @@ Follow this section to integrate Streams with [Amplify Central](https://docs.axw
 * You must have [a service account in Amplify Central](https://docs.axway.com/bundle/platform-management/page/docs/management_guide/organizations/managing_organizations/index.html#managing-service-accounts) with the following configuration:
     * **Org Roles**: Central Admin
     * **Authentication method**: Client Certificate
+* You must be authenticated with the [axway-cli](https://docs.axway.com/bundle/amplify-central/page/docs/integrate_with_central/cli_central/cli_install/index.html)
+* You must know your APIGateway base URL
+* You must know your APIManager host/port
+* You must know the public base URL of the Streams SSE subscriber
 
-## Create Kubernetes secret
+## Create your Kubernetes secret
 
 Streams requires the certificates associated with your service account to authenticate to Amplify Central. The following is an example of how to create a secret containing those certificates:
 
@@ -30,13 +34,50 @@ kubectl -n "${NAMESPACE}" create secret generic central-auth-credentials \
     --from-file=public_key.pem="${PUBLIC_KEY_PATH}"
 ```
 
+## Create your Axway Central secret
+
+Provision your APIManager credentials into a *Secret* resource on Central.
+
+1. Create and edit this YAML file *streams-apimanager-secret.yaml* with your own values:
+
+```yml
+group: management
+apiVersion: v1alpha1
+kind: Secret
+name: streams-apimanager-secret
+title: APIManager credentials secret for Streams
+metadata:
+  scope:
+    kind: Environment
+    name: <CHANGE_WITH_YOUR_ENVIRONMENT_NAME>
+spec:
+  data:
+    authUsername : <CHANGE_WITH_YOUR_USERNAME>
+    authPassword: <CHANGE_WITH_YOUR_PASSWORD>
+```
+
+2. Provision this *Secret* resource on Central:
+
+```sh
+axway central create -f ./streams-apimanager-secret.yaml
+```
+
+You should see a success message.
+
 ## Update your custom Helm values
 
-Add your organization ID, your environment name, and the clientID associated to your service account to your custom Helm values for the installation. For example:
+Add your organization ID, your environment name, the clientID associated to your service account, the APIGateway URL, the APIManager host/port and the public Streams SSE subscriber URL to your custom Helm values for the installation. For example:
 
 ```yml
 discoveryAgent:
   enabled: true
+  apigateway:
+    baseURL: ""
+  apimanager:
+    host: ""
+    port: 8075
+  subscriberSSE:
+    publicBaseURL: ""
 central:
   organizationID: ""
   environment: ""
