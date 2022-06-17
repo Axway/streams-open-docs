@@ -36,27 +36,27 @@ kubectl -n "${NAMESPACE}" create secret generic central-auth-credentials \
 
 ## Create your Axway Central secret
 
-Provision your APIManager credentials into a *Secret* resource on Central.
+You need to provision your APIManager credentials into a *Secret* resource on Central.
 
-1. Create and edit this YAML file *streams-apimanager-secret.yaml* with your own values:
+Create and edit this YAML file *streams-apimanager-secret.yaml* with your own values:
 
 ```yml
-group: management
-apiVersion: v1alpha1
-kind: Secret
-name: streams-apimanager-secret
-title: APIManager credentials secret for Streams
+group: "management"
+apiVersion: "v1alpha1"
+kind: "Secret"
+name: "streams-apimanager-secret"
+title: "APIManager credentials secret for Streams"
 metadata:
   scope:
-    kind: Environment
-    name: <CHANGE_WITH_YOUR_ENVIRONMENT_NAME>
+    kind: "Environment"
+    name: "<CHANGE_WITH_YOUR_ENVIRONMENT_NAME>"
 spec:
   data:
-    authUsername : <CHANGE_WITH_YOUR_USERNAME>
-    authPassword: <CHANGE_WITH_YOUR_PASSWORD>
+    authUsername : "<CHANGE_WITH_YOUR_USERNAME>"
+    authPassword: "<CHANGE_WITH_YOUR_PASSWORD>"
 ```
 
-2. Provision this *Secret* resource on Central:
+Provision this *Secret* resource on Central:
 
 ```sh
 axway central create -f ./streams-apimanager-secret.yaml
