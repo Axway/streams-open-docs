@@ -224,28 +224,12 @@ To secure SSE subscriptions, you must perform the following steps:
    kubectl create secret generic streams-subscriber-sse-jwt-secret --from-file=key=key.pem --from-file=cert=cert.pem -n ${NAMESPACE}
    ```
 
-* Activate SSE subscriber Access Token generation/validation in the **values.yaml**
+* Activate SSE subscriber Access Token generation/validation
 
-   To secure SSE subscriptions (disabled by default) add the following lines under `subscriberSse` section:
-
-   ```yaml
-   subscriberSse:
-   
-   ...
-     # add the following lines to secure SSE Subscriber with JWT token
-     jwt:
-       secretName: streams-subscriber-sse-jwt-secret # secret name containing the JWT certificate
-       privateKeyName: key # secret key name for the JWT private key
-       publicKeyName: cert # secret key name for the JWT public key
-     serviceArgs:
-       streams:
-         subscriber:
-           sse:
-             jwt:
-               generator:
-                 enabled: true # set to true to activate the JWT token generation API
-                 issuer: https://streams.axway.com/streams/subscribers/sse/api/v1/auth 
-                 tokenLifetime: PT15M # JWT token expiration time: 15 minutes by default
-               validator:
-                 enabled: true # set to true to secure SSE connections using JWT Tokens
-   ```
+  To secure SSE subscriptions (disabled by default) add the following `values-secured-subscriber-sse.yaml` file to your Helm install command line. Example:
+  ```sh
+      helm install "${HELM_RELEASE_NAME}" . \
+        -f values.yaml \
+        -f values-secured-subscriber-sse.yaml \ 
+        -n "${NAMESPACE}"
+  ```
