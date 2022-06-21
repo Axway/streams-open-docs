@@ -189,4 +189,4 @@ Most of the time, to upgrade the Streams RBAC policies, you just have to downloa
 In case of error during the deployment of the new policies proceed as following:
 
 * Unpublish and delete any Streams FrontEnd/Backend APIs in the API Manager.
-* do a full installation of the new policies as described in chapter [Configuration and deployment](/docs/install/apim-integration#configuration-and-deployment)
+* Do a full installation of the new policies as described in chapter [Configuration and deployment](/docs/install/apim-integration#configuration-and-deployment)
