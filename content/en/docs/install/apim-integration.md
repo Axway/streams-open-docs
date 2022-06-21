@@ -42,7 +42,7 @@ Import the following Streams URLs as Backend APIs, click **API > Backend API > N
 | `Streams Subscribers SSE` | `https://<streams-cluster>/streams/subscribers/sse/api/v1/openapi.yaml` |
 | `Streams Subscribers SSE Auth` | `https://<streams-cluster>/streams/subscribers/sse/api/v1/openapi-auth.yaml` |
 
-{{< alert title="Note" >}}Replace `<streams-cluster>` by the correct streams cluster address.{{< /alert >}}
+{{< alert title="Note" >}}Replace `<streams-cluster>` by the correct [streams hostname](docs/install/#ingress-hostname).{{< /alert >}}
 
 #### Create Streams Frontend APIs
 
