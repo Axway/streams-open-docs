@@ -13,7 +13,7 @@ Follow this section to secure Streams Subscribers API with [Amplify API Manageme
 * You must have access to an APIM environment (Policy Studio, API Manager, API Gateway)
 * This environment must have access to the Streams cluster.
 * Streams must be deployed with [Subscriber SSE Security](/docs/install/customize-install/#activate-subscriber-sse-security) feature enabled.
-* Streams APIM RBAC policies file must be have been downloaded and accessible to your Policy Studio.
+* You must have downloaded the Streams APIM RBAC policies file and made it available to your Policy Studio.
 
 ## Configuration and deployment
 
