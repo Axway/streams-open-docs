@@ -226,10 +226,9 @@ To secure SSE subscriptions, you must perform the following steps:
 
 * Activate SSE subscriber Access Token generation/validation
 
-  To secure SSE subscriptions (disabled by default) add the following `values-secured-subscriber-sse.yaml` file to your Helm install command line. Example:
+  To secure SSE subscriptions (disabled by default) add the provided `values-secured-subscriber-sse.yaml` values file to your Helm install command line. Example:
   ```sh
-      helm install "${HELM_RELEASE_NAME}" . \
-        -f values.yaml \
-        -f values-secured-subscriber-sse.yaml \ 
-        -n "${NAMESPACE}"
+      helm install "${HELM_RELEASE_NAME}" . -f values.yaml -f values-secured-subscriber-sse.yaml -n "${NAMESPACE}"
   ```
+
+{{< alert title="Note" >}}Replace `<streams-cluster>` by the correct streams cluster address.{{< /alert >}}
