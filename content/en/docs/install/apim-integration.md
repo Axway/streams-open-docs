@@ -1,5 +1,5 @@
 ---
-title: Integrate with APIM
+title: Integrate Streams with API Management
 linkTitle: Integrate with APIM
 weight: 15
 date: 2022-06-16
@@ -26,7 +26,7 @@ Select **Server Settings > API Manager** and configure policies as following:
 * *0- Streams RBAC routing* in **Routing Policies**
 * *0- Streams RBAC response* in **Response Policies**
 
-Deploy the created configuration to the API Gateway instances using the **Deploy** button
+Save the configuration with the **Save** button and from the project homepage, deploy the configuration to the API Gateway instances using the **Deploy** button.
 
 ### In API Manager
 
@@ -73,25 +73,7 @@ You Streams installation is now secured by APIM.
 
 ## Verify installation
 
-To access Streams APIs, an Authorization header must be provided. The format depends on the Security profile chosen during the Frontend creation:
-
-* For `OAuth` Security Profile
-
-  Use the **client_id** and **client_secret** created in your application
-
-  ```bash
-  curl -X POST '<API_GATEWAY_INGRESS>/api/oauth/token' \
-  --data-raw 'grant_type=client_credentials&client_id=<APP_CLIENT_ID>&client_secret=<APP_CLIENT_SECRET>'
-  ```
-
-  This should return a JSON containing a field **access_token** that need to be used as Authorization Bearer header like this:
-
-  ```bash
-  AUTHORIZATION_HEADER="Authorization: Bearer <ACCESS_TOKEN_RETURNED>"
-  ```
-* For `API Key` Security Profile
-
-  Use the **keyId** created in your application and set the following env variable:
+To access Streams APIs, an Authorization header must be provided. Use the **keyId** created in your application and set the following env variable:
 
   ```bash
   AUTHORIZATION_HEADER="KeyId: <KEY_ID_RETURNED>"
