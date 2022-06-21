@@ -71,53 +71,61 @@ If you are setting those parameters through `--set` on the command line, you mus
 
 ## Streams parameters
 
-| Parameter                             | Description                         | Mandatory | Default value |
-| ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| `acceptGeneralConditions`               | Accept General Conditions           | yes       | N/A           |
-| `images.repository`                     | Streams Images repository           | yes       | docker.repository.axway.com/axwaystreams-docker-prod-ptx/2.0         |
-| `imagePullSecrets[0].name`              | Image registry keys                 | no        | streams-docker-registry-secret           |
-| `hub.replicaCount`                      | Hub replica count                   | no        | 1 (2 HA)             |
-| `hub.service.port`                | HTTP port to reach the Streams Topics API | no        | 8080          |
-| `subscriberSse.enabled`             | Enable/Disable Subscriber SSE  | no        | true          |
-| `subscriberSse.replicaCount`        | Subscriber SSE replica count    | no        | 1 (2 HA)             |
-| `subscriberSse.service.port` | HTTP port to subscribe to a topic          | no        | 8080          |
-| `subscriberWebhook.enabled`             | Enable/Disable Subscriber Webhook  | no        | true          |
-| `subscriberWebhook.replicaCount`        | Subscriber Webhook replica count    | no        | 1 (2 HA)             |
-| `subscriberWebhook.service.port` | HTTP port to subscribe to a topic          | no        | 8080          |
-| `subscriberWebSocket.enabled`             | Enable/Disable Subscriber WebSocket  | no        | false          |
-| `subscriberWebSocket.replicaCount`        | Subscriber WebSocket replica count    | no        | 1 (2 HA)             |
-| `subscriberWebSocket.service.port` | HTTP port to subscribe to a topic          | no        | 8080          |
-| `subscriberKafka.enabled`             | Enable/Disable Subscriber Kafka  | no        | false          |
-| `subscriberKafka.replicaCount`        | Subscriber Kafka replica count    | no        | 1 (2 HA)             |
-| `subscriberKafka.service.port` | HTTP port to subscribe to a topic          | no        | 8080          |
-| `publisherHttpPoller.enabled`             | Enable/Disable Publisher HTTP Poller  | no        | true          |
-| `publisherHttpPoller.replicaCount`      | Publisher HTTP Poller replica count | no        | 1 (2 HA)            |
-| `publisherHttpPost.enabled`             | Enable/Disable Publisher HTTP Post  | no        | true          |
-| `publisherHttpPost.replicaCount`        | Publisher HTTP Post replica count   | no        | 1 (2 HA)             |
-| `publisherHttpPost.service.port` | HTTP port to publish to a topic     | no        | 8080          |
-| `publisherKafka.enabled`                | Enable/Disable Publisher Kafka      | no        | false          |
-| `publisherKafka.replicaCount`           | Publisher Kafka replica count       | no        | 1 (2 HA)             |
-| `publisherSfdc.enabled`                 | Enable/Disable Publisher SFDC       | no        | false         |
-| `publisherSfdc.replicaCount`            | Publisher SFDC replica count        | no        | 1 (2 HA)             |
-| `streams.extraCertificatesSecrets`      | List of secrets containing TLS certs to add as trusted by Streams | no | [] |
-| `actuator.prometheus.enabled`           | Activate metrics endpoints for Streams services | no | false    |
-| `streams.serviceArgs.spring.datasource.hikari.maxLifetime` | Maximum lifetime in milliseconds for a Streams database connection | no | 280000 |
-| `discoveryAgent.enabled` | Activate integration with Amplify Central                      | yes | false                        |
-| `central.organizationID` | Your Amplify Central organization ID                           | no  | N/A                          |
-| `central.environment`    | Your Amplify Central environment, as seen in topology          | no  | N/A                          |
-| `central.url`            | Amplify Central URL                                            | no  | [https://apicentral.axway.com](https://apicentral.axway.com) |
-| `central.auth.clientID`  | Client ID in the service account associated with your key pair | no  | N/A                          |
-| `central.auth.url`       | Amplify Central authentication URL                             | no  | [https://login.axway.com/auth](https://login.axway.com/auth) |
+| Parameter                                                  | Description                                                                                | Mandatory | Default value                                                |
+|------------------------------------------------------------|--------------------------------------------------------------------------------------------|-----------|--------------------------------------------------------------|
+| `acceptGeneralConditions`                                  | Accept General Conditions                                                                  | yes       | N/A                                                          |
+| `images.repository`                                        | Streams Images repository                                                                  | yes       | docker.repository.axway.com/axwaystreams-docker-prod-ptx/2.0 |
+| `imagePullSecrets[0].name`                                 | Image registry keys                                                                        | no        | streams-docker-registry-secret                               |
+| `hub.replicaCount`                                         | Hub replica count                                                                          | no        | 1 (2 HA)                                                     |
+| `hub.service.port`                                         | HTTP port to reach the Streams Topics API                                                  | no        | 8080                                                         |
+| `subscriberSse.enabled`                                    | Enable/Disable Subscriber SSE                                                              | no        | true                                                         |
+| `subscriberSse.replicaCount`                               | Subscriber SSE replica count                                                               | no        | 1 (2 HA)                                                     |
+| `subscriberSse.service.port`                               | HTTP port to subscribe to a topic                                                          | no        | 8080                                                         |
+| `subscriberWebhook.enabled`                                | Enable/Disable Subscriber Webhook                                                          | no        | true                                                         |
+| `subscriberWebhook.replicaCount`                           | Subscriber Webhook replica count                                                           | no        | 1 (2 HA)                                                     |
+| `subscriberWebhook.service.port`                           | HTTP port to subscribe to a topic                                                          | no        | 8080                                                         |
+| `subscriberWebSocket.enabled`                              | Enable/Disable Subscriber WebSocket                                                        | no        | false                                                        |
+| `subscriberWebSocket.replicaCount`                         | Subscriber WebSocket replica count                                                         | no        | 1 (2 HA)                                                     |
+| `subscriberWebSocket.service.port`                         | HTTP port to subscribe to a topic                                                          | no        | 8080                                                         |
+| `subscriberKafka.enabled`                                  | Enable/Disable Subscriber Kafka                                                            | no        | false                                                        |
+| `subscriberKafka.replicaCount`                             | Subscriber Kafka replica count                                                             | no        | 1 (2 HA)                                                     |
+| `subscriberKafka.service.port`                             | HTTP port to subscribe to a topic                                                          | no        | 8080                                                         |
+| `publisherHttpPoller.enabled`                              | Enable/Disable Publisher HTTP Poller                                                       | no        | true                                                         |
+| `publisherHttpPoller.replicaCount`                         | Publisher HTTP Poller replica count                                                        | no        | 1 (2 HA)                                                     |
+| `publisherHttpPost.enabled`                                | Enable/Disable Publisher HTTP Post                                                         | no        | true                                                         |
+| `publisherHttpPost.replicaCount`                           | Publisher HTTP Post replica count                                                          | no        | 1 (2 HA)                                                     |
+| `publisherHttpPost.service.port`                           | HTTP port to publish to a topic                                                            | no        | 8080                                                         |
+| `publisherKafka.enabled`                                   | Enable/Disable Publisher Kafka                                                             | no        | false                                                        |
+| `publisherKafka.replicaCount`                              | Publisher Kafka replica count                                                              | no        | 1 (2 HA)                                                     |
+| `publisherSfdc.enabled`                                    | Enable/Disable Publisher SFDC                                                              | no        | false                                                        |
+| `publisherSfdc.replicaCount`                               | Publisher SFDC replica count                                                               | no        | 1 (2 HA)                                                     |
+| `streams.extraCertificatesSecrets`                         | List of secrets containing TLS certs to add as trusted by Streams                          | no        | []                                                           |
+| `actuator.prometheus.enabled`                              | Activate metrics endpoints for Streams services                                            | no        | false                                                        |
+| `streams.serviceArgs.spring.datasource.hikari.maxLifetime` | Maximum lifetime in milliseconds for a Streams database connection                         | no        | 280000                                                       |
+| `discoveryAgent.enabled`                                   | Activate integration with Amplify Central                                                  | yes       | false                                                        |
+| `discoveryAgent.apigateway.baseURL`                        | The base URL of the deployed Axway APIGateway                                              | yes       | N/A                                                          |
+| `discoveryAgent.apimanager.host`                           | The APIManager host                                                                        | yes       | N/A                                                          |
+| `discoveryAgent.apimanager.port`                           | The APIManager port                                                                        | no        | 8075                                                         |
+| `discoveryAgent.apimanager.auth.username`                  | Link to the Secret provisioned on Central                                                  | no        | @Secret.streams-apimanager-secret.authUsername               |
+| `discoveryAgent.apimanager.auth.password`                  | Link to the Secret provisioned on Central                                                  | no        | @Secret.streams-apimanager-secret.authPassword               |
+| `discoveryAgent.apimanager.streamsJWTTokenAPIFrontendName` | The front-end name of the Streams JWT token API provisioned on the API Manager               | no        | Streams Subscribers SSE Auth                                 |
+| `discoveryAgent.apimanager.streamsJWTTokenAPISecurityType` | The security type configured for the Streams JWT token API provisioned on the API Manager   | no        | api-key                                                      |
+| `discoveryAgent.subscriberSSE.publicBaseURL`               | The public URL of the Streams subscriber SSE API                                           | yes       | N/A                                                          |
+| `central.organizationID`                                   | Your Amplify Central organization ID                                                       | no        | N/A                                                          |
+| `central.environment`                                      | Your Amplify Central environment, as shown in topology                                      | no        | N/A                                                          |
+| `central.url`                                              | Amplify Central URL                                                                        | no        | [https://apicentral.axway.com](https://apicentral.axway.com) |
+| `central.auth.clientID`                                    | Client ID in the service account associated with your key pair                             | no        | N/A                                                          |
+| `central.auth.url`                                         | Amplify Central authentication URL                                                         | no        | [https://login.axway.com/auth](https://login.axway.com/auth) |
 
 ## Monitoring parameters
 
-| Parameter                             | Description                         | Mandatory | Default value |
-| ------------------------------------- | ----------------------------------- | --------- | ------------- |
-| `embeddedMariadb.metrics.enabled`       | Activate metrics endpoint for MariaDB | no      | false         |
-| `zookeeper.metrics.enabled`             | Activate metrics endpoint for Zookeeper | no    | false         |
-| `embeddedKafka.metrics.jmx.enabled`     | Activate metrics endpoint for Kafka | no        | false         |
-| `nginx-ingress-controller.metrics.enabled` | Activate metrics endpoint for Ingress controller | no | false |
-| `actuator.prometheus.enabled`           | Activate metrics endpoints for Streams services | no | false    |
+| Parameter                                   | Description                                      | Mandatory | Default value |
+|---------------------------------------------|--------------------------------------------------|-----------|---------------|
+| `embeddedMariadb.metrics.enabled`           | Activate metrics endpoint for MariaDB            | no        | false         |
+| `zookeeper.metrics.enabled`                 | Activate metrics endpoint for Zookeeper          | no        | false         |
+| `embeddedKafka.metrics.jmx.enabled`         | Activate metrics endpoint for Kafka              | no        | false         |
+| `nginx-ingress-controller.metrics.enabled`  | Activate metrics endpoint for Ingress controller | no        | false         |
+| `actuator.prometheus.enabled`               | Activate metrics endpoints for Streams services  | no        | false         |
 
 ## Configure parameters from a dependency chart
 
