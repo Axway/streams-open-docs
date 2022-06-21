@@ -1,6 +1,6 @@
 ---
 title: Integrate Streams with API Management
-linkTitle: Integrate with APIM
+linkTitle: Integrate Streams with API Management
 weight: 15
 date: 2022-06-16
 description: Use Amplify API Management to secure Streams Subscribers APIs.
@@ -168,7 +168,7 @@ curl -X POST '<API_GATEWAY_INGRESS>/streams/subscribers/kafka/api/v1/topics/test
 
 Most of the time, to upgrade the Streams RBAC policies, you just have to download the new Streams RBAC Policies file and proceed with a partial installation described in chapter [In Policy Studio](/docs/install/apim-integration#in-policy-studio)
 
-In case of error during the deployment of the new policies proceed as following:
+In case of errors during the deployment of the new policies, proceed as follow:
 
 * Unpublish and delete any Streams FrontEnd/Backend APIs in the API Manager.
 * Do a full installation of the new policies as described in chapter [Configuration and deployment](/docs/install/apim-integration#configuration-and-deployment)
