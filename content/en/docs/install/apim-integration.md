@@ -6,7 +6,7 @@ date: 2022-06-16
 description: Use Amplify API Management to secure Streams Subscribers APIs.
 ---
 
-Follow this section to secure Streams Subscribers API with [Amplify API Management](https://docs.axway.com/bundle/axway-open-docs/page/docs/apim_administration/index.html).
+Follow this section to secure Streams Subscribers API with [Amplify API Management](https://docs.axway.com/bundle/axway-open-docs/page/docs/api_mgmt_overview/index.html).
 
 ## Prerequisites
 
