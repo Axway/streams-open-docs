@@ -3,28 +3,29 @@ title: Secure Streams with API Management
 linkTitle: Secure Streams with API Management
 weight: 15
 date: 2022-06-16
-description: Use Amplify API Management to secure Streams Subscribers APIs.
+description: Use Amplify API Management to secure Streams APIs.
 ---
 
-Follow this section to secure Streams Subscribers API with [Amplify API Management](https://docs.axway.com/bundle/axway-open-docs/page/docs/api_mgmt_overview/index.html).
+Follow this section to secure Streams APIs with [Amplify API Management](https://docs.axway.com/bundle/axway-open-docs/page/docs/api_mgmt_overview/index.html).
 
 ## Prerequisites
 
+* knowledge on [Policy Studio development](https://docs.axway.com/bundle/axway-open-docs/page/docs/apim_policydev/index.html) is required
 * You must have access to an API Management environment (Policy Studio, API Manager, API Gateway)
 * This environment must have access to the Streams cluster.
 * Streams must be deployed with [Subscriber SSE Security](/docs/install/customize-install/#activate-subscriber-sse-security) feature enabled.
 * You must have downloaded the Streams RBAC policies file (streams-apim-rbac.xml) and made it available to your Policy Studio.
 
-## Configuration and deployment
+## API Management configuration and deployment
 
 ### In policy Studio
 
 Create a Project Configuration from an existing API Gateway instance and import Streams RBAC policies in Policy Studio using the **import configuration fragment** button.
 Select **Server Settings > API Manager** and configure policies as following:
 
-* *0- Streams RBAC request* and *0- Streams Access Token request* in **Request Policies**
-* *0- Streams RBAC routing* in **Routing Policies**
-* *0- Streams RBAC response* in **Response Policies**
+* `0- Streams RBAC request` and `0- Streams Access Token request` in **Request Policies**
+* `0- Streams RBAC routing` in **Routing Policies**
+* `0- Streams RBAC response` in **Response Policies**
 
 Save the configuration with the **Save** button and from the project homepage, deploy the configuration to the API Gateway instances using the **Deploy** button.
 
@@ -69,7 +70,7 @@ Click on **Clients > Applications > New Application** button, fill the required 
 * In **Application > API Access** section add All Streams Frontend APIs
 * In **Authentication > API Keys** section click on the **new API Key** button to generate a new API key
 
-You Streams installation is now secured by APIM.
+Your Streams installation is now secured by APIM.
 
 ## Verify installation
 
@@ -171,4 +172,4 @@ Most of the time, to upgrade the Streams RBAC policies, you just have to downloa
 In case of errors during the deployment of the new policies, proceed as follow:
 
 * Unpublish and delete any Streams FrontEnd/Backend APIs in the API Manager.
-* Do a full installation of the new policies as described in chapter [Configuration and deployment](/docs/install/apim-integration#configuration-and-deployment)
+* Do a full installation of the new policies as described in chapter [API Management configuration and deployment](/docs/install/apim-integration#api-management-configuration-and-deployment)
