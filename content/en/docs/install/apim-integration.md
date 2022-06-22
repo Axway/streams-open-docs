@@ -1,6 +1,6 @@
 ---
-title: Integrate Streams with API Management
-linkTitle: Integrate Streams with API Management
+title: Secure Streams with API Management
+linkTitle: Secure Streams with API Management
 weight: 15
 date: 2022-06-16
 description: Use Amplify API Management to secure Streams Subscribers APIs.
@@ -10,16 +10,16 @@ Follow this section to secure Streams Subscribers API with [Amplify API Manageme
 
 ## Prerequisites
 
-* You must have access to an APIM environment (Policy Studio, API Manager, API Gateway)
+* You must have access to an API Management environment (Policy Studio, API Manager, API Gateway)
 * This environment must have access to the Streams cluster.
 * Streams must be deployed with [Subscriber SSE Security](/docs/install/customize-install/#activate-subscriber-sse-security) feature enabled.
-* You must have downloaded the Streams APIM RBAC policies file and made it available to your Policy Studio.
+* You must have downloaded the Streams RBAC policies file (streams-apim-rbac.xml) and made it available to your Policy Studio.
 
 ## Configuration and deployment
 
 ### In policy Studio
 
-Create a Project Configuration from an existing API Gateway instance and import Streams APIM RBAC policies (streams-apim-rbac.xml) in Policy Studio using the **import configuration fragment** button.
+Create a Project Configuration from an existing API Gateway instance and import Streams RBAC policies in Policy Studio using the **import configuration fragment** button.
 Select **Server Settings > API Manager** and configure policies as following:
 
 * *0- Streams RBAC request* and *0- Streams Access Token request* in **Request Policies**
