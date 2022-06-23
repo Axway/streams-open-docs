@@ -93,9 +93,9 @@ PUBLIC_STREAMS_SUBSCRIBER_SSE_ADDRESS=<PUBLIC_STREAMS_SUBSCRIBER_SSE_ADDRESS_USE
 Use the following curl command to create a simple Streams Topic:
 
 ```bash
-curl -v -X POST '${PUBLIC_API_GATEWAY_ADDRESS}/streams/hub/api/v1/topics' \
+curl -v -X POST "${PUBLIC_API_GATEWAY_ADDRESS}/streams/hub/api/v1/topics" \
 -H 'Content-Type: application/json'  \
--H '${APIM_AUTHORIZATION_HEADER}'  \
+-H "${APIM_AUTHORIZATION_HEADER}"  \
 --data-raw '{
    "name": "testTopic",
    "publisher": {
@@ -120,9 +120,9 @@ If the configuration is correct, the returned HTTP code must be 2xx and the resp
 Create a minimal SSE subscription with the previously created Streams Topic:
 
 ```bash
-curl -v -X POST '${PUBLIC_API_GATEWAY_ADDRESS}/streams/subscribers/sse/api/v1/topics/testTopic/subscriptions' \
+curl -v -X POST "${PUBLIC_API_GATEWAY_ADDRESS}/streams/subscribers/sse/api/v1/topics/testTopic/subscriptions" \
 -H 'Content-Type: application/json'  \
--H '${APIM_AUTHORIZATION_HEADER}'  \
+-H "${APIM_AUTHORIZATION_HEADER}"  \
 --data-raw '{}'
 ```
 
@@ -137,9 +137,9 @@ Two steps are required to consume a Streams SSE subscription:
 * Call the API Gateway to get a short-lived JWT token to access the Streams SSE Subscriber:
 
     ```bash
-    curl -v -X GET '${PUBLIC_API_GATEWAY_ADDRESS}/streams/subscribers/sse/auth' \
+    curl -v -X GET "${PUBLIC_API_GATEWAY_ADDRESS}/streams/subscribers/sse/auth" \
     -H 'Content-Type: application/json' \
-    -H '${APIM_AUTHORIZATION_HEADER}'
+    -H "${APIM_AUTHORIZATION_HEADER}"
     ```
 
     If the configuration is correct, the returned HTTP code must be 2xx and the JSON response must contain a field **token**. Use this field as SSE_JWT_TOKEN.
@@ -151,9 +151,9 @@ Two steps are required to consume a Streams SSE subscription:
 * Call directly the Streams SSE Subscriber with the token previously generated as `Authorization Bearer` header:
 
     ```bash
-    curl -v -X GET '${PUBLIC_STREAMS_SUBSCRIBER_SSE_ADDRESS}/streams/subscribers/sse/api/v1/subscriptions/${SUBSCRIPTION_ID}/subscribe' \
+    curl -v -X GET "${PUBLIC_STREAMS_SUBSCRIBER_SSE_ADDRESS}/streams/subscribers/sse/api/v1/subscriptions/${SUBSCRIPTION_ID}/subscribe" \
     -H 'Content-Type: application/json' \
-    -H 'Authorization: Bearer ${SSE_JWT_TOKEN}'
+    -H "Authorization: Bearer ${SSE_JWT_TOKEN}"
     ```
 
     If the configuration is correct, the returned HTTP code must be 2xx and the SSE stream should start receiving heartbeat events `:`.
@@ -163,9 +163,9 @@ Two steps are required to consume a Streams SSE subscription:
 Create a minimal Webhook subscription with the previously created Streams Topic. Set the mandatory field `webhookUrl` in the request body:
 
 ```bash
-curl -v -X POST '${PUBLIC_API_GATEWAY_ADDRESS}/streams/subscribers/webhook/api/v1/topics/testTopic/subscriptions' \
+curl -v -X POST "${PUBLIC_API_GATEWAY_ADDRESS}/streams/subscribers/webhook/api/v1/topics/testTopic/subscriptions" \
 -H 'Content-Type: application/json'  \
--H '${APIM_AUTHORIZATION_HEADER}'  \
+-H "${APIM_AUTHORIZATION_HEADER}"  \
 --data-raw '{
    "webhookUrl": "<YOUR_WEBHOOK_ENDPOINT_URL>"
 }'
@@ -178,9 +178,9 @@ If the configuration is correct, the returned HTTP code must be 2xx and the JSON
 Create a minimal Kafka subscription with the previously created Streams Topic. Set mandatory fields `kafkaBootstrapServers` and `kafkaTopic` in the request body:
 
 ```bash
-curl -v -X POST '${PUBLIC_API_GATEWAY_ADDRESS}/streams/subscribers/kafka/api/v1/topics/testTopic/subscriptions' \
+curl -v -X POST "${PUBLIC_API_GATEWAY_ADDRESS}/streams/subscribers/kafka/api/v1/topics/testTopic/subscriptions" \
 -H 'Content-Type: application/json'  \
--H '${APIM_AUTHORIZATION_HEADER}'  \
+-H "${APIM_AUTHORIZATION_HEADER}"  \
 --data-raw '{
    "kafkaBootstrapServers": "<YOUR_KAFKA_SERVERS>",
    "kafkaTopic": "<YOUR_KAFKA_TOPIC>"
