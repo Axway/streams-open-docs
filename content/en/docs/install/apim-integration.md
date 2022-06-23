@@ -10,7 +10,7 @@ Follow this section to secure Streams APIs with [Amplify API Management](https:/
 
 ## Prerequisites
 
-* knowledge on [Policy Studio development](https://docs.axway.com/bundle/axway-open-docs/page/docs/apim_policydev/index.html) is required
+* knowledge of [Policy Studio development](https://docs.axway.com/bundle/axway-open-docs/page/docs/apim_policydev/index.html) is required
 * You must have access to an API Management environment (Policy Studio, API Manager, API Gateway)
 * This environment must have access to the Streams cluster.
 * Streams must be deployed with [Subscriber SSE Security](/docs/install/customize-install/#activate-subscriber-sse-security) feature enabled.
@@ -33,7 +33,7 @@ Save the configuration with the **Save** button and from the project homepage, d
 
 #### Create Streams Backend APIs
 
-Import the following Streams URLs as Backend APIs, click **API > Backend API > New API** button, then choose **Swagger definition URL** as source and fill the following information.
+Import the following Streams URLs as Backend APIs, click **API > Backend API > New API** button, then select **Swagger definition URL** as source and complete the dialog box with the corresponding information.
 
 | API Name               | URL                                                                |
 |------------------------|--------------------------------------------------------------------|
@@ -61,33 +61,41 @@ Click on **API > Frontend API > New API > New API from backend API** button then
 
 #### Publish Streams Frontend APIs
 
-click on **API > Frontend API** toggle all Streams Frontend APIs checkboxes and click on **Managed Selected > Publish** button
+Click on **API > Frontend API** toggle all Streams Frontend APIs checkboxes and click on **Managed Selected > Publish** button
 
 #### Create application and credentials
 
-Click on **Clients > Applications > New Application** button, fill the required information.
+Click on **Clients > Applications > New Application** button
 
 * In **Application > API Access** section add All Streams Frontend APIs
-* In **Authentication > API Keys** section click on the **new API Key** button to generate a new API key
+* In **Authentication > API Keys** section click on the **new API Key** button to generate an API key
 
-Your Streams installation is now secured by APIM.
+Click on the **Save** button. Your Streams installation is now secured by APIM.
 
 ## Verify installation
 
-To access Streams APIs, an Authorization header must be provided. Use the **keyId** created in your application and set the following env variable:
+### Requirements
 
-  ```bash
-  AUTHORIZATION_HEADER="KeyId: <KEY_ID_RETURNED>"
-  ```
+* You must have a valid *API Key*. Use the **keyId** previously created in your application
+* You must have the *Public API Gateway address*
+* You must have the *Public address of the Streams Subscriber SSE* use to consume SSE subscriptions
+
+Open a terminal and set the following variables:
+
+```bash
+APIM_AUTHORIZATION_HEADER="KeyId: <YOUR_APPLICATION_KEY_ID>"
+PUBLIC_API_GATEWAY_ADDRESS=<PUBLIC_API_GATEWAY_ADDRESS_WITH_STREAMS_CONFIGURATION>
+PUBLIC_STREAMS_SUBSCRIBER_SSE_ADDRESS=<PUBLIC_STREAMS_SUBSCRIBER_SSE_ADDRESS_USE_TO_CONSUME_STREAMS_SSE_SUBSCRIPTION>
+```
 
 ### Validate Streams Hub API
 
-Use the following curl command to create a simple Streams Topic. This should return a JSON containing the Topic created
+Use the following curl command to create a simple Streams Topic:
 
 ```bash
-curl -X POST '<API_GATEWAY_INGRESS>/streams/hub/api/v1/topics' \
+curl -v -X POST '${PUBLIC_API_GATEWAY_ADDRESS}/streams/hub/api/v1/topics' \
 -H 'Content-Type: application/json'  \
--H '${AUTHORIZATION_HEADER}'  \
+-H '${APIM_AUTHORIZATION_HEADER}'  \
 --data-raw '{
    "name": "testTopic",
    "publisher": {
@@ -105,69 +113,85 @@ curl -X POST '<API_GATEWAY_INGRESS>/streams/hub/api/v1/topics' \
 '
 ```
 
+If the configuration is correct, the returned HTTP code must be 2xx and the response body must contain the Topic created.
+
 ### Validate Streams Subscribers SSE API
 
-Create a minimal SSE subscription with the previously created Streams Topic. This will return a JSON containing a field **id**. Use this id as SUBSCRIPTION_ID
+Create a minimal SSE subscription with the previously created Streams Topic:
 
 ```bash
-curl -X POST '<API_GATEWAY_INGRESS>/streams/subscribers/sse/api/v1/topics/testTopic/subscriptions' \
+curl -v -X POST '${PUBLIC_API_GATEWAY_ADDRESS}/streams/subscribers/sse/api/v1/topics/testTopic/subscriptions' \
 -H 'Content-Type: application/json'  \
--H '${AUTHORIZATION_HEADER}'  \
+-H '${APIM_AUTHORIZATION_HEADER}'  \
 --data-raw '{}'
 ```
 
-Generate the JWT Token required to consume the previously created SSE subscription. This should return a JSON containing a field **token** with the JWT token
+If the configuration is correct, the returned HTTP code must be 2xx and the JSON response must contain a field **id**. Use this id as SUBSCRIPTION_ID.
 
 ```bash
-curl -X GET '<API_GATEWAY_INGRESS>/streams/subscribers/sse/auth' \
--H 'Content-Type: application/json' \
--H '${AUTHORIZATION_HEADER}'
+SUBSCRIPTION_ID="<ID_RETURNED>"
 ```
 
-Store this token in env variable
+Two steps are required to consume a Streams SSE subscription:
 
-```bash
-SSE_JWT_TOKEN="<JWT_TOKEN_RETURNED>"
-```
+* Call the API Gateway to get a short-lived JWT token to access the Streams SSE Subscriber:
 
-Consume the SSE subscription using the JWT Token previously generated as Authorization Bearer header in the following call
+    ```bash
+    curl -v -X GET '${PUBLIC_API_GATEWAY_ADDRESS}/streams/subscribers/sse/auth' \
+    -H 'Content-Type: application/json' \
+    -H '${APIM_AUTHORIZATION_HEADER}'
+    ```
 
-```bash
-curl -X GET '<PUBLIC_STREAMS_SSE_INGRESS>/streams/subscribers/sse/api/v1/subscriptions/<SUBSCRIPTION_ID>/subscribe' \
--H 'Content-Type: application/json' \
--H 'Authorization: Bearer ${SSE_JWT_TOKEN}'
-```
+    If the configuration is correct, the returned HTTP code must be 2xx and the JSON response must contain a field **token**. Use this field as SSE_JWT_TOKEN.
+
+    ```bash
+    SSE_JWT_TOKEN="<JWT_TOKEN_RETURNED>"
+    ```
+
+* Call directly the Streams SSE Subscriber with the token previously generated as `Authorization Bearer` header:
+
+    ```bash
+    curl -v -X GET '${PUBLIC_STREAMS_SUBSCRIBER_SSE_ADDRESS}/streams/subscribers/sse/api/v1/subscriptions/${SUBSCRIPTION_ID}/subscribe' \
+    -H 'Content-Type: application/json' \
+    -H 'Authorization: Bearer ${SSE_JWT_TOKEN}'
+    ```
+
+    If the configuration is correct, the returned HTTP code must be 2xx and the SSE stream should start receiving heartbeat events `:`.
 
 ### Validate Streams Subscribers Webhook API
 
-Create a minimal Webhook subscription with the previously created Streams Topic. A field is mandatory `webhookUrl`. This will return a JSON containing a field **id**. Use this id as SUBSCRIPTION_ID
+Create a minimal Webhook subscription with the previously created Streams Topic. Set the mandatory field `webhookUrl` in the request body:
 
 ```bash
-curl -X POST '<API_GATEWAY_INGRESS>/streams/subscribers/webhook/api/v1/topics/testTopic/subscriptions' \
+curl -v -X POST '${PUBLIC_API_GATEWAY_ADDRESS}/streams/subscribers/webhook/api/v1/topics/testTopic/subscriptions' \
 -H 'Content-Type: application/json'  \
--H '${AUTHORIZATION_HEADER}'  \
+-H '${APIM_AUTHORIZATION_HEADER}'  \
 --data-raw '{
    "webhookUrl": "<YOUR_WEBHOOK_ENDPOINT_URL>"
 }'
 ```
 
+If the configuration is correct, the returned HTTP code must be 2xx and the JSON response must contain a field **id**.
+
 ### Validate Streams Subscribers Kafka API
 
-Create a minimal Kafka subscription with the previously created Streams Topic. Fields are mandatory `kafkaBootstrapServers` and `kafkaTopic`. This will return a JSON containing a field **id**. Use this id as SUBSCRIPTION_ID
+Create a minimal Kafka subscription with the previously created Streams Topic. Set mandatory fields `kafkaBootstrapServers` and `kafkaTopic` in the request body:
 
 ```bash
-curl -X POST '<API_GATEWAY_INGRESS>/streams/subscribers/kafka/api/v1/topics/testTopic/subscriptions' \
+curl -v -X POST '${PUBLIC_API_GATEWAY_ADDRESS}/streams/subscribers/kafka/api/v1/topics/testTopic/subscriptions' \
 -H 'Content-Type: application/json'  \
--H '${AUTHORIZATION_HEADER}'  \
+-H '${APIM_AUTHORIZATION_HEADER}'  \
 --data-raw '{
    "kafkaBootstrapServers": "<YOUR_KAFKA_SERVERS>",
    "kafkaTopic": "<YOUR_KAFKA_TOPIC>"
 }'
 ```
 
+If the configuration is correct, the returned HTTP code must be 2xx and the JSON response must contain a field **id**.
+
 ## Streams RBAC Policies Upgrade
 
-Most of the time, to upgrade the Streams RBAC policies, you just have to download the new Streams RBAC Policies file and proceed with a partial installation described in chapter [In Policy Studio](/docs/install/apim-integration#in-policy-studio)
+To upgrade the Streams RBAC policies, download the new Streams RBAC Policies file and proceed with a partial installation described in chapter [In Policy Studio](/docs/install/apim-integration#in-policy-studio)
 
 In case of errors during the deployment of the new policies, proceed as follow:
 
