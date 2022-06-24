@@ -29,7 +29,7 @@ After you have been onboarded on [Amplify Platform](https://platform.axway.com),
 
 To prepare your environment, extract the Helm chart and open a terminal from the extracted directory.
 
-{{< alert title="Note" >}}You can find others resources in the [Axway Support](https://support.axway.com/en) portal, for example, Postman collections, OpenAPI, Streams RBAC Policies and Docker Compose files, which can help you to configure your environment or test Streams.{{< /alert >}}
+{{< alert title="Note" >}}You can find others resources in the [Axway Support](https://support.axway.com/en) portal, for example, Postman collections, OpenAPI, Streams RBAC Policies, and Docker Compose files, which can help you to configure your environment or test Streams.{{< /alert >}}
 
 ## Prepare customizations
 

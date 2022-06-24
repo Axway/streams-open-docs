@@ -10,30 +10,39 @@ Follow this section to secure Streams APIs with [Amplify API Management](https:/
 
 ## Prerequisites
 
-* knowledge of [Policy Studio development](https://docs.axway.com/bundle/axway-open-docs/page/docs/apim_policydev/index.html) is required
-* You must have access to an API Management environment (Policy Studio, API Manager, API Gateway)
-* This environment must have access to the Streams cluster.
+* knowledge of [Policy Studio](https://docs.axway.com/bundle/axway-open-docs/page/docs/apim_policydev/index.html) development.
+* You must have access to an API Management environment (Policy Studio, API Manager, API Gateway), and this environment must have access to the Streams cluster.
 * Streams must be deployed with [Subscriber SSE Security](/docs/install/customize-install/#activate-subscriber-sse-security) feature enabled.
-* You must have downloaded the Streams RBAC policies file (streams-apim-rbac.xml) and made it available to your Policy Studio.
+* You must have downloaded the Streams RBAC policies file (`streams-apim-rbac.xml`) and made it available to your Policy Studio.
 
 ## API Management configuration and deployment
 
-### In policy Studio
+The following sections describe how to configure API Management to integrate with Streams.
 
-Create a Project Configuration from an existing API Gateway instance and import Streams RBAC policies in Policy Studio using the **import configuration fragment** button.
-Select **Server Settings > API Manager** and configure policies as following:
+### Configure Policy Studio
 
-* `0- Streams RBAC request` and `0- Streams Access Token request` in **Request Policies**
-* `0- Streams RBAC routing` in **Routing Policies**
-* `0- Streams RBAC response` in **Response Policies**
+Follow these steps to create and configure a project in Policy Studio:
 
-Save the configuration with the **Save** button and from the project homepage, deploy the configuration to the API Gateway instances using the **Deploy** button.
+1. Create a Project Configuration from an existing API Gateway instance.
+2. Import Streams RBAC policies to Policy Studio using the **Import configuration fragment** button.
+3. Select **Server Settings > API Manager** and configure policies as following:
 
-### In API Manager
+    * `0- Streams RBAC request` and `0- Streams Access Token request` in **Request Policies**.
+    * `0- Streams RBAC routing` in **Routing Policies**.
+    * `0- Streams RBAC response` in **Response Policies**.
 
-#### Create Streams Backend APIs
+4. Save the configuration, and from the project homepage, deploy the configuration to the API Gateway instances.
 
-Import the following Streams URLs as Backend APIs, click **API > Backend API > New API** button, then select **Swagger definition URL** as source and complete the dialog box with the corresponding information.
+### Configure API Manager
+
+The following sections describe how to create and publish your APIs in API Manager.
+
+#### Create Streams back-end APIs
+
+Import Streams URLs as back-end APIs:
+
+1. Click **API > Backend API > New API**.
+2. Select **Swagger definition URL** as source, and complete the dialog box with the corresponding information.
 
 | API Name               | URL                                                                |
 |------------------------|--------------------------------------------------------------------|
@@ -45,42 +54,50 @@ Import the following Streams URLs as Backend APIs, click **API > Backend API > N
 
 {{< alert title="Note" >}}Replace `<streams-cluster>` by the correct [streams hostname](docs/install/#ingress-hostname).{{< /alert >}}
 
-#### Create Streams Frontend APIs
+#### Create Streams front-end APIs
 
-Click on **API > Frontend API > New API > New API from backend API** button then for each backend API, fill the following information:
+Create your front-end APIs out of the back-end APIs.
 
-| Backend API Name           | Inbound tab                                                                | Outbound tab (Advanced view)                                                                                                    |
-|----------------------------|----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| `Streams Hub`              | Inbound security: `API Key` ResourcePath: `/streams/hub/api/v1`| Request policy: `0- Streams RBAC request` Default method routing: `0- Streams RBAC routing` Response policy: `0- Streams RBAC response` |
-| `Streams Subscribers Kafka` | Inbound security: `API Key` ResourcePath: `/streams/subscribers/kafka/api/v1` | Request policy: `0- Streams RBAC request` Default method routing: `0- Streams RBAC routing` Response policy: `0- Streams RBAC response` |
-| `Streams Subscribers Webhook` | Inbound security: `API Key` ResourcePath: `/streams/subscribers/webhook/api/v1` | Request policy: `0- Streams RBAC request` Default method routing: `0- Streams RBAC routing` Response policy: `0- Streams RBAC response` |
-| `Streams Subscribers SSE`  | Inbound security: `API Key` ResourcePath: `/streams/subscribers/sse/api/v1` | Request policy: `0- Streams RBAC request` Default method routing: `0- Streams RBAC routing` Response policy: `0- Streams RBAC response` |
-| `Streams Subscribers SSE Auth` | Inbound security: `API Key` ResourcePath: `/streams/subscribers/sse` | Request policy: `0- Streams RBAC Access Token request` Default method routing: `API Proxy` Response policy: `leave field empty` |
+1. Click **API > Frontend API > New API > New API from backend API**.
+2. For each back-end API, add the following information:
 
-{{< alert title="Note" >}}Be sure to set correct Inbound/ResourcePath and Outbound policies for `Streams Subscribers SSE Auth`.{{< /alert >}}
+    | Backend API Name           | Inbound tab                                                                | Outbound tab (Advanced     view)                                                                                                    |
+    |----------------------------|----------------------------------------------------------------------------|    ---------------------------------------------------------------------------------------------------------------------------------|
+    | `Streams Hub`              | Inbound security: `API Key` ResourcePath: `/streams/hub/api/v1`| Request policy: `0- Streams RBAC request` Default method routing: `0- Streams RBAC     routing` Response policy: `0- Streams RBAC response` |
+    | `Streams Subscribers Kafka` | Inbound security: `API Key` ResourcePath: `/streams/subscribers/kafka/api/v1` | Request policy: `0- Streams RBAC request` Default method routing:     `0- Streams RBAC routing` Response policy: `0- Streams RBAC response` |
+    | `Streams Subscribers Webhook` | Inbound security: `API Key` ResourcePath: `/streams/subscribers/webhook/api/v1` | Request policy: `0- Streams RBAC request` Default method     routing: `0- Streams RBAC routing` Response policy: `0- Streams RBAC response` |
+    | `Streams Subscribers SSE`  | Inbound security: `API Key` ResourcePath: `/streams/subscribers/sse/api/v1` | Request policy: `0- Streams RBAC request` Default method routing: `0-     Streams RBAC routing` Response policy: `0- Streams RBAC response` |
+    | `Streams Subscribers SSE Auth` | Inbound security: `API Key` ResourcePath: `/streams/subscribers/sse` | Request policy: `0- Streams RBAC Access Token request` Default method     routing: `API Proxy` Response policy: `leave field empty` |
 
-#### Publish Streams Frontend APIs
+#### Publish Streams front-end APIs
 
-Click on **API > Frontend API** toggle all Streams Frontend APIs checkboxes and click on **Managed Selected > Publish** button
+To publish your front-end APIs:
+
+1. Click **API > Frontend API**.
+2. Select all Streams front-end APIs checkboxes and click **Managed Selected > Publish**.
 
 #### Create application and credentials
 
-Click on **Clients > Applications > New Application** button
+To create applications and credentials:
 
-* In **Application > API Access** section add All Streams Frontend APIs
-* In **Authentication > API Keys** section click on the **new API Key** button to generate an API key
+1. Click **Clients > Applications > New Application**.
+2. In **Application > API Access** section, add All Streams Frontend APIs.
+3. In **Authentication > API Keys** section, click **new API Key** to generate an API key.
+4. Click **Save**.
 
-Click on the **Save** button. Your Streams installation is now secured by APIM.
+Your Streams installation is now secured by API Manager.
 
 ## Verify installation
 
+Verify that your Streams installation is working.
+
 ### Requirements
 
-* You must have a valid *API Key*. Use the **keyId** previously created in your application
-* You must have the *Public API Gateway address*
-* You must have the *Public address of the Streams Subscriber SSE* use to consume SSE subscriptions
+* You must have a valid API Key. Use the **keyId** previously created in your application.
+* You must have the public API Gateway address.
+* You must have the public address of the Streams Subscriber SSE user to consume SSE subscriptions.
 
-Open a terminal and set the following variables:
+To get started, open a terminal and set the following variables:
 
 ```bash
 APIM_AUTHORIZATION_HEADER="KeyId: <YOUR_APPLICATION_KEY_ID>"
@@ -90,7 +107,7 @@ PUBLIC_STREAMS_SUBSCRIBER_SSE_ADDRESS=<PUBLIC_STREAMS_SUBSCRIBER_SSE_ADDRESS_USE
 
 ### Validate Streams Hub API
 
-Use the following curl command to create a simple Streams Topic:
+Use the following curl command to create a simple Streams topic:
 
 ```bash
 curl -v -X POST "${PUBLIC_API_GATEWAY_ADDRESS}/streams/hub/api/v1/topics" \
@@ -113,7 +130,7 @@ curl -v -X POST "${PUBLIC_API_GATEWAY_ADDRESS}/streams/hub/api/v1/topics" \
 '
 ```
 
-If the configuration is correct, the returned HTTP code must be 2xx and the response body must contain the Topic created.
+If the configuration is correct, the returned HTTP code must be `2xx` and the response body must contain the Topic created.
 
 ### Validate Streams Subscribers SSE API
 
@@ -126,15 +143,15 @@ curl -v -X POST "${PUBLIC_API_GATEWAY_ADDRESS}/streams/subscribers/sse/api/v1/to
 --data-raw '{}'
 ```
 
-If the configuration is correct, the returned HTTP code must be 2xx and the JSON response must contain a field **id**. Use this id as SUBSCRIPTION_ID.
+If the configuration is correct, the returned HTTP code must be `2xx` and the JSON response must contain an **id** field. Use this ID as SUBSCRIPTION_ID.
 
 ```bash
 SUBSCRIPTION_ID="<ID_RETURNED>"
 ```
 
-Two steps are required to consume a Streams SSE subscription:
+The following two steps are required to consume a Streams SSE subscription:
 
-* Call the API Gateway to get a short-lived JWT token to access the Streams SSE Subscriber:
+1. Call the API Gateway to get a short-lived JWT token to access the Streams SSE Subscriber:
 
     ```bash
     curl -v -X GET "${PUBLIC_API_GATEWAY_ADDRESS}/streams/subscribers/sse/auth" \
@@ -142,13 +159,13 @@ Two steps are required to consume a Streams SSE subscription:
     -H "${APIM_AUTHORIZATION_HEADER}"
     ```
 
-    If the configuration is correct, the returned HTTP code must be 2xx and the JSON response must contain a field **token**. Use this field as SSE_JWT_TOKEN.
+    If the configuration is correct, the returned HTTP code must be `2xx` and the JSON response must contain a **token** field. Use this field as SSE_JWT_TOKEN.
 
     ```bash
     SSE_JWT_TOKEN="<JWT_TOKEN_RETURNED>"
     ```
 
-* Call directly the Streams SSE Subscriber with the token previously generated as `Authorization Bearer` header:
+2. Call the Streams SSE Subscriber directly with the token previously generated as `Authorization Bearer` header:
 
     ```bash
     curl -v -X GET "${PUBLIC_STREAMS_SUBSCRIBER_SSE_ADDRESS}/streams/subscribers/sse/api/v1/subscriptions/${SUBSCRIPTION_ID}/subscribe" \
@@ -156,7 +173,7 @@ Two steps are required to consume a Streams SSE subscription:
     -H "Authorization: Bearer ${SSE_JWT_TOKEN}"
     ```
 
-    If the configuration is correct, the returned HTTP code must be 2xx and the SSE stream should start receiving heartbeat events `:`.
+    If the configuration is correct, the returned HTTP code must be `2xx` and the SSE stream should start receiving heartbeat events.
 
 ### Validate Streams Subscribers Webhook API
 
@@ -171,7 +188,7 @@ curl -v -X POST "${PUBLIC_API_GATEWAY_ADDRESS}/streams/subscribers/webhook/api/v
 }'
 ```
 
-If the configuration is correct, the returned HTTP code must be 2xx and the JSON response must contain a field **id**.
+If the configuration is correct, the returned HTTP code must be `2xx` and the JSON response must contain an **id** field.
 
 ### Validate Streams Subscribers Kafka API
 
@@ -187,13 +204,13 @@ curl -v -X POST "${PUBLIC_API_GATEWAY_ADDRESS}/streams/subscribers/kafka/api/v1/
 }'
 ```
 
-If the configuration is correct, the returned HTTP code must be 2xx and the JSON response must contain a field **id**.
+If the configuration is correct, the returned HTTP code must be `2xx` and the JSON response must contain an **id** field.
 
-## Streams RBAC Policies Upgrade
+## Streams RBAC policies upgrade
 
-To upgrade the Streams RBAC policies, download the new Streams RBAC Policies file and proceed with a partial installation described in chapter [In Policy Studio](/docs/install/apim-integration#in-policy-studio)
+To upgrade the Streams RBAC policies, download the new Streams RBAC policies file and proceed with a partial installation described in section, [Configure Policy Studio](/docs/install/apim-integration#cofigure-policy-studio).
 
 In case of errors during the deployment of the new policies, proceed as follow:
 
-* Unpublish and delete any Streams FrontEnd/Backend APIs in the API Manager.
-* Do a full installation of the new policies as described in chapter [API Management configuration and deployment](/docs/install/apim-integration#api-management-configuration-and-deployment)
+* Unpublish and delete any Streams Front-end and back-end APIs in the API Manager.
+* Perform a full installation of the new policies again.
