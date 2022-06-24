@@ -211,24 +211,23 @@ For more information, see [Nginx documentation](https://kubernetes.github.io/ing
 
 To secure SSE subscriptions, you must perform the following steps:
 
-* Provide an existing RSA public/private key pair or create a new one as following
+1. Provide an existing RSA public and private key pair or create a new one as following:
 
    ```bash
    openssl genrsa -out key.pem 2048
    openssl rsa -in key.pem -outform PEM -pubout -out cert.pem
    ```
 
-* Create a kubernetes secret to store the RSA key pair
+2. Create a kubernetes secret to store the RSA key pair:
 
    ```bash
    kubectl create secret generic streams-subscriber-sse-jwt-secret --from-file=key=key.pem --from-file=cert=cert.pem -n "${NAMESPACE}"
    ```
 
-* Activate SSE subscriber Access Token generation/validation
+3. Activate SSE subscriber Access Token generation and validation. To secure SSE subscriptions (disabled by default) add the provided `values-secured-subscriber-sse.yaml` values file to your Helm install command line. For example:
 
-  To secure SSE subscriptions (disabled by default) add the provided `values-secured-subscriber-sse.yaml` values file to your Helm install command line. Example:
-  ```sh
-      helm install "${HELM_RELEASE_NAME}" . -f values.yaml -f values-secured-subscriber-sse.yaml -n "${NAMESPACE}"
-  ```
+    ```sh
+        helm install "${HELM_RELEASE_NAME}" . -f values.yaml -f values-secured-subscriber-sse.yaml -n "${NAMESPACE}"
+    ```
 
-{{< alert title="Note" >}}Replace `<streams-cluster>` by the correct streams cluster address.{{< /alert >}}
+{{< alert title="Note" >}}Replace `<streams-cluster>` in the values YAML file by the correct streams cluster address.{{< /alert >}}

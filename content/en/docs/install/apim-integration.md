@@ -10,7 +10,7 @@ Follow this section to secure Streams APIs with [Amplify API Management](https:/
 
 ## Prerequisites
 
-* knowledge of [Policy Studio](https://docs.axway.com/bundle/axway-open-docs/page/docs/apim_policydev/index.html) development.
+* Knowledge of [Policy Studio](https://docs.axway.com/bundle/axway-open-docs/page/docs/apim_policydev/index.html) development.
 * You must have access to an API Management environment (Policy Studio, API Manager, API Gateway), and this environment must have access to the Streams cluster.
 * Streams must be deployed with [Subscriber SSE Security](/docs/install/customize-install/#activate-subscriber-sse-security) feature enabled.
 * You must have downloaded the Streams RBAC policies file (`streams-apim-rbac.xml`) and made it available to your Policy Studio.
@@ -58,16 +58,16 @@ Import Streams URLs as back-end APIs:
 
 Create your front-end APIs out of the back-end APIs.
 
-1. Click **API > Frontend API > New API > New API from backend API**.
+1. Click **API > Frontend API > New API > New API from back-end API**.
 2. For each back-end API, add the following information:
 
-    | Backend API Name           | Inbound tab                                                                | Outbound tab (Advanced     view)                                                                                                    |
-    |----------------------------|----------------------------------------------------------------------------|    ---------------------------------------------------------------------------------------------------------------------------------|
-    | `Streams Hub`              | Inbound security: `API Key` ResourcePath: `/streams/hub/api/v1`| Request policy: `0- Streams RBAC request` Default method routing: `0- Streams RBAC     routing` Response policy: `0- Streams RBAC response` |
-    | `Streams Subscribers Kafka` | Inbound security: `API Key` ResourcePath: `/streams/subscribers/kafka/api/v1` | Request policy: `0- Streams RBAC request` Default method routing:     `0- Streams RBAC routing` Response policy: `0- Streams RBAC response` |
-    | `Streams Subscribers Webhook` | Inbound security: `API Key` ResourcePath: `/streams/subscribers/webhook/api/v1` | Request policy: `0- Streams RBAC request` Default method     routing: `0- Streams RBAC routing` Response policy: `0- Streams RBAC response` |
-    | `Streams Subscribers SSE`  | Inbound security: `API Key` ResourcePath: `/streams/subscribers/sse/api/v1` | Request policy: `0- Streams RBAC request` Default method routing: `0-     Streams RBAC routing` Response policy: `0- Streams RBAC response` |
-    | `Streams Subscribers SSE Auth` | Inbound security: `API Key` ResourcePath: `/streams/subscribers/sse` | Request policy: `0- Streams RBAC Access Token request` Default method     routing: `API Proxy` Response policy: `leave field empty` |
+| Backend API Name           | Inbound tab                                                                | Outbound tab (Advanced view)            |
+|----------------------------|----------------------------------------------------------------------------|   -------------|
+| `Streams Hub`              | Inbound security: `API Key` ResourcePath: `/streams/hub/api/v1`| Request policy: `0- Streams RBAC request` Default method routing: `0- StreamsRBAC     routing` Response policy: `0- Streams RBAC response` |
+| `Streams Subscribers Kafka` | Inbound security: `API Key` ResourcePath: `/streams/subscribers/kafka/api/v1` | Request policy: `0- Streams RBAC request` Default methodrouting:     `0- Streams RBAC routing` Response policy: `0- Streams RBAC response` |
+| `Streams Subscribers Webhook` | Inbound security: `API Key` ResourcePath: `/streams/subscribers/webhook/api/v1` | Request policy: `0- Streams RBAC request` Defaultmethod     routing: `0- Streams RBAC routing` Response policy: `0- Streams RBAC response` |
+| `Streams Subscribers SSE`  | Inbound security: `API Key` ResourcePath: `/streams/subscribers/sse/api/v1` | Request policy: `0- Streams RBAC request` Default method routing:`0-     Streams RBAC routing` Response policy: `0- Streams RBAC response` |
+| `Streams Subscribers SSE Auth` | Inbound security: `API Key` ResourcePath: `/streams/subscribers/sse` | Request policy: `0- Streams RBAC Access Token request` Default method     routing: `API Proxy` Response policy: `leave field empty` |
 
 #### Publish Streams front-end APIs
 
