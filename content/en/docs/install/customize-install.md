@@ -66,7 +66,7 @@ Follow these steps to enable TSL **only**:
 
     ```sh
     export NAMESPACE="my-namespace"
-    kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem -n ${NAMESPACE}
+    kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem -n "${NAMESPACE}"
     ```
 
 2. Set the [Helm parameter](/docs/install/helm-parameters-reference/#mariadb-parameters) `embeddedMariadb.encryption.enabled` to `false`.
@@ -79,7 +79,7 @@ Follow these steps to enable TDE **only**:
 
     ```sh
     export NAMESPACE="my-namespace"
-    kubectl create secret generic streams-database-secret --from-file=KEYFILE=keyfile -n ${NAMESPACE}
+    kubectl create secret generic streams-database-secret --from-file=KEYFILE=keyfile -n "${NAMESPACE}"
     ```
 
 2. Set the [Helm parameter](/docs/install/helm-parameters-reference/#mariadb-parameters) `embeddedMariadb.tls.enabled` to `false`.
@@ -130,7 +130,7 @@ Follow these steps to enable One-Way TLS:
 
     ```sh
     export NAMESPACE="my-namespace"
-    kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem -n ${NAMESPACE}
+    kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem -n "${NAMESPACE}"
     ```
 
 2. Set the [Helm parameter](/docs/install/helm-parameters-reference/#mariadb-parameters) `externalizedMariadb.tls.twoWay` to `false`.
@@ -141,7 +141,7 @@ To enable Two-Way TLS, you must provide the CA certificate, the server certifica
 
 ```sh
 export NAMESPACE="my-namespace"
-kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem -n ${NAMESPACE}
+kubectl create secret generic streams-database-secret --from-file=CA_PEM=ca.pem --from-file=SERVER_CERT_PEM=server-cert.pem --from-file=SERVER_KEY_PEM=server-key.pem -n "${NAMESPACE}"
 ```
 
 ### Disable TLS
@@ -206,3 +206,28 @@ For example, to allow cross origin request from the domain name `https://origin-
 ```
 
 For more information, see [Nginx documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#enable-cors).
+
+## Activate Subscriber SSE security
+
+To secure SSE subscriptions, you must perform the following steps:
+
+1. Provide an existing RSA public and private key pair or create a new one as following:
+
+   ```bash
+   openssl genrsa -out key.pem 2048
+   openssl rsa -in key.pem -outform PEM -pubout -out cert.pem
+   ```
+
+2. Create a kubernetes secret to store the RSA key pair:
+
+   ```bash
+   kubectl create secret generic streams-subscriber-sse-jwt-secret --from-file=key=key.pem --from-file=cert=cert.pem -n "${NAMESPACE}"
+   ```
+
+3. Activate SSE subscriber Access Token generation and validation. To secure SSE subscriptions (disabled by default) add the provided `values-secured-subscriber-sse.yaml` values file to your Helm install command line. For example:
+
+    ```sh
+        helm install "${HELM_RELEASE_NAME}" . -f values.yaml -f values-secured-subscriber-sse.yaml -n "${NAMESPACE}"
+    ```
+
+{{< alert title="Note" >}}Replace `<streams-cluster>` in the values YAML file by the correct streams cluster address.{{< /alert >}}

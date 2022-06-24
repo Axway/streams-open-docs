@@ -29,7 +29,7 @@ After you have been onboarded on [Amplify Platform](https://platform.axway.com),
 
 To prepare your environment, extract the Helm chart and open a terminal from the extracted directory.
 
-{{< alert title="Note" >}}You can find others resources in the [Axway Support](https://support.axway.com/en) portal, for example, Postman collections, OpenAPI, and Docker Compose files, which can help you to configure your environment or test Streams.{{< /alert >}}
+{{< alert title="Note" >}}You can find others resources in the [Axway Support](https://support.axway.com/en) portal, for example, Postman collections, OpenAPI, Streams RBAC Policies, and Docker Compose files, which can help you to configure your environment or test Streams.{{< /alert >}}
 
 ## Prepare customizations
 
@@ -111,9 +111,9 @@ By default, MariaDB is configured with [TLS communication](#tls-communication) a
 
 To configure the TLS communication between MariaDB and Streams microservices, provide a CA certificate, a server certificate, and a server key.
 
-For more information on how to generate a self-signed certificate, see MariaDB documentation - [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/).
+For more information on how to generate a self-signed certificate, see [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/).
 
-{{< alert title="Note" >}}The server certificate's Common Name must be set up with *streams-database*.{{< /alert >}}
+{{< alert title="Note" >}}The server certificate's Common Name must be set up with `streams-database`.{{< /alert >}}
 
 ##### Transparent Data Encryption (TDE)
 
@@ -259,7 +259,7 @@ For security reasons, we strongly recommend to enable TLS communication between 
     ```
 2. Set the [Helm parameters](/docs/install/helm-parameters-reference/) `externalizedMariadb.tls.twoWay` to `false`.
 
-For more information on how to generate a self-signed certificate, see MariaDB documentation - [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/).
+For more information on how to generate a self-signed certificate, see [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/).
 
 For alternate security settings, see [Custom externalized MariaDB security settings](/docs/install/customize-install#custom-externalized-mariadb-security-settings).
 
