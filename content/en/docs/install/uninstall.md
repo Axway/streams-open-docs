@@ -32,15 +32,8 @@ Similarly, all [secrets](/docs/install/#secrets-management) created for the Stre
 ```sh
 export NAMESPACE="my-namespace"
 export HELM_RELEASE_NAME="my-release"
-export REGISTRY_SECRET_NAME="my-registry-secret-name"
 
-kubectl -n "${NAMESPACE}" delete secrets "${REGISTRY_SECRET_NAME}" streams-database-passwords-secret streams-database-secret streams-kafka-passwords-secret streams-kafka-client-jks-secret
+kubectl -n "${NAMESPACE}" delete secrets streams-docker-registry-secret streams-database-passwords-secret streams-database-secret streams-kafka-passwords-secret streams-kafka-client-jks-secret streams-subscriber-sse-jwt-secret central-auth-credentials streams-ingress-tls-secret
 ```
 
-If you provided your own SSL/TLS certificate for the ingress, you can use the following command to delete it:
-
-```sh
-export NAMESPACE="my-namespace"
-
-kubectl -n "${NAMESPACE}" delete secrets streams-ingress-tls-secret
-```
+{{< alert title="Note" >}}Depending on your configuration, some of these secrets may not exist and the command will produce some harmless warning messages.{{< /alert >}}
