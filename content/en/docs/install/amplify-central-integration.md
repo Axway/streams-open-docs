@@ -101,6 +101,6 @@ You can [proceed with your Streams installation](/docs/install/#amplify-central-
 ## Network considerations
 
 In addition to the URL of the API Gateway and API Manager you have provided, Streams is configured to connect to some Amplify endpoints, for some with non standard ports (for example, `ingestion.datasearch.axway.com:5044`).
-Your infrastructure and firewalls needs to allow those outbound connections.
+Your infrastructure and firewalls need to allow those outbound connections.
 
 Refer to [Helm parameters](/docs/install/helm-parameters-reference/#streams-parameters) for those endpoints, in the `central` and `traceabilityAgent` values.
