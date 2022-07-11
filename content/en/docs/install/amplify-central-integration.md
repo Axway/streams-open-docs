@@ -6,7 +6,7 @@ date: 2022-04-26
 description: Connect Streams to Amplify Central to leverage tools like the Amplify Marketplace, where you can expose your Streams assets.
 ---
 
-Follow this section to integrate Streams with [Amplify Central](https://docs.axway.com/bundle/amplify-central/page/docs/index.html). You will enable a discovery agent to expose topics and subscriptions on Amplify Central, and a traceability agent to [track subscriptions usage](https://docs.axway.com/bundle/amplify-central/page/docs/get_actionable_insights/index.html).
+Follow this section to integrate Streams with [Amplify Central](https://docs.axway.com/bundle/amplify-central/page/docs/index.html) by enabling a discovery agent to expose topics and subscriptions on Amplify Central and a traceability agent to [track subscriptions usage](https://docs.axway.com/bundle/amplify-central/page/docs/get_actionable_insights/index.html).
 
 ## Prerequisites
 
@@ -100,7 +100,6 @@ You can [proceed with your Streams installation](/docs/install/#amplify-central-
 
 ## Network considerations
 
-In addition to the URL of the API Gateway and API Manager you have provided, Streams is configured to connect to some Amplify endpoints, for some with non standard ports (for example, `ingestion.datasearch.axway.com:5044`).
-Your infrastructure and firewalls need to allow those outbound connections.
+In addition to the URL of the API Gateway and API Manager you have provided, Streams is configured to connect to Amplify endpoints, some of them with non-standard ports, for example, `ingestion.datasearch.axway.com:5044`. You must ensure that your infrastructure and firewalls allow those outbound connections.
 
-Refer to [Helm parameters](/docs/install/helm-parameters-reference/#streams-parameters) for those endpoints, in the `central` and `traceabilityAgent` values.
+For more information on how to configure Amplify endpoints, see `central` and `traceabilityAgent` values in the [Helm parameters](/docs/install/helm-parameters-reference/#streams-parameters) section.

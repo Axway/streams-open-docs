@@ -14,7 +14,7 @@ Use this mode when you want to control how a Streams topic is consumed.
 
 ### Provision a SSE subscription
 
-You can create a SSE subscription by making an HTTP post request on the following endpoint:
+You can create a SSE subscription by sending an HTTP post request on the following endpoint:
 
 ```
 POST /streams/subscribers/sse/api/v1/topics/{topicID}/subscriptions
@@ -30,7 +30,7 @@ The request body must contain a JSON SSE subscription configuration as following
 
 | Configuration entry | Mandatory | Default value | Description |
 |---------------------|-----------|---------------|-------------|
-| subscriptionMode | no | Default subscription mode defined in the topic's configuration | For more information, see section [subscription modes](/docs/subscribers/#subscription-modes). |
+| subscriptionMode | no | Default subscription mode defined in the topic's configuration | For more information, see [subscription modes](/docs/subscribers/#subscription-modes). |
 
 After the SSE subscription is successfully created, you can consume it with a `subscribe` request.
 
@@ -49,13 +49,13 @@ curl -v "${BASE_URL}/streams/subscribers/sse/api/v1/subscriptions/${SUBSCRIPTION
 
 If the connection is successfully established, Streams returns `200 OK` and _Content-Type: text/event-stream_ responses.
 
-{{< alert title="Caution" color="warning">}}If [Subscriber SSE security](/docs/install/customize-install/#activate-subscriber-sse-security) feature is activated, an access token will be required to consume a SSE subscription. See section [Validate Streams Subscribers SSE API](/docs/install/apim-integration/#validate-streams-subscribers-sse-api) for more information.{{< /alert >}}
+{{< alert title="Note" >}}If the [subscriber SSE security](/docs/install/customize-install/#activate-subscriber-sse-security) feature is activated, an access token will be required to consume an SSE subscription. For more information, see [Validate Streams Subscribers SSE API](/docs/install/apim-integration/#validate-streams-subscribers-sse-api).{{< /alert >}}
 
 ## Subscribe to a topic via SSE without provisioning
 
-Use this mode when you need to specify the subscription mode. An automatic provision will be done with a disposable SSE subscription (deleted after the SSE channel disconnection) configured with the desired subscription mode.
+Use this mode to specify the subscription mode. An automatic provision will be done with a disposable SSE subscription (deleted after the SSE channel disconnection) configured with the desired subscription mode.
 
-{{< alert title="Caution" color="warning">}}Subscribing to a topic without provisioning is not allowed if [Subscriber SSE security](/docs/install/customize-install/#activate-subscriber-sse-security) feature is activated during the installation.{{< /alert >}}
+{{< alert title="Note" >}}Subscribing to a topic without provisioning is not allowed if the [subscriber SSE security](/docs/install/customize-install/#activate-subscriber-sse-security) feature is activated during the installation.{{< /alert >}}
 
 To subscribe to a topic, open a terminal and run the following cURL command:
 
