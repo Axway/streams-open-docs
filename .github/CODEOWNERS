@@ -38,7 +38,7 @@
 /static/admin/ @epiasentin-axway @andreamussap
 
 # Documentation files
-/content/en/docs/ @epiasentin-axway @andreamussap @jjayet-axway
+/content/en/docs/ @epiasentin-axway @andreamussap
 
 # The `docs/*` pattern will match files like
 # `docs/getting-started.md` but not further nested files like

@@ -15,13 +15,17 @@ The following new features and enhancements are available in this update.
 
 ### Connect to Amplify Central to use Amplify Marketplace
 
-Now you can connect Streams to [Amplify Central](https://docs.axway.com/bundle/amplify-central/page/docs/index.html) to leverage tools like the [Amplify Marketplace](https://docs.axway.com/bundle/amplify-central/page/docs/manage_marketplace/index.html), where you can expose your Streams assets.
+Now you can connect Streams to [Amplify Central](https://docs.axway.com/bundle/amplify-central/page/docs/index.html) to leverage tools like the [Amplify Marketplace](https://docs.axway.com/bundle/amplify-central/page/docs/manage_marketplace/index.html), where you can expose your Streams assets and receive subscription usage information.
 
 For more information on how to set up this integration, see [Integrate with Amplify Central Marketplace](/docs/install/amplify-central-integration).
 
 ### Kafka subscription configured with SASL and SSL
 
 The Streams Kafka subscriber can now authenticate and use traffic encryption when you setup a connection with a downstreams Kafka cluster. For more information on how to use this new capability, see [Kafka Subscriber documentation](/docs/subscribers/subscriber-kafka/#security-configuration-with-sasl-and-ssl).
+
+### Secure Streams with API Management
+
+Now can use [Amplify API Management](https://docs.axway.com/bundle/axway-open-docs/page/docs/api_mgmt_overview/index.html) to secure Streams Subscribers and Topic Management APIs. For more information on how to set up Streams and configure your API Management platform, see [Use Amplify API Management to secure Streams APIs](/docs/install/apim-integration).
 
 ## Important changes
 <!-- Use this section to describe any changes in the behavior of the product (as a result of features or fixes), for example, new Java system properties in the jvm.xml file. This section could also be used for any important information that doesn't fit elsewhere. -->
