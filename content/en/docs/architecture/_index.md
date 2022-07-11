@@ -20,7 +20,7 @@ Deploying Streams using Docker containers orchestrated by Kubernetes brings trem
 * Performance, logging, and monitoring aspects.
 * Backup and recovery, including disaster recovery.
 
-## Targe audience
+## Target audience
 
 The target audience for this guide is architects, developers, and operations personnel. To get the most value from this guide, the reader should have a good knowledge of Docker, Kubernetes, and APIs.
 
@@ -640,7 +640,7 @@ Apache Kafka is used as stream-processing layer.
 Source Docker image:
 
 * Repository: bitnami/kafka
-* Tag: 2.8.0-debian-10-r96
+* Tag: 2.8.1-debian-10-r179
 
 Pod name: `streams-kafka`.
 
@@ -657,7 +657,7 @@ Apache ZooKeeper is used by our microservices and by Kafka (when embedded in ins
 Source Docker image:
 
 * Repository: bitnami/zookeeper
-* Tag: 3.7.0-debian-10-r141
+* Tag: 3.7.1-debian-10-r18
 
 Pod name: `streams-zookeeper`
 
@@ -674,7 +674,7 @@ MariaDB is our persistence layer.
 Source Docker image:
 
 * Repository: bitnami/mariadb
-* Tag: 10.4.21-debian-10-r32
+* Tag: 10.4.24-debian-10-r47
 
 Pod names:
 
@@ -697,7 +697,7 @@ NGINX is the ingress controller in front of Streams APIs.
 Source Docker image:
 
 * Repository: bitnami/nginx-ingress-controller
-* Tag: 1.1.1-debian-10-r12
+* Tag: 1.1.2-debian-10-r27
 
 Pod name: `streams-nginx-ingress-controller`
 

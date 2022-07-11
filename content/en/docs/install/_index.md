@@ -8,7 +8,7 @@ no_list: true
 description: Learn how to install Streams on-premise or deploy it in your private cloud, configure a helm chart, and validate the installation.
 ---
 
-This section covers recommended steps to install Streams either on development environment or production environment.
+This section covers recommended steps to install Streams both on development environment and production environment.
 
 ## Prerequisites
 
@@ -29,7 +29,7 @@ After you have been onboarded on [Amplify Platform](https://platform.axway.com),
 
 To prepare your environment, extract the Helm chart and open a terminal from the extracted directory.
 
-{{< alert title="Note" >}}You can find others resources in the [Axway Support](https://support.axway.com/en) portal, for example, Postman collections, OpenAPI, and Docker Compose files, which can help you to configure your environment or test Streams.{{< /alert >}}
+{{< alert title="Note" >}}You can find others resources in the [Axway Support](https://support.axway.com/en) portal, for example, Postman collections, OpenAPI, Streams RBAC Policies, and Docker Compose files, which can help you to configure your environment or test Streams.{{< /alert >}}
 
 ## Prepare customizations
 
@@ -62,36 +62,21 @@ kubectl create namespace "${NAMESPACE}"
 
 ## Use Amplify Platform as your Docker registry
 
-Docker images must be hosted in a docker registry accessible from your Kubernetes (K8s) cluster. We recommend you to use the Amplify Platform repository for a custom docker registry. Alternatively, you can use [your own custom Docker registry](/docs/install/customize-install#use-a-custom-docker-registry).
+Docker images must be hosted in a docker registry accessible from your Kubernetes (K8s) cluster. We recommend that you use the Amplify Platform repository for a custom docker registry.  Alternatively, you can use [your own custom Docker registry](/docs/install/customize-install#use-a-custom-docker-registry).
 
-To use the Amplify Platform as your container registry you must first ensure the following:
+Before you start using Amplify Platform as your Docker registry, ensure the following:
 
-* You can see our images with your organization on the Amplify repository search page.
-* You have administrator access to create a service account in your organization.
+* Your Streams artifacts are listed on the Amplify [repository](https://repository.axway.com/home) under your Amplify Central organization.
+* You must have [a service account in Amplify Central](https://docs.axway.com/bundle/platform-management/page/docs/management_guide/organizations/managing_organizations/index.html#managing-service-accounts) with the **Authentication method** set to **Client Secret**.
 
-After you have verified that your images are loaded and that you have the correct level of access, you must create a service account, then create docker-registry secret with the information from your service account.
+### Create Kubernetes secret
 
-### Create a service account
-
-To create your service account, perform the following steps:
-
-1. Log in to the [Amplify Platform](https://platform.axway.com).
-2. Select your organization, and from the left menu, click **Service Accounts** (You should see all service accounts already created).
-3. Click **+ Service Account**, and fill in the mandatory fields:
-    * Enter a name for the service account.
-    * Choose `Client Secret` for the method.
-    * Choose `Platform-generated secret` for the credentials.
-4. Click **Save**
-5. Ensure to securely store the generated client secret because it will be required in further steps.
-
-### Create a secret
-
-To create a secret to use with the Amplify platform docker-registry, run the following command with the service account information:
+Streams needs the credentials of your service account to pull images from the repository. The following is an example of how to create a secret containing these credentials:
 
 ```sh
 export NAMESPACE="my-namespace"
-export REGISTRY_USERNAME="my-service-account-client-id"
-export REGISTRY_PASSWORD="my-service-account-client-secret"
+export REGISTRY_USERNAME="<my-service-account-client-id>"
+export REGISTRY_PASSWORD="<my-service-account-client-secret>"
 export REGISTRY_SERVER="docker.repository.axway.com"
 
 kubectl create secret docker-registry streams-docker-registry-secret --docker-server="${REGISTRY_SERVER}"  --docker-username="${REGISTRY_USERNAME}" --docker-password="${REGISTRY_PASSWORD}" -n "${NAMESPACE}"
@@ -99,7 +84,7 @@ kubectl create secret docker-registry streams-docker-registry-secret --docker-se
 
 ## Configuration for development environment
 
-For a quick installation of Streams, the default settings target a development environment. For production environment settings, see [Configuration for production environment](#configuration-for-production-environment) section further down.
+For a quick installation of Streams, the default settings target a development environment. For production environment settings, see [Configuration for production environment](#configuration-for-production-environment) section.
 
 ### Embedded MariaDB settings
 
@@ -126,9 +111,9 @@ By default, MariaDB is configured with [TLS communication](#tls-communication) a
 
 To configure the TLS communication between MariaDB and Streams microservices, provide a CA certificate, a server certificate, and a server key.
 
-For more information on how to generate a self-signed certificate, see MariaDB documentation - [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/).
+For more information on how to generate a self-signed certificate, see [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/).
 
-{{< alert title="Note" >}}The server certificate's Common Name must be set up with *streams-database*.{{< /alert >}}
+{{< alert title="Note" >}}The server certificate's Common Name must be set up with `streams-database`.{{< /alert >}}
 
 ##### Transparent Data Encryption (TDE)
 
@@ -274,7 +259,7 @@ For security reasons, we strongly recommend to enable TLS communication between 
     ```
 2. Set the [Helm parameters](/docs/install/helm-parameters-reference/) `externalizedMariadb.tls.twoWay` to `false`.
 
-For more information on how to generate a self-signed certificate, see MariaDB documentation - [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/).
+For more information on how to generate a self-signed certificate, see [Certificate Creation with OpenSSL](https://mariadb.com/kb/en/certificate-creation-with-openssl/).
 
 For alternate security settings, see [Custom externalized MariaDB security settings](/docs/install/customize-install#custom-externalized-mariadb-security-settings).
 
@@ -377,6 +362,10 @@ TLS endpoints which Streams services connect to must have a valid TLS certificat
 
 3. Set the [Helm parameter](/docs/install/helm-parameters-reference/) `streams.extraCertificatesSecrets` to your `$SECRET_NAME`. If you have more than one secrets, they must be separated by a comma.
 
+## Integrate with Amplify Central
+
+Streams can connect to [Amplify Central](https://docs.axway.com/bundle/amplify-central/page/docs/index.html) and expose assets to leverage tools like the [Amplify Marketplace](https://docs.axway.com/bundle/amplify-central/page/docs/manage_marketplace/index.html). This integration is disabled by default. For more information on how to enable it, see [Amplify Central Integration](/docs/install/amplify-central-integration).
+
 ## Customize your installation
 
 You can specify optional [Helm parameters](/docs/install/helm-parameters-reference/) to customize your installation.
@@ -398,22 +387,20 @@ export NAMESPACE="my-namespace"
 export HELM_RELEASE_NAME="my-release"
 
 helm install "${HELM_RELEASE_NAME}" . \
-  -f values.yaml \
   -n "${NAMESPACE}"
 ```
 
-### High availability configuration (recommend for production)
+### High availability configuration
 
-The following command deploys Streams on the Kubernetes cluster in High availability. This might take a few minutes.
+The following command deploys Streams on the Kubernetes cluster in high availability. The deploy might take a few minutes.
 
-{{< alert title="Note" >}}This is recommended for production environments.{{< /alert >}}
+{{< alert title="Note" >}}This configuration is recommended for production environments.{{< /alert >}}
 
 ```sh
 export NAMESPACE="my-namespace"
 export HELM_RELEASE_NAME="my-release"
 
 helm install "${HELM_RELEASE_NAME}" . \
-  -f values.yaml \
   -f values-ha.yaml \
   -n "${NAMESPACE}"
 ```

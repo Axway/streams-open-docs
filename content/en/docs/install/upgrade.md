@@ -23,7 +23,7 @@ Run the following command to upgrade your Streams installation:
 export NAMESPACE="my-namespace"
 export HELM_RELEASE_NAME="my-release"
 
-helm upgrade "${HELM_RELEASE_NAME}" . -f values.yaml [-f values-ha.yaml] -f my-values.yaml  -n "${NAMESPACE}"
+helm upgrade "${HELM_RELEASE_NAME}" . [-f values-ha.yaml] -f my-values.yaml  -n "${NAMESPACE}"
 ```
 
 {{< alert title="Caution" color="warning">}}Any difference in any of the `values.yaml` files or in the `--set` parameter from the initial installation will also be upgraded. Therefore, if you initially installed Streams with `-f values.yaml` or `-f values-ha.yaml`, you must specify the same parameters for the upgrade.
