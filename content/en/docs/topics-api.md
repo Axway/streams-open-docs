@@ -94,7 +94,7 @@ If you are securing Streams APIs with Amplify API Management, you may also recei
 | 404 Not Found | The requested resource doesn't exist. |
 | 409 Conflict | The request conflicts with current state of the resource. |
 | 413 Request Entity Too Large | Indicates that the server refuses to accept the request because the payload size is beyond 1MB, which is the limit for Streams. |
-| 500, 502, 503, 504 Server Errors | Something went wrong on Streams' platform end. |
+| 500, 502, 503, 504 Server Errors | Something might have gone wrong on Streams' platform end.                                                                       |
 
 ### Versioning
 
