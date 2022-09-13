@@ -94,6 +94,8 @@ Below the list of HTTP status codes that can be returned when trying to create a
 | 400 Bad Request | Indicates that the provided data are invalid. |
 | 404 Not found | Indicates that the requested URL does not exist. |
 
+Beyond those specific errors, you can also receive any of the [generic Streams API errors](/docs/topics-api/#error-codes).
+
 ## Stop a webhook subscription
 
 To stop the sending of webhook notifications, simply delete the corresponding webhook subscription with following request:
@@ -111,6 +113,8 @@ Below the list of HTTP status codes that can be returned when deleting the webho
 | 204 No Content | Indicates that the subscription has been successfully deleted.
 | 404 Not found | Indicates that the provided identifier does not correspond to an existing webhook subscription.
 
+Beyond those specific errors, you can also receive any of the [generic Streams API errors](/docs/topics-api/#error-codes).
+
 ## Get a webhook subscription
 
 To get an existing subscription, use the following GET request:
@@ -127,6 +131,8 @@ Below the list of HTTP status codes that can be returned when trying to get a we
 |------|---------|
 | 200 Ok | Indicates that the subscription requested is valid and has been retrieved. |
 | 404 Not found | Indicates that the requested URL or subscription requested does not exist. |
+
+Beyond those specific errors, you can also receive any of the [generic Streams API errors](/docs/topics-api/#error-codes).
 
 ## Test a webhook subscription
 
@@ -147,6 +153,8 @@ The following HTTP status codes can be returned while testing a webhook subscrip
 | 202 Accepted | Indicates that the payload has been successufuly sent to the subscription. |
 | 400 Bad Request | Indicates that the provided data are invalid. |
 | 404 Not found | Indicates that the requested URL does not exist. |
+
+Beyond those specific errors, you can also receive any of the [generic Streams API errors](/docs/topics-api/#error-codes).
 
 ## Get the webhook notification history for a subscription
 
@@ -170,6 +178,8 @@ The following HTTP status codes can be returned when interacting with the exchan
 |------|---------|
 | 200 Ok | Indicates that the exchanges history requested is valid and has been retrieved. |
 | 400 Bad Request | Indicates that the request is invalid. |
+
+Beyond those specific errors, you can also receive any of the [generic Streams API errors](/docs/topics-api/#error-codes).
 
 #### Webhook exchange samples
 

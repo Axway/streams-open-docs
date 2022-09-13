@@ -215,7 +215,11 @@ Based on the configured `initialValue`, the first call to the target URL will be
 
 ## Pagination
 
-The pagination section allows you to define how to paginate through your URL when it is using a pagination mechanism.
+The pagination section allows you to define how to poll a paginated source.
+
+Streams fetches all the available pages and consolidate the result into a single payload.
+This consolidation is required because Streams needs to compute the differences between successive payloads when the `payload.type` is `snapshot`.
+The consolidated payload is [still limited to 1MB](/docs/publishers/#publication-size-limit).
 
 The following are the types of pagination supported by the HTTP poller publisher:
 

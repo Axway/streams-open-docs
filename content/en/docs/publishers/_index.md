@@ -111,3 +111,12 @@ Setting `alwayOn` flag to `false` enables the publisher to avoid publishing cont
 ```
 
 `alwaysOn` flag is optional and will be set to `false` if no value is provided.
+
+### Publication size limit
+
+The published payload size cannot exceed 1MB. Streams use cases are currently limited to smaller payloads.
+
+If you exceed that limit:
+
+* If you are using an HTTP POST Publisher, you will receive a [`413 - Request Entity Too Large` response code](/docs/topics-api/#error-codes) at the time of publication
+* If you are using another Publisher type, your subscribers will receive a [`70015-Source response size limit exceeded` error event](/docs/subscribers/subscribers-errors/)
