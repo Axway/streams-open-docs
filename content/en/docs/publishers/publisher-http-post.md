@@ -64,4 +64,4 @@ Below the list of HTTP status codes that can be returned when trying to publish:
 | 413 Request Entity Too Large | Indicates that the server refuses to accept the request because the payload size is beyond 1MB, which is the limit for Streams.|
 | 415 Unsupported Media Type | Indicates that the server refuses to accept the request because the payload format defined in the publish request is in an unsupported format. Only application/json is supported. |
 
-Beyond those specific errors, you can also receive any of the [generic Streams API errors](/docs/topics-api/#error-codes).
+Besides those specific errors, you can also receive any of the [generic Streams API errors](/docs/topics-api/#error-codes).

@@ -80,10 +80,9 @@ Note that search capability works:
 
 ### Error codes
 
-Streams Topics API uses conventional HTTP response codes to indicate the success or failure of an API request.
-In general, codes in the `2xx` range indicate success, codes in the `4xx` range indicate an error that failed given the information provided (e.g., a required parameter was omitted, etc.), and codes in the `5xx` range indicate an error with Streams' servers.
+Streams Topics API uses conventional HTTP response codes to indicate the success or failure of an API request. In general, codes in the `2xx` range indicate success, codes in the `4xx` range indicate an error that failed given the information provided (for example, a required parameter was omitted, and so on), and codes in the `5xx` range indicate an error with Streams' servers.
 
-If you are securing Streams APIs with Amplify API Management, you may also receive its [documented error codes](https://docs.axway.com/bundle/axway-open-docs/page/docs/apim_reference/api_mgmt_responses/index.html) when the API Gateway terminates a transaction.
+If you are securing Streams APIs with Amplify API Management, you might also receive its [documented error codes](https://docs.axway.com/bundle/axway-open-docs/page/docs/apim_reference/api_mgmt_responses/index.html) when the API Gateway terminates a transaction.
 
 #### HTTP status code summary
 
