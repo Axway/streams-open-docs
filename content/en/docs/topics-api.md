@@ -80,8 +80,9 @@ Note that search capability works:
 
 ### Error codes
 
-Streams Topics API uses conventional HTTP response codes to indicate the success or failure of an API request.
-In general, codes in the `2xx` range indicate success, codes in the `4xx` range indicate an error that failed given the information provided (e.g., a required parameter was omitted, etc.), and codes in the `5xx` range indicate an error with Streams' servers.
+Streams Topics API uses conventional HTTP response codes to indicate the success or failure of an API request. In general, codes in the `2xx` range indicate success, codes in the `4xx` range indicate an error that failed given the information provided (for example, a required parameter was omitted, and so on), and codes in the `5xx` range indicate an error with Streams' servers.
+
+If you are securing Streams APIs with Amplify API Management, you might also receive its [documented error codes](https://docs.axway.com/bundle/axway-open-docs/page/docs/apim_reference/api_mgmt_responses/index.html) when the API Gateway terminates a transaction.
 
 #### HTTP status code summary
 
@@ -91,7 +92,8 @@ In general, codes in the `2xx` range indicate success, codes in the `4xx` range 
 | 400 Bad Request | The request was unacceptable, often due to missing a required parameter. |
 | 404 Not Found | The requested resource doesn't exist. |
 | 409 Conflict | The request conflicts with current state of the resource. |
-| 500, 502, 503, 504 Server Errors | Something went wrong on Streams' platform end. |
+| 413 Request Entity Too Large | Indicates that the server refuses to accept the request because the payload size is beyond 1MB, which is the limit for Streams. |
+| 500, 502, 503, 504 Server Errors | Something might have gone wrong on Streams' platform end.                                                                       |
 
 ### Versioning
 

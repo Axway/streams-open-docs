@@ -109,9 +109,9 @@ data : [{
 
 | Configuration Entry | Description |
 |---------------------|-------------|
-| id | The unique identifier of the event |
-| event | Define the type of the event. Refer to [type of events](#type-of-events) section
-| data | Refer to [subscription modes](/docs/subscribers/#subscription-modes) section |
+| id | The unique identifier of the event. |
+| event | Define the type of the event.|
+| data | Refer to [subscription modes](/docs/subscribers/#subscription-modes) section. |
 
 {{< alert title="Note" >}}`id`, `event`and `data` fields are always present and represent a single message, also called `event`.{{< /alert >}}
 
@@ -182,6 +182,8 @@ The following table shows HTTP status codes that can be returned when deleting t
 | 200 Ok        | Indicates that the subscription has been successfully suspended.
 | 404 Not found | Indicates that the provided identifier does not correspond to an existing SSE subscription.
 
+Besides those specific errors, you can also receive any of the [generic Streams API errors](/docs/topics-api/#error-codes).
+
 When the subscription has `suspended` status, it can no longer be used to open an SSE channel and if an SSE channel was already open it will be closed. To reactivate it, follow the same procedure with `active` value, instead of `suspended`.
 
 ## Delete a SSE subscription
@@ -201,6 +203,8 @@ The following table shows HTTP status codes that can be returned when deleting t
 | 204 No Content | Indicates that the subscription has been successfully deleted.
 | 404 Not found | Indicates that the provided identifier does not correspond to an existing SSE subscription.
 
+Besides those specific errors, you can also receive any of the [generic Streams API errors](/docs/topics-api/#error-codes).
+
 ## Get a SSE subscription
 
 To get an existing subscription, use the following GET request:
@@ -217,6 +221,8 @@ The following table shows HTTP status codes that can be returned when trying to 
 |------|---------|
 | 200 Ok | Indicates that the subscription requested is valid and has been retrieved. |
 | 404 Not found | Indicates that the requested URL or subscription requested does not exist. |
+
+Besides those specific errors, you can also receive any of the [generic Streams API errors](/docs/topics-api/#error-codes).
 
 ## Get SSE subscriptions for a topic
 

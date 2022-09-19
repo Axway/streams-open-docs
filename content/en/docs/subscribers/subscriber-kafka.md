@@ -95,6 +95,8 @@ The following are HTTP status codes that can be returned when trying to create a
 | 400 Bad Request | Indicates that the provided data is invalid. |
 | 404 Not found | Indicates that the requested URL does not exist. |
 
+Besides those specific errors, you can also receive any of the [generic Streams API errors](/docs/topics-api/#error-codes).
+
 ## Stop a kafka subscription
 
 To stop sending records to your kafka cluster, delete the corresponding kafka subscription with the following request:
@@ -112,6 +114,8 @@ The following are HTTP status codes that can be returned when deleting the kafka
 | 204 No Content | Indicates that the subscription has been successfully deleted.
 | 404 Not found | Indicates that the provided identifier does not correspond to an existing kafka subscription.
 
+Besides those specific errors, you can also receive any of the [generic Streams API errors](/docs/topics-api/#error-codes).
+
 ## Getting a kafka subscription
 
 To get an existing subscription, use the following GET request:
@@ -128,6 +132,8 @@ List of HTTP status codes that can be returned when trying to get a kafka subscr
 |------|---------|
 | 200 Ok | Indicates that the subscription requested is valid and has been retrieved. |
 | 404 Not found | Indicates that the requested URL or subscription requested does not exist. |
+
+Besides those specific errors, you can also receive any of the [generic Streams API errors](/docs/topics-api/#error-codes).
 
 ## Testing a Kafka subscription
 
@@ -148,6 +154,8 @@ The following HTTP status codes can be returned while testing a Kafka subscripti
 | 202 Accepted | Indicates that the payload has been successfully sent to the subscription. |
 | 400 Bad Request | Indicates that the provided data are invalid. |
 | 404 Not found | Indicates that the requested URL does not exist. |
+
+Besides those specific errors, you can also receive any of the [generic Streams API errors](/docs/topics-api/#error-codes).
 
 ## Get kafka subscriptions for a topic
 
