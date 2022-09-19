@@ -8,8 +8,7 @@ description: Learn how to use the different types of Publishers supported by Str
 
 ## Selecting your type of publisher
 
-Streams supports different publishers and each topic must be associated with one type of publisher.
-When creating your topic, you must define a name for the topic, the type of publisher and its configuration:
+Streams supports different publishers and each topic must be associated with one type of publisher. When creating your topic, you must define a name for the topic, the type of publisher, and its configuration:
 
 ```json
 {
@@ -24,7 +23,7 @@ When creating your topic, you must define a name for the topic, the type of publ
 
 ### Type of data source
 
-Streams can adapt to different type of data sources. We distinguish between data sources that provide a full data set (snapshot) and data sources that directly publish events.
+Streams can adapt to different types of data sources. We distinguish between data sources that provide a full data set (snapshot) and data sources that directly publish events.
 
 #### Configuring the type of data source
 
@@ -66,7 +65,7 @@ For example, a REST JSON API providing the list of the top 10 headline news. In 
 },...]
 ```
 
-When configured to connect to a `snapshot` data source, Streams will always compute **incremental updates** by comparing the previous snapshot to the newly published snapshot. Streams acts as a change data capture layer able to generate change events from what is being publish in the topic. With this type of payload, it is possible to configure additional subscription modes so that subscribers choose the type of event they wish to receive from Streams. See [subscription modes](../subscribers#subscription-modes) for details.
+When configured to connect to a `snapshot` data source, Streams will always compute **incremental updates** by comparing the previous snapshot to the newly published snapshot. Streams acts as a change data capture layer able to generate change events from what is being publish in the topic. With this type of payload, it is possible to configure additional subscription modes so that subscribers choose the type of event they wish to receive from Streams. See [subscription modes](/docs/subscribers#subscription-modes) for details.
 
 #### Event data source
 
@@ -89,7 +88,7 @@ For example, a change on the Lead object in Salesforce:
 }
 ```
 
-When configured to connect to an `event` data source, Streams does not compute **incremental updates** but acts as an Event Hub that forwards events, as is, to all subscribers defined in the topic. In this case, the subscription mode is forced to `event`. See [Subscription modes](../subscribers#subscription-modes) section for more details.
+When configured to connect to an `event` data source, Streams does not compute **incremental updates** but acts as an Event Hub that forwards events, as is, to all subscribers defined in the topic. In this case, the subscription mode is forced to `event`. See [Subscription modes](/docs/subscribers#subscription-modes) section for more details.
 
 ### Publishing in the absence of a subscriber
 
@@ -111,3 +110,12 @@ Setting `alwayOn` flag to `false` enables the publisher to avoid publishing cont
 ```
 
 `alwaysOn` flag is optional and will be set to `false` if no value is provided.
+
+### Publication size limit
+
+The published payload size cannot exceed 1MB. Streams use cases are currently limited to smaller payloads.
+
+When you exceed that limit, an error message is displayed:
+
+* If you are using an HTTP POST Publisher, you will receive a [`413 - Request Entity Too Large`](/docs/topics-api/#error-codes) response code at the time of publication.
+* If you are using another Publisher type, your subscribers will receive a [`70015-Source response size limit exceeded`](/docs/subscribers/subscribers-errors/) error event.

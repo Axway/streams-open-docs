@@ -69,6 +69,8 @@ Create your front-end APIs out of the back-end APIs.
 | `Streams Subscribers SSE`  | Inbound security: `API Key` ResourcePath: `/streams/subscribers/sse/api/v1` | Request policy: `0- Streams RBAC request` Default method routing:`0-     Streams RBAC routing` Response policy: `0- Streams RBAC response` |
 | `Streams Subscribers SSE Auth` | Inbound security: `API Key` ResourcePath: `/streams/subscribers/sse` | Request policy: `0- Streams RBAC Access Token request` Default method     routing: `API Proxy` Response policy: `leave field empty` |
 
+{{< alert title="Note" >}} The name `Streams Subscribers SSE Auth` is expected for the integration with Amplify Central. If you wish to change it, you must set the `discoveryAgent.apimanager.streamsJWTTokenAPIFrontendName` helm value to your chosen name.{{< /alert >}}
+
 #### Publish Streams front-end APIs
 
 To publish your front-end APIs:

@@ -61,4 +61,7 @@ Below the list of HTTP status codes that can be returned when trying to publish:
 | 405 Method Not Allowed | Indicates that the method used by Publisher is not allowed. Only POST verb is supported. |
 |  406 Not Acceptable | Indicates that the server cannot produce a response matching the list of acceptable values defined in the request's content negotiation headers. Only application/json is supported. |
 | 410 Gone | Indicates that the topic to which publisher is trying to publish is no longer available because of the following reasons: (1) The topic is configured with the alwaysOn option set to false and no subscriber is currently subscribed to the topic. As the number of subscribers can vary over time, we recommend to implement an exponential back off strategy but not to stop publication permanently. (2) The topic has been permanently deleted. In order to verify that a topic still exists or has been permanently deleted, you can request `GET /streams/hub/api/v1/topics` endpoint. |
+| 413 Request Entity Too Large | Indicates that the server refuses to accept the request because the payload size is beyond 1MB, which is the limit for Streams.|
 | 415 Unsupported Media Type | Indicates that the server refuses to accept the request because the payload format defined in the publish request is in an unsupported format. Only application/json is supported. |
+
+Besides those specific errors, you can also receive any of the [generic Streams API errors](/docs/topics-api/#error-codes).

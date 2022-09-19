@@ -30,8 +30,8 @@ The HTTP poller publisher requires the following specific configuration.
 | retryBackOffMaxDuration       | no        | PT10S          | Maximum period of time between two attempts (ISO-8601 format). Min = PT0S (0s); Max = PT60S (60s).                                                                                                                                                                                                                        |
 | retryBackOffFactor            | no        | 0.5            | The factor used to determine the next retry duration.                                                                                                                                                                                                                                                                     |
 | computedQueryParameters       | no        | none           | Map of [ComputedQueryParameters](/docs/publishers/publisher-http-poller/#computed-query-parameters) that will be injected as query parameters. The key, query parameter name, must use URL-safe characters. For more information, see [Unreserved Characters](https://datatracker.ietf.org/doc/html/rfc2396#section-2.3). |
-| authorization                 | no        | N/A            | OAuth2 Authorization configuration. For more information, see section [OAuth2 Authorization](#authorization-with-oauth-2-0)                                                                                                                                                                                               |
-| pagination                    | no        | N/A            | Pagination mechanism configuration. For more information, see section [Pagination](#pagination)                                                                                                                                                                                                                           |
+| authorization                 | no        | N/A            | OAuth2 Authorization configuration. For more information, see section [OAuth2 Authorization](#authorization-with-oauth-20)       |
+| pagination                    | no        | N/A            | Pagination mechanism configuration. For more information, see section [Pagination](#pagination)           |
 
 The following is an example of an HTTP poller publisher:
 
@@ -215,7 +215,9 @@ Based on the configured `initialValue`, the first call to the target URL will be
 
 ## Pagination
 
-The pagination section allows you to define how to paginate through your URL when it is using a pagination mechanism.
+The pagination section allows you to define how to poll a paginated source.
+
+Streams fetches all the available pages and consolidate the result into a single payload. This consolidation is required because Streams needs to compute the differences between successive payloads when the `payload.type` is `snapshot`. The consolidated payload is [still limited to 1MB](/docs/publishers/#publication-size-limit).
 
 The following are the types of pagination supported by the HTTP poller publisher:
 
