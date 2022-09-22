@@ -7,3 +7,4 @@ tech-doc-hugo
 .idea/
 **/*.iml
 .vscode/
+package-lock.json
