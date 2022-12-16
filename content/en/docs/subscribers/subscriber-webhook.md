@@ -32,16 +32,18 @@ The request body must contain a JSON webhook subscription configuration as the f
         "provider": "http://authorization.com/oauth/token",
         "scope": "READ,WRITE",
         "mode": "body"
-    }
+    },
+    "notificationEmail": "customer-email@domain.com"
 }
 ```
 
-| Configuration Entry | Mandatory | Default value | Description |
-|---------------------|-----------|---------------|-------------|
-| webhookUrl | yes | n/a | URL which will be called by Streams in order to inform the subscriber that a new event/message has been published in the topic identified by `{topicId}`. |
-| webhookHeaders | no | n/a | Map of key/value which will send by Streams to the subscriber. |
-| subscriptionMode | no | Default subscription mode defined in the topic's configuration | For more information, see section [subscription modes](/docs/subscribers/#subscription-modes). |
-| authorization | no | n/a | OAuth2 Authorization configuration. For more information, see section [OAuth2 Authorization](#authorization-with-oauth-2-0). |
+| Configuration Entry | Mandatory | Default value                                                  | Description                                                                                                                                               |
+|---------------------|-----------|----------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| webhookUrl          | yes | n/a                                                            | URL which will be called by Streams in order to inform the subscriber that a new event/message has been published in the topic identified by `{topicId}`. |
+| webhookHeaders      | no | n/a                                                            | Map of key/value which will send by Streams to the subscriber.                                                                                            |
+| subscriptionMode    | no | Default subscription mode defined in the topic's configuration | For more information, see section [subscription modes](/docs/subscribers/#subscription-modes).                                                            |
+| authorization       | no | n/a                                                            | OAuth2 Authorization configuration. For more information, see section [OAuth2 Authorization](#authorization-with-oauth-2-0).                              |
+| notificationEmail   | no | n/a                                                            | For more information, see section [Receive email notification on fatal error](#receive-email-notification-on-fatal-error).                                |
 
 After the webhook subscription is successfully created, Streams starts notifying the subscriber at the specified `webhookUrl`.
 
@@ -258,3 +260,19 @@ The webhook call is an HTTP POST request that contains two types of data: header
 #### Payload
 
 Fore more information, see [Subscription modes](/docs/subscribers/#subscription-modes) and [Subscription error](/docs/subscribers/subscribers-errors/).
+
+## Receive email notification on fatal error
+
+When an error occured on a webhook subscription, depending on its configuration, it can pass to a `failed`/`suspended` state.
+In this case, an action is required from the end-user to fix the issue and re-enable the subscription.
+
+If a valid SMTP configuration was provided to the webhook subscriber (see [Subscriber Webhook notifications](/docs/install/customize-install/#enable-subscriber-webhook-notifications)), we can provide an email in the webhook subscription configuration to be notify of the fatal issue.
+
+The following is a subscription example of how to provide the email for notifications:
+
+```json
+{
+  "webhookUrl": "https://valid.url/of/webhook",
+  "notificationEmail": "customer@email.com"
+}
+```

@@ -231,3 +231,15 @@ To secure SSE subscriptions, you must perform the following steps:
     ```
 
 {{< alert title="Note" >}}Replace `<streams-cluster>` in the values YAML file by the correct streams cluster address.{{< /alert >}}
+
+## Enable Subscriber Webhook notifications
+
+To allow email notifications for Webhook subscriptions, your must provide a SMTP server configuration with the following steps:
+
+1. Edit the `values-email-notifications-on-subscriber-webhook.yaml` with the desired configuration
+
+2. To enable the email notifications functionnality for Webhook subscriptions (disabled by default) add the provided `values-email-notifications-on-subscriber-webhook.yaml` values file to your Helm install command line. For example:
+
+    ```sh
+        helm install "${HELM_RELEASE_NAME}" . -f values.yaml -f values-email-notifications-on-subscriber-webhook.yaml -n "${NAMESPACE}"
+    ```
