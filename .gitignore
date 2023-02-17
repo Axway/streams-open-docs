@@ -3,8 +3,24 @@ public/
 resources/
 node_modules/
 tech-doc-hugo
-.DS_Store
+
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+# Eclipse Core
+.project
+.settings/
+
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
+*.iml
 .idea/
 **/*.iml
+
 .vscode/
 package-lock.json
+
+#Mac
+.DS_Store
+
+#hugo
+.hugo_build.lock
