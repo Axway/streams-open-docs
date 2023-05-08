@@ -123,8 +123,3 @@ Backwards-incompatible changes (breaking).
 * Changing a resource name format
 * Changing visible behavior of existing requests
 * Changing the URL format in the HTTP definition
-
-{{< alert title="" color="success" >}} **Note**: This is an alert with color=info. {{< /alert >}}
-{{< alert title="" color="secondary" >}} **Tip**: This is an alert with color=secondary {{< /alert >}}
-{{< alert title="" color="danger" >}} **Caution**: This is an alert with color=warning {{< /alert >}}
-{{< alert title="" color="danger" >}} **Caution**<br> This is an alert with color=warning and a breaking line {{< /alert >}}
